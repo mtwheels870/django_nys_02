@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'compassblue01',
+        'USER': 'cb_admin',
+        'PASSWORD': 'Ch0c0late!',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
