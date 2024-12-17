@@ -54,7 +54,7 @@ class QuestionIndexViewTests(TestCase):
         """
         If no questions exist, an appropriate message is displayed.
         """
-        response = self.client.get(reverse("ny_viz:index"))
+        response = self.client.get(reverse("app_nys:index"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No (nys) are available.")
         self.assertQuerySetEqual(response.context["latest_question_list"], [])
@@ -65,7 +65,7 @@ class QuestionIndexViewTests(TestCase):
         index page.
         """
         question = create_question(question_text="Past question.", days=-30)
-        response = self.client.get(reverse("ny_viz:index"))
+        response = self.client.get(reverse("app_nyz:index"))
         self.assertQuerySetEqual(
             response.context["latest_question_list"],
             [question],
