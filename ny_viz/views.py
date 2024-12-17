@@ -43,6 +43,7 @@ def vote(request, question_id):
             },
         )
     else:
+        # What does F() do?
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
         # Always return an HttpResponseRedirect after successfully dealing
