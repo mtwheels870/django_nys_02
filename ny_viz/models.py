@@ -10,8 +10,8 @@ class Question(models.Model):
 
     def was_published_recently(self):
         now = timezone.now()
-        delta = now - datetime.timedelta(days=1) 
-        print(f"now = {now}, delta = {delta}, pub_date = {self.pub_date}")
+        # delta = now - datetime.timedelta(days=1) 
+        # print(f"now = {now}, delta = {delta}, pub_date = {self.pub_date}")
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
 class Choice(models.Model):
