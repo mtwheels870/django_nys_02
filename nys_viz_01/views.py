@@ -23,7 +23,7 @@ def vote(request, question_id):
         # Fix the hard-coded name below (/polls/nys/)
         return render(
             request,
-            "nys/details.html",
+            "nys_viz_01/details.html",
             {
                 "question": question,
                 "error_message": "You didn't select a choice.",
