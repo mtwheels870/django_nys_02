@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class NysViz01Config(AppConfig):
+class NyVizConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'ny_viz'
