@@ -7,7 +7,7 @@ from django.views import generic
 from .models import Choice, Question
 
 class IndexView(generic.ListView):
-    template_name = "nys_viz_01/index.html"
+    template_name = "ny_viz/index.html"
     context_object_name = "latest_question_list"
 
     def get_queryset(self):
@@ -16,11 +16,11 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     model = Question
-    template_name = "nys_viz_01/detail.html"
+    template_name = "ny_viz/detail.html"
 
 class ResultsView(generic.DetailView):
     model = Question
-    template_name = "nys_viz_01/results.html"
+    template_name = "ny_viz/results.html"
     
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -31,7 +31,7 @@ def vote(request, question_id):
         # Fix the hard-coded name below (/polls/nys/)
         return render(
             request,
-            "nys_viz_01/detail.html",
+            "ny_viz/detail.html",
             {
                 "question": question,
                 "error_message": "You didn't select a choice.",
