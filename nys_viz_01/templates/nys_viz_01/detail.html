@@ -12,7 +12,8 @@
     {% endfor %}
     </ul>
     <p>New Stuff Below:</p>
-    <form action="{% url 'polls:vote' question.id %}" method="post">
+    <!-- use of app_name = nys below -->
+    <form action="{% url 'nys:vote' question.id %}" method="post">
         {% csrf_token %}
         <fieldset>
             <legend><h1>{{ question.question_text }}</h1></legend>
