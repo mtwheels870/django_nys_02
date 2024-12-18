@@ -75,10 +75,11 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# 'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'compassblue01',
         'USER': 'cb_admin',
         'PASSWORD': 'Ch0c0late!',
