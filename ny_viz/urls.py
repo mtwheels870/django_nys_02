@@ -4,7 +4,7 @@ from . import views
 
 app_name = "app_nys"
 urlpatterns = [
-    # ex: /nys/
+    # ex: /nys/.  Note, these are all formal classes (IndexView, DetailView...) inside views.py
     path("", views.IndexView.as_view(), name="index"),
     # ex: /nys/5/
     path("<int:pk>/", views.DetailView.as_view(), name="detail"),
