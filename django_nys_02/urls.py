@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path("nys/", include("ny_viz.urls")),
+    path("map/", include("markers.urls")),
     path('admin/', admin.site.urls),
 ]
