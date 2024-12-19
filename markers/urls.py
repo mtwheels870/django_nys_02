@@ -5,5 +5,5 @@ from . import views
 
 urlpatterns = [
     path("viewer/", TemplateView.as_view(template_name="markers/map.html")),
-    path("api/", include("api")),
+    path("api/", include("./api")),
 ]
