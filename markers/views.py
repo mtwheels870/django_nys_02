@@ -8,9 +8,10 @@ from markers.serializers import (
     MarkerSerializer,
 )
 
-
+# /maps/api/markers (through DefaultRouter)
 class MarkerViewSet(
     viewsets.ReadOnlyModelViewSet):
+    print("MTW, views.MarkerViewSet()")
     bbox_filter_field = "location"
     filter_backends = [filters.InBBoxFilter]
     queryset = Marker.objects.all()
