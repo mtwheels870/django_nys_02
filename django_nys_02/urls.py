@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-# path("map/api/", include("markers.api")),
+# I don't understand why: path("map/api/", can't me moved to the markers/ level, but include("api") won't work
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("nys/", include("ny_viz.urls")),
