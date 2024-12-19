@@ -9,7 +9,7 @@ map.setView(initial_position, 10)
 const layerGroup = L.layerGroup().addTo(map);
 // …
 async function load_markers() {
-  const markers_url = `/map/api/markers/?in_bbox=${map
+  const markers_url = `/centralny/api/markers/?in_bbox=${map
     .getBounds()
     .toBBoxString()}`;
   // console.log("map.js:load_markers, url: " + markers_url)
