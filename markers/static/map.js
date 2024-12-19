@@ -4,8 +4,8 @@ const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const layer = L.tileLayer(url, { attribution: copy });
 const map = L.map("map", { layers: [layer] });
 // map.fitWorld();
-const position = [43, -76.5];
-map.setView(position, 8)
+const initial_position = [43, -76.5];
+map.setView(initial_position, 10)
 const layerGroup = L.layerGroup().addTo(map);
 // …
 async function load_markers() {
