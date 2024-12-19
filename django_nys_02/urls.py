@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path("nys/", include("ny_viz.urls")),
     path("map/", include("markers.urls")),
-    path('admin/', admin.site.urls),
 ]
