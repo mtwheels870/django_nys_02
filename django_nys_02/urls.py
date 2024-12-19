@@ -21,6 +21,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("nys/", include("ny_viz.urls")),
-    path("map/", include("markers.urls")),
+    path("api", include("markers.api")),
+    path("", include("markers.urls")),
 ]
 print(f"project.urlpatterns = {urlpatterns}")
