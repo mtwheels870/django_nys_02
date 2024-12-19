@@ -31,8 +31,9 @@ ALLOWED_HOSTS = ["18.208.200.162"]
 # Application definition
 
 INSTALLED_APPS = [
-    'tutorial.apps.NyVizConfig',
-    'centralny.apps.MarkersConfig',
+    'tutorial.apps.TutorialConfig',
+    'centralny.apps.CentralNyConfig',
+    'world.apps.WorldConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
