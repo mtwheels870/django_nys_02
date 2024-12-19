@@ -17,9 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# path("map/api/", include("markers.api")),
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("nys/", include("ny_viz.urls")),
-    path("map/api/", include("markers.api")),
     path("map/", include("markers.urls")),
 ]
