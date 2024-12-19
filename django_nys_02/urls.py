@@ -23,3 +23,4 @@ urlpatterns = [
     path("nys/", include("ny_viz.urls")),
     path("map/", include("markers.urls")),
 ]
+print(f"project.urlpatterns = {urlpatterns}")
