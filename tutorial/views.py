@@ -8,7 +8,7 @@ from django.utils import timezone
 from .models import Choice, Question
 
 class IndexView(generic.ListView):
-    template_name = "ny_viz/index.html"
+    template_name = "tutorial/index.html"
     context_object_name = "latest_question_list"
 
     def get_queryset(self):
@@ -17,7 +17,7 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     model = Question
-    template_name = "ny_viz/detail.html"
+    template_name = "tutorial/detail.html"
 
     def get_queryset(self):
         """ Excludes any Qs that aren't published, yet.  """
@@ -25,7 +25,7 @@ class DetailView(generic.DetailView):
 
 class ResultsView(generic.DetailView):
     model = Question
-    template_name = "ny_viz/results.html"
+    template_name = "tutorial/results.html"
     
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -36,7 +36,7 @@ def vote(request, question_id):
         # Fix the hard-coded name below (/polls/nys/)
         return render(
             request,
-            "ny_viz/detail.html",
+            "tutorial/detail.html",
             {
                 "question": question,
                 "error_message": "You didn't select a choice.",
@@ -49,4 +49,4 @@ def vote(request, question_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse("app_nys:results", args=(question.id,)))
+        return HttpResponseRedirect(reverse("app_tut:results", args=(question.id,)))
