@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from markers.views import (
+from centralny.views import (
     MarkerViewSet,
 )
 

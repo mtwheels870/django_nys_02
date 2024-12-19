@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ["18.208.200.162"]
 
 INSTALLED_APPS = [
     'tutorial.apps.NyVizConfig',
-    'markers.apps.MarkersConfig',
+    'centralny.apps.MarkersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

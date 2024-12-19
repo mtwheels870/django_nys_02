@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.gis import admin
 
-from markers.models import Marker
+from centralny.models import Marker
 
 @admin.register(Marker)
 class MarkerAdmin(admin.GISModelAdmin):
