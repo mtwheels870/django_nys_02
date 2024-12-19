@@ -7,4 +7,4 @@ from . import views, api
 urlpatterns = [
     path("viewer/", TemplateView.as_view(template_name="markers/map.html")),
 ]
-print(f"markers.urlpatterns = {urlpatterns}")
+#print(f"markers.urlpatterns = {urlpatterns}")
