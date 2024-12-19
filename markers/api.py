@@ -10,4 +10,4 @@ router = routers.DefaultRouter()
 router.register(r"markers", MarkerViewSet)
 
 urlpatterns = router.urls
-print(f"after create, urlpatterns = {urlpatterns}")
+print(f"api.py: urlpatterns = {urlpatterns}")
