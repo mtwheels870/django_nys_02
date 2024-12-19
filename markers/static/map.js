@@ -4,7 +4,7 @@ const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const layer = L.tileLayer(url, { attribution: copy });
 const map = L.map("map", { layers: [layer] });
 // map.fitWorld();
-const initial_position = [43, -76.5];
+const initial_position = [43, -76.2];
 map.setView(initial_position, 10)
 const layerGroup = L.layerGroup().addTo(map);
 // …
@@ -12,6 +12,7 @@ async function load_markers() {
   const markers_url = `/api/markers/?in_bbox=${map
     .getBounds()
     .toBBoxString()}`;
+  console.log("load_markers, url: " + markers_url)
   const response = await fetch(
     markers_url
   );
@@ -20,6 +21,7 @@ async function load_markers() {
 }
 
 async function render_markers() {
+  console.log("render_markers")
   const markers = await load_markers();
   layerGroup.clearLayers();
   L.geoJSON(markers)
