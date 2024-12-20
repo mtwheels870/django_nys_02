@@ -5,7 +5,7 @@ from .models import WorldBorder
 class WorldBorderAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {"fields": ["name", "iso3"]}),
-        ("Mike's Label Here", {"fields": ["area", "pop2005", "region", "lon", "lat"], 
+        ("Additional Information", {"fields": ["area", "pop2005", "region", "lon", "lat"], 
             "classes": ["collapse"]}),
     ]
 
