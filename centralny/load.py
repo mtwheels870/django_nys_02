@@ -16,7 +16,7 @@ shp_model_mapping = {
     "mpoly": "MULTIPOLYGON",
 }
 
-path_name = "/home/bitnami/Data/County/NY_Counties_03.shp"
+path_name = "/home/bitnami/Data/County/NY_Counties_04.shp"
 county_shp = Path(path_name)
 
 def run(verbose=True):
