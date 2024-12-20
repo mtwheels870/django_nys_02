@@ -8,11 +8,11 @@ from .models import CensusBorderCounty
     # COUNTY_1
     # STATE_1
 shp_model_mapping = {
-    "fips": "COUNTY",
-    "iso2": "STATE",
-    "iso3": "COUNTY_1",
-    "un": "STATE_1",
-    "pop2005": "POP2000",
+    "county_name": "COUNTY",
+    "state_name": "STATE",
+    "county_code": "COUNTY_1",
+    "state_code": "STATE_1",
+    "pop2000": "POP2000",
     "mpoly": "MULTIPOLYGON",
 }
 
