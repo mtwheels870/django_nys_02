@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models as md1
 
 # Create your models here.
 from django.contrib.gis.db import models
@@ -28,7 +28,7 @@ class CensusBorderCounty(models.Model):
     def __str__(self):
         return self.county_name
 
-class CensusTract(django.db.models.Model):
+class CensusTract(md1.Model):
     county_code = models.ForeignKey(CensusBorderCounty, on_delete=models.CASCADE)
     state_code = models.CharField(max_length=2)
     tract_id = models.CharField(max_length=6)
