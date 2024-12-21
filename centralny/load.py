@@ -44,6 +44,7 @@ IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
 
 class Loader():
     def __init__(self):
+        self.counter = 0
 
     def run_county(self, verbose=True):
         county_shp = Path(COUNTY_PATH)
