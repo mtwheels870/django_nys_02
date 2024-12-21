@@ -11,14 +11,12 @@ class Marker(models.Model):
         return self.name
 
 class CensusBorderCounty(models.Model):
-    # Regular Django fields corresponding to the attributes in the
-    # world borders shapefile.
+    # COUNTY_1
+    county_code = models.CharField(max_length=3, primary_key=True)
     # COUNTY
     county_name = models.CharField(max_length=66)
     # STATE
     state_name = models.CharField(max_length=66)
-    # COUNTY_1
-    county_code = models.CharField(max_length=3, primary_key=True)
     # STATE_1
     state_code = models.CharField(max_length=2)
     pop2000 = models.IntegerField("Population 2000")
@@ -31,11 +29,8 @@ class CensusBorderCounty(models.Model):
         return self.county_name
 
 class CensusTract(models.Model):
-    # Regular Django fields corresponding to the attributes in the
-    # world borders shapefile.
+    county_code = models.ForeignKey(CensusBorderCounty, on_delete=models.CASCADE)
     state_code = models.CharField(max_length=2)
-    county_code = models.CharField(max_length=3)
-    county = models.ForeignKey(CensusBorderCounty, on_delete=models.CASCADE)
     tract_id = models.CharField(max_length=6)
     short_name = models.CharField(max_length=7)
     long_name = models.CharField(max_length=20)
