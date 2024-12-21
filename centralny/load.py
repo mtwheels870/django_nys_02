@@ -55,4 +55,4 @@ def run_ip_ranges(verbose=False, progress=1000):
     ip_range_shp = Path(IP_RANGE_PATH)
     lm = LayerMapping(DigitalElementIpRange, ip_range_shp, ip_range_mapping, transform=False)
     result = lm.save(strict=True, verbose=verbose, progress=progress)
-    print(f"result = {result}, lm.num_feat = {lm.num_feat}")
+    print(f"result = {result}, lm.num_feat = {lm.layer.num_feat}")
