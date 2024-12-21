@@ -28,7 +28,7 @@ class CensusBorderCounty(models.Model):
     def __str__(self):
         return self.county_name
 
-class CensusTract(md1.Model):
+class CensusTract(models.Model):
     county_code = models.ForeignKey(CensusBorderCounty, on_delete=models.CASCADE)
     state_code = models.CharField(max_length=2)
     tract_id = models.CharField(max_length=6)
@@ -45,7 +45,7 @@ class CensusTract(md1.Model):
         return self.short_name
 
 # pp = pulse_plus (in the original Digital Element Net Acuity DB 30
-class DigitalElementIpRange(models.Model):
+class DigitalElementIpRange(md1.Model):
     # Note, this is just for IPv4.  We might have to change for IPv6
     ip_range_start = models.CharField(max_length=20)
     ip_range_end = models.CharField(max_length=20)
@@ -55,6 +55,7 @@ class DigitalElementIpRange(models.Model):
     pp_latitude = models.CharField(max_length=20)
     pp_longitude = models.CharField(max_length=20)
     census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.SET_NULL)
+    mpoly = models.MultiPolygonField()
 
     def __str__(self):
         return self.ip_range_start
