@@ -53,6 +53,7 @@ class Loader():
         self.lm_county.save(strict=True, verbose=verbose)
 
     def run_tracts(self, verbose=False, progress=500):
+        lookup = ContainsLookup()
         tract_shp = Path(TRACT_PATH)
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
@@ -60,7 +61,6 @@ class Loader():
             g = feature.geom
             description = feature.fid
             print(f"f.fid = {description}, g = ...")
-            g.register_lookup(ContainsLookup)
 
     def run_ip_ranges(self, verbose=False, progress=1000):
         ip_range_shp = Path(IP_RANGE_PATH)
