@@ -52,8 +52,8 @@ class DigitalElementIpRange(models.Model):
     pp_city = models.CharField(max_length=20)
     pp_cxn_speed = models.CharField(max_length=20)
     pp_cxn_type = models.CharField(max_length=10)
-    pp_latitude = models.FloatField()
-    pp_longitude = models.FloatField()
+    pp_latitude = models.CharField(max_length=20)
+    pp_longitude = models.CharField(max_length=20)
     census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
