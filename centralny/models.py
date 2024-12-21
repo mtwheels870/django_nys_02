@@ -53,7 +53,7 @@ class DigitalElementIpRange(models.Model):
     pp_latitude = models.CharField(max_length=20)
     pp_longitude = models.CharField(max_length=20)
     census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.SET_NULL)
-    mpoly = models.MultiPointField()
+    mpoint = models.MultiPointField()
 
     def __str__(self):
         return self.ip_range_start

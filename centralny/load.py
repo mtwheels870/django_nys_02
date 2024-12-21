@@ -47,6 +47,7 @@ ip_range_mapping = {
     "pp_cxn_type" : "pp-conn-ty",
     "pp_latitude" : "pp-latitud",
     "pp_longitude" : "pp-longitu",
+    "mpoint" : "MULTIPOINT",
 }
 
 IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
