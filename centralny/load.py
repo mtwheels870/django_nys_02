@@ -23,9 +23,8 @@ def run_county(verbose=True):
     lm.save(strict=True, verbose=verbose)
 
 tract_mapping = {
-    "fk": {"county_code": "COUNTY_1"},     # Foreign key field
+    "county_code": {"county_code": "COUNTY_1"},     # Foreign key field
     "state_code": "STATEFP",
-    "county_code": "COUNTYFP",
     "tract_id": "TRACTCE",
     "short_name": "NAME",
     "long_name": "NAMELSAD",
