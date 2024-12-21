@@ -51,11 +51,11 @@ class Loader():
         self.lm_county = LayerMapping(CensusBorderCounty, county_shp, county_mapping, transform=False)
         self.lm_county.save(strict=True, verbose=verbose)
 
-    def run_tracts(self, verbose=True):
+    def run_tracts(self, verbose=False, progress=500):
         tract_shp = Path(TRACT_PATH)
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
-        self.lm_tracts.save(strict=True, verbose=verbose)
-        for feauture in self.lm_tracts.layer:
+        self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
+        for feature in self.lm_tracts.layer:
             g = feature.geom
             description = feature["description"]
             print(f"d = {description}, g = {g}")
