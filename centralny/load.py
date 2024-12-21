@@ -1,6 +1,6 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
-from .models import CensusBorderCounty, CensusTract
+from .models import CensusBorderCounty, CensusTract, DigitalElementIpRange
 
 # Field from models.py, mapped to field names from the shape file
     # COUNTY
