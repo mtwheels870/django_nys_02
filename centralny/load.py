@@ -1,5 +1,6 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
+from django.contrib.gis.db.models import ContainsLookup
 from .models import CensusBorderCounty, CensusTract, DeIpRange
 
 # Field from models.py, mapped to field names from the shape file
@@ -59,6 +60,7 @@ class Loader():
             g = feature.geom
             description = feature.fid
             print(f"f.fid = {description}, g = ...")
+            g.register_lookup(ContainsLookup)
 
     def run_ip_ranges(self, verbose=False, progress=1000):
         ip_range_shp = Path(IP_RANGE_PATH)
