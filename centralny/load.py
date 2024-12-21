@@ -38,3 +38,19 @@ def run_tracts(verbose=True):
     tract_shp = Path(TRACT_PATH)
     lm = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
     lm.save(strict=True, verbose=verbose)
+
+ip_range_mapping = {
+    "ip_range_start" : "start-ip",
+    "ip_range_end" : "end-ip",
+    "pp_city" : "pp-city",
+    "pp_cxn_speed" : "pp-conn-sp",
+    "pp_cxn_type" : "pp-conn-ty",
+    "pp_latitude" : "pp-latitud",
+    "pp_longitude" : "pp-longitu",
+}
+
+IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
+def run_ip_ranges(verbose=True):
+    ip_range_shp = Path(IP_RANGE_PATH)
+    lm = LayerMapping(DigitalElementIpRange, ip_range_shp, ip_range_mapping, transform=False)
+    lm.save(strict=True, verbose=verbose)

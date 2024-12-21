@@ -43,3 +43,19 @@ class CensusTract(models.Model):
     # Returns the string representation of the model.
     def __str__(self):
         return self.short_name
+
+# pp = pulse_plus (in the original Digital Element Net Acuity DB 30
+class DigitalElementIpRange(models.Model):
+    # Note, this is just for IPv4.  We might have to change for IPv6
+    ip_range_start = models.CharField(max_length=20)
+    ip_range_end = models.CharField(max_length=20)
+    pp_city = models.CharField(max_length=20)
+    pp_cxn_speed = models.CharField(max_length=20)
+    pp_cxn_type = models.CharField(max_length=10)
+    pp_latitude = models.FloatField()
+    pp_longitude = models.FloatField()
+    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.ip_range_start
+
