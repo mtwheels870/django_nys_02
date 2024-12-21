@@ -28,7 +28,7 @@ class CensusBorderCounty(models.Model):
     def __str__(self):
         return self.county_name
 
-class CensusTract(models.Model):
+class CensusTract(django.db.models.Model):
     county_code = models.ForeignKey(CensusBorderCounty, on_delete=models.CASCADE)
     state_code = models.CharField(max_length=2)
     tract_id = models.CharField(max_length=6)
