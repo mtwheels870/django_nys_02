@@ -57,7 +57,7 @@ class Loader():
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
         for feature in self.lm_tracts.layer:
             g = feature.geom
-            description = feature["description"]
+            description = str(feature)
             print(f"d = {description}, g = {g}")
 
     def run_ip_ranges(self, verbose=False, progress=1000):
@@ -68,5 +68,5 @@ class Loader():
         print(f"lm.num_feat = {lm.layer.num_feat}")
         for feauture in self.lm_tracts.layer:
             g = feature.geom
-            description = feature["description"]
+            description = str(feature)
             print(f"d = {description}, g = {g}")
