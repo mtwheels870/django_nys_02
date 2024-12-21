@@ -57,8 +57,8 @@ class Loader():
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
         for feature in self.lm_tracts.layer:
             g = feature.geom
-            description = feature["short_name"]
-            print(f"d = {description}, g = ...")
+            description = feature.fid
+            print(f"f.fid = {description}, g = ...")
 
     def run_ip_ranges(self, verbose=False, progress=1000):
         ip_range_shp = Path(IP_RANGE_PATH)
