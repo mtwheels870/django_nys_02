@@ -51,8 +51,8 @@ ip_range_mapping = {
 }
 
 IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
-def run_ip_ranges(verbose=True):
+def run_ip_ranges(verbose=False, progress=1000):
     ip_range_shp = Path(IP_RANGE_PATH)
     lm = LayerMapping(DigitalElementIpRange, ip_range_shp, ip_range_mapping, transform=False)
-    num_saved, num_feat = lm.save(strict=True, verbose=verbose)
-    print(f"num_saved = ${num_saved}")
+    result = lm.save(strict=True, verbose=verbose, progress=progress)
+    print(f"result = ${result}")
