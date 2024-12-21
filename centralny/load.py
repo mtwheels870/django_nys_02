@@ -33,7 +33,7 @@ tract_mapping = {
     "mpoly": "MULTIPOLYGON",
 }
 
-TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_02.shp"
+TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
 def run_tracts(verbose=True):
     tract_shp = Path(TRACT_PATH)
     lm = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
