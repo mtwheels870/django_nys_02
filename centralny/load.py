@@ -1,6 +1,6 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
-from django.contrib.gis.db.models import ContainsLookup
+import django.contrib.gis.db.models 
 from .models import CensusBorderCounty, CensusTract, DeIpRange
 
 # Field from models.py, mapped to field names from the shape file
