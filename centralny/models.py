@@ -42,4 +42,4 @@ class CensusTract(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
-        return self.county_name
+        return self.short_name
