@@ -1,6 +1,6 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
-from .models import CensusBorderCounty
+from .models import CensusBorderCounty, CensusTract
 
 # Field from models.py, mapped to field names from the shape file
     # COUNTY
@@ -33,8 +33,8 @@ tract_mapping = {
     "mpoly": "MULTIPOLYGON",
 }
 
-TRACT_PATH = "/home/bitnami/Data/County/NY_Counties_04.shp"
-def run_county(verbose=True):
-    county_shp = Path(COUNTY_PATH)
-    lm = LayerMapping(CensusBorderCounty, county_shp, county_mapping, transform=False)
+TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_02.shp"
+def run_tracts(verbose=True):
+    tract_shp = Path(TRACT_PATH)
+    lm = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
     lm.save(strict=True, verbose=verbose)
