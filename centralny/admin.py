@@ -13,7 +13,7 @@ class CensusBorderCountyAdmin(admin.GISModelAdmin):
 
 @admin.register(CensusTract)
 class CensusTractAdmin(admin.GISModelAdmin):
-    list_display = ("county_code", "name", "mpoly")
+    list_display = ("county_code", "short_name", "mpoly")
 
 @admin.register(DeIpRange)
 class DeIpRangeAdmin(admin.GISModelAdmin):
