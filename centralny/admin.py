@@ -10,10 +10,15 @@ from centralny.models import Marker, CensusBorderCounty, CensusTract, DeIpRange
 @admin.register(CensusBorderCounty)
 class CensusBorderCountyAdmin(admin.GISModelAdmin):
     fieldsets = [
-        (None, {"fields": ["county_name", "county_code", "pop2000"]}),
+        (None, {"fields": ["county_name", "county_code", "get_pop2000"]}),
         ("Geography", {"fields": ["mpoly"], 
             "classes": ["collapse"]}),
     ]
+    def get_pop2000(self, obj):
+        return obj.pop2000_formatted
+
+    get_pop2000.description = "Population 2000"
+
 #    list_display = ("county_name", "county_code", "pop2000", "mpoly")
 
 @admin.register(CensusTract)
