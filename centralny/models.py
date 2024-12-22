@@ -40,7 +40,6 @@ class CensusTract(models.Model):
     long_name = models.CharField(max_length=20)
     interp_lat = models.CharField(max_length=11)
     interp_long = models.CharField(max_length=12)
-    de_company_name = models.CharField(max_length=50, default="Acme Explosives")
 
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
@@ -60,6 +59,7 @@ class DeIpRange(models.Model):
     pp_latitude = models.CharField(max_length=20)
     pp_longitude = models.CharField(max_length=20)
     census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.SET_NULL)
+    de_company_name = models.CharField(max_length=50, default="Acme Explosives")
     mpoint = models.MultiPointField(null=True)
 
     def __str__(self):
