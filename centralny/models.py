@@ -45,8 +45,8 @@ class CensusTract(models.Model):
 # pp = pulse_plus (in the original Digital Element Net Acuity DB 30
 class DeIpRange(models.Model):
     # Note, this is just for IPv4.  We might have to change for IPv6
-    ip_range_start = models.CharField(max_length=20)
-    ip_range_end = models.CharField(max_length=20)
+    ip_range_start = models.CharField("IP Start", max_length=20)
+    ip_range_end = models.CharField("IP End", max_length=20)
     pp_city = models.CharField(max_length=20)
     pp_cxn_speed = models.CharField(max_length=20)
     pp_cxn_type = models.CharField(max_length=10)
