@@ -67,9 +67,12 @@ class Loader():
         for ip_range in DeIpRange.objects.all():
             point = Point(float(ip_range.pp_latitude), float(ip_range.pp_longitude))
             print(f"looking up point = {point}") 
-            found = CensusTract.objects.filter(mpoly__contains==point)
-            if (found) :
-                print(f"found = {found}")
+            for tract in CensusTract.objects.all():
+                print(f"checking tract: = {tract.short_name}") 
+                found = tract.mpoly.contains(point)
+                if (found) :
+                    print(f"found = {found}")
+                    break
             index = index + 1
             if (index >= 5):
                 break
