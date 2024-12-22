@@ -9,11 +9,20 @@ class MarkerAdmin(admin.GISModelAdmin):
 
 @admin.register(CensusBorderCounty)
 class CensusBorderCountyAdmin(admin.GISModelAdmin):
-    list_display = ("county_name", "county_code", "pop2000", "mpoly")
+    fieldsets = [
+        (None, {"fields": ["county_name", "county_code", "pop2000"]}),
+        ("Geography", {"fields": ["mpoly"], 
+            "classes": ["collapse"]}),
+    ]
+#    list_display = ("county_name", "county_code", "pop2000", "mpoly")
 
 @admin.register(CensusTract)
 class CensusTractAdmin(admin.GISModelAdmin):
-    list_display = ("county_code", "short_name", "mpoly")
+    fieldsets = [
+        (None, {"fields": ["county_code", "short_name"]}),
+        ("Geography", {"fields": ["mpoly"], 
+            "classes": ["collapse"]}),
+    ]
 
 @admin.register(DeIpRange)
 class DeIpRangeAdmin(admin.GISModelAdmin):
