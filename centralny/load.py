@@ -65,8 +65,9 @@ class Loader():
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         index = 0
         for ip_range in DeIpRange.objects.all():
-            point = Point(float(ip_range.pp_latitude), float(ip_range.pp_longitude))
-            print(f"looking up point = {point}") 
+            # point = Point(float(ip_range.pp_latitude), float(ip_range.pp_longitude))
+            point = Point(float(ip_range.pp_longitude), float(ip_range.pp_latitude))
+            print(f"\nlooking up point = {point}") 
             for tract in CensusTract.objects.all():
                 print(f"checking tract: = {tract.short_name}") 
                 found = tract.mpoly.contains(point)
@@ -74,7 +75,7 @@ class Loader():
                     print(f"found = {found}")
                     break
             index = index + 1
-            if (index >= 5):
+            if (index >= 3):
                 break
 
 #        for feature in self.lm_tracts.layer:
