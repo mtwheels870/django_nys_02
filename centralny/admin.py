@@ -9,12 +9,12 @@ class MarkerAdmin(admin.GISModelAdmin):
 
 @admin.register(CensusBorderCounty)
 class CensusBorderCountyAdmin(admin.GISModelAdmin):
-    list_display = ("county_name", "county_code", "pop2000", "location")
+    list_display = ("county_name", "county_code", "pop2000", "mpoly")
 
 @admin.register(CensusTract)
 class CensusTractAdmin(admin.GISModelAdmin):
-    list_display = ("county_code", "name", "location")
+    list_display = ("county_code", "name", "mpoly")
 
 @admin.register(DeIpRange)
 class DeIpRangeAdmin(admin.GISModelAdmin):
-    list_display = ("ip_range_start", "ip_range_end", "location")
+    list_display = ("ip_range_start", "ip_range_end", "mpoint")
