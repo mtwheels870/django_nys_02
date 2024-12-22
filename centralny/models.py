@@ -24,7 +24,7 @@ class CensusBorderCounty(models.Model):
     mpoly = models.MultiPolygonField()
 
     @property
-    @admin.display(decription="Population 2000", ordering="pop2000")
+    @admin.display(description="Population 2000", ordering="pop2000")
     def pop2000_formatted(self):
         return f"{self.pop2000:,}"
 
