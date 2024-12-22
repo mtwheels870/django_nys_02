@@ -65,7 +65,7 @@ class Loader():
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         index = 0
         for ip_range in DeIpRange.objects.all():
-            point = Point(ip_range.pp_latitude, ip_range.pp_longitude)
+            point = Point(float(ip_range.pp_latitude), float(ip_range.pp_longitude))
             print(f"looking up point = {point}") 
             found = CensusTract.objects.filter(mpoly__contains==point)
             if (found) :
