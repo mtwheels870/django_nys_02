@@ -66,12 +66,12 @@ class Loader():
         index = 0
         for ip_range in DeIpRange.objects.all():
             point = Point(float(ip_range.pp_longitude), float(ip_range.pp_latitude))
-            print(f"\nlooking up point = {point}") 
+            #print(f"\nlooking up point = {point}") 
             for tract in CensusTract.objects.all():
-                print(f"checking tract: = {tract.short_name}") 
+                # print(f"checking tract: = {tract.short_name}") 
                 found = tract.mpoly.contains(point)
                 if (found) :
-                    print(f"point: {point}, in tract: {tract.short_name}")
+                    print(f"point[{index}]: {point}, in tract: {tract.short_name}")
                     # ip_range.mpoint = point
                     ip_range.census_tract = tract
                     ip_range.save()
