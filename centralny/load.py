@@ -39,6 +39,7 @@ ip_range_mapping = {
     "pp_cxn_type" : "pp-conn-ty",
     "pp_latitude" : "pp-latitud",
     "pp_longitude" : "pp-longitu",
+    "de_company_name" : "digel_comp",
     "mpoint" : "MULTIPOINT",
 }
 

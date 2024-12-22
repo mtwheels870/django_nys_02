@@ -40,6 +40,7 @@ class CensusTract(models.Model):
     long_name = models.CharField(max_length=20)
     interp_lat = models.CharField(max_length=11)
     interp_long = models.CharField(max_length=12)
+    de_company_name = models.CharField(max_length=50)
 
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
