@@ -3,9 +3,9 @@ from django.contrib.gis import admin
 
 from centralny.models import Marker, CensusBorderCounty, CensusTract, DeIpRange
 
-@admin.register(Marker)
-class MarkerAdmin(admin.GISModelAdmin):
-    list_display = ("name", "location")
+#@admin.register(Marker)
+#class MarkerAdmin(admin.GISModelAdmin):
+#    list_display = ("name", "location")
 
 @admin.register(CensusBorderCounty)
 class CensusBorderCountyAdmin(admin.GISModelAdmin):
@@ -26,4 +26,9 @@ class CensusTractAdmin(admin.GISModelAdmin):
 
 @admin.register(DeIpRange)
 class DeIpRangeAdmin(admin.GISModelAdmin):
-    list_display = ("ip_range_start", "ip_range_end", "mpoint")
+    #list_display = ("ip_range_start", "ip_range_end", "mpoint")
+    fieldsets = [
+        (None, {"fields": ["ip_range_start", "ip_range_end"]}),
+        ("Geography", {"fields": ["mpoint"], 
+            "classes": ["collapse"]}),
+    ]
