@@ -28,7 +28,9 @@ class CensusTractAdmin(admin.GISModelAdmin):
 class DeIpRangeAdmin(admin.GISModelAdmin):
     #list_display = ("ip_range_start", "ip_range_end", "mpoint")
     fieldsets = [
-        (None, {"fields": ["ip_range_start", "ip_range_end"]}),
+        (None, {"fields": ["ip_range_start", "ip_range_end", "de_company_name"]}),
+        ("Connection Details", {"fields": ["pp_city", "pp_cxn_speed", "pp_cxn_type"], 
+            "classes": ["collapse"]}),
         ("Geography", {"fields": ["mpoint"], 
             "classes": ["collapse"]}),
     ]
