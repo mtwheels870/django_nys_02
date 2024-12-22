@@ -72,7 +72,7 @@ class Loader():
                 found = tract.mpoly.contains(point)
                 if (found) :
                     print(f"point: {point}, in tract: {tract.short_name}")
-                    ip_range.mpoint = point
+                    # ip_range.mpoint = point
                     ip_range.census_tract = tract
                     ip_range.save()
                     break
