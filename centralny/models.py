@@ -22,6 +22,11 @@ class CensusBorderCounty(models.Model):
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
 
+    @property
+    @admin.display(decription="Population 2000", ordering="pop2000")
+    def pop2000_formatted(self):
+        return f"{self.pop2000:,}"
+
     # Returns the string representation of the model.
     def __str__(self):
         return self.county_name
