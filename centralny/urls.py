@@ -5,6 +5,6 @@ from . import views, api
 
 # path("api/markers", views.MarkerViewSet.as_view({'get': 'list'}), name="markers")
 urlpatterns = [
-    path("map/", TemplateView.as_view(template_name="centralny/map.html")),
+    path("map/", TemplateView.as_view(template_name="centralny/map2.html")),
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")

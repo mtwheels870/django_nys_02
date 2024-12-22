@@ -128,7 +128,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# MTW
+# MTW, need to put the alias in the Apache file as well (should be done).
+# python manage.py collectstatic
 STATIC_ROOT = '/home/bitnami/CompassBlue/django_nys_02/static'
 
 # Default primary key field type
