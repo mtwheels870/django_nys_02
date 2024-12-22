@@ -1,5 +1,6 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
+from django.contrib.gis.geos import Point
 import django.contrib.gis.db.models 
 from .models import CensusBorderCounty, CensusTract, DeIpRange
 
@@ -53,18 +54,27 @@ class Loader():
         self.lm_county.save(strict=True, verbose=verbose)
 
     def run_tracts(self, verbose=False, progress=500):
-        lookup = ContainsLookup()
         tract_shp = Path(TRACT_PATH)
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
-        for feature in self.lm_tracts.layer:
-            g = feature.geom
-            description = feature.fid
-            print(f"f.fid = {description}, g = ...")
 
     def run_ip_ranges(self, verbose=False, progress=1000):
         ip_range_shp = Path(IP_RANGE_PATH)
-        self.lm_ranges = LayerMapping(DigitalElementIpRange, ip_range_shp, ip_range_mapping, transform=False)
+        self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, ip_range_mapping, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
-        print(f"lm.num_feat = {lm.layer.num_feat}")
+        index = 0
+        for ip_range in DeIpRange.objects.all():
+            point = Point(ip_range.pp_latitude, ip_range.pp_longitude)
+            print(f"looking up point = {point}") 
+            found = CensusTract.objects.filter(mpoly__contains==point)
+            if (found) :
+                print(f"found = {found}")
+            index = index + 1
+            if (index >= 5):
+                break
+
+#        for feature in self.lm_tracts.layer:
+#            g = feature.geom
+#            description = feature.fid
+#            print(f"f.fid = {description}, g = ...")
