@@ -82,11 +82,11 @@ async function load_target(url_field) {
   return geojson;
 }
 
-async function render_target(url_component, popup_field, color) {
+async function render_target(url_component, popup_field, myStyle) {
   // console.log("map.js:render_markers")
   const markers = await load_target(url_component);
   // Clears our layer group
-  L.geoJSON(markers, color: $color)
+  L.geoJSON(markers, { style: myStyle })
     .bindPopup(
       (layer) =>
         layer.feature.properties.$popup_field
@@ -96,8 +96,8 @@ async function render_target(url_component, popup_field, color) {
 
 async function render_all() {
   layerGroup.clearLayers();
-  render_target('markers', 'name', 'red');
-  render_target('tracts', 'short_name', 'orange');
+  render_target('markers', 'name', {"color": "#ff7800"})
+  render_target('tracts', 'short_name', {"color": "#506030"})
   // render_target('counties', 'county_name', 'blue');
 }
 
