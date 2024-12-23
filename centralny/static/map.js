@@ -22,7 +22,8 @@ const layerControl = L.control.layers(drawItems).addTo(map);
 
 // …
 async function load_markers() {
-  const markers_url = `/centralny/api/markers/?in_bbox=${map
+  // const markers_url = `/centralny/api/markers/?in_bbox=${map
+  const markers_url = `/centralny/api/tracts/?in_bbox=${map
     .getBounds()
     .toBBoxString()}`;
   // console.log("map.js:load_markers, url: " + markers_url)
@@ -41,15 +42,9 @@ async function render_markers() {
   L.geoJSON(markers)
     .bindPopup(
       (layer) =>
-        layer.feature.properties.name
+        layer.feature.properties.short_name
     )
     .addTo(layerGroup);
-    var circle = L.circle(43, -76], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: 1000
-}).addTo(layerGroup)
 }
 
 map.on("moveend", render_markers)
