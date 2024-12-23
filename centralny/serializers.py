@@ -1,6 +1,6 @@
 from rest_framework_gis import serializers
 
-from centralny.models import Marker, CensusTract
+from centralny.models import Marker, CensusTract, CensusBorderCounty
 
 class MarkerSerializer(
     serializers.GeoFeatureModelSerializer):
@@ -15,3 +15,10 @@ class CensusTractSerializer(
         fields = ("id", "short_name")
         geo_field = "mpoly"
         model = CensusTract
+
+class CountySerializer(
+    serializers.GeoFeatureModelSerializer):
+    class Meta:
+        fields = ("id", "county_name")
+        geo_field = "mpoly"
+        model = CensusBorderCounty

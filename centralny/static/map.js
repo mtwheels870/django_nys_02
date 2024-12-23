@@ -7,7 +7,7 @@ const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const layer = L.tileLayer(url, { attribution: copy });
 const map = L.map("map", { layers: [layer] });
 // map.fitWorld();
-const initial_position = [43.2, -76.05];
+const initial_position = [43.05, -76.1];
 const initial_zoom = 13
 map.setView(initial_position, initial_zoom)
 // map.fitBounds(-75.8, 42.9, -76.2, 43.3);
@@ -18,6 +18,7 @@ const layerGroup = L.layerGroup().addTo(map);
 // const layerControl = L.control.layers(drawItems).addTo(map);
 
 // …
+/*
 async function load_markers() {
   const markers_url = `/centralny/api/markers/?in_bbox=${map
     .getBounds()
@@ -30,7 +31,6 @@ async function load_markers() {
   return geojson;
 }
 
-/*
 async function render_markers() {
   // console.log("map.js:render_markers")
   const markers = await load_markers();
@@ -98,7 +98,7 @@ async function render_all() {
   layerGroup.clearLayers();
   render_target('markers', 'name', {"color": "#ff7800"})
   render_target('tracts', 'short_name', {"color": "#506030"})
-  // render_target('counties', 'county_name', 'blue');
+  render_target('counties', 'county_name', {"color": "#20bb80"})
 }
 
 map.on("moveend", render_all)
