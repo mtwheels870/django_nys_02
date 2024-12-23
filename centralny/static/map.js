@@ -26,14 +26,13 @@ async function load_target(url_field) {
   return geojson;
 }
 
-async function render_target(url_component, popup_field, myStyle) {
+async function render_target(url_component, description, popup_field, myStyle) {
   console.log("map.js:render_target(), popup_field: " + popup_field)
   const markers = await load_target(url_component);
   // Clears our layer group
   L.geoJSON(markers, { style: myStyle })
     .bindPopup(
-      (layer) =>
-        layer.feature.properties[popup_field]
+      (layer) => "<b>Popup label, " + description + ": " + layer.feature.properties[popup_field] + "</b><br>";
     )
     .addTo(layerGroup);
 }
@@ -43,11 +42,11 @@ async function render_all() {
   // console.log("render_all(), zoom level: " + zoom)
   layerGroup.clearLayers();
   if (zoom <= 10) {
-    render_target('counties', 'county_name', {"color": "#20bb80"})
+    render_target('counties', 'County Name', 'county_name', {"color": "#20bb80"})
   } else if (zoom <= 15) {
-    render_target('tracts', 'short_name', {"color": "#506030"})
+    render_target('tracts', 'Tract Id: ', 'short_name', {"color": "#506030"})
   } else {
-    render_target('ip_ranges', 'ip_range_start', {"color": "#b030b0"})
+    render_target('ip_ranges', 'IP Range: ', 'ip_range_start', {"color": "#b030b0"})
   } 
 }
 
