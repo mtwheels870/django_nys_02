@@ -48,18 +48,20 @@ async function render_all() {
       "weight": 3
     }
     render_target('counties', 'County Name', 'county_name', style)
-  } else if (zoom <= 15) {
-    style = {
-      "color": "#506030",
-      "fillOpacity": 0.25,
-      "weight": 2,
-    }
-    render_target('tracts', 'Tract Id: ', 'short_name', style)
   } else {
-    style = {
-      "color": "#b030b0"
-    }
-    render_target('ip_ranges', 'IP Range: ', 'ip_range_start', style)
+      // Always do ip ranges
+      style = {
+        "color": "#b030b0"
+      }
+      render_target('ip_ranges', 'IP Range: ', 'ip_range_start', style)
+      if (zoom <= 15) {
+        style = {
+          "color": "#506030",
+          "fillOpacity": 0.25,
+          "weight": 2,
+        }
+        render_target('tracts', 'Tract Id: ', 'short_name', style)
+      } 
   } 
 }
 
