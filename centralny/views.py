@@ -7,6 +7,7 @@ from centralny.models import Marker, CensusTract
 
 from centralny.serializers import (
     MarkerSerializer,
+    CensusTractSerializer,
 )
 
 # /maps/api/markers (through DefaultRouter)
@@ -24,4 +25,4 @@ class CensusTractViewSet(
     bbox_filter_field = "mpoly"
     filter_backends = [filters.InBBoxFilter]
     queryset = CensusTract.objects.all()
-    serializer_class = MarkerSerializer
+    serializer_class = CensusTractSerializer
