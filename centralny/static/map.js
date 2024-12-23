@@ -9,8 +9,8 @@ const map = L.map("map", { layers: [layer] });
 // map.fitWorld();
 const initial_position = [43, -76.2];
 const initial_zoom = 8
-// map.setView(initial_position, initial_zoom)
-map.fitBounds(-75.8, 42.9, -76.2, 43.3);
+map.setView(initial_position, initial_zoom)
+// map.fitBounds(-75.8, 42.9, -76.2, 43.3);
 (initial_position, initial_zoom)
 /* Creates the Layer group */
 const layerGroup = L.layerGroup().addTo(map);
@@ -68,10 +68,35 @@ async function render_tracts() {
     .addTo(layerGroup);
 }
 
+async function load_target(url_field) {
+  // const markers_url = `/centralny/api/markers/?in_bbox=${map
+  const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
+    .getBounds()
+    .toBBoxString()}`;
+  // console.log("map.js:load_markers, url: " + markers_url)
+  const response = await fetch(
+    markers_url
+  );
+  const geojson = await response.json();
+  return geojson;
+}
+
+async function render_target(url_component, popup_field) {
+  // console.log("map.js:render_markers")
+  const markers = await load_target(url_component);
+  // Clears our layer group
+  L.geoJSON(markers)
+    .bindPopup(
+      (layer) =>
+        layer.feature.properties.[popup_field]
+    )
+    .addTo(layerGroup);
+}
+
 async function render_all() {
   layerGroup.clearLayers();
-  render_markers();
-  render_tracts();
+  render_target('markers', 'name');
+  render_target('tracts', 'short_name');
 }
 
 map.on("moveend", render_all)
