@@ -11,7 +11,6 @@ const initial_position = [43, -76.2];
 const initial_zoom = 8
 map.setView(initial_position, initial_zoom)
 // map.fitBounds(-75.8, 42.9, -76.2, 43.3);
-(initial_position, initial_zoom)
 /* Creates the Layer group */
 const layerGroup = L.layerGroup().addTo(map);
 // var drawnItems = new L.featureGroup()
