@@ -4,6 +4,7 @@ from centralny.views import (
     MarkerViewSet,
     CensusTractViewSet,
     CountyViewSet,
+    DeIpRangeViewSet,
 )
 
 # MTW: This is in global space (no class)
@@ -12,6 +13,7 @@ router = routers.DefaultRouter()
 router.register(r"markers", MarkerViewSet)
 router.register(r"tracts", CensusTractViewSet)
 router.register(r"counties", CountyViewSet)
+router.register(r"ip_ranges", DeIpRangeViewSet)
 
 urlpatterns = router.urls
 # print(f"api.py: urlpatterns = {urlpatterns}")

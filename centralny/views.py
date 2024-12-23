@@ -3,12 +3,13 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
-from centralny.models import Marker, CensusTract, County
+from centralny.models import Marker, CensusTract, County, DeIpRange
 
 from centralny.serializers import (
     MarkerSerializer,
     CensusTractSerializer,
-    CountySerializer
+    CountySerializer,
+    DeIpRangeSerializer
 )
 
 # /maps/api/markers (through DefaultRouter)
@@ -35,3 +36,12 @@ class CountyViewSet(
     filter_backends = [filters.InBBoxFilter]
     queryset = County.objects.all()
     serializer_class = CountySerializer
+
+class DeIpRangeViewSet(
+    viewsets.ReadOnlyModelViewSet):
+    # print("MTW, views.MarkerViewSet()")
+    bbox_filter_field = "mpoly"
+    filter_backends = [filters.InBBoxFilter]
+    queryset = DeIpRange.objects.all()
+    serializer_class = DeIpRangeSerializer
+    

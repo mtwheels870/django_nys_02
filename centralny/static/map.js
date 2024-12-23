@@ -42,9 +42,16 @@ async function render_all() {
   zoom = map.getZoom()
   console.log("render_all(), zoom level: " + zoom)
   layerGroup.clearLayers();
-  render_target('markers', 'name', {"color": "#ff7800"})
-  render_target('tracts', 'short_name', {"color": "#506030"})
-  render_target('counties', 'county_name', {"color": "#20bb80"})
+  if (zoom <= 10) {
+    render_target('counties', 'county_name', {"color": "#20bb80"})
+  else if (zoom <= 15) {
+    render_target('tracts', 'short_name', {"color": "#506030"})
+  } else {
+    render_target('ip_ranges', 'de_company_name', {"color": "#b030b0"})
+  } 
+  // render_target('markers', 'name', {"color": "#ff7800"})
+  /* render_target('tracts', 'short_name', {"color": "#506030"})
+  render_target('counties', 'county_name', {"color": "#20bb80"}) */
 }
 
 map.on("moveend", render_all)
