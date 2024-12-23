@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
-from centralny.models import Marker, CensusTract, CensusBorderCounty
+from centralny.models import Marker, CensusTract, County
 
 from centralny.serializers import (
     MarkerSerializer,
@@ -32,5 +32,5 @@ class CountyViewSet(
     # print("MTW, views.MarkerViewSet()")
     bbox_filter_field = "mpoly"
     filter_backends = [filters.InBBoxFilter]
-    queryset = CensusBorderCounty.objects.all()
-    serializer_class = CensusTractSerializer
+    queryset = County.objects.all()
+    serializer_class = CountySerializer

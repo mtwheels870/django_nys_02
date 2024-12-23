@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.contrib.gis import admin
 
-from centralny.models import Marker, CensusBorderCounty, CensusTract, DeIpRange
+from centralny.models import Marker, County, CensusTract, DeIpRange
 
 @admin.register(Marker)
 class MarkerAdmin(admin.GISModelAdmin):
     list_display = ("name", "location")
 
-@admin.register(CensusBorderCounty)
+@admin.register(County)
 class CensusBorderCountyAdmin(admin.GISModelAdmin):
     fieldsets = [
         (None, {"fields": ["county_name", "county_code", "pop2000"]}),

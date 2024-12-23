@@ -9,7 +9,7 @@ class Marker(models.Model):
     def __str__(self):
         return self.name
 
-class CensusBorderCounty(models.Model):
+class County(models.Model):
     # COUNTY_1
     county_code = models.CharField(max_length=3, db_index=True)
     # COUNTY
@@ -33,7 +33,7 @@ class CensusBorderCounty(models.Model):
         return self.county_name
 
 class CensusTract(models.Model):
-    county_code = models.ForeignKey(CensusBorderCounty, on_delete=models.CASCADE)
+    county_code = models.ForeignKey(County, on_delete=models.CASCADE)
     state_code = models.CharField(max_length=2)
     tract_id = models.CharField(max_length=6)
     short_name = models.CharField(max_length=7)
