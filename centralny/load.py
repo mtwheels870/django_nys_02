@@ -91,7 +91,27 @@ class Loader():
                     break
             index = index + 1
 
-#        for feature in self.lm_tracts.layer:
-#            g = feature.geom
-#            description = feature.fid
-#            print(f"f.fid = {description}, g = ...")
+    def _create_tract_count(self, census_tract):
+        print(f"_c_t_c(), creating new, {census_tract}")
+        tract_count = CountRangeTract()
+        tract_count.census_tract = census_tract
+        tract_count.mpoint = MultiPointField(census_tract.interp_long, 
+            census_tract.interp_lat)
+        self.hash_tracts[censu_tract] = tract_count
+        return tract_count
+
+    def aggregate_tract_count(self, verbose=False):
+        index = 0
+        self.hash_tracts = {}
+        for range in DeIpRange.objects.all():
+            tract = range.census_tract
+            print(f"Looking up tract: {tract}")
+            tract_count = hash_tracts[tract]
+            if not tract_count:
+                tract_count = self._create_tract_count(self, tract)
+            tract_count.range_count = tract_count.range_count + 1 
+            index = index + 1
+            if (index >= 10):
+                break
+        # Should save here
+

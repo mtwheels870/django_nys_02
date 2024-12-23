@@ -65,3 +65,10 @@ class DeIpRange(models.Model):
     def __str__(self):
         return self.ip_range_start
 
+class CountRangeTract(models.Model):
+    census_tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
+    range_count = models.IntegerField(default=0)
+    mpoint = models.MultiPointField(null=True)
+
+    def __str__(self):
+        return f"{census_tract}: {range_count:,}"
