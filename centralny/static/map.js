@@ -22,8 +22,7 @@ const layerGroup = L.layerGroup().addTo(map);
 
 // …
 async function load_markers() {
-  // const markers_url = `/centralny/api/markers/?in_bbox=${map
-  const markers_url = `/centralny/api/tracts/?in_bbox=${map
+  const markers_url = `/centralny/api/markers/?in_bbox=${map
     .getBounds()
     .toBBoxString()}`;
   // console.log("map.js:load_markers, url: " + markers_url)
@@ -38,7 +37,31 @@ async function render_markers() {
   // console.log("map.js:render_markers")
   const markers = await load_markers();
   // Clears our layer group
-  layerGroup.clearLayers();
+  L.geoJSON(markers)
+    .bindPopup(
+      (layer) =>
+        layer.feature.properties.name
+    )
+    .addTo(layerGroup);
+}
+
+async function load_tracts() {
+  // const markers_url = `/centralny/api/markers/?in_bbox=${map
+  const markers_url = `/centralny/api/tracts/?in_bbox=${map
+    .getBounds()
+    .toBBoxString()}`;
+  // console.log("map.js:load_markers, url: " + markers_url)
+  const response = await fetch(
+    markers_url
+  );
+  const geojson = await response.json();
+  return geojson;
+}
+
+async function render_tracts() {
+  // console.log("map.js:render_markers")
+  const markers = await load_markers();
+  // Clears our layer group
   L.geoJSON(markers)
     .bindPopup(
       (layer) =>
@@ -47,4 +70,10 @@ async function render_markers() {
     .addTo(layerGroup);
 }
 
-map.on("moveend", render_markers)
+async function render_all() {
+  layerGroup.clearLayers();
+  render_markers();
+  render_tracts();
+}
+
+map.on("moveend", render_all)
