@@ -4,6 +4,13 @@ from django.contrib.gis.geos import Point
 import django.contrib.gis.db.models 
 from .models import CensusBorderCounty, CensusTract, DeIpRange
 
+MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
+marker_mapping = {
+    "id", "id",
+    "name", "Name",
+    "location", "MULTIPOINT",
+}
+
 # Field from models.py, mapped to field names from the shape file
     # COUNTY
     # STATE
@@ -48,6 +55,11 @@ IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
 class Loader():
     def __init__(self):
         self.counter = 0
+
+    def run_markers(self, verbose=True):
+        markers_shp = Path(MARKER_PATH)
+        self.lm_markers = LayerMapping(Marker, marker_shp, marker_mapping, transform=False)
+        self.lm_markers.save(strict=True, verbose=verbose)
 
     def run_county(self, verbose=True):
         county_shp = Path(COUNTY_PATH)
