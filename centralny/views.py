@@ -21,7 +21,7 @@ class MarkerViewSet(
 class CensusTractViewSet(
     viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
-    bbox_filter_field = "location"
+    bbox_filter_field = "mpoly"
     filter_backends = [filters.InBBoxFilter]
     queryset = CensusTract.objects.all()
     serializer_class = MarkerSerializer
