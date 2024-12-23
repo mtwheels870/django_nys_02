@@ -45,13 +45,14 @@ async function render_all() {
     style = {
       "color": "#20bb80",
       "fillOpacity": 0.25,
-      weight: 3
+      "weight": 3
     }
     render_target('counties', 'County Name', 'county_name', style)
   } else if (zoom <= 15) {
     style = {
       "color": "#506030",
-      "fillOpacity": "0.25",
+      "fillOpacity": 0.25,
+      "weight": 2,
     }
     render_target('tracts', 'Tract Id: ', 'short_name', style)
   } else {
