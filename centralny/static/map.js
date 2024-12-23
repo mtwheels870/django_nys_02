@@ -42,11 +42,22 @@ async function render_all() {
   // console.log("render_all(), zoom level: " + zoom)
   layerGroup.clearLayers();
   if (zoom <= 10) {
-    render_target('counties', 'County Name', 'county_name', {"color": "#20bb80"})
+    style = {
+      "color": "#20bb80",
+      "fillOpacity": "0.25",
+    }
+    render_target('counties', 'County Name', 'county_name', style)
   } else if (zoom <= 15) {
-    render_target('tracts', 'Tract Id: ', 'short_name', {"color": "#506030"})
+    style = {
+      "color": "#506030",
+      "fillOpacity": "0.25",
+    }
+    render_target('tracts', 'Tract Id: ', 'short_name', style)
   } else {
-    render_target('ip_ranges', 'IP Range: ', 'ip_range_start', {"color": "#b030b0"})
+    style = {
+      "color": "#b030b0"
+    }
+    render_target('ip_ranges', 'IP Range: ', 'ip_range_start', style)
   } 
 }
 
