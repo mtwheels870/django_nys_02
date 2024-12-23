@@ -38,19 +38,21 @@ async function render_target(url_component, popup_field, myStyle) {
         layer.feature.properties.$popup_field
     )
     .addTo(layerGroup);
+  return len;
 }
 
 async function render_all() {
   zoom = map.getZoom()
-  console.log("render_all(), zoom level: " + zoom)
+  // console.log("render_all(), zoom level: " + zoom)
   layerGroup.clearLayers();
   if (zoom <= 10) {
-    render_target('counties', 'county_name', {"color": "#20bb80"})
+    num_targets = render_target('counties', 'county_name', {"color": "#20bb80"})
   } else if (zoom <= 15) {
-    render_target('tracts', 'short_name', {"color": "#506030"})
+    num_targets = render_target('tracts', 'short_name', {"color": "#506030"})
   } else {
-    render_target('ip_ranges', 'de_company_name', {"color": "#b030b0"})
+    num_targets = render_target('ip_ranges', 'de_company_name', {"color": "#b030b0"})
   } 
+  console.log("render_all(), num_targets: " + num_targets)
   // render_target('markers', 'name', {"color": "#ff7800"})
   /* render_target('tracts', 'short_name', {"color": "#506030"})
   render_target('counties', 'county_name', {"color": "#20bb80"}) */
