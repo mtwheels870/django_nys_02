@@ -19,6 +19,6 @@ class CensusTractSerializer(
 class CountySerializer(
     serializers.GeoFeatureModelSerializer):
     class Meta:
-        fields = ("county_code", "county_name")
+        fields = ("id", "county_code", "county_name")
         geo_field = "mpoly"
         model = CensusBorderCounty
