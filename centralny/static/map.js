@@ -7,8 +7,8 @@ const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const layer = L.tileLayer(url, { attribution: copy });
 const map = L.map("map", { layers: [layer] });
 // map.fitWorld();
-const initial_position = [43, -76.2];
-const initial_zoom = 15
+const initial_position = [43.2, -76.05];
+const initial_zoom = 13
 map.setView(initial_position, initial_zoom)
 // map.fitBounds(-75.8, 42.9, -76.2, 43.3);
 /* Creates the Layer group */
@@ -30,6 +30,7 @@ async function load_markers() {
   return geojson;
 }
 
+/*
 async function render_markers() {
   // console.log("map.js:render_markers")
   const markers = await load_markers();
@@ -66,6 +67,7 @@ async function render_tracts() {
     )
     .addTo(layerGroup);
 }
+*/
 
 async function load_target(url_field) {
   // const markers_url = `/centralny/api/markers/?in_bbox=${map
@@ -80,11 +82,11 @@ async function load_target(url_field) {
   return geojson;
 }
 
-async function render_target(url_component, popup_field) {
+async function render_target(url_component, popup_field, color) {
   // console.log("map.js:render_markers")
   const markers = await load_target(url_component);
   // Clears our layer group
-  L.geoJSON(markers)
+  L.geoJSON(markers, color: $color)
     .bindPopup(
       (layer) =>
         layer.feature.properties.$popup_field
@@ -94,8 +96,9 @@ async function render_target(url_component, popup_field) {
 
 async function render_all() {
   layerGroup.clearLayers();
-  render_target('markers', 'name');
-  render_target('tracts', 'short_name');
+  render_target('markers', 'name', 'red');
+  render_target('tracts', 'short_name', 'orange');
+  // render_target('counties', 'county_name', 'blue');
 }
 
 map.on("moveend", render_all)
