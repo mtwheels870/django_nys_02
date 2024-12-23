@@ -3,9 +3,9 @@ from django.contrib.gis import admin
 
 from centralny.models import Marker, CensusBorderCounty, CensusTract, DeIpRange
 
-#@admin.register(Marker)
-#class MarkerAdmin(admin.GISModelAdmin):
-#    list_display = ("name", "location")
+@admin.register(Marker)
+class MarkerAdmin(admin.GISModelAdmin):
+    list_display = ("name", "location")
 
 @admin.register(CensusBorderCounty)
 class CensusBorderCountyAdmin(admin.GISModelAdmin):
