@@ -29,8 +29,6 @@ async function load_target(url_field) {
 async function render_target(url_component, popup_field, myStyle) {
   // console.log("map.js:render_markers")
   const markers = await load_target(url_component);
-  len = markers.length;
-  console.log("render_target(), num_markers: " + len);
   // Clears our layer group
   L.geoJSON(markers, { style: myStyle })
     .bindPopup(
@@ -38,7 +36,6 @@ async function render_target(url_component, popup_field, myStyle) {
         layer.feature.properties.$popup_field
     )
     .addTo(layerGroup);
-  return len;
 }
 
 async function render_all() {
@@ -46,13 +43,12 @@ async function render_all() {
   // console.log("render_all(), zoom level: " + zoom)
   layerGroup.clearLayers();
   if (zoom <= 10) {
-    num_targets = render_target('counties', 'county_name', {"color": "#20bb80"})
+    render_target('counties', 'county_name', {"color": "#20bb80"})
   } else if (zoom <= 15) {
-    num_targets = render_target('tracts', 'short_name', {"color": "#506030"})
+    render_target('tracts', 'short_name', {"color": "#506030"})
   } else {
-    num_targets = render_target('ip_ranges', 'de_company_name', {"color": "#b030b0"})
+    render_target('ip_ranges', 'de_company_name', {"color": "#b030b0"})
   } 
-  console.log("render_all(), num_targets: " + num_targets)
   // render_target('markers', 'name', {"color": "#ff7800"})
   /* render_target('tracts', 'short_name', {"color": "#506030"})
   render_target('counties', 'county_name', {"color": "#20bb80"}) */
