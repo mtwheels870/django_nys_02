@@ -88,7 +88,7 @@ async function render_target(url_component, popup_field) {
   L.geoJSON(markers)
     .bindPopup(
       (layer) =>
-        layer.feature.properties.[popup_field]
+        layer.feature.properties.$popup_field
     )
     .addTo(layerGroup);
 }
