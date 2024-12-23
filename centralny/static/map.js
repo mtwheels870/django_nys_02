@@ -8,7 +8,7 @@ const layer = L.tileLayer(url, { attribution: copy });
 const map = L.map("map", { layers: [layer] });
 // map.fitWorld();
 const initial_position = [43, -76.2];
-const initial_zoom = 8
+const initial_zoom = 15
 map.setView(initial_position, initial_zoom)
 // map.fitBounds(-75.8, 42.9, -76.2, 43.3);
 /* Creates the Layer group */
