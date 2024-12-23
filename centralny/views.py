@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render
 
 from rest_framework import viewsets
@@ -38,6 +39,9 @@ class CountyViewSet(
     serializer_class = CountySerializer
 
 class DeIpRangeViewSet(
+    l = logging.getLogger("django.db.backends")
+    l.setLevel(logging.DEBUG)
+    l.addHandler(logging.StreamHandler())
     viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
     bbox_filter_field = "mpoint"
