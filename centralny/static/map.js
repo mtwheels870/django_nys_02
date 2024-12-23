@@ -13,8 +13,12 @@ map.setView(initial_position, initial_zoom)
 var polygon = L.polygon([
     [43.1, -75.9],
     [42.9, -76.1],
-    [43.0, -76.0]]).addTo(map);
+    [43.0, -76.0]])
+/* Creates the Layer group */
 const layerGroup = L.layerGroup().addTo(map);
+var drawnItems = new L.featureGroup()
+drawnItems.addLayer(polygon)
+const layerControl = L.control.layers(drawItems)
 
 // …
 async function load_markers() {
