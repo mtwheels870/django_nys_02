@@ -109,7 +109,7 @@ class Loader():
             if tract.tract_id in self.hash_tracts:
                 tract_count = self.hash_tracts[tract.tract_id]
             else:
-                tract_count = self._create_tract_count(self, tract)
+                tract_count = self._create_tract_count(tract)
             tract_count.range_count = tract_count.range_count + 1 
             index = index + 1
             if (index >= 10):
