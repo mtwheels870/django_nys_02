@@ -47,6 +47,6 @@ class DeIpRangeViewSet(
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
     queryset = DeIpRange.objects.all()
-    print(f"DeIpRangeViewSet(), query: {queryset.query}")
+    # print(f"DeIpRangeViewSet(), query: {queryset.query}")
     serializer_class = DeIpRangeSerializer
     
