@@ -39,12 +39,12 @@ async function render_target(url_component, description, popup_field, myStyle) {
 
 async function render_circle(url_component, description, popup_field, myStyle) {
   var geojsonMarkerOptions = {
-      radius: 8,
-      fillColor: "#ff7800",
+      radius: 5,
+      fillColor: "#2080b0",
       color: "#000",
-      weight: 1,
+      weight: 0.5,
       opacity: 1,
-      fillOpacity: 0.8
+      fillOpacity: 0.5
   };
 
   // console.log("map.js:render_target(), popup_field: " + popup_field)
