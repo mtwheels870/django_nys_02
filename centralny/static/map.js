@@ -18,7 +18,7 @@ var polygon = L.polygon([
 const layerGroup = L.layerGroup().addTo(map);
 var drawnItems = new L.featureGroup()
 drawnItems.addLayer(polygon)
-const layerControl = L.control.layers(drawItems)
+const layerControl = L.control.layers(drawItems).addTo(map);
 
 // …
 async function load_markers() {
