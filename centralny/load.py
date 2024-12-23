@@ -97,16 +97,16 @@ class Loader():
         tract_count.census_tract = census_tract
         tract_count.mpoint = MultiPointField(census_tract.interp_long, 
             census_tract.interp_lat)
-        self.hash_tracts[censu_tract] = tract_count
+        self.hash_tracts[census_tract.tract_id] = tract_count
         return tract_count
 
-    def aggregate_tract_count(self, verbose=False):
+    def aggregate_tracts(self, verbose=False):
         index = 0
         self.hash_tracts = {}
         for range in DeIpRange.objects.all():
             tract = range.census_tract
             print(f"Looking up tract: {tract}")
-            tract_count = self.hash_tracts[tract]
+            tract_count = self.hash_tracts[tract.tract_id]
             if not tract_count:
                 tract_count = self._create_tract_count(self, tract)
             tract_count.range_count = tract_count.range_count + 1 
