@@ -10,10 +10,10 @@ class Marker(models.Model):
         return self.name
 
 class CensusBorderCounty(models.Model):
-    id = models.AutoField()
+    id = models.AutoField(primary_key=True)
 
     # COUNTY_1
-    county_code = models.CharField(max_length=3, primary_key=True)
+    county_code = models.CharField(max_length=3)
     # COUNTY
     county_name = models.CharField(max_length=66)
     # STATE
