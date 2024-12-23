@@ -11,7 +11,7 @@ class Marker(models.Model):
 
 class CensusBorderCounty(models.Model):
     # COUNTY_1
-    county_code = models.CharField(max_length=3, primary_key=True)
+    county_code = models.CharField(max_length=3, db_index=True)
     # COUNTY
     county_name = models.CharField(max_length=66)
     # STATE
