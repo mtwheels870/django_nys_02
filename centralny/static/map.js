@@ -39,7 +39,7 @@ async function render_target(url_component, description, popup_field, myStyle) {
 
 async function render_all() {
   zoom = map.getZoom()
-  // console.log("render_all(), zoom level: " + zoom)
+  console.log("render_all(), zoom level: " + zoom)
   layerGroup.clearLayers();
   if (zoom <= 10) {
     style = {
