@@ -8,6 +8,7 @@ from centralny.models import Marker, CensusTract, County
 from centralny.serializers import (
     MarkerSerializer,
     CensusTractSerializer,
+    CountySerializer
 )
 
 # /maps/api/markers (through DefaultRouter)
