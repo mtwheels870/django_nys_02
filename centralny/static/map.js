@@ -60,7 +60,7 @@ async function load_tracts() {
 
 async function render_tracts() {
   // console.log("map.js:render_markers")
-  const markers = await load_markers();
+  const markers = await load_tracts();
   // Clears our layer group
   L.geoJSON(markers)
     .bindPopup(
