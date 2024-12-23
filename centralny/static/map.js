@@ -30,7 +30,7 @@ async function render_target(url_component, description, popup_field, myStyle) {
   // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component);
   // Clears our layer group
-  L.geoJSON(targets, { style: myStyle }
+  L.geoJSON(targets, { style: myStyle })
     .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     )
