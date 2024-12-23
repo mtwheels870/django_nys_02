@@ -57,7 +57,7 @@ class Loader():
         self.counter = 0
 
     def run_markers(self, verbose=True):
-        markers_shp = Path(MARKER_PATH)
+        marker_shp = Path(MARKER_PATH)
         self.lm_markers = LayerMapping(Marker, marker_shp, marker_mapping, transform=False)
         self.lm_markers.save(strict=True, verbose=verbose)
 
