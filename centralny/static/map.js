@@ -49,7 +49,7 @@ async function render_markers() {
         fillColor: '#f03',
         fillOpacity: 0.5,
         radius: 1000
-}).addTo(map)
+}).addTo(layerGroup)
 }
 
 map.on("moveend", render_markers)
