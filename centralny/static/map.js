@@ -47,7 +47,7 @@ async function render_all() {
   } else if (zoom <= 15) {
     render_target('tracts', 'short_name', {"color": "#506030"})
   } else {
-    render_target('ip_ranges', 'de_company_name', {"color": "#b030b0"})
+    render_target('ip_ranges', 'ip_range_start', {"color": "#b030b0"})
   } 
 }
 
