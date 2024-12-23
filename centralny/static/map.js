@@ -36,6 +36,7 @@ async function load_markers() {
 async function render_markers() {
   // console.log("map.js:render_markers")
   const markers = await load_markers();
+  // Clears our layer group
   layerGroup.clearLayers();
   L.geoJSON(markers)
     .bindPopup(
@@ -43,6 +44,12 @@ async function render_markers() {
         layer.feature.properties.name
     )
     .addTo(layerGroup);
+    var polygon = L.polygon([
+        [43.1, -75.9],
+        [42.9, -76.1],
+        [43.0, -76.0]])
+    polygon.addTo(layerGroup)
+  
 }
 
 map.on("moveend", render_markers)
