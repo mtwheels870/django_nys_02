@@ -69,7 +69,7 @@ async function render_all() {
     }
     render_target('counties', 'County Name', 'county_name', style)
   } else {
-      if (zoom > 14) {
+      if (zoom >= 14) {
         // Always do ip ranges
         style = {
           "color": "#b030b0"
