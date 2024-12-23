@@ -53,6 +53,7 @@ async function render_circle(url_component, description, popup_field, myStyle) {
   L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, geojsonMarkerOptions);
+      }
     }).addTo(layerGroup);
 }
 
