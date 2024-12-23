@@ -137,12 +137,3 @@ STATIC_ROOT = '/home/bitnami/CompassBlue/django_nys_02/static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGGING = {
-    # ...
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
-    },
-}
