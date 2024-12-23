@@ -106,7 +106,7 @@ class Loader():
         for range in DeIpRange.objects.all():
             tract = range.census_tract
             print(f"Looking up tract: {tract}")
-            tract_count = hash_tracts[tract]
+            tract_count = self.hash_tracts[tract]
             if not tract_count:
                 tract_count = self._create_tract_count(self, tract)
             tract_count.range_count = tract_count.range_count + 1 
