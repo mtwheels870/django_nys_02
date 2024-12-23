@@ -1,7 +1,8 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.geos import Point
-import django.contrib.gis.db.models 
+# import django.contrib.gis.db.models 
+from django.contrib.gis.db import models
 from .models import County, CensusTract, DeIpRange, Marker, CountRangeTract
 
 MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
