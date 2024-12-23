@@ -144,9 +144,5 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
-        'django_nys_02': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
     },
 }
