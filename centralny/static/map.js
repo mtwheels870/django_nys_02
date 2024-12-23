@@ -74,7 +74,7 @@ async function render_all() {
         style = {
           "color": "#b030b0"
         }
-        render_circles('ip_ranges', 'IP Range: ', 'ip_range_start', style)
+        render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', style)
       }
       if (zoom <= 15) {
         style = {
