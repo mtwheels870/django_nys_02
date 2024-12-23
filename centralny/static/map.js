@@ -44,7 +44,7 @@ async function render_all() {
   layerGroup.clearLayers();
   if (zoom <= 10) {
     render_target('counties', 'county_name', {"color": "#20bb80"})
-  else if (zoom <= 15) {
+  } else if (zoom <= 15) {
     render_target('tracts', 'short_name', {"color": "#506030"})
   } else {
     render_target('ip_ranges', 'de_company_name', {"color": "#b030b0"})
