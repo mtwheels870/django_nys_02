@@ -3,7 +3,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
-from centralny.models import Marker
+from centralny.models import Marker, CensusTract
+
 from centralny.serializers import (
     MarkerSerializer,
 )
