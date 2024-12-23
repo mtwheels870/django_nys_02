@@ -30,11 +30,30 @@ async function render_target(url_component, description, popup_field, myStyle) {
   // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component);
   // Clears our layer group
-  L.geoJSON(targets, { style: myStyle })
+  L.geoJSON(targets, { style: myStyle }
     .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     )
     .addTo(layerGroup);
+}
+
+async function render_circle(url_component, description, popup_field, myStyle) {
+  var geojsonMarkerOptions = {
+      radius: 8,
+      fillColor: "#ff7800",
+      color: "#000",
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.8
+  };
+
+  // console.log("map.js:render_target(), popup_field: " + popup_field)
+  const targets = await load_target(url_component);
+  // Clears our layer group
+  L.geoJSON(targets, {
+      pointToLayer: function(feature, latLong) {
+        return new L.CircleMarker(latLong, geojsonMarkerOptions);
+    }).addTo(layerGroup);
 }
 
 async function render_all() {
@@ -49,11 +68,13 @@ async function render_all() {
     }
     render_target('counties', 'County Name', 'county_name', style)
   } else {
-      // Always do ip ranges
-      style = {
-        "color": "#b030b0"
+      if (zoom > 14) {
+        // Always do ip ranges
+        style = {
+          "color": "#b030b0"
+        }
+        render_circles('ip_ranges', 'IP Range: ', 'ip_range_start', style)
       }
-      render_target('ip_ranges', 'IP Range: ', 'ip_range_start', style)
       if (zoom <= 15) {
         style = {
           "color": "#506030",
