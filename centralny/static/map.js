@@ -32,7 +32,7 @@ async function render_target(url_component, description, popup_field, myStyle) {
   // Clears our layer group
   L.geoJSON(markers, { style: myStyle })
     .bindPopup(
-      (layer) => "String here" + layer.feature.properties[popup_field]
+      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     )
     .addTo(layerGroup);
 }
