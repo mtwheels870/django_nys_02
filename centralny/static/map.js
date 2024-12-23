@@ -27,7 +27,7 @@ async function load_target(url_field) {
 }
 
 async function render_target(url_component, popup_field, myStyle) {
-  // console.log("map.js:render_markers")
+  console.log("map.js:render_target(), popup_field: " + popup_field)
   const markers = await load_target(url_component);
   // Clears our layer group
   L.geoJSON(markers, { style: myStyle })
