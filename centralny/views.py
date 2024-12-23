@@ -40,7 +40,7 @@ class CountyViewSet(
 class DeIpRangeViewSet(
     viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
-    bbox_filter_field = "mpoly"
+    bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
     queryset = DeIpRange.objects.all()
     serializer_class = DeIpRangeSerializer
