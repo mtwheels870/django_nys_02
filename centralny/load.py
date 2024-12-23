@@ -2,7 +2,7 @@ from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.geos import Point
 import django.contrib.gis.db.models 
-from .models import CensusBorderCounty, CensusTract, DeIpRange
+from .models import CensusBorderCounty, CensusTract, DeIpRange, Marker
 
 MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
 marker_mapping = {
