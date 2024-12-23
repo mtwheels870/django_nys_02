@@ -44,12 +44,12 @@ async function render_markers() {
         layer.feature.properties.name
     )
     .addTo(layerGroup);
-    var polygon = L.polygon([
-        [43.1, -75.9],
-        [42.9, -76.1],
-        [43.0, -76.0]])
-    polygon.addTo(layerGroup)
-  
+    var circle = L.circle(43, -76], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: 1000
+}).addTo(map)
 }
 
 map.on("moveend", render_markers)
