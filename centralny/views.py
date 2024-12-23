@@ -39,10 +39,10 @@ class CountyViewSet(
     serializer_class = CountySerializer
 
 class DeIpRangeViewSet(
+    viewsets.ReadOnlyModelViewSet):
     l = logging.getLogger("django.db.backends")
     l.setLevel(logging.DEBUG)
     l.addHandler(logging.StreamHandler())
-    viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
