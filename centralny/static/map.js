@@ -38,21 +38,13 @@ async function render_target(url_component, description, popup_field, myStyle) {
 }
 
 async function render_circle(url_component, description, popup_field, myStyle) {
-  var geojsonMarkerOptions = {
-      radius: 5,
-      fillColor: "#2080b0",
-      color: "#000",
-      weight: 0.5,
-      opacity: 1,
-      fillOpacity: 0.5
-  };
 
   // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component);
   // Clears our layer group
   L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
-        return new L.CircleMarker(latLong, geojsonMarkerOptions);
+        return new L.CircleMarker(latLong, myStyle);
       }
     }).addTo(layerGroup);
 }
@@ -70,11 +62,15 @@ async function render_all() {
     render_target('counties', 'County Name', 'county_name', style)
   } else {
       if (zoom >= 14) {
-        // Always do ip ranges
-        style = {
-          "color": "#b030b0"
-        }
-        render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', style)
+        var geojsonMarkerOptions = {
+            radius: 5,
+            fillColor: "#2080b0",
+            color: "#000",
+            weight: 0.5,
+            opacity: 1,
+            fillOpacity: 0.5
+        };
+        render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', geojsonMarkerOptions)
       }
       if (zoom <= 15) {
         style = {
