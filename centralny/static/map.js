@@ -9,11 +9,9 @@ const map = L.map("map", { layers: [layer] });
 // map.fitWorld();
 const initial_position = [43, -76.2];
 const initial_zoom = 8
-map.setView(initial_position, initial_zoom)
-var polygon = L.polygon([
-    [43.1, -75.9],
-    [42.9, -76.1],
-    [43.0, -76.0]])
+// map.setView(initial_position, initial_zoom)
+map.fitBounds(-75.8, 42.9, -76.2, 43.3);
+(initial_position, initial_zoom)
 /* Creates the Layer group */
 const layerGroup = L.layerGroup().addTo(map);
 // var drawnItems = new L.featureGroup()
