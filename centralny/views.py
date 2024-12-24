@@ -52,7 +52,7 @@ class DeIpRangeViewSet(
     queryset = DeIpRange.objects.all()
     serializer_class = DeIpRangeSerializer
     
-class CountTractViewSet(models.Model):
+class CountTractViewSet(
     viewsets.ReadOnlyModelViewSet):
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
