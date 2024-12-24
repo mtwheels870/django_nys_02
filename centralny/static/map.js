@@ -99,7 +99,7 @@ async function render_all() {
         layer_tracts = render_target('tracts', 'Tract Id: ', 'short_name', style)
         overlayLayers = {
             'IP Range Count': layer_centroids,
-            'Tracts': layer_controls
+            'Tracts': layer_tracts
         };
         /* panes = map.getPanes()
         var pane_index = 0
