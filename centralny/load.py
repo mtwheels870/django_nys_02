@@ -132,7 +132,7 @@ class Loader():
             if code in self.hash_counties:
                 county_counter = self.hash_counties[code]
             else:
-                county_counter = self._create_county_counter(county, code)
+                county_counter = self._create_county_counter(county)
             county_counter.range_count = county_counter.range_count + 1 
         # Should save here
         for county_code, county_counter in self.hash_counties.items():
