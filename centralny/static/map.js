@@ -62,6 +62,7 @@ async function render_all() {
     render_target('counties', 'County Name', 'county_name', style)
   } else {
       if (zoom >= 14) {
+        // Show the actual IP ranges
         var geojsonMarkerOptions = {
             radius: 5,
             fillColor: "#2080b0",
@@ -73,12 +74,16 @@ async function render_all() {
         render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', geojsonMarkerOptions)
       }
       if (zoom <= 15) {
+        // Tracts
         style = {
           "color": "#506030",
           "fillOpacity": 0.25,
           "weight": 2,
         }
         render_target('tracts', 'Tract Id: ', 'short_name', style)
+        style["weight"] = 0.6
+        style["radius"] = 5
+        render_circle('tract_counts', 'IP ranges in Tract: ', 'range_count', style)
       } 
   } 
 }

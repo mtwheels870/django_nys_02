@@ -4,13 +4,20 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
-from centralny.models import Marker, CensusTract, County, DeIpRange
+from centralny.models import (
+    Marker,
+    CensusTract,
+    County,
+    DeIpRange,
+    CountRangeTract
+)
 
 from centralny.serializers import (
     MarkerSerializer,
     CensusTractSerializer,
     CountySerializer,
-    DeIpRangeSerializer
+    DeIpRangeSerializer,
+    CountRangeTractSerializer
 )
 
 # /maps/api/markers (through DefaultRouter)
@@ -40,13 +47,15 @@ class CountyViewSet(
 
 class DeIpRangeViewSet(
     viewsets.ReadOnlyModelViewSet):
-#    l = logging.getLogger("django.db.backends")
-#    l.setLevel(logging.DEBUG)
-#    l.addHandler(logging.StreamHandler())
-    # print("MTW, views.MarkerViewSet()")
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
     queryset = DeIpRange.objects.all()
-    # print(f"DeIpRangeViewSet(), query: {queryset.query}")
     serializer_class = DeIpRangeSerializer
+    
+class CountTractViewSet(models.Model):
+    viewsets.ReadOnlyModelViewSet):
+    bbox_filter_field = "mpoint"
+    filter_backends = [filters.InBBoxFilter]
+    queryset = CountRangeTract.objects.all()
+    serializer_class = CountRangeTractSerializer
     
