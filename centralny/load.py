@@ -134,7 +134,7 @@ class Loader():
         for tract_range in CountRangeTract.objects.all():
             county = tract_range.census_tract.county_code
             code = county.county_code
-            print(f"Looking up county: {code}")
+            print(f"tract: {tract_range.census_tract.tract_id}, Looking up county: {code}")
             if code in self.hash_counties:
                 county_counter = self.hash_counties[code]
             else:
@@ -142,5 +142,5 @@ class Loader():
             county_counter.range_count = county_counter.range_count + 1 
         # Should save here
         for county_code, county_counter in self.hash_counties.items():
-            print(f"save[{county_code}]: count = {county.range_count}")
+            print(f"save[{county_code}]: count = {county_counter.range_count}")
             county_counter.save()
