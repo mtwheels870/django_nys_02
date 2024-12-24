@@ -1,7 +1,6 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
-from django.contrib.gis.geos import Point
-# import django.contrib.gis.db.models 
+from django.contrib.gis.geos import Point, MultiPoint
 from django.contrib.gis.db import models
 from .models import County, CensusTract, DeIpRange, Marker, CountRangeTract
 
@@ -116,4 +115,6 @@ class Loader():
             if (index >= 10):
                 break
         # Should save here
-
+        for tract_id, tract_count in self.hash_tracts.items():
+            print(f"save[{tract_id}]: count = {tract_count.range_count}")
+            tract_count.save()
