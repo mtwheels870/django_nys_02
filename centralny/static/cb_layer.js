@@ -84,9 +84,8 @@ function cb_render_all(layerGroup, layerControl, zoom) {
           "radius": 5,
           "zIndex": 300,
         }
-        layer_centroids = render_circle('tract_counts', 'IP ranges in Tract: ', 'range_count', circle_style)
-        console.log("cb_render_all(), layer_centroids: " + layer_centroids)
-        layerControl.addOverlay(layer_centroids , "Tract Counts")
+        layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'IP ranges in Tract: ',
+            'range_count', circle_style)
         // Tracts + their counts
         style = {
           "color": "#506030",
