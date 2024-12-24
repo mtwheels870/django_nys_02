@@ -48,7 +48,7 @@ async function render_circle(url_component, description, popup_field, myStyle) {
       }
     }).addTo(layerGroup);
   // We always the circles to be selectable before the polygons
-  layer_circle.bringToFront()
+  // layer_circle.bringToFront()
 }
 
 async function render_all() {
@@ -76,6 +76,13 @@ async function render_all() {
         render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', geojsonMarkerOptions)
       }
       if (zoom <= 15) {
+        circle_style = {
+          "color": "#506030",
+          "fillOpacity": 0.25,
+          "weight": 0.6,
+          "radius": 5,
+        }
+        render_circle('tract_counts', 'IP ranges in Tract: ', 'range_count', circle_style)
         // Tracts + their counts
         style = {
           "color": "#506030",
@@ -83,10 +90,6 @@ async function render_all() {
           "weight": 2,
         }
         render_target('tracts', 'Tract Id: ', 'short_name', style)
-        style["weight"] = 0.6
-        style["radius"] = 5
-        render_circle('tract_counts', 'IP ranges in Tract: ', 'range_count', style)
-      } 
   } 
 }
 
