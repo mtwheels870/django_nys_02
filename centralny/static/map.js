@@ -36,7 +36,7 @@ async function render_target(url_component, description, popup_field, myStyle) {
   return L.geoJSON(targets, { style: myStyle })
     .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-    )
+    ).addTo(map);
     // .addTo(layerGroup);
 }
 
@@ -49,7 +49,7 @@ async function render_circle(url_component, description, popup_field, myStyle) {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, myStyle);
       }
-    })
+    }).addTo(map);
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
 }
@@ -107,6 +107,7 @@ async function render_all() {
         console.log("draw_tracts(), num_panes = " + num_panes) */
       }
       var controls = L.control.orderlayers(baseLayers, overlayLayers, {collapsed: false});
+      controls.addTo(map);
   } 
 }
 
