@@ -95,8 +95,8 @@ class Loader():
         print(f"_c_t_c(), creating new, {census_tract}")
         tract_count = CountRangeTract()
         tract_count.census_tract = census_tract
-        tract_count.mpoint = MultiPoint(Point(census_tract.interp_long, 
-            census_tract.interp_lat))
+        tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
+            float(census_tract.interp_lat)))
         self.hash_tracts[census_tract.tract_id] = tract_count
         return tract_count
 
