@@ -122,10 +122,10 @@ class Loader():
         county_counter.county_code = county
         num_polys = len(county.mpoly)
         if (num_polys >= 1):
-            first_polygon = county.mpoly[0]
-            first_centroid = Centroid(first_polygon).output_field
+            first_centroid = county.geom.centroid
+            #first_centroid = Centroid(first_polygon).output_field
             print(f"_create_county_count(), centroid, {first_centroid}")
-            county_counter.centroid = models.PointField(first_centroid)
+            county_counter.centroid = first_centroid
         self.hash_counties[county.county_code] = county_counter
         return tract_count
 
