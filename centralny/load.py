@@ -2,6 +2,7 @@ from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.geos import Point, MultiPoint
 from django.contrib.gis.db import models
+from django.contrib.gis.db.models.functions import Centroid
 from .models import County, CensusTract, DeIpRange, Marker, CountRangeTract, CountRangeCounty
 
 MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
@@ -116,11 +117,15 @@ class Loader():
             tract_count.save()
 
     def _create_county_counter(self, county):
-        num_polys = len(county.mpoly)
-        print(f"_create_county_count(), creating new, {county}, mpoly.len: {num_polys}")
+        print(f"_create_county_count(), creating new, {county}")
         county_counter = CountRangeCounty()
         county_counter.county_code = county
-        county_counter.mpoint = county.mpoly[0].get_centroid()
+        num_polys = len(county.mpoly)
+        if (num_polys >= 1):
+            first_polygon = county.mpoly[0]
+            first_centroid = Centroid(first_polygon)
+            print(f"_create_county_count(), centroid, {first_centroid}")
+            county_counter.mpoint = MultiPoint(first_centroid)
         self.hash_counties[county.county_code] = county_counter
         return tract_count
 
