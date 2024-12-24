@@ -13,6 +13,21 @@ const styleIpRanges = {
     fillOpacity: 0.5
 };
 
+const styleTractCounts = {
+  "color": "#506030",
+  "fillOpacity": 0.25,
+  "weight": 0.6,
+  "radius": 5,
+  "zIndex": 300,
+}
+
+const styleTracts = {
+  "color": "#506030",
+  "fillOpacity": 0.25,
+  "weight": 2,
+  "zIndex": 400,
+}
+
 async function load_target(url_field) {
   // const markers_url = `/centralny/api/markers/?in_bbox=${map
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
@@ -56,47 +71,20 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
 }
 
 function cb_render_all(layerGroup, layerControl, zoom) {
-/*  zoom = map.getZoom()
-  console.log("render_all(), zoom level: " + zoom)
-  var overlayLayers = {} */
   console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
+    // Counties
     layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties)
-    // layerControl.addOverlay(layerCounties , "Counties")
   } else {
       if (zoom >= 16) {
-        // Show the actual IP ranges
-        /* var geojsonMarkerOptions = {
-            radius: 5,
-            fillColor: "#2080b0",
-            color: "#000",
-            weight: 0.5,
-            opacity: 1,
-            fillOpacity: 0.5
-        }; */
-        layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'IP Range: ',
+        // Actual IP ranges
+        layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
             'ip_range_start', styleIpRanges);
-        // layerControl.addOverlay(layer_ip_ranges, "IP Ranges")
-        // overlayLayers = {'Actual IP Ranges' : layer_ip_ranges }
       } else {
-        circle_style = {
-          "color": "#506030",
-          "fillOpacity": 0.25,
-          "weight": 0.6,
-          "radius": 5,
-          "zIndex": 300,
-        }
-        layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'IP ranges in Tract: ',
-            'range_count', circle_style)
         // Tracts + their counts
-        style = {
-          "color": "#506030",
-          "fillOpacity": 0.25,
-          "weight": 2,
-          "zIndex": 400,
-        }
-        render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', style)
-        // layerControl.addOverlay(layer_tracts , "Tract Polygons")
+        layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
+            'range_count', styleTractCounts)
+        render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
       }
   } 
 }
