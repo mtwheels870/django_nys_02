@@ -26,14 +26,16 @@ async function load_target(url_field) {
   return geojson;
 }
 
-async function render_target(url_component, description, popup_field, myStyle) {
+async function render_target(layerGroup, layerControl, url_component, description, popup_field, myStyle) {
   // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component);
   // Clears our layer group
-  return L.geoJSON(targets, { style: myStyle })
+  var layer = L.geoJSON(targets, { style: myStyle })
     .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-    ).addTo(layerGroup);
+    );
+  layer.addTo(layerGroup);
+  layerControl.addOverlay(layer, description);
 }
 
 async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle) {
@@ -48,7 +50,7 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
     });
     console.log("render_circle(), layer: " + layer)
     layer.addTo(layerGroup);
-    layerControl.addOverlay(layer_centroids , "Tract Counts")
+    layerControl.addOverlay(layer, description);
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
 }
@@ -59,8 +61,8 @@ function cb_render_all(layerGroup, layerControl, zoom) {
   var overlayLayers = {} */
   console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
-    layerCounties = render_target('counties', 'County Name', 'county_name', styleCounties)
-    layerControl.addOverlay(layerCounties , "Counties")
+    layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties)
+    // layerControl.addOverlay(layerCounties , "Counties")
   } else {
       if (zoom >= 16) {
         // Show the actual IP ranges
@@ -93,9 +95,8 @@ function cb_render_all(layerGroup, layerControl, zoom) {
           "weight": 2,
           "zIndex": 400,
         }
-        layer_tracts = render_target('tracts', 'Tract Id: ', 'short_name', style)
-        console.log("cb_render_all(), layer_tracts: " + layer_tracts)
-        layerControl.addOverlay(layer_tracts , "Tract Polygons")
+        render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', style)
+        // layerControl.addOverlay(layer_tracts , "Tract Polygons")
       }
   } 
 }
