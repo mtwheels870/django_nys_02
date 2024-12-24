@@ -115,13 +115,12 @@ class Loader():
             print(f"save[{tract_id}]: count = {tract_count.range_count}")
             tract_count.save()
 
-    def _create_county_count(self, county):
+    def _create_county_counter(self, county):
         print(f"_create_county_count(), creating new, {county}")
-        county_count = CountRangeCounty()
-        county_count.county_code = census_tract
-        tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
-            float(census_tract.interp_lat)))
-        self.hash_tracts[census_tract.tract_id] = tract_count
+        county_counter = CountRangeCounty()
+        county_counter.county_code = county
+        county_counter.mpoint = county.mpoly.get_centroid()
+        self.hash_counties[county.county_code] = county_counter
         return tract_count
 
     def aggregate_counties(self, verbose=False):
@@ -131,11 +130,11 @@ class Loader():
             code = county.county_code
             print(f"Looking up county: {code}")
             if code in self.hash_counties:
-                county_count = self.hash_counties[code]
+                county_counter = self.hash_counties[code]
             else:
-                county_count = self._create_county_count(county, code)
-            county_count.range_count = county_count.range_count + 1 
+                county_counter = self._create_county_counter(county, code)
+            county_counter.range_count = county_counter.range_count + 1 
         # Should save here
-        for county_code, county_count in self.hash_counties.items():
+        for county_code, county_counter in self.hash_counties.items():
             print(f"save[{county_code}]: count = {county.range_count}")
-            county_count.save()
+            county_counter.save()
