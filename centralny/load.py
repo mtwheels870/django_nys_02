@@ -139,7 +139,8 @@ class Loader():
                 county_counter = self.hash_counties[code]
             else:
                 county_counter = self._create_county_counter(county)
-            county_counter.range_count = county_counter.range_count + 1 
+            # +1 here counts the number of tracts, we want the number of IP ranges
+            county_counter.range_count = county_counter.range_count + tract_range.range_count
         # Should save here
         for county_code, county_counter in self.hash_counties.items():
             print(f"save[{county_code}]: count = {county_counter.range_count}")
