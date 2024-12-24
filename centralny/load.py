@@ -116,7 +116,7 @@ class Loader():
             tract_count.save()
 
     def _create_county_counter(self, county):
-        print(f"_create_county_count(), creating new, {county}")
+        print(f"_create_county_count(), creating new, {county}, mpoly: {county.mpoly}")
         county_counter = CountRangeCounty()
         county_counter.county_code = county
         county_counter.mpoint = county.mpoly.get_centroid()
