@@ -50,13 +50,14 @@ async function render_circle(url_component, description, popup_field, myStyle) {
   // layer_circle.bringToFront()
 }
 
-function cb_render_all(layerGroup, zoom) {
+function cb_render_all(layerGroup, layerControl, zoom) {
 /*  zoom = map.getZoom()
   console.log("render_all(), zoom level: " + zoom)
   var overlayLayers = {} */
   layerGroup.clearLayers();
   if (zoom <= 10) {
-    layer_counties = render_target('counties', 'County Name', 'county_name', styleCounties)
+    layerCounties = render_target('counties', 'County Name', 'county_name', styleCounties)
+    layerControl.addOverlay(layerCounties , "Counties")
   } else {
       if (zoom >= 16) {
         // Show the actual IP ranges
@@ -69,6 +70,7 @@ function cb_render_all(layerGroup, zoom) {
             fillOpacity: 0.5
         }; */
         layer_ip_ranges = render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', styleIpRanges);
+        layerControl.addOverlay(layer_ip_ranges, "IP Ranges")
         // overlayLayers = {'Actual IP Ranges' : layer_ip_ranges }
       } else {
         circle_style = {
@@ -79,6 +81,7 @@ function cb_render_all(layerGroup, zoom) {
           "zIndex": 300,
         }
         layer_centroids = render_circle('tract_counts', 'IP ranges in Tract: ', 'range_count', circle_style)
+        layerControl.addOverlay(layer_centroids , "Tract Counts")
         // Tracts + their counts
         style = {
           "color": "#506030",
@@ -87,6 +90,7 @@ function cb_render_all(layerGroup, zoom) {
           "zIndex": 400,
         }
         layer_tracts = render_target('tracts', 'Tract Id: ', 'short_name', style)
+        layerControl.addOverlay(layer_tracts , "Tract Polygons")
       }
   } 
 }
