@@ -54,7 +54,7 @@ function cb_render_all(layerGroup, layerControl, zoom) {
 /*  zoom = map.getZoom()
   console.log("render_all(), zoom level: " + zoom)
   var overlayLayers = {} */
-  layerGroup.clearLayers();
+  console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     layerCounties = render_target('counties', 'County Name', 'county_name', styleCounties)
     layerControl.addOverlay(layerCounties , "Counties")
@@ -70,6 +70,7 @@ function cb_render_all(layerGroup, layerControl, zoom) {
             fillOpacity: 0.5
         }; */
         layer_ip_ranges = render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', styleIpRanges);
+        console.log("cb_render_all(), layer_ip_ranges: " + layer_ip_ranges)
         layerControl.addOverlay(layer_ip_ranges, "IP Ranges")
         // overlayLayers = {'Actual IP Ranges' : layer_ip_ranges }
       } else {
@@ -81,6 +82,7 @@ function cb_render_all(layerGroup, layerControl, zoom) {
           "zIndex": 300,
         }
         layer_centroids = render_circle('tract_counts', 'IP ranges in Tract: ', 'range_count', circle_style)
+        console.log("cb_render_all(), layer_centroids: " + layer_centroids)
         layerControl.addOverlay(layer_centroids , "Tract Counts")
         // Tracts + their counts
         style = {
@@ -90,6 +92,7 @@ function cb_render_all(layerGroup, layerControl, zoom) {
           "zIndex": 400,
         }
         layer_tracts = render_target('tracts', 'Tract Id: ', 'short_name', style)
+        console.log("cb_render_all(), layer_tracts: " + layer_tracts)
         layerControl.addOverlay(layer_tracts , "Tract Polygons")
       }
   } 

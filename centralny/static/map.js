@@ -28,6 +28,7 @@ const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 async function render_all() {
   zoom = map.getZoom()
   console.log("render_all(), zoom level: " + zoom)
+  layerGroup.clearLayers();
   cb_render_all(layerGroup, layerControl, zoom);
 }
 
