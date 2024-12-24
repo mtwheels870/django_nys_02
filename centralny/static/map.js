@@ -42,11 +42,13 @@ async function render_circle(url_component, description, popup_field, myStyle) {
   // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component);
   // Clears our layer group
-  L.geoJSON(targets, {
+  layer_circle = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, myStyle);
       }
     }).addTo(layerGroup);
+  // We always the circles to be selectable before the polygons
+  layer_circle.bringToFront()
 }
 
 async function render_all() {
@@ -74,7 +76,7 @@ async function render_all() {
         render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', geojsonMarkerOptions)
       }
       if (zoom <= 15) {
-        // Tracts
+        // Tracts + their counts
         style = {
           "color": "#506030",
           "fillOpacity": 0.25,
