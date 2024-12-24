@@ -122,13 +122,17 @@ class Loader():
         num_polys = len(county.mpoly)
         print(f"_create_county_count(), creating new, {county}, num_polys: {num_polys}")
         if (num_polys >= 1):
+            print(f"_create_county_count(), creating new, {county}")
             first_polygon = county.mpoly
             # 1. first_centroid = first_polygon.centroid(), TypeError: 'Point' object is not callable
             # - Why is that a Point?
             # 2. Tried: centroid(first_polygon), NameError: name 'centroid' is not defined. Did you mean: 'Centroid'?
+            # 3.  TypeError: Cannot set CountRangeCounty SpatialProxy (POINT) with value of
+            #    type: <class 'django.contrib.gis.db.models.functions.Centroid'>
+            first_polygon = county.mpoly[0]
             type_polygon = type(first_polygon)
             print(f"_create_county_count(), type {type_polygon}")
-            first_centroid = Centroid(first_polygon)
+            first_centroid = first_polygon.centroid()
             #first_centroid = Centroid(first_polygon).output_field
             print(f"_create_county_count(), centroid, {first_centroid}")
             county_counter.centroid = first_centroid
