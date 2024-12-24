@@ -10,8 +10,8 @@ const map = L.map("map", { layers: [layer_attribution] });
 const initial_position = [43.05, -76.1];
 const initial_zoom = 12.5
 map.setView(initial_position, initial_zoom)
+const layerGroup = L.layerGroup().addTo(map);
 /* Creates the Layer group */
-// const layerGroup = L.layerGroup().addTo(map);
 // const controls = L.control.orderlayers(map)
 // var baseLayers = { }
 
