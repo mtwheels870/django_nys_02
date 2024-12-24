@@ -50,7 +50,7 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     );
   layer.addTo(layerGroup);
-  layerControl.addOverlay(layer, description);
+  // layerControl.addOverlay(layer, description);
 }
 
 async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle) {
@@ -65,12 +65,13 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
     });
     console.log("render_circle(), layer: " + layer)
     layer.addTo(layerGroup);
-    layerControl.addOverlay(layer, description);
+    // layerControl.addOverlay(layer, description);
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
 }
 
 function cb_render_all(layerGroup, layerControl, zoom) {
+  layerGroup.clearLayers();
   console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
