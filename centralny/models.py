@@ -78,7 +78,7 @@ class CountRangeCounty(models.Model):
     # Should be county_ref or something (it's not an actual code)
     county_code = models.ForeignKey(County, on_delete=models.CASCADE)
     range_count = models.IntegerField(default=0)
-    mpoint = models.MultiPointField(null=True)
+    centroid = models.PointField(null=True)
 
     def __str__(self):
         return f"County: {county_code}"
