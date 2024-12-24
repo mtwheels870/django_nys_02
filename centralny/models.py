@@ -33,6 +33,7 @@ class County(models.Model):
         return self.county_name
 
 class CensusTract(models.Model):
+    # Should be county_ref or something (it's not an actual code)
     county_code = models.ForeignKey(County, on_delete=models.CASCADE)
     state_code = models.CharField(max_length=2)
     tract_id = models.CharField(max_length=6)
@@ -72,3 +73,12 @@ class CountRangeTract(models.Model):
 
     def __str__(self):
         return f"{census_tract}: {range_count:,}"
+
+class CountRangeCounty(models.Model):
+    # Should be county_ref or something (it's not an actual code)
+    county_code = models.ForeignKey(County, on_delete=models.CASCADE)
+    range_count = models.IntegerField(default=0)
+    mpoint = models.MultiPointField(null=True)
+
+    def __str__(self):
+        return f"County: {county_code}"

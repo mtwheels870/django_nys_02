@@ -2,7 +2,7 @@ from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.geos import Point, MultiPoint
 from django.contrib.gis.db import models
-from .models import County, CensusTract, DeIpRange, Marker, CountRangeTract
+from .models import County, CensusTract, DeIpRange, Marker, CountRangeTract, CountRangeCounty
 
 MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
 marker_mapping = {
@@ -114,3 +114,28 @@ class Loader():
         for tract_id, tract_count in self.hash_tracts.items():
             print(f"save[{tract_id}]: count = {tract_count.range_count}")
             tract_count.save()
+
+    def _create_county_count(self, county):
+        print(f"_create_county_count(), creating new, {county}")
+        county_count = CountRangeCounty()
+        county_count.county_code = census_tract
+        tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
+            float(census_tract.interp_lat)))
+        self.hash_tracts[census_tract.tract_id] = tract_count
+        return tract_count
+
+    def aggregate_counties(self, verbose=False):
+        self.hash_counties = {}
+        for tract_range in CountRangeTract.objects.all():
+            county = tract_range.census_tract.county_code
+            code = county.county_code
+            print(f"Looking up county: {code}")
+            if code in self.hash_counties:
+                county_count = self.hash_counties[code]
+            else:
+                county_count = self._create_county_count(county, code)
+            county_count.range_count = county_count.range_count + 1 
+        # Should save here
+        for county_code, county_count in self.hash_counties.items():
+            print(f"save[{county_code}]: count = {county.range_count}")
+            county_count.save()
