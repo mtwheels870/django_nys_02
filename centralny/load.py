@@ -92,7 +92,7 @@ class Loader():
             index = index + 1
 
     def _create_tract_count(self, census_tract):
-        print(f"_c_t_c(), creating new, {census_tract}")
+        print(f"create_tract_count(), creating new, {census_tract}")
         tract_count = CountRangeTract()
         tract_count.census_tract = census_tract
         tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
@@ -101,19 +101,15 @@ class Loader():
         return tract_count
 
     def aggregate_tracts(self, verbose=False):
-        index = 0
         self.hash_tracts = {}
         for range in DeIpRange.objects.all():
             tract = range.census_tract
-            print(f"Looking up tract: {tract}")
+            #print(f"Looking up tract: {tract}")
             if tract.tract_id in self.hash_tracts:
                 tract_count = self.hash_tracts[tract.tract_id]
             else:
                 tract_count = self._create_tract_count(tract)
             tract_count.range_count = tract_count.range_count + 1 
-            index = index + 1
-            if (index >= 10):
-                break
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
             print(f"save[{tract_id}]: count = {tract_count.range_count}")
