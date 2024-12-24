@@ -36,16 +36,19 @@ async function render_target(url_component, description, popup_field, myStyle) {
     ).addTo(layerGroup);
 }
 
-async function render_circle(url_component, description, popup_field, myStyle) {
+async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle) {
 
   // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component);
   // Clears our layer group
-  return L.geoJSON(targets, {
+  var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, myStyle);
       }
-    }).addTo(layerGroup);
+    });
+    console.log("render_circle(), layer: " + layer)
+    layer.addTo(layerGroup);
+    layerControl.addOverlay(layer_centroids , "Tract Counts")
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
 }
@@ -69,9 +72,9 @@ function cb_render_all(layerGroup, layerControl, zoom) {
             opacity: 1,
             fillOpacity: 0.5
         }; */
-        layer_ip_ranges = render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', styleIpRanges);
-        console.log("cb_render_all(), layer_ip_ranges: " + layer_ip_ranges)
-        layerControl.addOverlay(layer_ip_ranges, "IP Ranges")
+        layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'IP Range: ',
+            'ip_range_start', styleIpRanges);
+        // layerControl.addOverlay(layer_ip_ranges, "IP Ranges")
         // overlayLayers = {'Actual IP Ranges' : layer_ip_ranges }
       } else {
         circle_style = {
