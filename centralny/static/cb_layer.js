@@ -20,7 +20,7 @@ async function render_target(url_component, description, popup_field, myStyle) {
   return L.geoJSON(targets, { style: myStyle })
     .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-    )..addTo(layerGroup);
+    ).addTo(layerGroup);
 }
 
 async function render_circle(url_component, description, popup_field, myStyle) {
