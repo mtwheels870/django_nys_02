@@ -92,7 +92,7 @@ async function render_all() {
         render_target('tracts', 'Tract Id: ', 'short_name', style)
         panes = map.getPanes()
         var pane_index = 0
-        var num_panes = len(panes)
+        var num_panes = panes.length
         console.log("draw_tracts(), num_panes = " + num_panes)
       }
   } 
