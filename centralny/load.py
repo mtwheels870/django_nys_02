@@ -117,12 +117,12 @@ class Loader():
             tract_count.save()
 
     def _create_county_counter(self, county):
-        print(f"_create_county_count(), creating new, {county}")
         county_counter = CountRangeCounty()
         county_counter.county_code = county
         num_polys = len(county.mpoly)
+        print(f"_create_county_count(), creating new, {county}, num_polys: {num_polys}")
         if (num_polys >= 1):
-            first_polygon = county.mpoly[0]
+            first_polygon = county.mpoly
             first_centroid = first_polygon.centroid()
             #first_centroid = Centroid(first_polygon).output_field
             print(f"_create_county_count(), centroid, {first_centroid}")
