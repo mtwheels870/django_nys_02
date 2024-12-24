@@ -1,5 +1,3 @@
-const layerGroup = L.layerGroup().addTo(map);
-
 async function load_target(url_field) {
   // const markers_url = `/centralny/api/markers/?in_bbox=${map
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
@@ -37,11 +35,11 @@ async function render_circle(url_component, description, popup_field, myStyle) {
   // layer_circle.bringToFront()
 }
 
-async function render_all() {
-  zoom = map.getZoom()
+function cb_render_all(layerGroup, zoom) {
+/*  zoom = map.getZoom()
   console.log("render_all(), zoom level: " + zoom)
-  var overlayLayers = {}
-  // layerGroup.clearLayers();
+  var overlayLayers = {} */
+  layerGroup.clearLayers();
   if (zoom <= 10) {
     style = {
       "color": "#20bb80",
@@ -49,7 +47,7 @@ async function render_all() {
       "weight": 3
     }
     layer_counties = render_target('counties', 'County Name', 'county_name', style)
-    overlayLayers = {'Counties' : layer_counties }
+    // overlayLayers = {'Counties' : layer_counties }
   } else {
       if (zoom >= 16) {
         // Show the actual IP ranges
@@ -83,6 +81,3 @@ async function render_all() {
       }
   } 
 }
-
-map.on("moveend", render_all)
-

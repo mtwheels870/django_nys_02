@@ -53,12 +53,14 @@ async function render_circle(url_component, description, popup_field, myStyle) {
     }).addTo(map);
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
-}
+} */
 
 async function render_all() {
   zoom = map.getZoom()
   console.log("render_all(), zoom level: " + zoom)
-  var overlayLayers = {}
+  cb_render_all(layerGroup, zoom);
+}
+/*
   // layerGroup.clearLayers();
   if (zoom <= 10) {
     style = {
