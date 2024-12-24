@@ -90,6 +90,10 @@ async function render_all() {
           "weight": 2,
         }
         render_target('tracts', 'Tract Id: ', 'short_name', style)
+        panes = map.getPanes()
+        var pane_index = 0
+        var num_panes = len(panes)
+        console.log("draw_tracts(), num_panes = " + num_panes)
       }
   } 
 }
