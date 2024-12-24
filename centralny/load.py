@@ -123,7 +123,11 @@ class Loader():
         print(f"_create_county_count(), creating new, {county}, num_polys: {num_polys}")
         if (num_polys >= 1):
             first_polygon = county.mpoly
-            first_centroid = first_polygon.centroid()
+            # 1. first_centroid = first_polygon.centroid(), TypeError: 'Point' object is not callable
+            # - Why is that a Point?
+            type_polygon = type(first_polygon)
+            print(f"_create_county_count(), type {type_polygon}")
+            first_centroid = centroid(first_polygon)
             #first_centroid = Centroid(first_polygon).output_field
             print(f"_create_county_count(), centroid, {first_centroid}")
             county_counter.centroid = first_centroid
