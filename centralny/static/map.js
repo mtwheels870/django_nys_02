@@ -11,11 +11,12 @@ const initial_position = [43.05, -76.1];
 const initial_zoom = 12.5
 map.setView(initial_position, initial_zoom)
 /* Creates the Layer group */
-const layerGroup = L.layerGroup().addTo(map);
+// const layerGroup = L.layerGroup().addTo(map);
 // const controls = L.control.orderlayers(map)
-var baseLayers = { }
+// var baseLayers = { }
 
 
+/*
 async function load_target(url_field) {
   // const markers_url = `/centralny/api/markers/?in_bbox=${map
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
@@ -104,12 +105,13 @@ async function render_all() {
         /* panes = map.getPanes()
         var pane_index = 0
         var num_panes = panes.length
-        console.log("draw_tracts(), num_panes = " + num_panes) */
+        console.log("draw_tracts(), num_panes = " + num_panes) 
       }
       var controls = L.control.orderlayers(baseLayers, overlayLayers, {collapsed: false});
       controls.addTo(map);
   } 
 }
+*/
 
 map.on("moveend", render_all)
 
