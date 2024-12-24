@@ -116,10 +116,11 @@ class Loader():
             tract_count.save()
 
     def _create_county_counter(self, county):
-        print(f"_create_county_count(), creating new, {county}, mpoly: {county.mpoly}")
+        num_polys = len(county.mpoly)
+        print(f"_create_county_count(), creating new, {county}, mpoly.len: {num_polys}")
         county_counter = CountRangeCounty()
         county_counter.county_code = county
-        county_counter.mpoint = county.mpoly.get_centroid()
+        county_counter.mpoint = county.mpoly[0].get_centroid()
         self.hash_counties[county.county_code] = county_counter
         return tract_count
 
