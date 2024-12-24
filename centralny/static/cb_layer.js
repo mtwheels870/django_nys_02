@@ -1,3 +1,18 @@
+const styleCounties = {
+  "color": "#20bb80",
+  "fillOpacity": 0.25,
+  "weight": 3
+};
+
+const styleIpRanges = {
+    radius: 5,
+    fillColor: "#2080b0",
+    color: "#000",
+    weight: 0.5,
+    opacity: 1,
+    fillOpacity: 0.5
+};
+
 async function load_target(url_field) {
   // const markers_url = `/centralny/api/markers/?in_bbox=${map
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
@@ -41,26 +56,20 @@ function cb_render_all(layerGroup, zoom) {
   var overlayLayers = {} */
   layerGroup.clearLayers();
   if (zoom <= 10) {
-    style = {
-      "color": "#20bb80",
-      "fillOpacity": 0.25,
-      "weight": 3
-    }
-    layer_counties = render_target('counties', 'County Name', 'county_name', style)
-    // overlayLayers = {'Counties' : layer_counties }
+    layer_counties = render_target('counties', 'County Name', 'county_name', styleCounties)
   } else {
       if (zoom >= 16) {
         // Show the actual IP ranges
-        var geojsonMarkerOptions = {
+        /* var geojsonMarkerOptions = {
             radius: 5,
             fillColor: "#2080b0",
             color: "#000",
             weight: 0.5,
             opacity: 1,
             fillOpacity: 0.5
-        };
-        layer_ip_ranges = render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', geojsonMarkerOptions)
-        overlayLayers = {'Actual IP Ranges' : layer_ip_ranges }
+        }; */
+        layer_ip_ranges = render_circle('ip_ranges', 'IP Range: ', 'ip_range_start', styleIpRanges);
+        // overlayLayers = {'Actual IP Ranges' : layer_ip_ranges }
       } else {
         circle_style = {
           "color": "#506030",
