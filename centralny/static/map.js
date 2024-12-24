@@ -59,7 +59,6 @@ async function render_all() {
   console.log("render_all(), zoom level: " + zoom)
   var overlayLayers = {}
   // layerGroup.clearLayers();
-				var overlayLayers = {
   if (zoom <= 10) {
     style = {
       "color": "#20bb80",
