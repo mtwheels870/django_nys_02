@@ -49,7 +49,6 @@ async function render_circle(url_component, description, popup_field, myStyle) {
     }).addTo(layerGroup);
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
-  }
 }
 
 async function render_all() {
@@ -91,6 +90,7 @@ async function render_all() {
           "weight": 2,
         }
         render_target('tracts', 'Tract Id: ', 'short_name', style)
+      }
   } 
 }
 
