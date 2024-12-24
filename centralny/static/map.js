@@ -81,6 +81,7 @@ async function render_all() {
           "fillOpacity": 0.25,
           "weight": 0.6,
           "radius": 5,
+          "zIndex": 300,
         }
         render_circle('tract_counts', 'IP ranges in Tract: ', 'range_count', circle_style)
         // Tracts + their counts
@@ -88,6 +89,7 @@ async function render_all() {
           "color": "#506030",
           "fillOpacity": 0.25,
           "weight": 2,
+          "zIndex": 400,
         }
         render_target('tracts', 'Tract Id: ', 'short_name', style)
         panes = map.getPanes()
