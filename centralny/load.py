@@ -123,7 +123,7 @@ class Loader():
         num_polys = len(county.mpoly)
         if (num_polys >= 1):
             first_polygon = county.mpoly[0]
-            first_centroid = Centroid(first_polygon)
+            first_centroid = Centroid(first_polygon).output_field
             print(f"_create_county_count(), centroid, {first_centroid}")
             county_counter.mpoint = MultiPoint(first_centroid)
         self.hash_counties[county.county_code] = county_counter
