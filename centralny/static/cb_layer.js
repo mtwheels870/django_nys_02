@@ -87,8 +87,8 @@ function cb_render_all(layerGroup, layerControl, zoom) {
         // Tracts + their counts
         render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
         // Later in the zList
-        layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
-            'range_count', styleTractCounts)
+        /* layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
+            'range_count', styleTractCounts) */
       }
   } 
 }
