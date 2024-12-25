@@ -63,9 +63,9 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
         return new L.CircleMarker(latLong, myStyle);
       }
     }).bindPopup(
-      (layer) => "Circle popup here"
+      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     );
-    console.log("render_circle(), layer: " + layer)
+    // console.log("render_circle(), layer: " + layer)
     layer.addTo(layerGroup);
     // layerControl.addOverlay(layer, description);
   // We always the circles to be selectable before the polygons
