@@ -20,7 +20,7 @@ var baseMaps = {
 };
 
 // Start with no overlays
-var overlayMaps = { "CB Layers": layerGroup }
+var overlayMaps = { "Pinp01nt 360": layerGroup }
 
 const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
