@@ -1,7 +1,7 @@
 const styleCounties = {
-  "color": "#20bb80",
-  "fillOpacity": 0.25,
-  "weight": 3
+  color: "#20bb80",
+  fillOpacity: 0.25,
+  weight: 3
 };
 
 const styleIpRanges = {
@@ -14,18 +14,18 @@ const styleIpRanges = {
 };
 
 const styleTractCounts = {
-  "color": "#506030",
-  "fillOpacity": 0.25,
-  "weight": 0.6,
-  "radius": 5,
-  "zIndex": 300,
+  color: "#506030",
+  fillOpacity: 0.25,
+  weight: 0.6,
+  radius: 5,
+  zIndex: 300,
 }
 
 const styleTracts = {
-  "color": "#506030",
-  "fillOpacity": 0.25,
-  "weight": 2,
-  "zIndex": 400,
+  color: "#506030",
+  fillOpacity: 0.25,
+  weight: 2,
+  zIndex: 400,
 }
 
 async function load_target(url_field) {
