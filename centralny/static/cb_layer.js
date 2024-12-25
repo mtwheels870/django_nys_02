@@ -62,7 +62,9 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, myStyle);
       }
-    });
+    }).bindPopup(
+      (layer) => "Circle popup here"
+    );
     console.log("render_circle(), layer: " + layer)
     layer.addTo(layerGroup);
     // layerControl.addOverlay(layer, description);
