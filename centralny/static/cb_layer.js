@@ -130,7 +130,8 @@ function onEachCircleGeneric(feature, layer) {
 async function render_circle(classObject, layerGroup, layerControl, boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-   var layer = L.geoJSON(targets, {
+    console.log("render_circle(), myStyle = " + classObject.myStyle)
+    var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, classObject.myStyle);
       },
