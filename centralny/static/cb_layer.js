@@ -27,9 +27,9 @@ class LayerTractCounts extends CbLayer {
   renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LTC.renderClass(), this = " + this);
     // Call render circle
-    var foreachFunction = this.onEachCircle;
+    // var foreachFunction = this.onEachCircle;
     render_circle(this, layerGroup, layerControl,
-      boundsString, foreachFunction);
+      boundsString);
   }
 }
 
@@ -108,23 +108,21 @@ function onEachCircleGeneric(feature, layer) {
 } 
 
 // async function render_circle(classObject, layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString, foreachFunction) {
-async function render_circle(classObject, layerGroup, layerControl, boundsString, foreachFunction) {
-
-  var url_component = classObject.urlComponent 
-  var myStyle = classObject.myStyle
-  const targets = await load_target(url_component, boundsString);
+async function render_circle(classObject, layerGroup, layerControl, boundsString) {
+  const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-  var layer = L.geoJSON(targets, {
+   var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
-        return new L.CircleMarker(latLong, myStyle);
+        return new L.CircleMarker(latLong, classObject.myStyle);
       },
-      onEachFeature: foreachFunction
-    })
+      onEachFeature: classObject.onEachCircle,
+    }).addTo(layerGroup);
+    layer.bringToFront();
 /* .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     ); */
     // console.log("render_circle(), layer: " + layer)
-    layer.addTo(layerGroup);
+    // layer.addTo(layerGroup);
     // layerControl.addOverlay(layer, description);
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
