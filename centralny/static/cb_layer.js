@@ -6,10 +6,6 @@ class CbLayer {
     this.description = description;
     this.popupField = popupField;
     this.style = myStyle;
-    for (const key in myStyle) {
-      console.log("  style, " + key + ": " + myStyle[key]);
-    }
-    // console.log("CbLayer.ctor(), myStyle = " + myStyle);
   }
 }
 
@@ -21,7 +17,6 @@ class LayerCircle extends CbLayer {
   renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
-    // var foreachFunction = this.onEachCircle;
     render_circle(this, layerGroup, layerControl, boundsString);
   }
 }
@@ -40,21 +35,14 @@ class LayerTractCounts extends LayerCircle {
     for (const key in this.style) {
       console.log("  " + key + ": " + this.style[key]);
     }
+    layer.setStyle(this.style);
 
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
     } */
   } 
-
-  // Wrap the render function
-  /* renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LTC.renderClass(), this = " + this + ", type(): " + typeof(this));
-    // Call render circle
-    // var foreachFunction = this.onEachCircle;
-    render_circle(this, layerGroup, layerControl,
-      boundsString); 
-  } */
 }
+
 // Instantiate
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
   {
@@ -75,19 +63,8 @@ class LayerIpRanges extends LayerCircle {
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
     console.log("LIP.onEachCircle(), feature.props = " + keys);
+    layer.setStyle(this.style);
   } 
-
-  // Wrap the render function
-  /* renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LIP.renderClass(), this = " + this + ", type: " + typeof(this));
-    // Call render circle
-    // var foreachFunction = this.onEachCircle;
-    render_circle(this, layerGroup, layerControl,
-      boundsString);
-  } */
-  /*  if (feature.properties && feature.properies.popupContent) {
-      layer.bindPopup(feature.properties.popupContent);
-    } */
 };
 
 // Instantiate
@@ -116,12 +93,7 @@ const styleTracts = {
 }
 
 async function load_target(url_field, boundsString) {
-  // const markers_url = `/centralny/api/markers/?in_bbox=${map
-  /* const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
-    .getBounds()
-    .toBBoxString()}`; */
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
-  // console.log("map.js:load_markers, url: " + markers_url)
   const response = await fetch(
     markers_url
   );
@@ -130,7 +102,6 @@ async function load_target(url_field, boundsString) {
 }
 
 async function render_target(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
-  // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component, boundsString);
   // Clears our layer group
   var layer = L.geoJSON(targets, { style: myStyle })
@@ -152,15 +123,7 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
       },
       onEachFeature: classObject.onEachCircle,
     }).addTo(layerGroup);
-    layer.bringToFront();
-/* .bindPopup(
-      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-    ); */
-    // console.log("render_circle(), layer: " + layer)
-    // layer.addTo(layerGroup);
-    // layerControl.addOverlay(layer, description);
-  // We always the circles to be selectable before the polygons
-  // layer_circle.bringToFront()
+    // layer.bringToFront();
 }
 
 export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
@@ -179,8 +142,46 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
         // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
         // Later in the zList
         layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
-        /* var layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
-            'range_count', styleTractCounts, boundsString); */
       }
   } 
 }
+
+/* .bindPopup(
+      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
+    ); */
+    // console.log("render_circle(), layer: " + layer)
+    // layer.addTo(layerGroup);
+    // layerControl.addOverlay(layer, description);
+  // We always the circles to be selectable before the polygons
+  // layer_circle.bringToFront()
+        /* var layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
+            'range_count', styleTractCounts, boundsString); */
+  // console.log("map.js:render_target(), popup_field: " + popup_field)
+  // const markers_url = `/centralny/api/markers/?in_bbox=${map
+  /* const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
+    .getBounds()
+    .toBBoxString()}`; */
+  // ddconsole.log("map.js:load_markers, url: " + markers_url)
+  // Wrap the render function
+  /* renderClass = (layerGroup, layerControl, boundsString) => {
+    console.log("LIP.renderClass(), this = " + this + ", type: " + typeof(this));
+    // Call render circle
+    // var foreachFunction = this.onEachCircle;
+    render_circle(this, layerGroup, layerControl,
+      boundsString);
+  } */
+  /*  if (feature.properties && feature.properies.popupContent) {
+      layer.bindPopup(feature.properties.popupContent);
+    } */
+  // Wrap the render function
+  /* renderClass = (layerGroup, layerControl, boundsString) => {
+    console.log("LTC.renderClass(), this = " + this + ", type(): " + typeof(this));
+    // Call render circle
+    // var foreachFunction = this.onEachCircle;
+    render_circle(this, layerGroup, layerControl,
+      boundsString); 
+  } */
+/*    for (const key in myStyle) {
+      console.log("  style, " + key + ": " + myStyle[key]);
+    } */
+    // console.log("CbLayer.ctor(), myStyle = " + myStyle);
