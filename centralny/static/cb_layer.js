@@ -23,6 +23,11 @@ class LayerTractCounts extends CbLayer {
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
     console.log("LTC.onEachCircle(), feature.props = " + keys);
+    console.log("      style: ");
+    for (const key in this.style) {
+      console.log("  " + key + ": " + this.style[key]);
+    }
+
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
     } */
@@ -30,7 +35,7 @@ class LayerTractCounts extends CbLayer {
 
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LTC.renderClass(), this = " + this);
+    console.log("LTC.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
     // var foreachFunction = this.onEachCircle;
     render_circle(this, layerGroup, layerControl,
@@ -61,7 +66,7 @@ class LayerIpRanges extends CbLayer {
 
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LIP.renderClass(), this = " + this);
+    console.log("LIP.renderClass(), this = " + this + ", type: " + typeof(this));
     // Call render circle
     // var foreachFunction = this.onEachCircle;
     render_circle(this, layerGroup, layerControl,
@@ -124,9 +129,10 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
 }
 
 async function render_circle(classObject, layerGroup, layerControl, boundsString) {
+  console.log("render_circle(), myStyle = " + classObject + ", type = " + typeof(classObject))
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-    console.log("render_circle(), myStyle = " + classObject.myStyle + ", type = " + typeof(classObject) + "/" + typeof(classObject.myStyle))
+    console.log("render_circle(), type(style) = " + typeof(classObject.myStyle))
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, classObject.myStyle);
