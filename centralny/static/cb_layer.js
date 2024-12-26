@@ -1,7 +1,7 @@
 // Base Class
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
-    console.log("CbLayer.ctor():")
+    console.log("CbLayer.ctor(): type(style): " + typeof(myStyle))
     this.urlComponent = urlComponent;
     this.description = description;
     this.popupField = popupField;
@@ -126,7 +126,7 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
 async function render_circle(classObject, layerGroup, layerControl, boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-    console.log("render_circle(), myStyle = " + classObject.myStyle)
+    console.log("render_circle(), myStyle = " + classObject.myStyle + ", type = " + typeof(classObject) + "/" + typeof(classObject.myStyle))
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, classObject.myStyle);
