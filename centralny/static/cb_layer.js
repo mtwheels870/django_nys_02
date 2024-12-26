@@ -25,11 +25,11 @@ class LayerTractCounts extends CbLayer {
 
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LayerTractCounts.renderClass(), this = " + this);
+    console.log("LTC.renderClass(), this = " + this);
     // Call render circle
     var foreachFunction = this.onEachCircle;
-    render_circle(layerGroup, layerControl,
-      this.urlComponent, this.description, this.popupField, this.myStyle, boundsString, foreachFunction);
+    render_circle(this, layerGroup, layerControl,
+      boundsString, foreachFunction);
   }
 }
 
@@ -107,8 +107,11 @@ function onEachCircleGeneric(feature, layer) {
   } */
 } 
 
-async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString, foreachFunction) {
+// async function render_circle(classObject, layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString, foreachFunction) {
+async function render_circle(classObject, layerGroup, layerControl, boundsString, foreachFunction) {
 
+  var url_component = classObject.urlComponent 
+  var myStyle = classObject.myStyle
   const targets = await load_target(url_component, boundsString);
   // Clears our layer group
   var layer = L.geoJSON(targets, {
@@ -116,9 +119,10 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
         return new L.CircleMarker(latLong, myStyle);
       },
       onEachFeature: foreachFunction
-    }).bindPopup(
+    })
+/* .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-    );
+    ); */
     // console.log("render_circle(), layer: " + layer)
     layer.addTo(layerGroup);
     // layerControl.addOverlay(layer, description);
