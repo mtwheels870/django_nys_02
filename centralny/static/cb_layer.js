@@ -28,97 +28,6 @@ const styleTracts = {
   zIndex: 400,
 }
 
-function cb_render_all(layerGroup, layerControl, zoom) {
-  layerGroup.clearLayers();
-  console.log("cb_render_all(), zoom level: " + zoom)
-  if (zoom <= 10) {
-    // Counties
-    // layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties)
-    layerCounties = CbLayerPolygon('counties', 'County Name', 'county_name', styleCounties)
-    layerCounties.render(layerGroup);
-  } else {
-      if (zoom >= 16) {
-        // Actual IP ranges
-        layerIpRanges = CbLayerCircle('ip_ranges', 'Actual IP Range','ip_range_start', styleIpRanges);
-        layerIpRanges.render(layerGroup);
-        /* layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
-            'ip_range_start', styleIpRanges); */
-      } else {
-        // Tracts + their counts
-        layerTracts = CbLayerPolygon('tracts', 'Tract Id: ', 'short_name', styleTracts)
-        layerTracts.render(layerGroup)
-        // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
-        // Later in the zList
-        /* layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
-            'range_count', styleTractCounts) */
-      }
-  } 
-}
-
-class CbLayer {
-  constructor(urlField, description, popupField, style) {
-    this.urlField = urlField;
-    this.description = description;
-    this.popupField = popupField;
-    this.style = style;
-  }
-
-  async function restGet() {
-    console.log("cbLayer.restGet()")
-    const markers_url = `/centralny/api/` + this.urlField + `/?in_bbox=${map
-      .getBounds()
-      .toBBoxString()}`;
-    console.log("cbLayer.restGet(), map.js:load_markers, url: " + markers_url)
-    const response = await fetch(
-      markers_url
-    );
-    const geojson = await response.json();
-    console.log("cbLayer.restGet(), geojson = " + geojson)
-    return geojson;
-  }
-
-  async function render() {
-    console.log("CbLayer.render(), should not be here")
-  }
-};
-
-class CbLayerPolygon extends CbLayer {
-  constructor(urlField, description, popupField, style) {
-    super(urlField, description, popupField, style);
-  }
-
-  async function render(layerGroup) {
-    console.log("cbLayerPoly.render()")
-    const targets = await restGet();
-    // Clears our layer group
-    var layer = L.geoJSON(targets, { style: this.style })
-      .bindPopup(
-        (layer) => this.description + ": <b>" + layer.feature.properties[this.popup_field] + "</b>"
-      );
-    layer.addTo(layerGroup);
-  }
-}
-
-class CbLayerCircle extends CbLayer {
-  constructor(urlField, description, popupField, style) {
-    super(urlField, description, popupField, style);
-  }
-
-  async function render(layerGroup) {
-    const targets = await restGet();
-    // Clears our layer group
-    var layer = L.geoJSON(targets, {
-        pointToLayer: function(feature, latLong) {
-          return new L.CircleMarker(latLong, myStyle);
-        }
-      }).bindPopup(
-        (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>";
-      );
-    );
-    layer.addTo(layerGroup);
-  }
-}
-
 async function load_target(url_field) {
   // const markers_url = `/centralny/api/markers/?in_bbox=${map
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
@@ -163,3 +72,23 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
   // layer_circle.bringToFront()
 }
 
+function cb_render_all(layerGroup, layerControl, zoom) {
+  layerGroup.clearLayers();
+  console.log("cb_render_all(), zoom level: " + zoom)
+  if (zoom <= 10) {
+    // Counties
+    layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties)
+  } else {
+      if (zoom >= 16) {
+        // Actual IP ranges
+        layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
+            'ip_range_start', styleIpRanges);
+      } else {
+        // Tracts + their counts
+        render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
+        // Later in the zList
+        /* layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
+            'range_count', styleTractCounts) */
+      }
+  } 
+}
