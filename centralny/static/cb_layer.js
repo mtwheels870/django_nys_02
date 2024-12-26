@@ -55,10 +55,12 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
 }
 
 function onEachCircle(feature, layer) {
-  if (feature.properties && feature.properies.popupContent) {
+  var keys = Object.keys(feature);
+  console.log("onEachCircle(), keys = " + keys)
+/*  if (feature.properties && feature.properies.popupContent) {
     layer.bindPopup(feature.properties.popupContent);
-  }
-}
+  } */
+} 
 
 async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
 
