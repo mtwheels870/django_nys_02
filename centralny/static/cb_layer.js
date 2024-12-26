@@ -32,7 +32,6 @@ class LayerTractCounts extends CbLayer {
       boundsString);
   }
 }
-
 // Instantiate
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
   {
@@ -41,30 +40,40 @@ const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ran
     weight: 0.6,
     radius: 5,
     zIndex: 300,
-  });
+  }
+);
 
-const styleCounties = {
-  color: "#20bb80",
-  fillOpacity: 0.25,
-  weight: 3
-};
+class LayerIpRanges extends CbLayer {
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
+  }
 
-const styleIpRanges = {
+  // Inside a class, format if methodName: function
+  onEachCircle = (feature, layer) => {
+    var keys = Object.keys(feature.properties);
+    console.log("LIP.onEachCircle(), feature.props = " + keys);
+  /*  if (feature.properties && feature.properies.popupContent) {
+      layer.bindPopup(feature.properties.popupContent);
+    } */
+} 
+
+// Instantiate
+const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_range_start",
+  {
     radius: 5,
     fillColor: "#2080b0",
     color: "#000",
     weight: 0.5,
     opacity: 1,
     fillOpacity: 0.5
-};
+  }
+);
 
-const styleTractCounts = {
-  color: "#506030",
+const styleCounties = {
+  color: "#20bb80",
   fillOpacity: 0.25,
-  weight: 0.6,
-  radius: 5,
-  zIndex: 300,
-}
+  weight: 3
+};
 
 const styleTracts = {
   color: "#506030",
@@ -138,8 +147,9 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   } else {
       if (zoom >= 16) {
         // Actual IP ranges
-        var layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
-            'ip_range_start', styleIpRanges, boundsString, onEachCircleGeneric);
+        layerIpRanges.renderClass(layerGroup, layerControl, boundsString)
+        /* var layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
+            'ip_range_start', styleIpRanges, boundsString, onEachCircleGeneric); */
       } else {
         // Tracts + their counts
         // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
