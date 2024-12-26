@@ -15,7 +15,7 @@ class LayerTractCounts extends CbLayer {
   }
 
   // Inside a class, format if methodName: function
-  onEachCircle = (feature, layer) => {
+  onEachCircle: function(feature, layer) {
     var keys = Object.keys(feature.properties);
     console.log("LTC.onEachCircle(), feature.props = " + keys);
   /*  if (feature.properties && feature.properies.popupContent) {
@@ -27,7 +27,7 @@ class LayerTractCounts extends CbLayer {
   renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LayerTractCounts.renderClass(), this = " + this);
     // Call render circle
-    foreachFunction = this.onEachCircle
+    var foreachFunction = this.onEachCircle;
     render_circle(layerGroup, layerControl,
       this.urlComponent, this.description, this.popupField, this.myStyle, boundsString, foreachFunction);
   }
