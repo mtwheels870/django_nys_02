@@ -53,6 +53,15 @@ class LayerIpRanges extends CbLayer {
     var keys = Object.keys(feature.properties);
     console.log("LIP.onEachCircle(), feature.props = " + keys);
   } 
+
+  // Wrap the render function
+  renderClass = (layerGroup, layerControl, boundsString) => {
+    console.log("LIP.renderClass(), this = " + this);
+    // Call render circle
+    // var foreachFunction = this.onEachCircle;
+    render_circle(this, layerGroup, layerControl,
+      boundsString);
+  }
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
     } */
