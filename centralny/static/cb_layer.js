@@ -17,9 +17,19 @@ class LayerTractCounts extends CbLayer {
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LayerTractCounts.renderClass(), this = " + this);
+    // Call render circle
+    foreachFunction = this.onEachCircle
     render_circle(layerGroup, layerControl,
-      this.urlComponent, this.description, this.popupField, this.myStyle, boundsString);
+      this.urlComponent, this.description, this.popupField, this.myStyle, boundsString, foreachFunction);
   }
+  for
+  function onEachCircle(feature, layer) {
+    var keys = Object.keys(feature.properties);
+    console.log("LTC.onEachCircle(), feature.props = " + keys);
+  /*  if (feature.properties && feature.properies.popupContent) {
+      layer.bindPopup(feature.properties.popupContent);
+    } */
+  } 
 }
 
 // Instantiate
@@ -88,15 +98,15 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
   // layerControl.addOverlay(layer, description);
 }
 
-function onEachCircle(feature, layer) {
+function onEachCircleGeneric(feature, layer) {
   var keys = Object.keys(feature.properties);
-  console.log("onEachCircle(), keys.props = " + keys);
+  console.log("onEachCircleGeneric(), feature.props = " + keys);
 /*  if (feature.properties && feature.properies.popupContent) {
     layer.bindPopup(feature.properties.popupContent);
   } */
 } 
 
-async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
+async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString, foreachFunction) {
 
   const targets = await load_target(url_component, boundsString);
   // Clears our layer group
@@ -104,7 +114,7 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, myStyle);
       },
-      onEachFeature: onEachCircle
+      onEachFeature: foreachFunction
     }).bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     );
@@ -126,7 +136,7 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
       if (zoom >= 16) {
         // Actual IP ranges
         var layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
-            'ip_range_start', styleIpRanges, boundsString);
+            'ip_range_start', styleIpRanges, boundsString, onEachCircleGeneric);
       } else {
         // Tracts + their counts
         // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
