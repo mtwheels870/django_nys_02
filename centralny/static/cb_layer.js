@@ -52,10 +52,11 @@ class LayerIpRanges extends CbLayer {
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
     console.log("LIP.onEachCircle(), feature.props = " + keys);
+  } 
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
     } */
-} 
+};
 
 // Instantiate
 const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_range_start",
