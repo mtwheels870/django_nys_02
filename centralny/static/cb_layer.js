@@ -30,7 +30,8 @@ class LayerTractCounts extends LayerCircle {
   // Inside a class, format if methodName: function
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
-    console.log("LTC.onEachCircle(), feature.props = " + keys);
+    var rangeCount = feature.properties["range_count"]
+    console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount);
     console.log("      style: ");
     for (const key in this.style) {
       console.log("  " + key + ": " + this.style[key]);
