@@ -28,7 +28,7 @@ const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 // This calls into the cb_layer stuff 
 async function render_all() {
-  zoom = map.getZoom()
+  var zoom = map.getZoom()
   console.log("render_all(), zoom level: " + zoom)
   cb_render_all(layerGroup, layerControl, zoom);
 }
