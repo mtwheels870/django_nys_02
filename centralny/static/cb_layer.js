@@ -63,7 +63,7 @@ class CbLayer {
     this.style = style;
   }
 
-  async restGet() {
+  async function restGet() {
     console.log("cbLayer.restGet()")
     const markers_url = `/centralny/api/` + this.urlField + `/?in_bbox=${map
       .getBounds()
@@ -77,7 +77,7 @@ class CbLayer {
     return geojson;
   }
 
-  async render() {
+  async function render() {
     console.log("CbLayer.render(), should not be here")
   }
 };
@@ -87,7 +87,7 @@ class CbLayerPolygon extends CbLayer {
     super(urlField, description, popupField, style);
   }
 
-  async render(layerGroup) {
+  async function render(layerGroup) {
     console.log("cbLayerPoly.render()")
     const targets = await restGet();
     // Clears our layer group
@@ -104,7 +104,7 @@ class CbLayerCircle extends CbLayer {
     super(urlField, description, popupField, style);
   }
 
-  async render(layerGroup) {
+  async function render(layerGroup) {
     const targets = await restGet();
     // Clears our layer group
     var layer = L.geoJSON(targets, {
