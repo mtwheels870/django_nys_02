@@ -13,8 +13,12 @@ class LayerTractCounts extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
   }
+
+  // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LayerTractCounts.renderClass(), this = " + this);
+    render_circle(layerGroup, layerControl,
+      this.urlComponent, this.description, this.popupField, this.myStyle, boundsString);
   }
 }
 
