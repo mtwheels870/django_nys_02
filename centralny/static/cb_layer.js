@@ -110,7 +110,6 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
 }
-        layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
 
 export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   layerGroup.clearLayers();
@@ -126,7 +125,7 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
             'ip_range_start', styleIpRanges, boundsString);
       } else {
         // Tracts + their counts
-        render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
+        // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
         // Later in the zList
         layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
         /* var layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
