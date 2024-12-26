@@ -43,6 +43,7 @@ class LayerTractCounts extends LayerCircle {
     }
     console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount);
     var copiedStyle = {...this.style};
+    copiedStyle["radius"] = radiusGraduated;
     console.log("      style: ");
     for (const key in copiedStyle) {
       console.log("  " + key + ": " + copiedStyle[key]);
@@ -56,12 +57,12 @@ class LayerTractCounts extends LayerCircle {
 }
 
 // Instantiate
+//   radius: 5,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
   {
     color: "#506030",
     fillOpacity: 0.25,
     weight: 0.6,
-    radius: 5,
     zIndex: 300,
   }
 );
