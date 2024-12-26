@@ -1,3 +1,4 @@
+// Base Class
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     this.urlComponent = urlComponent;
@@ -7,7 +8,8 @@ class CbLayer {
   }
 }
 
-const LayerTractCounts extends CbLayer {
+// Sub Class
+class LayerTractCounts extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
   }
@@ -16,6 +18,7 @@ const LayerTractCounts extends CbLayer {
   }
 }
 
+// Instantiate
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
   {
     color: "#506030",
