@@ -2,7 +2,7 @@ class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     this.urlComponent = urlComponent;
     this.description = description;
-    this.popupField popupField;
+    this.popupField = popupField;
     this.style = myStyle;
   }
 }
