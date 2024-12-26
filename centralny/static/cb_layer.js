@@ -29,26 +29,14 @@ class LayerTractCounts extends LayerCircle {
 
   // Inside a class, format if methodName: function
   onEachCircle = (feature, layer) => {
-    var keys = Object.keys(feature.properties);
+    // Do the graduated circle
     var rangeCount = feature.properties["range_count"]
     var radiusGraduated = Math.ceil(rangeCount / 60) * 2;
-    /* if (rangeCount <= 60) {
-      radiusGraduated = 2;
-    } else if (rangeCount <= 120) {
-      radiusGraduated = 4;
-    } else if (rangeCount <= 180) {
-      radiusGraduated = 6;
-    } else {
-      radiusGraduated = 8;
-    } */
-    console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount);
     var copiedStyle = {...this.style};
     copiedStyle["radius"] = radiusGraduated;
-    console.log("      style: ");
-    for (const key in copiedStyle) {
-      console.log("  " + key + ": " + copiedStyle[key]);
-    } 
     layer.setStyle(copiedStyle)
+    var censusTract = feature.properties["census_tract"]
+    layer.bindPopup("<b>Census Tract: " + censusTract + "\nIP Range Count: " + rangeCount + "</b>")
 
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
@@ -61,7 +49,8 @@ class LayerTractCounts extends LayerCircle {
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
   {
     color: "#2F118F",
-    fillOpacity: 0.50,
+    fillOpacity: 0.80,
+    weight: 0,
     zIndex: 300,
   }
 );
@@ -197,3 +186,18 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
       console.log("  style, " + key + ": " + myStyle[key]);
     } */
     // console.log("CbLayer.ctor(), myStyle = " + myStyle);
+    /* if (rangeCount <= 60) {
+      radiusGraduated = 2;
+    } else if (rangeCount <= 120) {
+      radiusGraduated = 4;
+    } else if (rangeCount <= 180) {
+      radiusGraduated = 6;
+    } else {
+      radiusGraduated = 8;
+    } */
+    // var keys = Object.keys(feature.properties);
+    /* console.log("      style: ");
+    for (const key in copiedStyle) {
+      console.log("  " + key + ": " + copiedStyle[key]);
+    }  */
+    /* console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount); */
