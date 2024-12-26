@@ -7,7 +7,7 @@ class CbLayer {
   }
 }
 
-const LayerTractCounts = class CbLayer {
+const LayerTractCounts extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
   }
