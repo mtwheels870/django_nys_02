@@ -5,6 +5,7 @@ class CbLayer {
     this.description = description;
     this.popupField = popupField;
     this.style = myStyle;
+    console.log("CbLayer.ctor(), myStyle = " + myStyle);
   }
 }
 
