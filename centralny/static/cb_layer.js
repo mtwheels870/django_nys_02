@@ -112,8 +112,8 @@ class CbLayerCircle extends CbLayer {
           return new L.CircleMarker(latLong, myStyle);
         }
       }).bindPopup(
-        (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-      });
+        (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>";
+      );
     );
     layer.addTo(layerGroup);
   }
