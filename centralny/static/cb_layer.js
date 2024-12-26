@@ -13,8 +13,21 @@ class CbLayer {
   }
 }
 
+class LayerCircle extends CbLayer {
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
+  },
+  // Wrap the render function
+  renderClass = (layerGroup, layerControl, boundsString) => {
+    console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
+    // Call render circle
+    // var foreachFunction = this.onEachCircle;
+    render_circle(this, layerGroup, layerControl, boundsString);
+  }
+}
+
 // Sub Class
-class LayerTractCounts extends CbLayer {
+class LayerTractCounts extends LayerCircle {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
   }
@@ -34,12 +47,12 @@ class LayerTractCounts extends CbLayer {
   } 
 
   // Wrap the render function
-  renderClass = (layerGroup, layerControl, boundsString) => {
+  /* renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LTC.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
     // var foreachFunction = this.onEachCircle;
     render_circle(this, layerGroup, layerControl,
-      boundsString);
+      boundsString); */
   }
 }
 // Instantiate
@@ -65,13 +78,13 @@ class LayerIpRanges extends CbLayer {
   } 
 
   // Wrap the render function
-  renderClass = (layerGroup, layerControl, boundsString) => {
+  /* renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LIP.renderClass(), this = " + this + ", type: " + typeof(this));
     // Call render circle
     // var foreachFunction = this.onEachCircle;
     render_circle(this, layerGroup, layerControl,
       boundsString);
-  }
+  } */
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
     } */
