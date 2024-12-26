@@ -31,12 +31,23 @@ class LayerTractCounts extends LayerCircle {
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
     var rangeCount = feature.properties["range_count"]
-    console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount);
-    console.log("      style: ");
-    for (const key in this.style) {
-      console.log("  " + key + ": " + this.style[key]);
+    var radiusGraduated;
+    if (rangeCount <= 60) {
+      radiusGraduated = 2;
+    } else if (rangeCount <= 120) {
+      radiusGraduated = 4;
+    } else if (rangeCount <= 180) {
+      radiusGraduated = 6;
+    } else {
+      radiusGraduated = 8;
     }
-    layer.setStyle(this.style);
+    console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount);
+    var copiedStyle = {...this.style};
+    console.log("      style: ");
+    for (const key in copiedStyle) {
+      console.log("  " + key + ": " + copiedStyle[key]);
+    } 
+    layer.setStyle(copiedStyle)
 
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
