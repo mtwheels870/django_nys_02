@@ -28,11 +28,12 @@ const styleTracts = {
   zIndex: 400,
 }
 
-async function load_target(url_field) {
+async function load_target(url_field, boundsString) {
   // const markers_url = `/centralny/api/markers/?in_bbox=${map
-  const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
+  /* const markers_url = `/centralny/api/` + url_field + `/?in_bbox=${map
     .getBounds()
-    .toBBoxString()}`;
+    .toBBoxString()}`; */
+  const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
   // console.log("map.js:load_markers, url: " + markers_url)
   const response = await fetch(
     markers_url
@@ -41,9 +42,9 @@ async function load_target(url_field) {
   return geojson;
 }
 
-async function render_target(layerGroup, layerControl, url_component, description, popup_field, myStyle) {
+async function render_target(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
   // console.log("map.js:render_target(), popup_field: " + popup_field)
-  const targets = await load_target(url_component);
+  const targets = await load_target(url_component, boundsString);
   // Clears our layer group
   var layer = L.geoJSON(targets, { style: myStyle })
     .bindPopup(
@@ -53,10 +54,10 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
   // layerControl.addOverlay(layer, description);
 }
 
-async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle) {
+async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
 
   // console.log("map.js:render_target(), popup_field: " + popup_field)
-  const targets = await load_target(url_component);
+  const targets = await load_target(url_component, boundsString);
   // Clears our layer group
   var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
@@ -72,23 +73,23 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
   // layer_circle.bringToFront()
 }
 
-export function cb_render_all(layerGroup, layerControl, zoom) {
+export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   layerGroup.clearLayers();
   console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
-    layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties)
+    var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties, boundsString)
   } else {
       if (zoom >= 16) {
         // Actual IP ranges
-        layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
-            'ip_range_start', styleIpRanges);
+        var layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
+            'ip_range_start', styleIpRanges, boundsString);
       } else {
         // Tracts + their counts
         // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
         // Later in the zList
-        layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
-            'range_count', styleTractCounts) 
+        var layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
+            'range_count', styleTractCounts, boundsString);
       }
   } 
 }
