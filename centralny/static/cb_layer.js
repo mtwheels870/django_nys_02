@@ -23,7 +23,9 @@ class LayerTractCounts extends CbLayer {
       this.urlComponent, this.description, this.popupField, this.myStyle, boundsString, foreachFunction);
   }
 
-  function onEachCircle(feature, layer) {
+   
+  // Inside a class, format if methodName: function
+  onEachCircle: function(feature, layer) {
     var keys = Object.keys(feature.properties);
     console.log("LTC.onEachCircle(), feature.props = " + keys);
   /*  if (feature.properties && feature.properies.popupContent) {
