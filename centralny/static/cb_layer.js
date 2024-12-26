@@ -66,7 +66,7 @@ const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ran
   }
 );
 
-class LayerIpRanges extends CbLayer {
+class LayerIpRanges extends LayerCircle {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
   }
