@@ -54,6 +54,12 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
   // layerControl.addOverlay(layer, description);
 }
 
+function onEachCircle(feature, layer) {
+  if (feature.properties && feature.properies.popupContent) {
+    layer.bindPopup(feature.properties.popupContent);
+  }
+}
+
 async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
 
   // console.log("map.js:render_target(), popup_field: " + popup_field)
@@ -62,7 +68,8 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
   var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, myStyle);
-      }
+      },
+      onEachFeature: onEachCircle
     }).bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     );
@@ -86,7 +93,7 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
             'ip_range_start', styleIpRanges, boundsString);
       } else {
         // Tracts + their counts
-        // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
+        render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
         // Later in the zList
         var layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
             'range_count', styleTractCounts, boundsString);
