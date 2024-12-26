@@ -47,6 +47,7 @@ class CbLayer {
     const geojson = await response.json();
     return geojson;
   }
+
   async render() {
     console.log("CbLayer.render(), should not be here")
   }
@@ -82,7 +83,7 @@ class CbLayerCircle extends CbLayer {
         }
       }).bindPopup(
         (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-      );
+      });
     );
     layer.addTo(layerGroup);
   }
