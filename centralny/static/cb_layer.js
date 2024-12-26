@@ -1,12 +1,13 @@
 // Base Class
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
+    console.log("CbLayer.ctor():")
     this.urlComponent = urlComponent;
     this.description = description;
     this.popupField = popupField;
     this.style = myStyle;
     for (const key in myStyle) {
-      console.log("CbLayer.ctor(), " + key + ": " + myStyle[key]);
+      console.log("  style, " + key + ": " + myStyle[key]);
     }
     // console.log("CbLayer.ctor(), myStyle = " + myStyle);
   }
@@ -122,15 +123,6 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
   // layerControl.addOverlay(layer, description);
 }
 
-function onEachCircleGeneric(feature, layer) {
-  var keys = Object.keys(feature.properties);
-  console.log("onEachCircleGeneric(), feature.props = " + keys);
-/*  if (feature.properties && feature.properies.popupContent) {
-    layer.bindPopup(feature.properties.popupContent);
-  } */
-} 
-
-// async function render_circle(classObject, layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString, foreachFunction) {
 async function render_circle(classObject, layerGroup, layerControl, boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
@@ -163,8 +155,6 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
       if (zoom >= 16) {
         // Actual IP ranges
         layerIpRanges.renderClass(layerGroup, layerControl, boundsString)
-        /* var layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
-            'ip_range_start', styleIpRanges, boundsString, onEachCircleGeneric); */
       } else {
         // Tracts + their counts
         // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
