@@ -1,3 +1,30 @@
+class CbLayer {
+  constructor(urlComponent, description, popupField, myStyle) {
+    this.urlComponent = urlComponent;
+    this.description = description;
+    this.popupField popupField;
+    this.style = myStyle;
+  }
+}
+
+const LayerTractCounts = class CbLayer {
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
+  }
+  renderClass = (layerGroup, layerControl, boundsString) => {
+    console.log("LayerTractCounts.renderClass(), this = " + this);
+  }
+}
+
+const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
+  {
+    color: "#506030",
+    fillOpacity: 0.25,
+    weight: 0.6,
+    radius: 5,
+    zIndex: 300,
+  });
+
 const styleCounties = {
   color: "#20bb80",
   fillOpacity: 0.25,
@@ -64,7 +91,6 @@ function onEachCircle(feature, layer) {
 
 async function render_circle(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
 
-  // console.log("map.js:render_target(), popup_field: " + popup_field)
   const targets = await load_target(url_component, boundsString);
   // Clears our layer group
   var layer = L.geoJSON(targets, {
@@ -81,13 +107,15 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
   // We always the circles to be selectable before the polygons
   // layer_circle.bringToFront()
 }
+        layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
 
 export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   layerGroup.clearLayers();
   console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
-    var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties, boundsString)
+    var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
+        'county_name', styleCounties, boundsString)
   } else {
       if (zoom >= 16) {
         // Actual IP ranges
@@ -97,8 +125,9 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
         // Tracts + their counts
         render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
         // Later in the zList
-        var layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
-            'range_count', styleTractCounts, boundsString);
+        layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
+        /* var layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
+            'range_count', styleTractCounts, boundsString); */
       }
   } 
 }
