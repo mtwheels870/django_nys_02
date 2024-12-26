@@ -14,16 +14,6 @@ class LayerTractCounts extends CbLayer {
     super(urlComponent, description, popupField, myStyle);
   }
 
-  // Wrap the render function
-  renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LayerTractCounts.renderClass(), this = " + this);
-    // Call render circle
-    foreachFunction = this.onEachCircle
-    render_circle(layerGroup, layerControl,
-      this.urlComponent, this.description, this.popupField, this.myStyle, boundsString, foreachFunction);
-  }
-
-   
   // Inside a class, format if methodName: function
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
@@ -32,6 +22,15 @@ class LayerTractCounts extends CbLayer {
       layer.bindPopup(feature.properties.popupContent);
     } */
   } 
+
+  // Wrap the render function
+  renderClass = (layerGroup, layerControl, boundsString) => {
+    console.log("LayerTractCounts.renderClass(), this = " + this);
+    // Call render circle
+    foreachFunction = this.onEachCircle
+    render_circle(layerGroup, layerControl,
+      this.urlComponent, this.description, this.popupField, this.myStyle, boundsString, foreachFunction);
+  }
 }
 
 // Instantiate
