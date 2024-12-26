@@ -92,5 +92,3 @@ export function cb_render_all(layerGroup, layerControl, zoom) {
       }
   } 
 }
-
-module.export { cb_render_all };
