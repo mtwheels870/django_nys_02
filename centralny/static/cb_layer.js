@@ -31,8 +31,8 @@ class LayerTractCounts extends LayerCircle {
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
     var rangeCount = feature.properties["range_count"]
-    var radiusGraduated;
-    if (rangeCount <= 60) {
+    var radiusGraduated = Math.ceil(rangeCount / 60) * 2;
+    /* if (rangeCount <= 60) {
       radiusGraduated = 2;
     } else if (rangeCount <= 120) {
       radiusGraduated = 4;
@@ -40,7 +40,7 @@ class LayerTractCounts extends LayerCircle {
       radiusGraduated = 6;
     } else {
       radiusGraduated = 8;
-    }
+    } */
     console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount);
     var copiedStyle = {...this.style};
     copiedStyle["radius"] = radiusGraduated;
@@ -57,12 +57,11 @@ class LayerTractCounts extends LayerCircle {
 }
 
 // Instantiate
-//   radius: 5,
+//   radius: 5, weight: 0.6,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
   {
-    color: "#b040b0",
-    fillOpacity: 0.25,
-    weight: 0.6,
+    color: "#2F118F"
+    fillOpacity: 0.50,
     zIndex: 300,
   }
 );
