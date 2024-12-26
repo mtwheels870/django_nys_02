@@ -37,14 +37,16 @@ class CbLayer {
   }
 
   async restGet() {
+    console.log("cbLayer.restGet()")
     const markers_url = `/centralny/api/` + this.urlField + `/?in_bbox=${map
       .getBounds()
       .toBBoxString()}`;
-    // console.log("map.js:load_markers, url: " + markers_url)
+    console.log("cbLayer.restGet(), map.js:load_markers, url: " + markers_url)
     const response = await fetch(
       markers_url
     );
     const geojson = await response.json();
+    console.log("cbLayer.restGet(), geojson = " + geojson)
     return geojson;
   }
 
@@ -59,6 +61,7 @@ class CbLayerPolygon extends CbLayer {
   }
 
   async render(layerGroup) {
+    console.log("cbLayerPoly.render()")
     const targets = await restGet();
     // Clears our layer group
     var layer = L.geoJSON(targets, { style: this.style })
