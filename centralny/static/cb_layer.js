@@ -55,8 +55,8 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
 }
 
 function onEachCircle(feature, layer) {
-  var keys = Object.keys(feature);
-  console.log("onEachCircle(), keys = " + keys)
+  var keys = Object.keys(feature.properties);
+  console.log("onEachCircle(), keys.props = " + keys);
 /*  if (feature.properties && feature.properies.popupContent) {
     layer.bindPopup(feature.properties.popupContent);
   } */
