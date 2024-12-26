@@ -31,12 +31,12 @@ class LayerTractCounts extends LayerCircle {
   onEachCircle = (feature, layer) => {
     // Do the graduated circle
     var rangeCount = feature.properties["range_count"]
-    var radiusGraduated = Math.ceil(rangeCount / 60) * 2;
+    var radiusGraduated = Math.ceil(rangeCount / 60) * 3;
     var copiedStyle = {...this.style};
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
     var censusTract = feature.properties["census_tract"]
-    layer.bindPopup("<b>Census Tract: " + censusTract + "\nIP Range Count: " + rangeCount + "</b>")
+    layer.bindPopup("<b>Census Tract: " + censusTract + "<br>IP Range Count: " + rangeCount + "</b>")
 
   /*  if (feature.properties && feature.properies.popupContent) {
       layer.bindPopup(feature.properties.popupContent);
