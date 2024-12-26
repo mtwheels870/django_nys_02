@@ -72,7 +72,7 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
   // layer_circle.bringToFront()
 }
 
-function cb_render_all(layerGroup, layerControl, zoom) {
+module.export = function cb_render_all(layerGroup, layerControl, zoom) {
   layerGroup.clearLayers();
   console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
@@ -92,5 +92,3 @@ function cb_render_all(layerGroup, layerControl, zoom) {
       }
   } 
 }
-
-export { cb_render_all };
