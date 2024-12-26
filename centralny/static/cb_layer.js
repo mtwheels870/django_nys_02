@@ -52,8 +52,8 @@ class LayerTractCounts extends LayerCircle {
     // Call render circle
     // var foreachFunction = this.onEachCircle;
     render_circle(this, layerGroup, layerControl,
-      boundsString); */
-  }
+      boundsString); 
+  } */
 }
 // Instantiate
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
