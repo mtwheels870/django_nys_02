@@ -16,7 +16,7 @@ class CbLayer {
 class LayerCircle extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
-  },
+  }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
