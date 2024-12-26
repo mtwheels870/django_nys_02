@@ -28,6 +28,33 @@ const styleTracts = {
   zIndex: 400,
 }
 
+function cb_render_all(layerGroup, layerControl, zoom) {
+  layerGroup.clearLayers();
+  console.log("cb_render_all(), zoom level: " + zoom)
+  if (zoom <= 10) {
+    // Counties
+    // layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties)
+    layerCounties = CbLayerPolygon('counties', 'County Name', 'county_name', styleCounties)
+    layerCounties.render(layerGroup);
+  } else {
+      if (zoom >= 16) {
+        // Actual IP ranges
+        layerIpRanges = CbLayerCircle('ip_ranges', 'Actual IP Range','ip_range_start', styleIpRanges);
+        layerIpRanges.render(layerGroup);
+        /* layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
+            'ip_range_start', styleIpRanges); */
+      } else {
+        // Tracts + their counts
+        layerTracts = CbLayerPolygon('tracts', 'Tract Id: ', 'short_name', styleTracts)
+        layerTracts.render(layerGroup)
+        // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
+        // Later in the zList
+        /* layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
+            'range_count', styleTractCounts) */
+      }
+  } 
+}
+
 class CbLayer {
   constructor(urlField, description, popupField, style) {
     this.urlField = urlField;
@@ -136,29 +163,3 @@ async function render_circle(layerGroup, layerControl, url_component, descriptio
   // layer_circle.bringToFront()
 }
 
-function cb_render_all(layerGroup, layerControl, zoom) {
-  layerGroup.clearLayers();
-  console.log("cb_render_all(), zoom level: " + zoom)
-  if (zoom <= 10) {
-    // Counties
-    // layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name', 'county_name', styleCounties)
-    layerCounties = CbLayerPolygon('counties', 'County Name', 'county_name', styleCounties)
-    layerCounties.render(layerGroup);
-  } else {
-      if (zoom >= 16) {
-        // Actual IP ranges
-        layerIpRanges = CbLayerCircle('ip_ranges', 'Actual IP Range','ip_range_start', styleIpRanges);
-        layerIpRanges.render(layerGroup);
-        /* layer_ip_ranges = render_circle(layerGroup, layerControl, 'ip_ranges', 'Actual IP Range',
-            'ip_range_start', styleIpRanges); */
-      } else {
-        // Tracts + their counts
-        layerTracts = CbLayerPolygon('tracts', 'Tract Id: ', 'short_name', styleTracts)
-        layerTracts.render(layerGroup)
-        // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts)
-        // Later in the zList
-        /* layer_centroids = render_circle(layerGroup, layerControl, 'tract_counts', 'Count ranges in Tract ',
-            'range_count', styleTractCounts) */
-      }
-  } 
-}
