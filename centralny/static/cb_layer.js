@@ -22,7 +22,7 @@ class LayerTractCounts extends CbLayer {
     render_circle(layerGroup, layerControl,
       this.urlComponent, this.description, this.popupField, this.myStyle, boundsString, foreachFunction);
   }
-  for
+
   function onEachCircle(feature, layer) {
     var keys = Object.keys(feature.properties);
     console.log("LTC.onEachCircle(), feature.props = " + keys);
