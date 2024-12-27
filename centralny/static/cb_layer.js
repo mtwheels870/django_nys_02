@@ -126,20 +126,17 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
 async function render_target2(classObject, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-  L.geoJSON(targets, { style: classObject.myStyle }).addTo(layerGroup);
-/*    .bindPopup(
-AQUI
-      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-    ); */
-//  layer.addTo(layerGroup);
+  console.log("render_target2(). style = " + classObject.myStyle);
+  L.geoJSON(targets, { style: classObject.myStyle })
+    .bindPopup(
+      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>")
+    .addTo(layerGroup);
+    //  layer.addTo(layerGroup);
   // layerControl.addOverlay(layer, description);
 }
 
 async function render_circle(classObject, layerGroup, layerControl, boundsString) {
-  console.log("render_circle(), myStyle = " + classObject + ", type = " + typeof(classObject))
   const targets = await load_target(classObject.urlComponent, boundsString);
-  // Clears our layer group
-    console.log("render_circle(), type(style) = " + typeof(classObject.myStyle))
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
         return new L.CircleMarker(latLong, classObject.myStyle);
@@ -151,7 +148,7 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
 
 export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   layerGroup.clearLayers();
-  console.log("cb_render_all(), zoom level: " + zoom)
+  // console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
     var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
@@ -222,3 +219,6 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
       console.log("  " + key + ": " + copiedStyle[key]);
     }  */
     /* console.log("LTC.onEachCircle(), feature.props = " + keys + ", range_count = " + rangeCount); */
+  // console.log("render_circle(), myStyle = " + classObject + ", type = " + typeof(classObject))
+  // Clears our layer group
+    // console.log("render_circle(), type(style) = " + typeof(classObject.myStyle))
