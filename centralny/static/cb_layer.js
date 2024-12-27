@@ -1,16 +1,10 @@
 // Base Class
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
-    // console.log("CbLayer.ctor(): type(style): " + typeof(myStyle))
     this.urlComponent = urlComponent;
     this.description = description;
     this.popupField = popupField;
     this.style = myStyle;
-    console.log("CbLayer.ctor(), this.style: ");
-    // var keys = Object.keys(this.style);
-    for (const key in this.style) {
-      console.log("  " + key + ": " + this.style[key]);
-    } 
   }
 }
 
@@ -77,14 +71,9 @@ class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
     console.log("LP.ctor(), this.style: ");
-    // var keys = Object.keys(myStyle);
-    for (const key in this.style) {
-      console.log("  " + key + ": " + this.style[key]);
-    } 
-}
+  }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LayerPoly.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
     render_target2(this, layerGroup, layerControl, boundsString);
   }
@@ -92,7 +81,7 @@ class LayerPolygon extends CbLayer {
 
 // Instantiate
 const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
-{ color: "#506030", fillOpacity: 0.25, weight: 2, zIndex: 400 })
+{ color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 400 })
 
     // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
 const styleCounties = {
