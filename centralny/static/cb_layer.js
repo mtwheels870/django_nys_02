@@ -31,7 +31,7 @@ class LayerTractCounts extends LayerCircle {
   onEachCircle = (feature, layer) => {
     // Do the graduated circle
     var rangeCount = feature.properties["range_count"]
-    var radiusGraduated = Math.ceil(rangeCount / 60) * 3;
+    var radiusGraduated = Math.ceil(rangeCount / 60) * 3.5;
     var copiedStyle = {...this.style};
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
@@ -69,9 +69,27 @@ class LayerIpRanges extends LayerCircle {
 
 // Instantiate
 const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_range_start",
-  { radius: 6, fillColor: "#9A0669", color: "#000", weight: 0, fillOpacity: 0.8 }
+  { radius: 7, fillColor: "#9A0669", color: "#000", weight: 0, fillOpacity: 0.8 }
 );
 
+
+class LayerPolygon extends CbLayer {
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
+  }
+  // Wrap the render function
+  renderClass = (layerGroup, layerControl, boundsString) => {
+    console.log("LayerPoly.renderClass(), this = " + this + ", type(): " + typeof(this));
+    // Call render circle
+    render_target2(this, layerGroup, layerControl, boundsString);
+  }
+}
+
+// Instantiate
+const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
+{ color: "#506030", fillOpacity: 0.25, weight: 2, zIndex: 400 })
+
+    // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
 const styleCounties = {
   color: "#20bb80",
   fillOpacity: 0.25,
@@ -105,6 +123,18 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
   // layerControl.addOverlay(layer, description);
 }
 
+async function render_target2(classObject, layerGroup, layerControl,boundsString) {
+  const targets = await load_target(classObject.urlComponent, boundsString);
+  // Clears our layer group
+  L.geoJSON(targets, { style: classObject.myStyle }).addTo(layerGroup);
+/*    .bindPopup(
+AQUI
+      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
+    ); */
+//  layer.addTo(layerGroup);
+  // layerControl.addOverlay(layer, description);
+}
+
 async function render_circle(classObject, layerGroup, layerControl, boundsString) {
   console.log("render_circle(), myStyle = " + classObject + ", type = " + typeof(classObject))
   const targets = await load_target(classObject.urlComponent, boundsString);
@@ -130,6 +160,7 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
     // Actual IP ranges
     layerIpRanges.renderClass(layerGroup, layerControl, boundsString)
   } else {
+    layerTracts.renderClass(layerGroup, layerControl, boundsString);
     // Tracts + their counts
     // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
     // Later in the zList
