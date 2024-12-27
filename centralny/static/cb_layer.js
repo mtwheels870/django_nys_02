@@ -71,7 +71,7 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
 class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
-      console.log("LP.ctor(), this.myStyle: "
+      console.log("LP.ctor(), this.myStyle: ");
       var keys = Object.keys(this.myStyle);
       for (const key in this.myStyle) {
         console.log("  " + key + ": " + this.myStyle[key]);
