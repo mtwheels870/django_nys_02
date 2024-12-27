@@ -1,4 +1,6 @@
-// Base Class
+/*
+ * Base Class
+ */ 
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     this.urlComponent = urlComponent;
@@ -8,6 +10,9 @@ class CbLayer {
   }
 }
 
+/*
+ * Circle (intermediate)
+ */ 
 class LayerCircle extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
@@ -19,7 +24,9 @@ class LayerCircle extends CbLayer {
   }
 }
 
-// Sub Class
+/*
+ * TractCounts -> Circle -> Base
+ */ 
 class LayerTractCounts extends LayerCircle {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
@@ -44,7 +51,10 @@ const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ran
   { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
-// Sub Class
+
+/*
+ * CountyCounts -> Circle -> Base
+ */ 
 class LayerCountyCounts extends LayerCircle {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
@@ -71,11 +81,13 @@ class LayerCountyCounts extends LayerCircle {
 }
 
 // Instantiate
-//   radius: 5, weight: 0.6,
 const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", "range_counts",
   { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
+/*
+ * IP Ranges -> Circle -> Base
+ */ 
 class LayerIpRanges extends LayerCircle {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
@@ -99,6 +111,9 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
 );
 
 
+/*
+ * Polygon 
+ */ 
 class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
@@ -111,10 +126,13 @@ class LayerPolygon extends CbLayer {
   }
 }
 
-// Instantiate
+// Instantiate Tractgs
 const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
 { color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 400 })
 
+// Instantiate Counties
+const layerCounties = new LayerPolygon('counties', 'County Name', 'county_name',
+{ color: "#20bb80", fillOpacity: 0.25, weight: 1, zIndex: 400 })
 
 async function load_target(url_field, boundsString) {
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
@@ -162,8 +180,9 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   if (zoom <= 10) {
     // Counties
     layerCountyCounts.renderClass(layerGroup, layerControl, boundsString);
+    layerCounties.renderClass(layerGroup, layerControl, boundsString);
     /* var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
-        'county_name', styleCounties, boundsString); */
+        'county_name', styleCounties, boundsString);  */
   } else if (zoom >= 15) {
     // Actual IP ranges
     layerIpRanges.renderClass(layerGroup, layerControl, boundsString);
