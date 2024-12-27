@@ -117,7 +117,6 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
 class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
-    console.log("LP.ctor(), this.style: ");
   }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
@@ -196,10 +195,10 @@ function debug_layers(layerGroup, layerControl) {
   console.log("Layer Group:");
   var i = 0;
   for (const layer in layerGroup) {
-    console.log("layer[" + i + "]:");
-    for (const key in layerGroup[i]) {
-      console.log("  " + key + ": " + layerGroup[i][key]);
-    }
+    name = layerGroup[i].name
+    console.log("layer[" + i + "]: " + name);
+    /* for (const key in layerGroup[i]) {
+    } */
     i = i + 1;
   }
   // var keys = Object.keys(feature.properties);
