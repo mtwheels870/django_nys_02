@@ -195,8 +195,8 @@ function debug_layers(layerGroup, layerControl) {
   console.log("Layer Group:");
   var i = 0;
   for (const layer in layerGroup) {
-    name = layerGroup[i].name
-    console.log("layer[" + i + "]: " + name);
+    // name = layerGroup[i].name
+    // console.log("layer[" + i + "]: " + name);
     /* for (const key in layerGroup[i]) {
     } */
     i = i + 1;
