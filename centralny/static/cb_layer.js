@@ -122,7 +122,7 @@ class LayerPolygon extends CbLayer {
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
     // Call render circle
-    render_target2(this, layerGroup, layerControl, boundsString);
+    render_target(this, layerGroup, layerControl, boundsString);
   }
 }
 
@@ -143,7 +143,7 @@ async function load_target(url_field, boundsString) {
   return geojson;
 }
 
-async function render_target(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
+async function render_target3(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
   const targets = await load_target(url_component, boundsString);
   // Clears our layer group
   var layer = L.geoJSON(targets, { style: myStyle })
@@ -154,10 +154,10 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
   // layerControl.addOverlay(layer, description);
 }
 
-async function render_target2(classObject, layerGroup, layerControl,boundsString) {
+async function render_target(classObject, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-  console.log("render_target2(). style = " + classObject.style);
+  console.log("render_target(). style = " + classObject.style);
   L.geoJSON(targets, { style: classObject.style })
     .bindPopup(
       (layer) => classObject.description + ": <b>" + layer.feature.properties[classObject.popupField] + "</b>")
@@ -181,20 +181,34 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
     // Counties
     layerCountyCounts.renderClass(layerGroup, layerControl, boundsString);
     layerCounties.renderClass(layerGroup, layerControl, boundsString);
-    /* var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
-        'county_name', styleCounties, boundsString);  */
   } else if (zoom >= 15) {
     // Actual IP ranges
     layerIpRanges.renderClass(layerGroup, layerControl, boundsString);
   } else {
-    layerTracts.renderClass(layerGroup, layerControl, boundsString);
     // Tracts + their counts
-    // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
-    // Later in the zList
+    layerTracts.renderClass(layerGroup, layerControl, boundsString);
     layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
   } 
+  debug_layers(layerGroup, layerControl);
 }
 
+function debug_layers(layerGroup, layerControl) {
+  console.log("Layer Group:");
+  var i = 0;
+  for (const layer in layerGroup) {
+    console.log("layer[" + i "]:");
+    for (const key in layerGroup[i]) {
+      console.log("  " + key + ": " + layerGroup[i][key]);
+    }
+    i = i + 1;
+  }
+  // var keys = Object.keys(feature.properties);
+  /* console.log("      style: ");
+  for (const key in copiedStyle) {
+    console.log("  " + key + ": " + copiedStyle[key]);
+  }  */
+
+}
 /* .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     ); */
@@ -270,3 +284,7 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   weight: 3
 }; */
     // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
+    // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
+    // Later in the zList
+    /* var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
+        'county_name', styleCounties, boundsString);  */
