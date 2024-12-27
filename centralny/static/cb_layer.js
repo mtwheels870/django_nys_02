@@ -6,10 +6,10 @@ class CbLayer {
     this.description = description;
     this.popupField = popupField;
     this.style = myStyle;
-    console.log("CbLayer.ctor(), myStyle: ");
-    var keys = Object.keys(myStyle);
-    for (const key in myStyle) {
-      console.log("  " + key + ": " + myStyle[key]);
+    console.log("CbLayer.ctor(), this.tyle: ");
+    // var keys = Object.keys(this.style);
+    for (const key in this.style) {
+      console.log("  " + key + ": " + this.style[key]);
     } 
   }
 }
