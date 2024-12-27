@@ -47,12 +47,7 @@ class LayerTractCounts extends LayerCircle {
 // Instantiate
 //   radius: 5, weight: 0.6,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
-  {
-    color: "#2F118F",
-    fillOpacity: 0.80,
-    weight: 0,
-    zIndex: 300,
-  }
+  { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
 class LayerIpRanges extends LayerCircle {
@@ -65,19 +60,16 @@ class LayerIpRanges extends LayerCircle {
     var keys = Object.keys(feature.properties);
     console.log("LIP.onEachCircle(), feature.props = " + keys);
     layer.setStyle(this.style);
+    var ipRangeSart = feature.properties["ip_range_start"]
+    var companyName = feature.properties["de_company_name"]
+    layer.bindPopup("<b>First IP Range (@ this location):<br>IP Range Start:" + ipRangeStart + 
+        "<br>Company Name: " + companyName + "</b>")
   } 
 };
 
 // Instantiate
 const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_range_start",
-  {
-    radius: 5,
-    fillColor: "#2080b0",
-    color: "#000",
-    weight: 0.5,
-    opacity: 1,
-    fillOpacity: 0.5
-  }
+  { radius: 4, fillColor: "#2080b0", color: "#000", weight: 0, fillOpacity: 0.8 }
 );
 
 const styleCounties = {
