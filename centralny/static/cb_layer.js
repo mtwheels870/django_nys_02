@@ -15,7 +15,6 @@ class LayerCircle extends CbLayer {
   }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    // console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
     render_circle(this, layerGroup, layerControl, boundsString);
   }
@@ -37,10 +36,6 @@ class LayerTractCounts extends LayerCircle {
     layer.setStyle(copiedStyle)
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>Census Tract: " + censusTract + "<br>IP Range Count: " + rangeCount + "</b>")
-
-  /*  if (feature.properties && feature.properies.popupContent) {
-      layer.bindPopup(feature.properties.popupContent);
-    } */
   } 
 }
 
@@ -80,7 +75,7 @@ class LayerPolygon extends CbLayer {
   }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    // console.log("LayerPoly.renderClass(), this = " + this + ", type(): " + typeof(this));
+    console.log("LayerPoly.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
     render_target2(this, layerGroup, layerControl, boundsString);
   }
@@ -130,7 +125,7 @@ async function render_target2(classObject, layerGroup, layerControl,boundsString
   console.log("render_target2(). style = " + classObject.myStyle);
   L.geoJSON(targets, { style: classObject.myStyle })
     .bindPopup(
-      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>")
+      (layer) => classObject.description + ": <b>" + layer.feature.properties[classObject.popupField] + "</b>")
     .addTo(layerGroup);
     //  layer.addTo(layerGroup);
   // layerControl.addOverlay(layer, description);
@@ -223,3 +218,7 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   // console.log("render_circle(), myStyle = " + classObject + ", type = " + typeof(classObject))
   // Clears our layer group
     // console.log("render_circle(), type(style) = " + typeof(classObject.myStyle))
+  /*  if (feature.properties && feature.properies.popupContent) {
+      layer.bindPopup(feature.properties.popupContent);
+    } */
+    // console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
