@@ -71,7 +71,10 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
 class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
-    console.log("LP.ctor(), myStyle = " + myStyle);
+      console.log("LP.ctor(), this.myStyle: "
+      var keys = Object.keys(this.myStyle);
+      for (const key in this.myStyle) {
+        console.log("  " + key + ": " + this.myStyle[key]);
   }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
@@ -127,8 +130,6 @@ async function render_target2(classObject, layerGroup, layerControl,boundsString
     .bindPopup(
       (layer) => classObject.description + ": <b>" + layer.feature.properties[classObject.popupField] + "</b>")
     .addTo(layerGroup);
-    //  layer.addTo(layerGroup);
-  // layerControl.addOverlay(layer, description);
 }
 
 async function render_circle(classObject, layerGroup, layerControl, boundsString) {
@@ -222,3 +223,5 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
       layer.bindPopup(feature.properties.popupContent);
     } */
     // console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
+    //  layer.addTo(layerGroup);
+  // layerControl.addOverlay(layer, description);
