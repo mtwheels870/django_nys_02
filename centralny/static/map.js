@@ -30,7 +30,7 @@ const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 async function render_all() {
   var zoom = map.getZoom()
   var boundsString = map.getBounds().toBBoxString()
-  console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
+  // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
   cb_render_all(layerGroup, layerControl, zoom, boundsString);
 }
 

@@ -1,7 +1,7 @@
 // Base Class
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
-    console.log("CbLayer.ctor(): type(style): " + typeof(myStyle))
+    // console.log("CbLayer.ctor(): type(style): " + typeof(myStyle))
     this.urlComponent = urlComponent;
     this.description = description;
     this.popupField = popupField;
@@ -15,7 +15,7 @@ class LayerCircle extends CbLayer {
   }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
+    // console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
     render_circle(this, layerGroup, layerControl, boundsString);
   }
@@ -76,10 +76,11 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
 class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
+    console.log("LP.ctor(), myStyle = " + myStyle);
   }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
-    console.log("LayerPoly.renderClass(), this = " + this + ", type(): " + typeof(this));
+    // console.log("LayerPoly.renderClass(), this = " + this + ", type(): " + typeof(this));
     // Call render circle
     render_target2(this, layerGroup, layerControl, boundsString);
   }
