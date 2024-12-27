@@ -60,7 +60,7 @@ class LayerIpRanges extends LayerCircle {
     var keys = Object.keys(feature.properties);
     console.log("LIP.onEachCircle(), feature.props = " + keys);
     layer.setStyle(this.style);
-    var ipRangeSart = feature.properties["ip_range_start"]
+    var ipRangeStart = feature.properties["ip_range_start"]
     var companyName = feature.properties["de_company_name"]
     layer.bindPopup("<b>First IP Range (@ this location):<br>IP Range Start:" + ipRangeStart + 
         "<br>Company Name: " + companyName + "</b>")
