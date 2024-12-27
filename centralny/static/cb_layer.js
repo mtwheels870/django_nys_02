@@ -75,6 +75,7 @@ class LayerPolygon extends CbLayer {
       var keys = Object.keys(this.myStyle);
       for (const key in this.myStyle) {
         console.log("  " + key + ": " + this.myStyle[key]);
+      } 
   }
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
