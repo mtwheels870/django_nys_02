@@ -69,7 +69,7 @@ class LayerIpRanges extends LayerCircle {
 
 // Instantiate
 const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_range_start",
-  { radius: 4, fillColor: "#2080b0", color: "#000", weight: 0, fillOpacity: 0.8 }
+  { radius: 6, fillColor: "#9A0669", color: "#000", weight: 0, fillOpacity: 0.8 }
 );
 
 const styleCounties = {
