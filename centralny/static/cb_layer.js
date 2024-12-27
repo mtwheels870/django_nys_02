@@ -6,6 +6,11 @@ class CbLayer {
     this.description = description;
     this.popupField = popupField;
     this.style = myStyle;
+    console.log("CbLayer.ctor(), this.myStyle: ");
+    var keys = Object.keys(this.myStyle);
+    for (const key in this.myStyle) {
+      console.log("  " + key + ": " + this.myStyle[key]);
+    } 
   }
 }
 
@@ -71,12 +76,12 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
 class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
-      console.log("LP.ctor(), this.myStyle: ");
-      var keys = Object.keys(this.myStyle);
-      for (const key in this.myStyle) {
-        console.log("  " + key + ": " + this.myStyle[key]);
-      } 
-  }
+    console.log("LP.ctor(), this.myStyle: ");
+    var keys = Object.keys(this.myStyle);
+    for (const key in this.myStyle) {
+      console.log("  " + key + ": " + this.myStyle[key]);
+    } 
+}
   // Wrap the render function
   renderClass = (layerGroup, layerControl, boundsString) => {
     console.log("LayerPoly.renderClass(), this = " + this + ", type(): " + typeof(this));
