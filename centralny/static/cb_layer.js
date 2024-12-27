@@ -6,7 +6,7 @@ class CbLayer {
     this.description = description;
     this.popupField = popupField;
     this.style = myStyle;
-    console.log("CbLayer.ctor(), this.tyle: ");
+    console.log("CbLayer.ctor(), this.style: ");
     // var keys = Object.keys(this.style);
     for (const key in this.style) {
       console.log("  " + key + ": " + this.style[key]);
@@ -76,10 +76,10 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
 class LayerPolygon extends CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     super(urlComponent, description, popupField, myStyle);
-    console.log("LP.ctor(), myStyle: ");
-    var keys = Object.keys(myStyle);
-    for (const key in myStyle) {
-      console.log("  " + key + ": " + myStyle[key]);
+    console.log("LP.ctor(), this.style: ");
+    // var keys = Object.keys(myStyle);
+    for (const key in this.style) {
+      console.log("  " + key + ": " + this.style[key]);
     } 
 }
   // Wrap the render function
@@ -131,8 +131,8 @@ async function render_target(layerGroup, layerControl, url_component, descriptio
 async function render_target2(classObject, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-  console.log("render_target2(). style = " + classObject.myStyle);
-  L.geoJSON(targets, { style: classObject.myStyle })
+  console.log("render_target2(). style = " + classObject.style);
+  L.geoJSON(targets, { style: classObject.style })
     .bindPopup(
       (layer) => classObject.description + ": <b>" + layer.feature.properties[classObject.popupField] + "</b>")
     .addTo(layerGroup);
