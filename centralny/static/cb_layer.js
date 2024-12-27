@@ -115,19 +115,6 @@ class LayerPolygon extends CbLayer {
 const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
 { color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 400 })
 
-    // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
-const styleCounties = {
-  color: "#20bb80",
-  fillOpacity: 0.25,
-  weight: 3
-};
-
-/* const styleTracts = {
-  color: "#506030",
-  fillOpacity: 0.25,
-  weight: 2,
-  zIndex: 400,
-} */
 
 async function load_target(url_field, boundsString) {
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
@@ -167,7 +154,6 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
       },
       onEachFeature: classObject.onEachCircle,
     }).addTo(layerGroup);
-    // layer.bringToFront();
 }
 
 export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
@@ -176,8 +162,8 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   if (zoom <= 10) {
     // Counties
     layerCountyCounts.renderClass(layerGroup, layerControl, boundsString);
-    var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
-        'county_name', styleCounties, boundsString);
+    /* var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
+        'county_name', styleCounties, boundsString); */
   } else if (zoom >= 15) {
     // Actual IP ranges
     layerIpRanges.renderClass(layerGroup, layerControl, boundsString);
@@ -253,3 +239,15 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
     // console.log("LayerCirc.renderClass(), this = " + this + ", type(): " + typeof(this));
     //  layer.addTo(layerGroup);
   // layerControl.addOverlay(layer, description);
+/* const styleTracts = {
+  color: "#506030",
+  fillOpacity: 0.25,
+  weight: 2,
+  zIndex: 400,
+} */
+/* const styleCounties = {
+  color: "#20bb80",
+  fillOpacity: 0.25,
+  weight: 3
+}; */
+    // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
