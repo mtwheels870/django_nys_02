@@ -40,8 +40,41 @@ class LayerTractCounts extends LayerCircle {
 
 // Instantiate
 //   radius: 5, weight: 0.6,
-const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "rangeCounts",
+const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
   { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 300, }
+);
+
+// Sub Class
+class LayerCountyCounts extends LayerCircle {
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
+  }
+
+  // Inside a class, format if methodName: function
+  onEachCircle = (feature, layer) => {
+    // Do the graduated circle
+    var rangeCount = feature.properties["range_count"]
+    var radiusGraduated;
+    if (rangeCount <= 250) {
+      radiusGraduated = 5;
+    } else if (rangeCount <= 1000) {
+      radiusGraduated = 10;
+    } else {
+      radiusGraduated = 15;
+    }
+    var copiedStyle = {...this.style};
+    copiedStyle["radius"] = radiusGraduated;
+    layer.setStyle(copiedStyle)
+    var countyCode = feature.properties["county_code"]
+    layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + rangeCount + "</b>")
+  } 
+}
+
+// Instantiate
+//   radius: 5, weight: 0.6,
+const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", "range_counts",
+        fields = ("id", "county_code", "range_count")
+  { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
 class LayerIpRanges extends LayerCircle {
@@ -90,12 +123,12 @@ const styleCounties = {
   weight: 3
 };
 
-const styleTracts = {
+/* const styleTracts = {
   color: "#506030",
   fillOpacity: 0.25,
   weight: 2,
   zIndex: 400,
-}
+} */
 
 async function load_target(url_field, boundsString) {
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
@@ -143,11 +176,12 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
   // console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
+    layerCountyCounts.renderClass(layerGroup, layerControl, boundsString);
     var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
-        'county_name', styleCounties, boundsString)
+        'county_name', styleCounties, boundsString);
   } else if (zoom >= 15) {
     // Actual IP ranges
-    layerIpRanges.renderClass(layerGroup, layerControl, boundsString)
+    layerIpRanges.renderClass(layerGroup, layerControl, boundsString);
   } else {
     layerTracts.renderClass(layerGroup, layerControl, boundsString);
     // Tracts + their counts

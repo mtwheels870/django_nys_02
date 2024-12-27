@@ -9,7 +9,8 @@ from centralny.models import (
     CensusTract,
     County,
     DeIpRange,
-    CountRangeTract
+    CountRangeTract,
+    CountRangeCounty
 )
 
 from centralny.serializers import (
@@ -17,7 +18,8 @@ from centralny.serializers import (
     CensusTractSerializer,
     CountySerializer,
     DeIpRangeSerializer,
-    CountRangeTractSerializer
+    CountRangeTractSerializer,
+    CountRangeCountySerializer
 )
 
 # /maps/api/markers (through DefaultRouter)
@@ -59,3 +61,9 @@ class CountTractViewSet(
     queryset = CountRangeTract.objects.all()
     serializer_class = CountRangeTractSerializer
     
+class CountCountyViewSet(
+    viewsets.ReadOnlyModelViewSet):
+    bbox_filter_field = "centroid"
+    filter_backends = [filters.InBBoxFilter]
+    queryset = CountRangeCounty.objects.all()
+    serializer_class = CountRangeCountySerializer
