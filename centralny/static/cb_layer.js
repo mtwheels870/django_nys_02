@@ -73,7 +73,6 @@ class LayerCountyCounts extends LayerCircle {
 // Instantiate
 //   radius: 5, weight: 0.6,
 const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", "range_counts",
-        fields = ("id", "county_code", "range_count")
   { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
