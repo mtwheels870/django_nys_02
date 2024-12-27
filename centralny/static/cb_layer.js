@@ -126,16 +126,14 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
     // Counties
     var layerCounties = render_target(layerGroup, layerControl, 'counties', 'County Name',
         'county_name', styleCounties, boundsString)
+  } else if (zoom >= 15) {
+    // Actual IP ranges
+    layerIpRanges.renderClass(layerGroup, layerControl, boundsString)
   } else {
-      if (zoom >= 16) {
-        // Actual IP ranges
-        layerIpRanges.renderClass(layerGroup, layerControl, boundsString)
-      } else {
-        // Tracts + their counts
-        // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
-        // Later in the zList
-        layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
-      }
+    // Tracts + their counts
+    // render_target(layerGroup, layerControl, 'tracts', 'Tract Id: ', 'short_name', styleTracts, boundsString)
+    // Later in the zList
+    layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
   } 
 }
 
