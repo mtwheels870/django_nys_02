@@ -51,7 +51,8 @@ ip_range_mapping = {
     "mpoint" : "MULTIPOINT",
 }
 
-IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
+# IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
+IP_RANGE_PATH = "/home/bitnami/Data/IP/NA_All_DBs_01.shp"
 
 class Loader():
     def __init__(self):
