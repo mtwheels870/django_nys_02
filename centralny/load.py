@@ -46,7 +46,7 @@ ip_range_mapping = {
     "pp_cxn_type" : "pp_conn_ty",
     "pp_latitude" : "pp_latitud",
     "pp_longitude" : "pp_longitu",
-    "de_company_name" : "company_na",
+    "company_name" : "company_na",
     "naics_code" : "naics_code",
     "organization" : "organizati",
     "srs_company_name" : "srs_compan",
