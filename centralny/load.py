@@ -52,8 +52,8 @@ ip_range_mapping = {
     "srs_company_name" : "srs_compan",
     "srs_issuer_id" : "srs_issuer",
     "srs_latitude" : "srs_latitu",
-    "srs_longitude" : "str_longit",
-    "srs_strength" : "str_streng",
+    "srs_longitude" : "srs_longit",
+    "srs_strength" : "srs_streng",
     "mpoint" : "MULTIPOINT",
 }
 
