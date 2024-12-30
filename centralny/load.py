@@ -40,14 +40,20 @@ tract_mapping = {
 TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
 
 ip_range_mapping = {
-    "ip_range_start" : "start-ip",
-    "ip_range_end" : "end-ip",
-    "pp_city" : "pp-city",
-    "pp_cxn_speed" : "pp-conn-sp",
-    "pp_cxn_type" : "pp-conn-ty",
-    "pp_latitude" : "pp-latitud",
-    "pp_longitude" : "pp-longitu",
-    "de_company_name" : "digel_comp",
+    "ip_range_start" : "ip_start",
+    "ip_range_end" : "ip_end_x",
+    "pp_cxn_speed" : "pp_conn_sp",
+    "pp_cxn_type" : "pp_conn_ty",
+    "pp_latitude" : "pp_latitud",
+    "pp_longitude" : "pp_longitu",
+    "de_company_name" : "company_na",
+    "naics_code" : "naics_code",
+    "organization" : "organizati",
+    "srs_company_name" : "srs_compan",
+    "srs_issuer_id" : "srs_issuer",
+    "srs_latitude" : "srs_latitu",
+    "srs_longitude" : "str_longit",
+    "srs_strength" : "str_streng"
     "mpoint" : "MULTIPOINT",
 }
 
