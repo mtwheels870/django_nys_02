@@ -60,7 +60,7 @@ class DeIpRange(models.Model):
     pp_longitude = models.CharField(max_length=20)
     company_name = models.CharField(max_length=40, null=True)
     naics_code = models.CharField(max_length=8, null=True)
-    organization = models.CharField(max_length=40, null=True)
+    organization = models.CharField(max_length=80, null=True)
     srs_company_name = models.CharField(max_length=40, null=True)
     srs_issuer_id = models.CharField(max_length=10, null=True)
     srs_latitude = models.CharField(max_length=20, null=True)
