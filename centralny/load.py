@@ -53,7 +53,7 @@ ip_range_mapping = {
     "srs_issuer_id" : "srs_issuer",
     "srs_latitude" : "srs_latitu",
     "srs_longitude" : "str_longit",
-    "srs_strength" : "str_streng"
+    "srs_strength" : "str_streng",
     "mpoint" : "MULTIPOINT",
 }
 
