@@ -67,7 +67,6 @@ class DeIpRange(models.Model):
     srs_longitude = models.CharField(max_length=20, null=True)
     srs_strength = models.CharField(max_length=3, null=True)
     census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.SET_NULL)
-    de_company_name = models.CharField(max_length=50, default="Acme Explosives")
     mpoint = models.MultiPointField(null=True)
 
     def __str__(self):
