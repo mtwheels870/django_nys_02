@@ -117,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 # WAS TIME_ZONE = 'UTC'
-TIME_ZONE = 'America/New York'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
