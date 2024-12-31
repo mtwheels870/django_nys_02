@@ -1,14 +1,14 @@
-from django.contrib import admin
 from django.contrib.gis import admin
+from django.contrib import admin
 
 from centralny.models import Marker, County, CensusTract, DeIpRange
 
 @admin.register(Marker)
-class MarkerAdmin(admin.GISModelAdmin):
+class MarkerAdmin(admin.GeoModelAdmin):
     list_display = ("name", "location")
 
 @admin.register(County)
-class CensusBorderCountyAdmin(admin.GISModelAdmin):
+class CensusBorderCountyAdmin(admin.GeoModelAdmin):
     fieldsets = [
         (None, {"fields": ["county_name", "county_code", "pop2000"]}),
         ("Geography", {"fields": ["mpoly"], 
@@ -22,7 +22,7 @@ class CensusBorderCountyAdmin(admin.GISModelAdmin):
 #    list_display = ("county_name", "county_code", "pop2000", "mpoly")
 
 @admin.register(CensusTract)
-class CensusTractAdmin(admin.GISModelAdmin):
+class CensusTractAdmin(admin.GeoModelAdmin):
     fieldsets = [
         (None, {"fields": ["county_code", "short_name"]}),
         ("Geography", {"fields": ["mpoly"], 
@@ -30,7 +30,7 @@ class CensusTractAdmin(admin.GISModelAdmin):
     ]
 
 @admin.register(DeIpRange)
-class DeIpRangeAdmin(admin.GISModelAdmin):
+class DeIpRangeAdmin(admin.GeoModelAdmin):
     #list_display = ("ip_range_start", "ip_range_end", "mpoint")
     fieldsets = [
         (None, {"fields": ["ip_range_start", "ip_range_end", "de_company_name"]}),
