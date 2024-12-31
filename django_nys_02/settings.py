@@ -173,3 +173,10 @@ LOGGING = {
         "level": "WARNING",
     },
 }
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'jquery-ui',
+    'bootstrap',
+    'fullcalendar#3.8.2'
+)
