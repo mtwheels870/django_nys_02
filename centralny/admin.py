@@ -1,5 +1,5 @@
+# from django.contrib import admin
 from django.contrib.gis import admin
-from django.contrib import admin
 
 from centralny.models import Marker, County, CensusTract, DeIpRange
 
