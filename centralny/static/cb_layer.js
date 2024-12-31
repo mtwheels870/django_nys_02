@@ -36,7 +36,7 @@ class LayerTractCounts extends LayerCircle {
   onEachCircle = (feature, layer) => {
     // Do the graduated circle
     var rangeCount = feature.properties["range_count"]
-    # range 1... 100 ... 200 ... 400
+    // range 1... 100 ... 200 ... 400
     var radiusGraduated = Math.ceil(rangeCount / 120) * 3.5;
     var copiedStyle = {...this.style};
     copiedStyle["radius"] = radiusGraduated;
