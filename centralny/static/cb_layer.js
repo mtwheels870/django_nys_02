@@ -157,7 +157,7 @@ async function render_target3(layerGroup, layerControl, url_component, descripti
 async function render_target(classObject, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
-  console.log("render_target(). style = " + classObject.style);
+  // console.log("render_target(). style = " + classObject.style);
   L.geoJSON(targets, { style: classObject.style })
     .bindPopup(
       (layer) => classObject.description + ": <b>" + layer.feature.properties[classObject.popupField] + "</b>")
@@ -189,7 +189,7 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
     layerTracts.renderClass(layerGroup, layerControl, boundsString);
     layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
   } 
-  debug_layers(layerGroup, layerControl);
+  // debug_layers(layerGroup, layerControl);
 }
 
 function debug_layers(layerGroup, layerControl) {
