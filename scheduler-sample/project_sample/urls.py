@@ -9,10 +9,10 @@ from django.conf import settings
 admin.autodiscover()
 
 urlpatterns = [
-    path(r'^$', TemplateView.as_view(template_name="homepage.html"),),
-    path(r'^schedule/', include('schedule.urls')),
-    path(r'^fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
-    path(r'^admin/', admin.site.urls),
+    path(r's/', TemplateView.as_view(template_name="homepage.html"),),
+    path(r's/schedule/', include('schedule.urls')),
+    path(r's/fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
+    path(r's/admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
