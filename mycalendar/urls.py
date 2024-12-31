@@ -1,6 +1,7 @@
 from django.urls import path, include
 from django.views.generic import TemplateView
 
+import debug_toolbar
 # from . import views, api
 
 #print(f"markers.urlpatterns = {urlpatterns}")
@@ -13,8 +14,8 @@ urlpatterns = [
     path(r'fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
 ]
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [
-        path(r'__debug__/', include(debug_toolbar.urls)),
-    ]
+# if settings.DEBUG:
+#    import debug_toolbar
+urlpatterns += [
+    path(r'__debug__/', include(debug_toolbar.urls)),
+]
