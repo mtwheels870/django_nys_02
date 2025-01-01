@@ -7,9 +7,7 @@
   <body>
     <h1>{{ ping_range.ip_range.ip_range_start }}</h1>
     <ul>
-    {% for choice in question.choice_set.all %}
-        <li>{{ choice.choice_text }}</li>
-    {% endfor %}
+        ID: {{ ping_range.id }}
     </ul>
     <p>Ping Strategy Configuration Details:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
