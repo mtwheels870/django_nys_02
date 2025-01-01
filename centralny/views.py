@@ -92,26 +92,5 @@ class PingStrategyResultsView(generic.DetailView):
     template_name = "centralny/ping_strat_results.html"
 
 # Reverse mapping from clicking on a index, detail
-def vote(request, ping_range_id):
-    range_ping = get_object_or_404(IpRangePing, pk=ping_range_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST["choice"])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        # Fix the hard-coded name below (/polls/nys/)
-        return render(
-            request,
-            "tutorial/detail.html",
-            {
-                "question": question,
-                "error_message": "You didn't select a choice.",
-            },
-        )
-    else:
-        # What does F() do?
-        selected_choice.votes = F("votes") + 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse("app_tut:results", args=(question.id,)))
+def vote(request):
+    print("Views.vote()")
