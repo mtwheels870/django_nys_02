@@ -1,6 +1,7 @@
 # Subclasses from django.db import models 
 from django.contrib import admin
 from django.contrib.gis.db import models
+from django.utils import timezone
 
 class Marker(models.Model):
     name = models.CharField(max_length=255)
@@ -92,7 +93,7 @@ class CountRangeCounty(models.Model):
 class IpRangePing(models.Model):
     # Should be county_ref or something (it's not an actual code)
     ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
-    time_created = models.DateTimeField(null=True, default=datetime.now())
+    time_created = models.DateTimeField(null=True, default=timezone.now())
     time_pinged = models.DateTimeField(null=True)
     addresses_pinged = models.BinaryField(max_length=32, default=b'\x00')
     addresses_responded = models.BinaryField(max_length=32, default=b'\x00')
