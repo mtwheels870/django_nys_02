@@ -72,7 +72,7 @@ class CountCountyViewSet(
     serializer_class = CountRangeCountySerializer
 
 class PingStrategyIndexView(generic.ListView):
-    template_name = "centralny/ping_strat_index.html"
+    template_name = "centralny/ps_index.html"
     context_object_name = "latest_ping_list"
 
     def get_queryset(self):
@@ -81,7 +81,7 @@ class PingStrategyIndexView(generic.ListView):
 
 class PingStrategyDetailView(generic.DetailView):
     model = IpRangePing
-    template_name = "centralny/ping_strat_detail.html"
+    template_name = "centralny/ps_detail.html"
 
     def get_queryset(self):
         """ Excludes any Qs that aren't published, yet.  """
@@ -89,7 +89,7 @@ class PingStrategyDetailView(generic.DetailView):
 
 class PingStrategyResultsView(generic.DetailView):
     model = IpRangePing
-    template_name = "centralny/ping_strat_results.html"
+    template_name = "centralny/ps_results.html"
 
 # Reverse mapping from clicking on a index, detail
 def vote(request):
