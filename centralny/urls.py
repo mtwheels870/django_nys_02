@@ -11,10 +11,10 @@ app_name = "app_centralny"
 
 urlpatterns = [
     path("map/", TemplateView.as_view(template_name="centralny/map.html")),
-    path("ping/", views.PingStrategyIndexView.as_view(), name="index"),
+    path("ping/", views.PingStrategyIndexView.as_view(), name="ping_strat_index"),
     # ex: /tutorial/5/
-    path("ping/<int:pk>/", views.PingStrategyDetailView.as_view(), name="detail"),
+    path("ping/<int:pk>/", views.PingStrategyDetailView.as_view(), name="ping_strat_detail"),
     # ex: /tutorial/5/results/
-    path("ping/<int:pk>/results/", views.PingStrategyResultsView.as_view(), name="results"),
+    path("ping/<int:pk>/results/", views.PingStrategyResultsView.as_view(), name="ping_strat_results"),
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")
