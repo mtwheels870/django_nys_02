@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'djangobower',
     'schedule',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
