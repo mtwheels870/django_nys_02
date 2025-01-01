@@ -11,9 +11,9 @@
         <li>{{ choice.choice_text }}</li>
     {% endfor %}
     </ul>
-    <p>New Stuff Below:</p>
+    <p>Ping Strategy Configuration Details:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
-    <form action="{% url 'app_centralny:stuff' %}" method="post">
+    <form action="{% url 'app_centralny:configure_ping' %}" method="post">
         {% csrf_token %}
         <fieldset>
             <legend><h1>{{  ping_range.ip_range.ip_range_start }}</h1></legend>
@@ -23,7 +23,7 @@
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
         </fieldset>
-        <input type="submit" value="Vote">
+        <input type="submit" value="Configure">
     </form>
   </body>
 </html>
