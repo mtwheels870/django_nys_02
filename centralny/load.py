@@ -57,13 +57,6 @@ ip_range_mapping = {
     "mpoint" : "MULTIPOINT",
 }
 
-class IpRangePing(models.Model):
-    # Should be county_ref or something (it's not an actual code)
-    ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
-    last_ping_time = models.DateTimeField(null=True)
-    addresses_pinged = models.BinaryField(max_length=32, default=0)
-    addresses_responded = models.BinaryField(max_length=32, default=0)
-
 # IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
 IP_RANGE_PATH = "/home/bitnami/Data/IP/NA_All_DBs_01.shp"
 
