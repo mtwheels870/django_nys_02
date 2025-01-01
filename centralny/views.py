@@ -92,5 +92,5 @@ class PingStrategyResultsView(generic.DetailView):
     template_name = "centralny/ps_results.html"
 
 # Reverse mapping from clicking on a index, detail
-def vote(request):
-    print("Views.vote()")
+def stuff(request):
+    print("Views.stuff()")
