@@ -166,6 +166,6 @@ class Loader():
             8201, 8407, 9028, 10073]
         for id in ip_range_ids:
             ping = IpRangePing()
-            range_object = DeIpRange.objects.filter(pk=id):
+            range_object = DeIpRange.objects.filter(pk=id)
             ping.ip_range = range_object
             ping.save()            
