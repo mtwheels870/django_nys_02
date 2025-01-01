@@ -92,8 +92,8 @@ class PingStrategyResultsView(generic.DetailView):
     template_name = "centralny/ping_strat_results.html"
 
 # Reverse mapping from clicking on a index, detail
-def vote(request, ip_range_ping_id):
-    range_ping = get_object_or_404(IpRangePing, pk=ip_range_ping_id)
+def vote(request, ping_range_id):
+    range_ping = get_object_or_404(IpRangePing, pk=ping_range_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
