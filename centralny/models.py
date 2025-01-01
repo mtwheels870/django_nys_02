@@ -88,3 +88,13 @@ class CountRangeCounty(models.Model):
 
     def __str__(self):
         return f"County: {county_code}"
+
+class IpRangePing(models.Model):
+    # Should be county_ref or something (it's not an actual code)
+    ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
+    last_ping_time = models.DateTimeField(null=True)
+    addresses_pinged = models.BinaryField(max_length=32, default=0)
+    addresses_responded = models.BinaryField(max_length=32, default=0)
+
+    def __str__(self):
+        return f"Ping: {id}, ip_range: {ip_range.ip_range_start}, last_ping_time = {last_ping_time}"

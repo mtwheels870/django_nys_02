@@ -57,6 +57,13 @@ ip_range_mapping = {
     "mpoint" : "MULTIPOINT",
 }
 
+class IpRangePing(models.Model):
+    # Should be county_ref or something (it's not an actual code)
+    ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
+    last_ping_time = models.DateTimeField(null=True)
+    addresses_pinged = models.BinaryField(max_length=32, default=0)
+    addresses_responded = models.BinaryField(max_length=32, default=0)
+
 # IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
 IP_RANGE_PATH = "/home/bitnami/Data/IP/NA_All_DBs_01.shp"
 
@@ -152,3 +159,13 @@ class Loader():
         for county_code, county_counter in self.hash_counties.items():
             print(f"save[{county_code}]: count = {county_counter.range_count}")
             county_counter.save()
+
+    def bootstrap_range_pings(self, verbose=True):
+        # Census tract 222, \n 217
+        ip_range_ids = [8066, 7212, 7666, 8111, 8452, 8533,
+            8201, 8407, 9028, 10073]
+        for id in ip_range_ids:
+            ping = IpRangePing()
+            range_object = DeIpRange.objects.filter(pk=id):
+            ping.ip_range = range_object
+            ping.save()            
