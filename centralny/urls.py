@@ -17,6 +17,6 @@ urlpatterns = [
     # ex: /tutorial/5/results/
     path("ping/<int:pk>/results/", views.PingStrategyResultsView.as_view(), name="ping_strat_results"),
     # ex: /tutorial/5/vote/
-    path("stuff/", views.stuff, name="stuff"),
+    path("ping/stuff/", views.stuff, name="stuff"),
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")
