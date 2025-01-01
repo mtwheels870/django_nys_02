@@ -92,5 +92,5 @@ class PingStrategyResultsView(generic.DetailView):
     template_name = "centralny/ps_results.html"
 
 # Reverse mapping from clicking on a index, detail
-def configure_ping(request):
-    print("Views.configure_ping()")
+def configure_ping(request, ip_range_id):
+    print(f"Views.configure_ping(), {ip_range_id}")
