@@ -5,6 +5,10 @@ from . import views, api
 
 # path("api/markers", views.MarkerViewSet.as_view({'get': 'list'}), name="markers")
 # path("ping/", TemplateView.as_view(template_name="centralny/ping_strategy.html")),
+
+# We can use this app_name inside the HTML
+app_name = "app_centralny"
+
 urlpatterns = [
     path("map/", TemplateView.as_view(template_name="centralny/map.html")),
     path("ping/", views.PingStrategyIndexView.as_view(), name="index"),
