@@ -13,7 +13,7 @@
     </ul>
     <p>Ping Strategy Configuration Details:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
-    <form action="{% url 'app_centralny:configure_ping' ping_range.ip_range_id %}" method="post">
+    <form action="{% url 'app_centralny:configure_ping' ping_range.id %}" method="post">
     ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
         {% csrf_token %}
         <fieldset>
