@@ -91,8 +91,8 @@ class PingStrategyResultsView(generic.DetailView):
     model = IpRangePing
     template_name = "centralny/ping_strat_results.html"
 
-def vote(request, ip_range_pind_id):
-    range_ping = get_object_or_404(IpRangePing, pk=ip_range_pind_id)
+def vote(request, ip_range_ping_id):
+    range_ping = get_object_or_404(IpRangePing, pk=ip_range_ping_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
