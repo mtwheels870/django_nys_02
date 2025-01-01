@@ -3,7 +3,11 @@ from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.geos import Point, MultiPoint
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models.functions import Centroid
-from .models import County, CensusTract, DeIpRange, Marker, CountRangeTract, CountRangeCounty
+from .models import (
+    County, CensusTract,
+    DeIpRange, Marker,
+    CountRangeTract, CountRangeCounty, 
+    IpRangePing)
 
 MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
 marker_mapping = {
