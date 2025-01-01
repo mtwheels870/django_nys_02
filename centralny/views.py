@@ -91,6 +91,7 @@ class PingStrategyResultsView(generic.DetailView):
     model = IpRangePing
     template_name = "centralny/ping_strat_results.html"
 
+# Reverse mapping from clicking on a index, detail
 def vote(request, ip_range_ping_id):
     range_ping = get_object_or_404(IpRangePing, pk=ip_range_ping_id)
     try:
