@@ -92,7 +92,8 @@ class CountRangeCounty(models.Model):
 class IpRangePing(models.Model):
     # Should be county_ref or something (it's not an actual code)
     ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
-    last_ping_time = models.DateTimeField(null=True)
+    time_created = models.DateTimeField(null=True, default=datetime.now())
+    time_pinged = models.DateTimeField(null=True)
     addresses_pinged = models.BinaryField(max_length=32, default=b'\x00')
     addresses_responded = models.BinaryField(max_length=32, default=b'\x00')
 

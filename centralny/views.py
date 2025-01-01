@@ -10,7 +10,8 @@ from centralny.models import (
     County,
     DeIpRange,
     CountRangeTract,
-    CountRangeCounty
+    CountRangeCounty,
+    IpRangePing
 )
 
 from centralny.serializers import (
@@ -67,3 +68,24 @@ class CountCountyViewSet(
     filter_backends = [filters.InBBoxFilter]
     queryset = CountRangeCounty.objects.all()
     serializer_class = CountRangeCountySerializer
+
+class PingStrategyIndexView(generic.ListView):
+    template_name = "centralny/index.html"
+    context_object_name = "latest_ping_list"
+
+    def get_queryset(self):
+        """ Return the last five published questions."""
+        return IpRangePing.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
+
+
+class PingStrategyDetailView(generic.DetailView):
+    model = IpRangePing
+    template_name = "centralny/detail.html"
+
+    def get_queryset(self):
+        """ Excludes any Qs that aren't published, yet.  """
+        return IpRangePing.objects.filter(time_created__lte=timezone.now())
+
+class PingStrategyResultsView(generic.DetailView):
+    model = IpRangePing
+    template_name = "centralny/results.html"
