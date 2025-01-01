@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ["18.208.200.162"]
 INSTALLED_APPS = [
     'centralny.apps.CentralNyConfig',
     'mycalendar.apps.MyCalendarConfig',
+    'tutorial.apps.TutorialConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
