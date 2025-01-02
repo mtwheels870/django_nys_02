@@ -96,5 +96,5 @@ class PingStrategyResultsView(generic.DetailView):
 # Reverse mapping from clicking on a index, detail
 def configure_ping(request, id):
     print(f"Views.configure_ping(), {id}")
-    result_string = "I am a happy result string"
-    return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,result_string)))
+    # ping_strat_results is the name from urls.py
+    return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,)))
