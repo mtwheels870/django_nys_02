@@ -1,7 +1,8 @@
 # Subclasses from django.db import models 
+from django.forms import ModelForm
+from django.utils import timezone
 from django.contrib import admin
 from django.contrib.gis.db import models
-from django.utils import timezone
 
 class Marker(models.Model):
     name = models.CharField(max_length=255)
@@ -100,3 +101,8 @@ class IpRangePing(models.Model):
 
     def __str__(self):
         return f"Ping: {id}, ip_range: {ip_range.ip_range_start}, last_ping_time = {last_ping_time}"
+
+class IpRangePingForm(ModelForm):
+    class Meta:
+        model = IpRangePing
+        fields = ["time_created", "time_pinged", "addresses_pinged"]
