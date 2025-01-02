@@ -5,22 +5,33 @@
     <title>Details Ping Strategy Page</title>
   </head>
   <body>
+    <h2>Owning IP Range: </h2>
     <h1>{{ object.ip_range.ip_range_start }}</h1>
-    <p>ID: {{ object.id }}</p>
+    <p>ID (range in DB): {{ object.ip_range.id }}</p>
+    <p>Company Name: {{ object.ip_range.company_name }}</p>
+    <p>NAICS Code: {{ object.ip_range.naics_code }}</p>
+    <p>Organiation: {{ object.ip_range.organization }}</p>
+    <p>Census Tract: {{ object.ip_range.census_tract }}</p>
+    <p>County: {{ object.ip_range.county_code }}</p>
+    <br>
+    <h2>Ping configuration: </h2>
+    <p>ID (in the database table): {{ object.id }}</p>
+    <p>Date/time created: {{ object.time_created }}</p>
+    <p>Date/time pinged: {{ object.time_pinged }}</p>
+    time_created = models.DateTimeField(null=True, auto_now_add=True)
     <p>Ping Strategy Configuration Details:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:configure_ping' object.id %}" method="post">
-    ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
         {% csrf_token %}
         <fieldset>
-            <legend><h1>{{  ping_range.ip_range.ip_range_start }}</h1></legend>
+            <legend><h1>{{  object.ip_range.ip_range_start }}</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% for choice in question.choice_set.all %}
                 <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
         </fieldset>
-        <input type="submit" value="Configure">
+        <input type="submit" value="Start Ping">
     </form>
   </body>
 </html>
