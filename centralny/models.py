@@ -105,4 +105,4 @@ class IpRangePing(models.Model):
 class IpRangePingForm(ModelForm):
     class Meta:
         model = IpRangePing
-        fields = ["time_pinged", "addresses_pinged"]
+        fields = ["time_pinged"]
