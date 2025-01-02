@@ -97,4 +97,4 @@ class PingStrategyResultsView(generic.DetailView):
 def configure_ping(request, id):
     print(f"Views.configure_ping(), {id}")
     result_string = "I am a happy result string"
-    return HttpResponseRedirect(reverse("app_centralny:results", args=(id,result_string)))
+    return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,result_string)))
