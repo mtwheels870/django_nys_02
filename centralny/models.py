@@ -101,7 +101,7 @@ class IpRangePing(models.Model):
     addresses_responded = models.BinaryField(max_length=32, default=b'\x00')
 
     def __str__(self):
-        return f"Ping: {id}, ip_range: {ip_range.ip_range_start}, last_ping_time = {last_ping_time}"
+        return f"Ping: {self.id}, ip_range: {self.ip_range.ip_range_start}, last_ping_time = {self.last_ping_time}"
 
     def approve(self):
         self.time_approved = timezone.now()
