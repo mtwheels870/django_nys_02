@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 
 from rest_framework import viewsets
 from rest_framework_gis import filters
@@ -96,7 +97,7 @@ class PingStrategyResultsView(generic.DetailView):
 # Reverse mapping from clicking on a index, detail
 def approve_ping(request, id):
     print(f"Views.approve_ping(), {id}")
-    range = IpRangePing.objects.filter(id=id)
+    range = get_object_or_404(IpRangePing, pk=id)
     range.approve()
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,)))
