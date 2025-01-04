@@ -94,7 +94,9 @@ class PingStrategyResultsView(generic.DetailView):
     template_name = "centralny/ps_results.html"
 
 # Reverse mapping from clicking on a index, detail
-def configure_ping(request, id):
-    print(f"Views.configure_ping(), {id}")
+def approve_ping(request, id):
+    print(f"Views.approve_ping(), {id}")
+    range = IpRangePing.filter(id=id)
+    range.approve()
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,)))

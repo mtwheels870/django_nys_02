@@ -20,7 +20,7 @@
     <p>Date/time pinged: {{ object.time_pinged }}</p>
     <h2>Ping Strategy Configuration Details:</h2>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
-    <form action="{% url 'app_centralny:configure_ping' object.id %}" method="post">
+    <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
         <fieldset>
             <legend><h1>{{  object.ip_range.ip_range_start }}</h1></legend>
@@ -30,7 +30,7 @@
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
         </fieldset>
-        <input type="submit" value="Start Ping">
+        <input type="submit" value="Approve">
     </form>
   </body>
 </html>

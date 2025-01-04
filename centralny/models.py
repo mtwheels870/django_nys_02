@@ -103,6 +103,11 @@ class IpRangePing(models.Model):
     def __str__(self):
         return f"Ping: {id}, ip_range: {ip_range.ip_range_start}, last_ping_time = {last_ping_time}"
 
+    def approve(self):
+        self.time_approved = timezone.now()
+        print(f"IpRangePing.approve(), time_approved = {self.time_approved}")
+        self.save()
+
 class IpRangePingForm(ModelForm):
     class Meta:
         model = IpRangePing
