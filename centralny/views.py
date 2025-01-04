@@ -5,6 +5,7 @@ from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
+import django.dispatch
 
 from rest_framework import viewsets
 from rest_framework_gis import filters
@@ -99,5 +100,7 @@ def approve_ping(request, id):
     print(f"Views.approve_ping(), {id}")
     range = get_object_or_404(IpRangePing, pk=id)
     range.approve()
+    pizza_done = django.dispatch.Signal()
+    pizza_done.send(sender=self.__class__, id=id)
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,)))
