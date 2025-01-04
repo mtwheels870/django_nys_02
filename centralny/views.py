@@ -29,6 +29,10 @@ from centralny.serializers import (
     CountRangeCountySerializer
 )
 
+# Import our neighbors
+
+from myclandar import views
+
 # /maps/api/markers (through DefaultRouter)
 class MarkerViewSet(
     viewsets.ReadOnlyModelViewSet):
