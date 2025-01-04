@@ -102,6 +102,6 @@ def approve_ping(request, id):
     range.approve()
     pizza_done = django.dispatch.Signal()
     # pizza_done.send(sender=self.__class__, id=id)
-    pizza_done.send(range.__name__, id=id)
+    pizza_done.send(type(range).__class__, id=id)
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,)))
