@@ -5,7 +5,7 @@
     <title>Details Ping Strategy Page</title>
   </head>
   <body>
-    <h2>Owning IP Range: </h2>
+    <h3>Owning IP Range: </h3>
     <h1>{{ object.ip_range.ip_range_start }}</h1>
     <p>ID (range in DB): {{ object.ip_range.id }}</p>
     <p>Company Name: <b>{{ object.ip_range.company_name }}</b></p>
@@ -14,22 +14,22 @@
     <p>Census Tract: {{ object.ip_range.census_tract }}</p>
     <p>County: {{ object.ip_range.county_code.county_name }}</p>
     <br>
-    <h2>Ping configuration: </h2>
+    <h3>Ping configuration: </h3>
     <p>ID (in the database table): {{ object.id }}</p>
     <p>Date/time created: {{ object.time_created }}</p>
     <p>Date/time pinged: {{ object.time_pinged }}</p>
-    <h2>Ping Strategy Configuration Details:</h2>
+    <h3>Ping Strategy Configuration Details:</h3>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
-        <fieldset>
+        <!-- fieldset>
             <legend><h1>{{  object.ip_range.ip_range_start }}</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% for choice in question.choice_set.all %}
                 <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
-        </fieldset>
+        </fieldset -->
         <input type="submit" value="Approve">
     </form>
   </body>
