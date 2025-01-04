@@ -100,4 +100,4 @@ def approve_ping(request, id):
     range = get_object_or_404(IpRangePing, pk=id)
     range.approve()
     # ping_strat_results is the name from urls.py
-    return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(range,)))
+    return HttpResponseRedirect(reverse("app_centralny:ping_strat_results", args=(id,)))
