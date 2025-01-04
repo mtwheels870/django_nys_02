@@ -31,7 +31,7 @@ from centralny.serializers import (
 
 # Import our neighbors
 
-from myclandar import views
+from mycalendar import views
 
 # /maps/api/markers (through DefaultRouter)
 class MarkerViewSet(
