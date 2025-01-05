@@ -17,7 +17,8 @@ from centralny.models import (
     DeIpRange,
     CountRangeTract,
     CountRangeCounty,
-    IpRangePing
+    IpRangePing,
+    IpRangeSurvey
 )
 
 from centralny.serializers import (
