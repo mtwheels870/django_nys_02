@@ -21,7 +21,7 @@ class ScheduledIpRangePing(models.Model):
         return f"Ping: {self.id}, ip_range: {self.ip_range.ip_range_start}, time_pinged = {self.time_pinged}"
 
 
-class ScheduledIpRangeSurvey(models.Event):
+class ScheduledIpRangeSurvey(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     # One to many.  An IpRangeSurvey can have multiple ranges
     ip_range_ping = models.ForeignKey(IpRangePing, on_delete=models.CASCADE)
