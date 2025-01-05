@@ -92,6 +92,7 @@ class CountRangeCounty(models.Model):
         return f"County: {county_code}"
 
 class IpRangePing(models.Model):
+    ip_survey = models.ForeignKey(IpRangeSurvey, null=True, on_delete=models.CASCADE)
     # THis is a 1-1 relationship: one range = one ping
     ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
     time_pinged = models.DateTimeField(null=True)
@@ -104,7 +105,6 @@ class IpRangePing(models.Model):
 
 class IpRangeSurvey(models.Model):
     # One to many.  An IpRangeSurvey can have multiple ranges
-    ip_range_ping = models.ForeignKey(IpRangePing, on_delete=models.CASCADE)
     time_created = models.DateTimeField(null=True, auto_now_add=True)
     time_approved = models.DateTimeField(null=True)
     survey_type = models.IntegerField(default=0)

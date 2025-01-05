@@ -88,7 +88,7 @@ class PingStrategyIndexView(generic.ListView):
         return IpRangePing.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
 
 class PingStrategyDetailView(generic.DetailView):
-    model = IpRangePing
+    model = IpRangeSurvey
     template_name = "centralny/ps_detail.html"
 
     def get_queryset(self):
@@ -96,16 +96,13 @@ class PingStrategyDetailView(generic.DetailView):
         return IpRangePing.objects.filter(time_created__lte=timezone.now())
 
 class PingStrategyResultsView(generic.DetailView):
-    model = IpRangePing
+    model = IpRangeSurvey
     template_name = "centralny/ps_results.html"
 
 # Reverse mapping from clicking on a index, detail
 def approve_ping(request, id):
     print(f"Views.approve_ping(), {id}")
-    range = get_object_or_404(IpRangePing, pk=id)
-    range.approve()
-    pizza_done = django.dispatch.Signal()
-    # pizza_done.send(sender=self.__class__, id=id)
-    pizza_done.send(type(range).__class__, id=id)
+    survey = get_object_or_404(IpRangeSurvey, pk=id)
+    survey.approve()
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_my_scheduler:schedule_survey_detail", args=(id,)))
