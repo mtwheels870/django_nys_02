@@ -91,19 +91,6 @@ class CountRangeCounty(models.Model):
     def __str__(self):
         return f"County: {county_code}"
 
-class IpRangePing(models.Model):
-    # One survey can have multiple pings
-    ip_survey = models.ForeignKey(IpRangeSurvey, null=True, on_delete=models.CASCADE)
-    # THis is a 1-1 relationship: one range = one ping
-    ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
-    time_pinged = models.DateTimeField(null=True)
-    addresses_pinged = models.BinaryField(max_length=32, default=b'\x00')
-    addresses_responded = models.BinaryField(max_length=32, default=b'\x00')
-
-    def __str__(self):
-        return f"Ping: {self.id}, ip_range: {self.ip_range.ip_range_start}, time_pinged = {self.time_pinged}"
-
-
 class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(null=True, auto_now_add=True)
     time_approved = models.DateTimeField(null=True)
@@ -122,6 +109,17 @@ class IpRangeSurvey(models.Model):
         else:
             return f"Unnamed survey, {self.num_ranges} ranges"
 
+class IpRangePing(models.Model):
+    # One survey can have multiple pings
+    ip_survey = models.ForeignKey(IpRangeSurvey, null=True, on_delete=models.CASCADE)
+    # THis is a 1-1 relationship: one range = one ping
+    ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
+    time_pinged = models.DateTimeField(null=True)
+    addresses_pinged = models.BinaryField(max_length=32, default=b'\x00')
+    addresses_responded = models.BinaryField(max_length=32, default=b'\x00')
+
+    def __str__(self):
+        return f"Ping: {self.id}, ip_range: {self.ip_range.ip_range_start}, time_pinged = {self.time_pinged}"
 
 class IpRangePingForm(ModelForm):
     class Meta:
