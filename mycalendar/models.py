@@ -8,7 +8,11 @@ from schedule.models import Calendar
 from schedule.models import Event
 from schedule.models import Rule
 
-from centralny.models import DeIpRange
+from centralny.models import (
+    DeIpRange,
+    IpRangeSurvey,
+    IpRangePing
+)
 
 class ScheduledIpRangePing(models.Model):
     # THis is a 1-1 relationship: one range = one ping
@@ -24,7 +28,7 @@ class ScheduledIpRangePing(models.Model):
 class ScheduledIpRangeSurvey(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     # One to many.  An IpRangeSurvey can have multiple ranges
-    ip_range_ping = models.ForeignKey(IpRangePing, on_delete=models.CASCADE)
+    ip_range_survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
     time_created = models.DateTimeField(null=True, auto_now_add=True)
     time_approved = models.DateTimeField(null=True)
     survey_type = models.IntegerField(default=0)
