@@ -10,6 +10,10 @@ import django.dispatch
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
+from mycalendar.models import (
+    ScheduledIpRangeSurvey
+)
+
 class ScheduleSurveyDetailView(generic.DetailView):
     model = ScheduledIpRangeSurvey
     template_name = "./schedsurv_detail.html"
