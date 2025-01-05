@@ -8,6 +8,8 @@ from schedule.models import Calendar
 from schedule.models import Event
 from schedule.models import Rule
 
+from centralny.models import DeIpRange
+
 class ScheduledIpRangePing(models.Model):
     # THis is a 1-1 relationship: one range = one ping
     ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
