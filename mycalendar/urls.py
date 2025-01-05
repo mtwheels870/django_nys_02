@@ -8,14 +8,21 @@ import debug_toolbar
 # admin.autodiscover()
 #    path(r'admin/', admin.site.urls),
 
+app_name = "app_my_scheduler"
+
+# Why are some things just urls and others templates?  (Need the %% expansion?)
 urlpatterns = [
     path(r'', TemplateView.as_view(template_name="homepage.html"),),
+    # This is "3rd party" (b/c django-scheduler)
+    # File lives here:
+    # /home/bitnami/.local/lib/python3.12/site-packages/schedule/urls.py
     path(r'schedule/', include('schedule.urls')),
     path(r'fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
+    path("schedule/survey/<int:pk>/", views.ScheduleSurveyDetailView.as_view(), name="schedule_survey_detail"),
 ]
 
 # if settings.DEBUG:
-#    import debug_toolbar
+#    import debug_toolbar.... Don't think this does anything (older version of Django)
 urlpatterns += [
     path(r'__debug__/', include(debug_toolbar.urls)),
 ]
