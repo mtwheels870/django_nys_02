@@ -8,6 +8,8 @@ import debug_toolbar
 # admin.autodiscover()
 #    path(r'admin/', admin.site.urls),
 
+from . import views
+
 app_name = "app_my_scheduler"
 
 # Why are some things just urls and others templates?  (Need the %% expansion?)
