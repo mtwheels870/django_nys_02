@@ -82,7 +82,7 @@ class CountCountyViewSet(
 
 class PingStrategyIndexView(generic.ListView):
     template_name = "centralny/ps_index.html"
-    context_object_name = "latest_ping_list"
+    context_object_name = "latest_strategy_list"
 
     def get_queryset(self):
         """ Return the last five published questions."""

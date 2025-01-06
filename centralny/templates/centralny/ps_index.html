@@ -8,13 +8,13 @@
   </head>
   <body>
     <p>Survey Name (if any): </p>
-    <p>List of IP ranges to ping:</p>
-    {% if latest_ping_list%}
+    <p>List of IP Strategies to ping:</p>
+    {% if latest_strategy_list%}
         <ul>
-        {% for ping_range  in latest_ping_list %}
+        {% for ping_strategy  in latest_strategy_list %}
             <!-- MTW, note, this uses app_name=nys below -->
-            <li><a href="{% url 'app_centralny:ping_strat_detail' ping_range.id %}">
-                {{ ping_range.ip_range.ip_range_start }}</a></li>
+            <li><a href="{% url 'app_centralny:ping_strat_detail' ping_strategy.id %}">
+                {{ ping_strategy.id } { ping_strategy.survey_name }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
