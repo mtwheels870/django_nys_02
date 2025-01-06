@@ -163,8 +163,8 @@ class Loader():
     def bootstrap_range_pings(self, verbose=True):
         # Census tract 222, \n 217
         surveys = ["First", "Second"]
-        ip_range_ids = [[8066, 7212, 7666, 8111, 8452], [8533,
-            8201, 8407, 9028, 10073]]
+        ip_range_ids = [[8066, 7212, 7666, 8111, 8452, 8533],
+            [8201, 8407, 9028, 10073]]
         time_now = timezone.now()
         for index_survey, name in enumerate(surveys):
             survey = IpRangeSurvey(time_created=time_now, survey_name=name)
@@ -172,8 +172,9 @@ class Loader():
             ranges = ip_range_ids[index_survey]
             num_ranges = survey.num_ranges = len(ranges)
             survey.save()
-            for index_range in range(num_ranges):
-                range_object = DeIpRange.objects.filter(pk=id)[ranges[index_range]]
+            for index_range, range_id in enumerate(ranges):
+                print(f"         [{index_range}]: looking up range={range_id}")
+                range_object = DeIpRange.objects.filter(pk=range_id)
                 new_range = IpRangePing(ip_survey=survey, ip_range=range_object)
                 print(f"         [{index_range}]: range {range_object}")
                 new_range.save()
