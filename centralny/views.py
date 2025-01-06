@@ -94,11 +94,15 @@ class PingStrategyDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
+        pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
-        print(f"PingStrategyDetailView.get_context_data(), pk = {self.pk}")
+        print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
         return context
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.children = ["quick", "brown", "fox"]
+        return queryset
 #    def get_queryset(self):
 #        """ Excludes any Qs that aren't published, yet.  """
 #        return IpRangePing.objects.filter(ip_survey__eq=self.pk)
