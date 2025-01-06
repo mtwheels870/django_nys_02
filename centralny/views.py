@@ -96,7 +96,7 @@ class PingStrategyDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         self.pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
-        print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
+        print(f"PingStrategyDetailView.get_context_data(), pk = {self.pk}")
         return context
 
 #    def get_queryset(self):
