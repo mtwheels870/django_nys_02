@@ -5,9 +5,19 @@
     <title>Details Ping Strategy Page</title>
   </head>
   <body>
-    <h3>Owning IP Range: </h3>
-    <h1>{{ object }}</h1>
-    <h1>{{ object.QuerySet }}</h1>
+    <h2>IP Survey: </h2>
+    <h3>{{ object }}</h3>
+    <h3>IP Ranges: </h3>
+    {% if object.QuerySet %}
+        <ul>
+        {% for range in object.QuerySet %}
+            <!-- MTW, note, this uses app_name=nys below -->
+            <li>{{ range }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No IP Ranges to ping.</p>
+    {% endif %}
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
@@ -19,7 +29,7 @@
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
         </fieldset -->
-        <input type="submit" value="Approve">
+        <input type="submit" value="Approve / Schedule">
     </form>
   </body>
 </html>
