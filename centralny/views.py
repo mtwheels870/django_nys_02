@@ -93,9 +93,11 @@ class PingStrategyDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs.get('pk')
-        print(f"PingStrategyDetailView.get_context_data(), pk = {self.pk}")
+        pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
+        # Use pk to access the object or do other operations
+        print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
         return context
+
 #    model = IpRangeSurvey
 #    template_name = "centralny/ps_detail.html"
     # survey_id = model.id
