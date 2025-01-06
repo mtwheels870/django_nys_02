@@ -94,16 +94,16 @@ class PingStrategyDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super.get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
-        print(f"PingStrategyDetailView(), pk = {self.pk}")
+        print(f"PingStrategyDetailView.get_context_data(), pk = {self.pk}")
         return context
 #    model = IpRangeSurvey
 #    template_name = "centralny/ps_detail.html"
     # survey_id = model.id
 #    print(f"PSDV(), getting ranges with survey(name) = {name}")
 
-    def get_queryset(self):
-        """ Excludes any Qs that aren't published, yet.  """
-        return IpRangePing.objects.filter(ip_survey__eq=self.pk)
+#    def get_queryset(self):
+#        """ Excludes any Qs that aren't published, yet.  """
+#        return IpRangePing.objects.filter(ip_survey__eq=self.pk)
 
 class PingStrategyResultsView(generic.DetailView):
     model = IpRangeSurvey
