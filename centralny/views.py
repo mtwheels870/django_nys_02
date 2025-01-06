@@ -89,12 +89,13 @@ class PingStrategyIndexView(generic.ListView):
         return IpRangeSurvey.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
 
 class PingStrategyDetailView(generic.DetailView):
-    @classmethod
-    def as_view(cls, **initkwargs):
-        view = super().as_view(**initkwargs)
-        self.name = initkwargs[name]
-        print(f"PingStrategyDetailView(), name = {self.name}")
-        return view
+    model = IpRangeSurvey
+
+    def get_context_data(self, **kwargs):
+        context = super.get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        print(f"PingStrategyDetailView(), pk = {self.pk}")
+        return context
 #    model = IpRangeSurvey
 #    template_name = "centralny/ps_detail.html"
     # survey_id = model.id
