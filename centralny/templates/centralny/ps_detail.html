@@ -8,16 +8,9 @@
     <h2>IP Survey: </h2>
     <h3>{{ object }}</h3>
     <h3>IP Ranges: </h3>
-    {% if object.children %}
-        <ul>
-        {% for range in object.children %}
-            <!-- MTW, note, this uses app_name=nys below -->
-            <li>{{ range }}</li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No IP Ranges to ping.</p>
-    {% endif %}
+    {% for ip_range in object.iprangeping_set.all %}
+        <li>{{ ip_range }}</li>
+    {% endfor %}
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
