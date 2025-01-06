@@ -6,19 +6,7 @@
   </head>
   <body>
     <h3>Owning IP Range: </h3>
-    <h1>{{ object.ip_range.ip_range_start }}</h1>
-    <p>ID (range in DB): {{ object.ip_range.id }}</p>
-    <p>Company Name: <b>{{ object.ip_range.company_name }}</b></p>
-    <p>NAICS Code: {{ object.ip_range.naics_code }}</p>
-    <p>Organiation: {{ object.ip_range.organization }}</p>
-    <p>Census Tract: {{ object.ip_range.census_tract }}</p>
-    <p>County: {{ object.ip_range.county_code.county_name }}</p>
-    <br>
-    <h3>Ping configuration: </h3>
-    <p>ID (in the database table): {{ object.id }}</p>
-    <p>Date/time created: {{ object.time_created }}</p>
-    <p>Date/time pinged: {{ object.time_pinged }}</p>
-    <h3>Ping Strategy Configuration Details:</h3>
+    <h1>{{ object }}</h1>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}

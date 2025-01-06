@@ -99,9 +99,9 @@ class PingStrategyDetailView(generic.DetailView):
         print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
         return context
 
-    def get_queryset(self):
-        """ Excludes any Qs that aren't published, yet.  """
-        return IpRangePing.objects.filter(ip_survey__eq=self.pk)
+#    def get_queryset(self):
+#        """ Excludes any Qs that aren't published, yet.  """
+#        return IpRangePing.objects.filter(ip_survey__eq=self.pk)
 
 #    model = IpRangeSurvey
 #    template_name = "centralny/ps_detail.html"
