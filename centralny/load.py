@@ -172,7 +172,7 @@ class Loader():
             ranges = ip_range_ids[index_survey]
             num_ranges = survey.num_ranges = len(ranges)
             survey.save()
-            for index_range in range(stuff):
+            for index_range in range(num_ranges):
                 range_object = DeIpRange.objects.filter(pk=id)[ranges[index_range]]
                 new_range = IpRangePing(ip_survey=survey, ip_range=range_object)
                 print(f"         [{index_range}]: range {range_object}")
