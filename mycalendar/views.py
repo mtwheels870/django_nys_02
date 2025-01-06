@@ -10,14 +10,17 @@ import django.dispatch
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
+from centralny.models import (
+    IpRangePing,
+    IpRangeSurvey
+)
+
 from mycalendar.models import (
     ScheduledIpRangeSurvey
 )
 
-class ScheduleSurveyDetailView(generic.DetailView):
-    model = ScheduledIpRangeSurvey
-    template_name = "./schedsurv_detail.html"
 
-    def get_queryset(self):
-        """ Excludes any Qs that aren't published, yet.  """
-        return ScheduledIpRangeSurvey.objects.filter(time_created__lte=timezone.now())
+class ScheduleSurveyDetailView(generic.DetailView):
+    model = IpRangeSurvey
+    template_name = "./schedsurv_create.html"
+
