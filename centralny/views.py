@@ -92,7 +92,7 @@ class PingStrategyDetailView(generic.DetailView):
     model = IpRangeSurvey
 
     def get_context_data(self, **kwargs):
-        context = super.get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
         print(f"PingStrategyDetailView.get_context_data(), pk = {self.pk}")
         return context
