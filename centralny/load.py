@@ -174,7 +174,8 @@ class Loader():
             survey.save()
             for index_range, range_id in enumerate(ranges):
                 print(f"         [{index_range}]: looking up range={range_id}")
-                range_object = DeIpRange.objects.filter(pk=range_id)
+                # This retunrs a QuerySet, we just need the first
+                range_object = DeIpRange.objects.filter(pk=range_id)[0]
                 new_range = IpRangePing(ip_survey=survey, ip_range=range_object)
                 print(f"         [{index_range}]: range {range_object}")
                 new_range.save()
