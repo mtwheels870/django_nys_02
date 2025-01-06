@@ -7,6 +7,7 @@
   <body>
     <h3>Owning IP Range: </h3>
     <h1>{{ object }}</h1>
+    <h1>{{ object.QuerySet }}</h1>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
