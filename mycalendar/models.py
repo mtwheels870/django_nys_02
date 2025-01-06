@@ -14,6 +14,12 @@ from centralny.models import (
     IpRangePing
 )
 
+class ScheduleType(models.Model):
+    # THis is a 1-1 relationship: one range = one ping
+    type_name = models.CharField(max_length=20, null=True)
+    def __str__(self):
+        return f"Type: {self.type_name}"
+
 class ScheduledIpRangePing(models.Model):
     # THis is a 1-1 relationship: one range = one ping
     ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
@@ -31,7 +37,7 @@ class ScheduledIpRangeSurvey(models.Model):
     ip_range_survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
     time_created = models.DateTimeField(null=True, auto_now_add=True)
     time_approved = models.DateTimeField(null=True)
-    survey_type = models.IntegerField(default=0)
+    survey_type = models.ForeignKey(ScheduleType, on_delete=models.CASCADE)
     survey_name = models.CharField(max_length=20, null=True)
     num_ranges = models.IntegerField(null=True)
 

@@ -5,7 +5,7 @@
     <title>Scheduled Ping Survey Page</title>
   </head>
   <body>
-    <h2>Ip Survey: </h2>
+    <h2>Scheduling IP Survey: </h2>
     <h3>{{ object }}</h3>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
@@ -18,7 +18,7 @@
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
             {% endfor %}
         </fieldset -->
-        <input type="submit" value="Approve / Schedule">
+        <input type="submit" value="Schedule">
     </form>
   </body>
 </html>
