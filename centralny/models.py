@@ -105,9 +105,9 @@ class IpRangeSurvey(models.Model):
 
     def __str__(self):
         if self.survey_name:
-            return f"Survey: {self.survey_name}, {self.num_ranges} ranges"
+            return f"Survey[{self.id}]: {self.survey_name}, {self.num_ranges} ranges"
         else:
-            return f"Unnamed survey, {self.num_ranges} ranges"
+            return f"Unnamed survey[{self.id}]: {self.num_ranges} ranges"
 
 class IpRangePing(models.Model):
     # One survey can have multiple pings

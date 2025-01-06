@@ -14,7 +14,7 @@
         {% for ping_strategy  in latest_strategy_list %}
             <!-- MTW, note, this uses app_name=nys below -->
             <li><a href="{% url 'app_centralny:ping_strat_detail' ping_strategy.id %}">
-                {{ ping_strategy.id } { ping_strategy.survey_name }}</a></li>
+                {{ ping_strategy }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
