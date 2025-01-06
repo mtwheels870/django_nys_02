@@ -103,7 +103,7 @@ class PingStrategyDetailView(generic.DetailView):
 
     def get_queryset(self):
         """ Excludes any Qs that aren't published, yet.  """
-        return IpRangePing.objects.filter(ip_survey__eq=pk)
+        return IpRangePing.objects.filter(ip_survey__eq=self.pk)
 
 class PingStrategyResultsView(generic.DetailView):
     model = IpRangeSurvey
