@@ -8,7 +8,7 @@
     <h2>IP Survey: </h2>
     <h3>{{ object }}</h3>
     <h3>IP Ranges: </h3>
-    {% if object.iprangeping_set.count() > 0 %}
+    {% if object.iprangeping_set %}
         <ul>
         {% for ip_range in object.iprangeping_set.all %}
             <li>{{ ip_range }}</li>
