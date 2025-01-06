@@ -91,10 +91,12 @@ class PingStrategyIndexView(generic.ListView):
 class PingStrategyDetailView(generic.DetailView):
     model = IpRangeSurvey
     template_name = "centralny/ps_detail.html"
+    survey_id = model.id
+    print(f"PSDV(), getting ranges with survey = {survey_id}")
 
     def get_queryset(self):
         """ Excludes any Qs that aren't published, yet.  """
-        return IpRangePing.objects.filter(time_created__lte=timezone.now())
+        return IpRangePing.objects.filter(ip_survey__eq=survey_id)
 
 class PingStrategyResultsView(generic.DetailView):
     model = IpRangeSurvey
