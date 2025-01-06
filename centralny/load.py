@@ -10,7 +10,7 @@ from .models import (
     County, CensusTract,
     DeIpRange, Marker,
     CountRangeTract, CountRangeCounty, 
-    IpRangePing)
+    IpRangeSurvey, IpRangePing)
 
 MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
 marker_mapping = {
