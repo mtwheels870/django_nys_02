@@ -88,11 +88,17 @@ class PingStrategyIndexView(generic.ListView):
         """ Return the last five published IP surveys."""
         return IpRangeSurvey.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
 
-class PingStrategyDetailView(generic.DetailView, name):
-    model = IpRangeSurvey
-    template_name = "centralny/ps_detail.html"
+class PingStrategyDetailView(generic.DetailView):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        self.name = initkwargs[name]
+        print(f"PingStrategyDetailView(), name = {self.name}")
+        return view
+#    model = IpRangeSurvey
+#    template_name = "centralny/ps_detail.html"
     # survey_id = model.id
-    print(f"PSDV(), getting ranges with survey(name) = {name}")
+#    print(f"PSDV(), getting ranges with survey(name) = {name}")
 
     def get_queryset(self):
         """ Excludes any Qs that aren't published, yet.  """
