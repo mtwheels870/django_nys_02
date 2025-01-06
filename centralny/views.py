@@ -85,8 +85,8 @@ class PingStrategyIndexView(generic.ListView):
     context_object_name = "latest_strategy_list"
 
     def get_queryset(self):
-        """ Return the last five published questions."""
-        return IpRangePing.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
+        """ Return the last five published IP surveys."""
+        return IpRangeSurvey.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
 
 class PingStrategyDetailView(generic.DetailView):
     model = IpRangeSurvey
