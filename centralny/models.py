@@ -119,7 +119,7 @@ class IpRangePing(models.Model):
     addresses_responded = models.BinaryField(max_length=32, default=b'\x00')
 
     def __str__(self):
-        return f"Ping: {self.id}, ip_range: {self.ip_range.ip_range_start}, time_pinged = {self.time_pinged}"
+        return f"Range[{self.id}]: [{self.ip_range.ip_range_start},{self.ip_range.ip_range_end}], time_pinged = {self.time_pinged}"
 
 class IpRangePingForm(ModelForm):
     class Meta:
