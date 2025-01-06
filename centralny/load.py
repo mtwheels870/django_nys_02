@@ -166,7 +166,7 @@ class Loader():
         ip_range_ids = [[8066, 7212, 7666, 8111, 8452], [8533,
             8201, 8407, 9028, 10073]]
         time_now = timezone.now()
-        for index_survey, name in enumerte(surveys):
+        for index_survey, name in enumerate(surveys):
             survey = IpRangeSurvey(time_created=time_now, survey_name=name)
             print(f"b_r_p(), [{index_survey}]: created survey {name}")
             ranges = ip_range_ids[index_survey]
