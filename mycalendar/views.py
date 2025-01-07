@@ -20,17 +20,18 @@ from .models import (
     ScheduleType,
 )
 
-class CalendarMixin:
+class ScheduleSurveyMixin:
     model = IpRangeSurvey
-    slug_url_kwarg = "stuff"
+    stuff_kwarg = "stuff"
+    types_kwarg = "types"
 
-class ScheduleSurveyDetailView(CalendarMixin, generic.DetailView):
+class ScheduleSurveyDetailView(ScheduleSurveyMixin, generic.DetailView):
     template_name = "./schedsurv_create.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['stuff'] = "Really cool stuff"
-        # context['types'] = ScheduleType.objects.all()
+        context['types'] = ScheduleType.objects.all()
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
         print(f"PingStrategyDetailView.get_context_data(), stuff = {context['stuff']}")
