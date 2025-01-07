@@ -60,4 +60,4 @@ def set_schedule_type(request, pk):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         r"^calendar/daily/(?P<calendar_slug>[-\w]+)/$",
-        return HttpResponseRedirect(reverse(f"mycalendar/schedule/calendar/daily/{PP_CALENDAR_SLUG}", args=(pk,)))
+        return HttpResponseRedirect(reverse(f"/mycalendar/schedule/calendar/daily/{PP_CALENDAR_SLUG}/", args=(pk,)))
