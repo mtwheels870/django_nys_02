@@ -46,7 +46,7 @@ def set_schedule_type(request, survey_id):
         # Fix the hard-coded name below (/polls/nys/)
         return render(
             request,
-            "./schedsurv_create.html"
+            "./schedsurv_create.html",
             {
                 "survey_id": survey_id,
                 "error_message": "You didn't select a schedule_type.",
