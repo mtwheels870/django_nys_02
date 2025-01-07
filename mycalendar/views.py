@@ -27,6 +27,7 @@ class ScheduleSurveyDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['stuff'] = "Really cool stuff"
         context['types'] = ScheduleType.objects.all()
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
