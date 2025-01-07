@@ -22,7 +22,7 @@ urlpatterns = [
     path(r'fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
     path(r"schedule/survey/<int:pk>/", views.ScheduleSurveyDetailView.as_view(), name="schedule_survey_detail"),
     path(r"schedule/survey/<int:pk>/schedule_type", views.set_schedule_type, name="set_schedule_type"),
-    path(r"schedule/survey/<int:pk>/done", views.done, name="done"),
+    path(r"schedule/survey/<int:pk>/done", TemplateView.as_view(template_name="dailycalendar.html"), name='dailycalendar'),
 ]
 
 # if settings.DEBUG:
