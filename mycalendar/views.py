@@ -59,4 +59,6 @@ def set_schedule_type(request, pk):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse(r"app_my_scheduler:schedule_survey_detail", args=(pk,)))
+        # This works (back to the same thing... not what we want):
+        # reverse(r"app_my_scheduler:schedule_survey_detail", args=(pk,)))
+        return HttpResponseRedirect(reverse(r"schedule/calendar/daily/<calendar_slug>", args=(PP_CALENDAR_SLUG,)))
