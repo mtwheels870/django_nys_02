@@ -61,4 +61,5 @@ def set_schedule_type(request, pk):
         # user hits the Back button.
         # This works (back to the same thing... not what we want):
         # reverse(r"app_my_scheduler:schedule_survey_detail", args=(pk,)))
-        return HttpResponseRedirect(reverse(r"schedule/calendar/daily/<calendar_slug>", args=(PP_CALENDAR_SLUG,)))
+        # Can't use reverse(), that's only with named stuff (app_name)
+        return HttpResponseRedirect(r"schedule/calendar/daily/<calendar_slug>", args=(PP_CALENDAR_SLUG,))
