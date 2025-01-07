@@ -15,10 +15,7 @@ from centralny.models import (
 )
 
 class ScheduleType(models.Model):
-    # THis is a 1-1 relationship: one range = one ping
-    type_name = models.CharField(max_length=20, null=True)
-    def __str__(self):
-        return f"Type: {self.type_name}"
+    survey_name = models.CharField(max_length=20)
 
 class ScheduledIpRangePing(models.Model):
     # THis is a 1-1 relationship: one range = one ping
@@ -29,7 +26,6 @@ class ScheduledIpRangePing(models.Model):
 
     def __str__(self):
         return f"Ping: {self.id}, ip_range: {self.ip_range.ip_range_start}, time_pinged = {self.time_pinged}"
-
 
 class ScheduledIpRangeSurvey(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
