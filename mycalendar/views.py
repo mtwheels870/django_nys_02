@@ -20,7 +20,7 @@ from .models import (
     ScheduleType,
 )
 
-class CalendarMixin(CalendarViewPermissionMixin):
+class CalendarMixin:
     model = IpRangeSurvey
     slug_url_kwarg = "stuff"
 
