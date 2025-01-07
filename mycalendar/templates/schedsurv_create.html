@@ -10,14 +10,14 @@
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
-        <!-- fieldset>
-            <legend><h1>{{  object.ip_range.ip_range_start }}</h1></legend>
+        <fieldset>
+            <legend><h1>Type</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-            {% for choice in question.choice_set.all %}
-                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+            {% for item in object.types %}
+                <input type="radio" name="type" id="item{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="types{{ forloop.counter }}">{{ item.name }}</label><br>
             {% endfor %}
-        </fieldset -->
+        </fieldset>
         <input type="submit" value="Schedule">
     </form>
   </body>
