@@ -36,11 +36,11 @@ class ScheduleSurveyDetailView(ScheduleSurveyMixin, generic.DetailView):
         # Use pk to access the object or do other operations
         return context
 
-def set_schedule_type(request, survey_id):
-    survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+def set_schedule_type(request, pk):
+    survey = get_object_or_404(IpRangeSurvey, pk=pk)
     try:
         selected_sched_type = request.POST["sched_type"]
-        print(f"selected_sched_type: {selected_sched_type}")
+        print(f"pk: {pk}")
     except (KeyError):
         # Redisplay the question voting form.
         # Fix the hard-coded name below (/polls/nys/)
