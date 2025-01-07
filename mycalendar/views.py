@@ -48,7 +48,7 @@ def set_schedule_type(request, pk):
             request,
             "./schedsurv_create.html",
             {
-                "survey_id": survey_id,
+                "survey_id": pk,
                 "error_message": "You didn't select a schedule_type.",
             },
         )
@@ -60,4 +60,4 @@ def set_schedule_type(request, pk):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         r"^calendar/daily/(?P<calendar_slug>[-\w]+)/$",
-        return HttpResponseRedirect(reverse(f"calendar/daily/{PP_CALENDAR_SLUG}", args=(survey_id,)))
+        return HttpResponseRedirect(reverse(f"calendar/daily/{PP_CALENDAR_SLUG}", args=(pk,)))
