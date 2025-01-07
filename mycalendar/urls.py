@@ -21,6 +21,7 @@ urlpatterns = [
     path(r'schedule/', include('schedule.urls')),
     path(r'fullcalendar/', TemplateView.as_view(template_name="fullcalendar.html"), name='fullcalendar'),
     path("schedule/survey/<int:pk>/", views.ScheduleSurveyDetailView.as_view(), name="schedule_survey_detail"),
+    path("schedule/survey/<int:pk>/schedule-type", views.set_schedule_type, name="set_schedule_type"),
 ]
 
 # if settings.DEBUG:
