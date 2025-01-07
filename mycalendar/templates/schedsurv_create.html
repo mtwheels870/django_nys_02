@@ -7,17 +7,16 @@
   <body>
     <h2>Scheduling IP Survey: </h2>
     <h3>{{ object }}</h3>
-    <p>Stuff variable: {{ stuff }} </p>
-    <p>Types: {{ types }} </p>
+    <p>Types: {{ sched_types }} </p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
         <fieldset>
             <legend><h1>Type</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-            {% for item in object.types %}
-                <input type="radio" name="type" id="item{{ forloop.counter }}" value="{{ choice.id }}">
-                <label for="types{{ forloop.counter }}">{{ item.name }}</label><br>
+            {% for single_item in sched_types %}
+                <input type="radio" name="sched_type" id="single_item{{ forloop.counter }}" value="{{ sched_types.id }}">
+                <label for="types{{ forloop.counter }}">{{ single_item.name }}</label><br>
             {% endfor %}
         </fieldset>
         <input type="submit" value="Schedule">

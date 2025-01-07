@@ -22,17 +22,14 @@ from .models import (
 
 class ScheduleSurveyMixin:
     model = IpRangeSurvey
-    stuff_kwarg = "stuff"
-    types_kwarg = "types"
+    sched_types_kwarg = "sched_types"
 
 class ScheduleSurveyDetailView(ScheduleSurveyMixin, generic.DetailView):
     template_name = "./schedsurv_create.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['stuff'] = "Really cool stuff"
-        context['types'] = ScheduleType.objects.all()
+        context['sched_types'] = ScheduleType.objects.all()
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
-        print(f"PingStrategyDetailView.get_context_data(), stuff = {context['stuff']}")
         return context
