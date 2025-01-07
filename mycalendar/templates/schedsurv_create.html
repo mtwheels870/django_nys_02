@@ -8,7 +8,7 @@
     <h2>Scheduling IP Survey: </h2>
     <h3>{{ object }}</h3>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
-    <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
+    <form action="{% url 'app_my_scheduler:set_schedule_type' object.id %}" method="post">
         {% csrf_token %}
         <fieldset>
             <legend><h1>Type</h1></legend>
