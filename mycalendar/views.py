@@ -31,5 +31,5 @@ class ScheduleSurveyDetailView(generic.DetailView):
         context['types'] = ScheduleType.objects.all()
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
-        # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
+        print(f"PingStrategyDetailView.get_context_data(), stuff = {context['stuff']}")
         return context
