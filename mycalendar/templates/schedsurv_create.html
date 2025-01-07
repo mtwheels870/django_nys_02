@@ -7,7 +7,6 @@
   <body>
     <h2>Scheduling IP Survey: </h2>
     <h3>{{ object }}</h3>
-    <p>Types: {{ sched_types }} </p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form action="{% url 'app_centralny:approve_ping' object.id %}" method="post">
         {% csrf_token %}
@@ -15,7 +14,8 @@
             <legend><h1>Type</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% for single_item in sched_types %}
-                <input type="radio" name="sched_type" id="single_item{{ forloop.counter }}" value="{{ sched_types.id }}">
+                <!-- MTW, id is just for HTML uniqueness? -->
+                <input type="radio" name="sched_type" id="single_item{{ forloop.counter }}" value="{{ single_item.id }}">
                 <label for="types{{ forloop.counter }}">{{ single_item.name }}</label><br>
             {% endfor %}
         </fieldset>
