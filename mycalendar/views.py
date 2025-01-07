@@ -15,8 +15,9 @@ from centralny.models import (
     IpRangeSurvey
 )
 
-from mycalendar.models import (
-    ScheduledIpRangeSurvey
+from .models import (
+    ScheduledIpRangeSurvey,
+    ScheduleType,
 )
 
 
@@ -26,7 +27,7 @@ class ScheduleSurveyDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['types'] = [1, 2, 3]
+        context['types'] = ScheduleType.objects.all()
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
         # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
