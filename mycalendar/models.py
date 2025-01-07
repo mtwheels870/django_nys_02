@@ -34,8 +34,6 @@ class ScheduledIpRangeSurvey(models.Model):
     time_created = models.DateTimeField(null=True, auto_now_add=True)
     time_approved = models.DateTimeField(null=True)
     survey_type = models.ForeignKey(ScheduleType, on_delete=models.CASCADE)
-    survey_name = models.CharField(max_length=20, null=True)
-    num_ranges = models.IntegerField(null=True)
 
     def approve(self):
         self.time_approved = timezone.now()
