@@ -15,7 +15,7 @@ from centralny.models import (
 )
 
 class ScheduleType(models.Model):
-    survey_name = models.CharField(max_length=20)
+    survey_name = models.CharField(max_length=20, null=True)
 
 class ScheduledIpRangePing(models.Model):
     # THis is a 1-1 relationship: one range = one ping
