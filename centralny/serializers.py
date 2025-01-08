@@ -26,7 +26,7 @@ class CountySerializer(
 class DeIpRangeSerializer(
     serializers.GeoFeatureModelSerializer):
     class Meta:
-        fields = ("id", "ip_range_start", "de_company_name")
+        fields = ("id", "ip_range_start", "company_name")
         geo_field = "mpoint"
         model = DeIpRange
 
