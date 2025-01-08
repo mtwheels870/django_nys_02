@@ -65,6 +65,7 @@ def set_schedule_type(request, pk):
             ip_range_survey=survey, time_approved=timezone.now(),
             survey_type=sched_type)
         scheduled_survey.save()
+        call_command('fire_zmap', verbosity=3, interactive=False, survey_id=pk)
         new_id = scheduled_survey.id
         return HttpResponseRedirect(reverse("app_my_scheduler:dailycalendar", args=(new_id,)))
 
