@@ -53,10 +53,10 @@ def set_schedule_type(request, pk):
         )
     else:
         # app_name = request.resolver_match.app_name
-        configs = apps.app_configs
-        for index, app in enumerate(configs):
-            print(f"app[{index}] = {app}")
-        app_config = apps.get_app_config('myscheduler')
+        #configs = apps.app_configs
+        #for index, app in enumerate(configs):
+        #    print(f"app[{index}] = {app}")
+        app_config = apps.get_app_config('mycalendar')
         calendar = app_config.get_calendar()
         today = app_config.today
         print(f"set_schedule_type(), today: {today}")
