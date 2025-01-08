@@ -23,8 +23,8 @@ class MyCalendarConfig(AppConfig):
         from schedule.models import (Calendar, Event, Rule)
 
         if self.pp_calendar:
-            print(f"Could not find calendar(slug) {CALENDAR_SLUG_PP}")
-            return self.pp_calendar;
+            print(f"Returning existing calendar(slug) {CALENDAR_SLUG_PP}")
+            return self.pp_calendar
 
         try:
             self.pp_calendar = Calendar.objects.get(slug=CALENDAR_SLUG_PP)
@@ -37,3 +37,4 @@ class MyCalendarConfig(AppConfig):
             sys.exit(1)
         self.today = timezone.now()
         print("Finished configuring calendar")
+        return self.pp_calendar
