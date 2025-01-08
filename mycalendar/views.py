@@ -60,9 +60,10 @@ def set_schedule_type(request, pk):
         calendar = app_config.get_calendar()
         today = app_config.today
         print(f"set_schedule_type(), today: {today}")
+        sched_type = ScheduleType.objects.filter(pk=selected_sched_type)[0]
         scheduled_survey = ScheduledIpRangeSurvey(calendar=calendar,
             ip_range_survey=survey, time_approved=timezone.now(),
-            survey_type=selected_sched_type)
+            survey_type=sched_type)
         scheduled_survey.save()
         new_id = scheduled_survey.id
         return HttpResponseRedirect(reverse("app_my_scheduler:dailycalendar", args=(new_id,)))
