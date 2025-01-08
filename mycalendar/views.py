@@ -1,5 +1,6 @@
 import logging
 
+from django.core.management import call_command
 from django.apps import apps
 from django.shortcuts import render
 from django.utils import timezone
