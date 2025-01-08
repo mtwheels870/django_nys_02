@@ -105,7 +105,7 @@ class PingStrategyResultsView(generic.DetailView):
 
 # Reverse mapping from clicking on a index, detail
 def approve_ping(request, id):
-    print(f"Views.approve_ping(), {id}")
+    # print(f"Views.approve_ping(), {id}")
     survey = get_object_or_404(IpRangeSurvey, pk=id)
     survey.approve()
     # ping_strat_results is the name from urls.py
