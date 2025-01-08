@@ -2,8 +2,7 @@ import sys
 
 from django.apps import AppConfig
 from django.core.signals import request_finished
-
-from schedule.models import (Calendar, Event, Rule)
+from django.utils import timezone
 
 CALENDAR_SLUG_PP = "pp"
 
@@ -20,6 +19,8 @@ class MyCalendarConfig(AppConfig):
         print("MyCalendarConfig.ready(), moved all of the init logic..")
 
     def get_calendar(self):
+        from schedule.models import (Calendar, Event, Rule)
+
         if self.pp_calendar:
             print(f"Could not find calendar(slug) {CALENDAR_SLUG_PP}")
             return self.pp_calendar;
@@ -33,5 +34,5 @@ class MyCalendarConfig(AppConfig):
         except Rule.DoesNotExist:
             print("Could not find calendar rules")
             sys.exit(1)
-        self.today = datetime.date.today()
+        self.today = timezone.now()
         print("Finished configuring calendar")
