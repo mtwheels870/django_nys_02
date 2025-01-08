@@ -17,6 +17,7 @@ class MyCalendarConfig(AppConfig):
         # from . import signals
         # request_finished.connect(signals.my_callback)
         print("MyCalendarConfig.ready(), moved all of the init logic..")
+        self.pp_calendar = None
 
     def get_calendar(self):
         from schedule.models import (Calendar, Event, Rule)
