@@ -16,7 +16,7 @@ class MyCalendarConfig(AppConfig):
 
         # from . import signals
         # request_finished.connect(signals.my_callback)
-        print("MyCalendarConfig.ready(), moved all of the init logic..")
+        # print("MyCalendarConfig.ready(), moved all of the init logic..")
         self.pp_calendar = None
 
     def get_calendar(self):
@@ -36,5 +36,5 @@ class MyCalendarConfig(AppConfig):
             print("Could not find calendar rules")
             sys.exit(1)
         self.today = timezone.now()
-        print("Finished configuring calendar")
+        # print("Finished configuring calendar")
         return self.pp_calendar
