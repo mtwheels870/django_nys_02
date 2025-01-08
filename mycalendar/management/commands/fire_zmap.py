@@ -1,3 +1,5 @@
+import argparse
+
 try:
     from django.core.management.base import NoArgsCommand as BaseCommand
 except ImportError:
@@ -5,15 +7,20 @@ except ImportError:
 
 
 class Command(BaseCommand):
-    help = "Load some sample data into the db"
+    help = "Fire the zmap tool with a given survey_id"
+
+    def add_arguments(self, parser):
+        parser.add_argument("survey_id", type=int, help="ID of the survey range to ping", default=4)
 
     def handle(self, **options):
         import datetime
         from schedule.models import Calendar
         from schedule.models import Event
         from schedule.models import Rule
+        survey_id = options["survey_id"]
 
-        print("checking for existing data ...")
+        print(f"running zmap, survey_id = {survey_id}")
+
         try:
             Calendar.objects.get(name="yml_cal")
             print("It looks like you already have loaded the sample data, quitting.")
