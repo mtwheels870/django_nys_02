@@ -3,6 +3,8 @@ import sys
 from django.apps import AppConfig
 from django.core.signals import request_finished
 
+from schedule.models import (Calendar, Event, Rule)
+
 CALENDAR_SLUG_PP = "pp"
 
 # I think this name becomes the leading prefix on the database table names, etc.

@@ -10,8 +10,6 @@ import django.dispatch
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
-from schedule.models import (Calendar, Event, Rule)
-
 from centralny.models import (
     IpRangePing,
     IpRangeSurvey
