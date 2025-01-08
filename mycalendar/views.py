@@ -59,7 +59,7 @@ def set_schedule_type(request, pk):
         app_config = apps.get_app_config('mycalendar')
         calendar = app_config.get_calendar()
         today = app_config.today
-        print(f"set_schedule_type(), today: {today}")
+        print(f"set_schedule_type(), calendar: {calendar}, today: {today}")
         sched_type = ScheduleType.objects.filter(pk=selected_sched_type)[0]
         scheduled_survey = ScheduledIpRangeSurvey(calendar=calendar,
             ip_range_survey=survey, time_approved=timezone.now(),
