@@ -52,6 +52,7 @@ def set_schedule_type(request, pk):
     else:
         app_name = self.request.resolver_match.app_name
         app_config = apps.get_app_config(app_name)
+        calendar = app_config.get_calendar()
         today = app_config.today
         print(f"set_schedule_type(), today: {today}")
         scheduled_survey = ScheduledIpRangeSurvey(calendar=our_calendar,
