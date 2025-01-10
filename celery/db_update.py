@@ -21,16 +21,22 @@ default_config = {
 
 CELERY_TASK_NAME = 'db_update'
 RABBITMQ_BROKER = "pyamqp://guest@localhost//"
-app = Celery(CELERY_TASK_NAME , broker=RABBITMQ_BROKER)
+app = Celery(CELERY_TASK_NAME,
+    broker=RABBITMQ_BROKER,
+    broker_connection_retry=True,
+    broker_connection_retry_on_startup=False
+)
 # disable UTC to use local time
 app.conf.enable_utc = False
 
 
+# Command line:
+# celery -A db_update beat --loglevel=info
 @app.task
 def generate_data():
     start = time.time()
     try:
-        print('check db to track updates.')
+        print('generate_data(), check db to track updates.')
         # db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
         # debug = settings.DEBUG
         # print(f"generate_data(), debug = {debug}")
@@ -40,7 +46,7 @@ def generate_data():
                 user=default_config['USER'],
                 password=default_config['PASSWORD'])
 
-        c = db.cursor()
+        cursor = db.cursor()
         # c.execute("""SELECT * FROM `student_old`""")
         # print(c.fetchall())
         insert_query = """INSERT INTO `mycalendar_studentold` (`name`, `email`, `address`, `class1`) VALUES (%s, %s, %s, %s)"""
@@ -51,7 +57,7 @@ def generate_data():
             print('id: ', i + 1)
             rand_name = ''.join(random.choice(letters) for _ in range(10))
             query_data = (rand_name, rand_name + '@venturenxt.com', random.choice(addr_list), random.randint(1, 10))
-            c.execute(insert_query, query_data)
+            cursor.execute(insert_query, query_data)
             db.commit()
         db.close()
 
@@ -64,7 +70,7 @@ def generate_data():
 def update_data():
     start = time.time()
     try:
-        print('check db to track updates.')
+        print('update_data(), check db to track updates.')
         # debug = settings.DEBUG
         # print(f"generate_data(), debug = {debug}")
         # default_config = DATABASES['default']
@@ -73,7 +79,7 @@ def update_data():
                 database=default_config['NAME'],
                 user=default_config['USER'],
                 password=default_config['PASSWORD'])
-        c = db.cursor()
+        cursor = db.cursor()
         offset, limit = 0, 30000
         # MTW truncate_query = """`TRUNCATE TABLE mycalendar_studentnew`"""
         truncate_query = "TRUNCATE TABLE mycalendar_studentnew"
@@ -82,13 +88,13 @@ def update_data():
         insert_query = """INSERT INTO `mycalendar_studentnew` (`id`, `name`, `email`, `address`, `class1`) VALUES (%s, %s, %s, %s, %s)"""
         try:
             # Truncate the table first
-            c.execute(truncate_query)
+            cursor.execute(truncate_query)
             db.commit()
             while True:
                 # get data from old table
 
                 # results = c.execute(query_str, (offset, limit))
-                results = c.execute(query_str)
+                results = cursor.execute(query_str)
                 print('Total retrieved data: ', results)
                 offset += limit
 
@@ -100,9 +106,9 @@ def update_data():
                     print('Retrieved all data, exiting the function')
                     break
 
-                # insert into new table
-                data = c.fetchall()
-                c.executemany(insert_query, data)
+                # insert into new table (should insert rows from old into new)
+                data = cursor.fetchall()
+                cursor.executemany(insert_query, data)
                 db.commit()
 
         except Exception as err:
@@ -118,6 +124,7 @@ def update_data():
 
 # add "update_data" task to the beat schedule
 app.conf.beat_schedule = {
+    # Does this mean, run a crontab job every minute?
     "sync-db": {
         "task": "db_update.update_data",
         "schedule": crontab(minute='*'),
