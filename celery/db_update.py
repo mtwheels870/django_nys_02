@@ -77,7 +77,8 @@ def update_data():
         offset, limit = 0, 30000
         # MTW truncate_query = """`TRUNCATE TABLE mycalendar_studentnew`"""
         truncate_query = "TRUNCATE TABLE mycalendar_studentnew"
-        query_str = """SELECT * from `mycalendar_studentold` LIMIT %s , %s"""
+        # query_str = """SELECT * from `mycalendar_studentold` LIMIT %s , %s"""
+        query_str = f"SELECT * from mycalendar_studentold LIMIT {offset} , {limit}"
         insert_query = """INSERT INTO `mycalendar_studentnew` (`id`, `name`, `email`, `address`, `class1`) VALUES (%s, %s, %s, %s, %s)"""
         try:
             # Truncate the table first
@@ -86,7 +87,8 @@ def update_data():
             while True:
                 # get data from old table
 
-                results = c.execute(query_str, (offset, limit))
+                # results = c.execute(query_str, (offset, limit))
+                results = c.execute(query_str)
                 print('Total retrieved data: ', results)
                 offset += limit
 
