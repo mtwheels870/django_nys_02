@@ -50,7 +50,11 @@ def update_data():
     start = time.time()
     try:
         print('check db to track updates.')
-        db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
+        # db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
+        db = psycopg2.connect(host=default_config['HOST'],
+                database=default_config['NAME'],
+                user=default_config['USER'],
+                password=default_config['PASSWORD'])
         c = db.cursor()
         offset, limit = 0, 30000
         truncate_query = """TRUNCATE TABLE `student_new`"""
