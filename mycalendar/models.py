@@ -46,3 +46,20 @@ class ScheduledIpRangeSurvey(models.Model):
         else:
             return f"Unnamed survey, {self.num_ranges} ranges"
 
+class StudentNew(models.Model):
+    name = models.CharField(max_length=40)
+    email = models.CharField(max_length=40)
+    address = models.CharField(max_length=40)
+    class1 = models.CharField(max_length=40)
+
+    def __str__(self):
+        return f"New, name = {self.name}"
+
+class StudentOld(models.Model):
+    name = models.CharField(max_length=40)
+    email = models.CharField(max_length=40)
+    address = models.CharField(max_length=40)
+    class1 = models.CharField(max_length=40)
+
+    def __str__(self):
+        return f"Old, name = {self.name}"
