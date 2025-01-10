@@ -1,5 +1,13 @@
 #!/bin/bash
 
+NUM_ARGS = "$#"
+DEFAULT_OP = "start"
+
+if [ $NUM_ARGS -eq 1 ];
+    echo first_arg: $1
+    exit 1
+fi
+
 LOG_DIR=/tmp/pp_celery
 if [ ! -d $LOG_DIR ]; then
     echo mkdir $LOG_DIR
