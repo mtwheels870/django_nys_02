@@ -1,6 +1,11 @@
 #!/bin/bash
 
 LOG_DIR=/tmp/pp_celery
+if [ ! -d $LOG_DIR ]; then
+    echo mkdir $LOG_DIR
+    mkdir $LOG_DIR
+fi
+
 LOG_FILE=celery_"$(date +'%FT%H%m').txt"
 FULL_FILE=$LOG_DIR/$LOG_FILE
 
