@@ -1,6 +1,6 @@
 from celery import Celery
 from celery.schedules import crontab
-import MySQLdb
+# import MySQLdb
 import random
 import string
 import time
