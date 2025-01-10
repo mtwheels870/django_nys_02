@@ -78,7 +78,7 @@ def update_data():
         # MTW truncate_query = """`TRUNCATE TABLE mycalendar_studentnew`"""
         truncate_query = "TRUNCATE TABLE mycalendar_studentnew"
         # query_str = """SELECT * from `mycalendar_studentold` LIMIT %s , %s"""
-        query_str = f"SELECT * from mycalendar_studentold LIMIT {offset} , {limit}"
+        query_str = f"SELECT * from mycalendar_studentold LIMIT {limit}"
         insert_query = """INSERT INTO `mycalendar_studentnew` (`id`, `name`, `email`, `address`, `class1`) VALUES (%s, %s, %s, %s, %s)"""
         try:
             # Truncate the table first
