@@ -6,6 +6,8 @@ import random
 import string
 import time
 
+from django.conf import settings
+
 CELERY_TASK_NAME = 'db_update'
 RABBITMQ_BROKER = "pyamqp://guest@localhost//"
 app = Celery(CELERY_TASK_NAME , broker=RABBITMQ_BROKER)
@@ -19,6 +21,8 @@ def generate_data():
     try:
         print('check db to track updates.')
         # db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
+        debug = settings.DEBUG
+        print(f"generate_data(), debug = {debug}")
         default_config = DATABASES['default']
         db = psycopg2.connect(host=default_config['HOST'],
                 database=default_config['NAME'],
@@ -50,6 +54,9 @@ def update_data():
     start = time.time()
     try:
         print('check db to track updates.')
+        debug = settings.DEBUG
+        print(f"generate_data(), debug = {debug}")
+        default_config = DATABASES['default']
         # db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
         db = psycopg2.connect(host=default_config['HOST'],
                 database=default_config['NAME'],
