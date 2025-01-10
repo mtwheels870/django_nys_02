@@ -6,7 +6,18 @@ import random
 import string
 import time
 
-from django.conf import settings
+# settins are not configured
+# from django.conf import settings
+
+# This shold match settings.py
+default_config = {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'compassblue01',
+        'USER': 'cb_admin',
+        'PASSWORD': 'Ch0c0late!',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 
 CELERY_TASK_NAME = 'db_update'
 RABBITMQ_BROKER = "pyamqp://guest@localhost//"
@@ -21,9 +32,9 @@ def generate_data():
     try:
         print('check db to track updates.')
         # db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
-        debug = settings.DEBUG
-        print(f"generate_data(), debug = {debug}")
-        default_config = DATABASES['default']
+        # debug = settings.DEBUG
+        # print(f"generate_data(), debug = {debug}")
+        # default_config = DATABASES['default']
         db = psycopg2.connect(host=default_config['HOST'],
                 database=default_config['NAME'],
                 user=default_config['USER'],
@@ -54,9 +65,9 @@ def update_data():
     start = time.time()
     try:
         print('check db to track updates.')
-        debug = settings.DEBUG
-        print(f"generate_data(), debug = {debug}")
-        default_config = DATABASES['default']
+        # debug = settings.DEBUG
+        # print(f"generate_data(), debug = {debug}")
+        # default_config = DATABASES['default']
         # db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
         db = psycopg2.connect(host=default_config['HOST'],
                 database=default_config['NAME'],
