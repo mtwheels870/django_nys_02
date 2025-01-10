@@ -43,7 +43,7 @@ def generate_data():
         c = db.cursor()
         # c.execute("""SELECT * FROM `student_old`""")
         # print(c.fetchall())
-        insert_query = """INSERT INTO `student_old` (`name`, `email`, `address`, `class`) VALUES (%s, %s, %s, %s)"""
+        insert_query = """INSERT INTO `mycalendar_studentold` (`name`, `email`, `address`, `class1`) VALUES (%s, %s, %s, %s)"""
 
         addr_list = ['Dhaka', 'Rajshahi', 'Gazipur', 'Rangpur']
         letters = string.ascii_lowercase
@@ -77,7 +77,7 @@ def update_data():
         offset, limit = 0, 30000
         truncate_query = """TRUNCATE TABLE `student_new`"""
         query_str = """SELECT * from `student_old` LIMIT %s , %s"""
-        insert_query = """INSERT INTO `student_new` (`id`, `name`, `email`, `address`, `class`) VALUES (%s, %s, %s, %s, %s)"""
+        insert_query = """INSERT INTO `mycalendar_studentnew` (`id`, `name`, `email`, `address`, `class1`) VALUES (%s, %s, %s, %s, %s)"""
         try:
             # Truncate the table first
             c.execute(truncate_query)
