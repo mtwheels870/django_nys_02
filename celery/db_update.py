@@ -17,11 +17,8 @@ def generate_data():
     start = time.time()
     try:
         print('check db to track updates.')
-DATABASES = {
-    'default': {
         # db = MySQLdb.connect(user='root', passwd="qweqwe", db="celery_test")
         default_config = DATABASES['default']
-
         db = psycopg2.connect(host=default_config['HOST'],
                 database=default_config['NAME'],
                 user=default_config['USER'],
