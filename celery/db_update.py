@@ -75,8 +75,8 @@ def update_data():
                 password=default_config['PASSWORD'])
         c = db.cursor()
         offset, limit = 0, 30000
-        truncate_query = """TRUNCATE TABLE `student_new`"""
-        query_str = """SELECT * from `student_old` LIMIT %s , %s"""
+        truncate_query = """TRUNCATE TABLE `mycalendar_studentnew`"""
+        query_str = """SELECT * from `mycalendar_studentold` LIMIT %s , %s"""
         insert_query = """INSERT INTO `mycalendar_studentnew` (`id`, `name`, `email`, `address`, `class1`) VALUES (%s, %s, %s, %s, %s)"""
         try:
             # Truncate the table first
