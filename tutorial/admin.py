@@ -15,4 +15,5 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
 
 # Register your models here.
-admin.site.register(Question, QuestionAdmin)
+# Take this out, so it won't show up in production
+# admin.site.register(Question, QuestionAdmin)
