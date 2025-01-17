@@ -86,7 +86,7 @@ def mtw_navigation(parser, token):
 def my_custom_tag(arg1, arg2):
     return arg1 + arg2
 
-@register.simple_tag
+@register.simple_tag(name="my_stuff_here")
 def my_class_tag(value):
     my_instalce = MyClass(value)
     return my_instance.my_method()

@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load navigation %}
 <link rel="stylesheet" href="{% static 'ny_viz/style.css' %}">
 <html lang="en-US">
   <head>
@@ -9,7 +10,7 @@
   <body>
     <p>Sample HTML Page</p>
     <p>Test of class stuff</p>
-    {% my_class_tag %}
+    {% my_stuff_here %}
     {% if latest_question_list %}
         <ul>
         {% for app in latest_question_list %}
