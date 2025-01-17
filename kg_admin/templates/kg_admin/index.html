@@ -16,7 +16,6 @@
         {% for app in latest_question_list %}
             <!-- MTW, note, this uses app_name=nys below -->
             <li>{{ app }}</li>
-            <li><a href="{% app.url  %}">{{ app.name }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
