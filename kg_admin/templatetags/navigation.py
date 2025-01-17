@@ -88,5 +88,5 @@ def my_custom_tag(arg1, arg2):
 
 @register.simple_tag
 def my_class_tag(value):
-    my_instalce = MyClass(value)
+    my_instance = MyClass(value)
     return my_instance.my_method()
