@@ -18,12 +18,16 @@ from ..util import get_admin_site
 register = template.Library()
 logger = logging.getLogger(__name__)
 
-class MyClass:
-    def __init__(self, value):
-        self.value = value
+class KgApp:
+    def __init__(self, name, url):
+        self.name = name;
+        self.url = url;
 
-    def my_method(self):
-        return f"Processed value: {self.value}"
+train = KgApp("kg_train", "../../index.html")
+test = KgApp("kg_test", "../../test.html")
+viz = KgApp("kg_viz", "../../viz.html")
+
+KG_APPS = [train, test, viz]
 
 class AdminUserNavigationNode(template.Node):
     """
@@ -87,6 +91,10 @@ def my_custom_tag(arg1, arg2):
     return arg1 + arg2
 
 @register.simple_tag
-def my_class_tag(value):
-    my_instance = MyClass(value)
-    return my_instance.my_method()
+def kg_apps_list():
+    return KG_APPS
+
+@register.simple_tag
+def my_class_tag(app)
+    # my_instance = MyClass(value)
+    return app.name
