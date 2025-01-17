@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views import generic
 
 KG_APPS = ["kg_train", "kg_test", "kg_viz"]
 
