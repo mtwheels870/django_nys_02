@@ -7,7 +7,8 @@ from django.views.generic import TemplateView
 # We can use this app_name inside the HTML
 app_name = "kg_admin"
 
+#    path("", TemplateView.as_view(template_name="kg_admin/navigation.html")),
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="kg_admin/navigation.html")),
+    path("", views.IndexView.as_view(), name="index"),
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")
