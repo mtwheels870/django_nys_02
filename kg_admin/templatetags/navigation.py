@@ -57,7 +57,7 @@ def admin_navigation(parser, token):
 
     return AdminUserNavigationNode()
 
-@register.tag
+@register.simple_tag
 def mtw_navigation(parser, token):
     """
     Template tag that renders the main admin navigation tree based on the
