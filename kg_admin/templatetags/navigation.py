@@ -95,6 +95,6 @@ def kg_apps_list():
     return KG_APPS
 
 @register.simple_tag
-def my_class_tag(app)
+def my_class_tag(app):
     # my_instance = MyClass(value)
     return app.name
