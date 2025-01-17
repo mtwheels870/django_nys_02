@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class MyClass:
     def __init__(self, value):
-        self.value
+        self.value = value
 
     def my_method(self):
         return f"Processed value: {self.value}"
