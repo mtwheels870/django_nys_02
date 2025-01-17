@@ -14,6 +14,7 @@ def get_admin_site():
     """
     Get default or custom admin site instance.
     """
+    print(f"get_admin_site()")
     path = getattr(settings, 'ADMIN_APPMENU_CLASS',
         'django.contrib.admin.site')
     return import_string(path)
