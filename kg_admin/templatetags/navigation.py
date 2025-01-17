@@ -56,3 +56,7 @@ def admin_navigation(parser, token):
     ))
 
     return AdminUserNavigationNode()
+
+@register.simple_tag
+def my_custom_tag(arg1, arg2):
+    return arg1 + arg2
