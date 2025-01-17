@@ -92,6 +92,7 @@ def my_custom_tag(arg1, arg2):
 
 @register.simple_tag
 def kg_apps_list():
+    print(f"kg_apps_list(), returning {KG_APPS.len}")
     return KG_APPS
 
 @register.simple_tag
