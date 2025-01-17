@@ -47,6 +47,7 @@ def admin_navigation(parser, token):
     # split_contents() knows not to split quoted strings.
     tag_name = token.split_contents()
 
+    print(f"admin_navigation()")
     if len(tag_name) > 1:
         raise base.TemplateSyntaxError(
             '{} tag does not accept any argument(s): {}'.format(
