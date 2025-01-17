@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'schedule',
     'django_celery_beat',
     'django_extensions',
+    'admin_appmenu',
 ]
 
 MIDDLEWARE = [
