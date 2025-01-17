@@ -18,6 +18,12 @@ from ..util import get_admin_site
 register = template.Library()
 logger = logging.getLogger(__name__)
 
+class MyClass:
+    def __init__(self, value):
+        self.value
+
+    def my_method(self):
+        return f"Processed value: {self.value}"
 
 class AdminUserNavigationNode(template.Node):
     """
@@ -79,3 +85,8 @@ def mtw_navigation(parser, token):
 @register.filter
 def my_custom_tag(arg1, arg2):
     return arg1 + arg2
+
+@register.simple_tag
+def my_class_tag(value):
+    my_instalce = MyClass(value)
+    return my_instance.my_method()
