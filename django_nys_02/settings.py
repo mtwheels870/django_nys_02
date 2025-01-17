@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["18.208.200.162"]
 # Application definition
 #    'tutorial.apps.TutorialConfig',
 #    'world.apps.WorldConfig',
+#    'admin_appmenu',
 INSTALLED_APPS = [
     'centralny.apps.CentralNyConfig',
     'mycalendar.apps.MyCalendarConfig',
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
     'schedule',
     'django_celery_beat',
     'django_extensions',
-    'admin_appmenu',
+    'kg_admin.apps.KgAdminConfig',
 ]
 
 MIDDLEWARE = [
