@@ -57,6 +57,25 @@ def admin_navigation(parser, token):
 
     return AdminUserNavigationNode()
 
+@register.tag
+def mtw_navigation(parser, token):
+    """
+    Template tag that renders the main admin navigation tree based on the
+    authenticated user's permissions.
+    """
+    # split_contents() knows not to split quoted strings.
+    tag_name = token.split_contents()
+
+    print(f"mtw_navigation()")
+    if len(tag_name) > 1:
+        raise base.TemplateSyntaxError(
+            '{} tag does not accept any argument(s): {}'.format(
+            token.contents.split()[0],
+            ', '.join(token.contents.split()[1:])
+    ))
+
+    return AdminUserNavigationNode()
+
 @register.filter
 def my_custom_tag(arg1, arg2):
     return arg1 + arg2
