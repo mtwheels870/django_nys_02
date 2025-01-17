@@ -24,5 +24,6 @@ urlpatterns = [
     path("centralny/api/", include("centralny.api")),
     path("mycalendar/", include("mycalendar.urls")),
     path("tutorial/", include("tutorial.urls")),
+    path("kg_admin/", include("kg_admin.urls")),
 ]
 #print(f"project.urlpatterns = {urlpatterns}")
