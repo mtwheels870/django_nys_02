@@ -1,7 +1,16 @@
 from django.shortcuts import render
 from django.views import generic
 
-KG_APPS = ["kg_train", "kg_test", "kg_viz"]
+class KgApp:
+    def __init__(self, name, url):
+        self.name = name;
+        self.url = url;
+
+train = KgApp("kg_train", "../../index.html")
+test = KgApp("kg_test", "../../test.html")
+viz = KgApp("kg_viz", "../../viz.html")
+
+KG_APPS = [train, test, viz]
 
 class IndexView(generic.ListView):
     template_name = "kg_admin/index.html"
