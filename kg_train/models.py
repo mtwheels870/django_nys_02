@@ -8,7 +8,7 @@ class TextFileStatus(models.Model):
 class TextFile(models.Model):
     file_name = models.CharField(max_length=80)
     date_uploaded = models.DateTimeField("date published")
-    status = models.ForeignKey(models.CharField(max_length=80), on_delete=models.CASCADE)
+    status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     aws_file_path = models.CharField(max_length=120)
     def __str__(self):
         return self.file_name
