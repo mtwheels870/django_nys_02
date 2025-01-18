@@ -17,6 +17,16 @@ class IndexView(generic.ListView):
     template_name = "kg_admin/index.html"
     context_object_name = "latest_question_list"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        dictionary = { 'red' : 1,
+                'green' : 2, 
+                'blue' : 3} 
+        context['data'] = dictionary
+        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
+        # Use pk to access the object or do other operations
+        return context
+
     def get_queryset(self):
         """ Return the last five published questions."""
         # return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
