@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 
-from templatetags.navigation import KgApp
+from .templatetags.navigation import KgApp
 #class KgApp:
 #    def __init__(self, name, url):
 #        self.name = name;
