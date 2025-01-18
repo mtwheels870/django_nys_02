@@ -23,9 +23,9 @@ class KgApp:
         self.name = name;
         self.url = url;
 
-train = KgApp("kg_train", "../../index.html")
-test = KgApp("kg_test", "../../test.html")
-viz = KgApp("kg_viz", "../../viz.html")
+#train = KgApp("kg_train", "../../index.html")
+#test = KgApp("kg_test", "../../test.html")
+#viz = KgApp("kg_viz", "../../viz.html")
 
 KG_APPS = [train, test, viz]
 
@@ -96,6 +96,11 @@ def kg_apps_list():
     return KG_APPS
 
 @register.simple_tag
-def my_class_tag(app):
+def kg_app_name(app):
     # my_instance = MyClass(value)
     return app.name
+
+@register.simple_tag
+def kg_app_url(app):
+    # my_instance = MyClass(value)
+    return app.url

@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.views import generic
 
-class KgApp:
-    def __init__(self, name, url):
-        self.name = name;
-        self.url = url;
+from templatetags.navigation import KgApp
+#class KgApp:
+#    def __init__(self, name, url):
+#        self.name = name;
+#        self.url = url;
 
 train = KgApp("kg_train", "../../index.html")
 test = KgApp("kg_test", "../../test.html")

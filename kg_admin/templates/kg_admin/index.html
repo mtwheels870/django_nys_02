@@ -10,10 +10,11 @@
   <body>
     <p>Sample HTML Page</p>
     <p>Test of class stuff</p>
-    {% if kg_apps_list %}
+    {% if latest_question_list %}
         <ul>
-        {% for app in kg_apps_list %}
-            {% my_class_tag app %}
+        {% for app in latest_question_list %}
+            <p>Name: {{ kg_app_name app }}</p>
+            <p>Name: {{ kg_app_url app }}</p>
             <!-- MTW, note, this uses app_name=nys below -->
             <li>{{ app }}</li>
         {% endfor %}
