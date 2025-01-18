@@ -10,11 +10,11 @@
   <body>
     <p>Sample HTML Page</p>
     <p>Test of class stuff</p>
-    {% if data %}
+    {% if kg_apps %}
         <ul>
-        {% for key, value in data.items %}
+        {% for key, value in kg_apps.items %}
             {{ key }}: {{ value }}
-            <!-- MTW, note, this uses app_name=nys below -->
+            <li><a href="{{ value }}">{{ key }}</a></li>
         {% endfor %}
         </ul>
     {% else %}

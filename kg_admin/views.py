@@ -19,10 +19,10 @@ class IndexView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        dictionary = { 'red' : 1,
-                'green' : 2, 
-                'blue' : 3} 
-        context['data'] = dictionary
+        dictionary = { 'kg_train' : "../../index.html",
+                'kg_test' : "../../test.html", 
+                'kg_viz' : "../../viz.html"} 
+        context['kg_apps'] = dictionary
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
         return context
