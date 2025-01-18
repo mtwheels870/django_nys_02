@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_extensions',
     'kg_admin.apps.KgAdminConfig',
+    'kg_train.apps.KgTrainConfig',
 ]
 
 MIDDLEWARE = [
