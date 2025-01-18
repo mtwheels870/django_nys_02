@@ -96,11 +96,11 @@ def kg_apps_list():
     return KG_APPS
 
 @register.simple_tag
-def kg_app_name(app):
+def kg_app_name(app, arg1):
     # my_instance = MyClass(value)
     return app.name
 
 @register.simple_tag
-def kg_app_url(app):
+def kg_app_url(app, arg1):
     # my_instance = MyClass(value)
     return app.url
