@@ -27,7 +27,7 @@ class KgApp:
 #test = KgApp("kg_test", "../../test.html")
 #viz = KgApp("kg_viz", "../../viz.html")
 
-KG_APPS = [train, test, viz]
+# KG_APPS = [train, test, viz]
 
 class AdminUserNavigationNode(template.Node):
     """
