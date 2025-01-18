@@ -97,6 +97,7 @@ def kg_apps_list():
 
 @register.simple_tag
 def kg_app_name(app, arg1):
+    print(f"kg_app_name(), app = {app}, arg1 = {arg1}")
     # my_instance = MyClass(value)
     return app.name
 
