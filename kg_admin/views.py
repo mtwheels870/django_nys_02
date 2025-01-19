@@ -7,11 +7,11 @@ from .templatetags.navigation import KgApp
 #        self.name = name;
 #        self.url = url;
 
-#train = KgApp("kg_train", "../kg_train/templates/kg_train/index.html")
-#test = KgApp("kg_test", "../../test.html")
-#viz = KgApp("kg_viz", "../../viz.html")
+train = KgApp("kg_train", "../kg_train/templates/kg_train/index.html")
+test = KgApp("kg_test", "../../test.html")
+viz = KgApp("kg_viz", "../../viz.html")
 
-#KG_APPS = [train, test, viz]
+KG_APPS = [train, test, viz]
 
 class IndexView(generic.ListView):
     template_name = "kg_admin/index.html"
@@ -27,6 +27,7 @@ class IndexView(generic.ListView):
         # Use pk to access the object or do other operations
         return context
 
+    # Don't think we ever use this (b/c among other reasons, no latest_question_list)
     def get_queryset(self):
         """ Return the last five published questions."""
         # return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
