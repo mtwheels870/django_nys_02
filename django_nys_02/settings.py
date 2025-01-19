@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     'django_extensions',
     'kg_admin.apps.KgAdminConfig',
     'kg_train.apps.KgTrainConfig',
+    'file_picker',
+    'file_picker.uploads', # file and image Django app
+    'file_picker.wymeditor', # optional WYMeditor plugin
+    'sorl.thumbnail',  # required
 ]
 
 MIDDLEWARE = [
