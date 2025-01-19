@@ -20,7 +20,7 @@ class IndexView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # dictionary = { 'kg_train' : "{% url 'app_kg_admin:index'%}",
-        dictionary = { 'kg_train' : "../kg_train/templates/kg_train/index.html",
+        dictionary = { 'kg_train' : "/kg_train/",
                 'kg_test' : "../../test.html", 
                 'kg_viz' : "../../viz.html"} 
         context['kg_apps'] = dictionary
