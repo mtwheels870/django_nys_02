@@ -8,8 +8,8 @@ from django.utils import timezone
 from .models import Choice, Question
 
 class IndexView(generic.ListView):
-    template_name = "tutorial/index.html"
-    context_object_name = "latest_question_list"
+    template_name = "kg_train/index.html"
+    context_object_name = "uploaded_files_list"
 
     def get_queryset(self):
         """ Return the last five published questions."""

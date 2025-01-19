@@ -4,19 +4,21 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
-    <title>My test page</title>
+    <title>Files uploaded to GISA</title>
   </head>
   <body>
-    <p>Sample HTML Page</p>
-    {% if latest_question_list %}
+    <p>Uploaded files and status:</p>
+
+    context_object_name = ""
+    {% if uploaded_files_list %}
         <ul>
-        {% for question in latest_question_list %}
+        {% for file in uploaded_files_list %}
             <!-- MTW, note, this uses app_name=nys below -->
-            <li><a href="{% url 'app_tut:detail' question.id %}">{{ question.question_text }}</a></li>
+            <li><a href="{% url 'app_kg_train:detail' file.id %}">{{ file.file_name }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
-        <p>No counties are available.</p>
+        <p>No files uploaded.</p>
     {% endif %}
   </body>
 </html>
