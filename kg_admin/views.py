@@ -7,9 +7,9 @@ from .templatetags.navigation import KgApp
 #        self.name = name;
 #        self.url = url;
 
-train = KgApp("kg_train", "../kg_train/templates/kg_train/index.html")
-test = KgApp("kg_test", "../../test.html")
-viz = KgApp("kg_viz", "../../viz.html")
+train = KgApp("kg_train", "NOT USED")
+test = KgApp("kg_test", "NOT USED")
+viz = KgApp("kg_viz", "NOT USED")
 
 KG_APPS = [train, test, viz]
 
@@ -19,7 +19,7 @@ class IndexView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        dictionary = { 'kg_train' : "app_kg_train:index",
+        dictionary = { 'kg_train' : "{% url 'app_kg_admin:index'%}",
                 'kg_test' : "../../test.html", 
                 'kg_viz' : "../../viz.html"} 
         context['kg_apps'] = dictionary
