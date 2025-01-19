@@ -12,3 +12,9 @@ class TextFile(models.Model):
     aws_file_path = models.CharField(max_length=120)
     def __str__(self):
         return self.file_name
+
+class Post(models.Model):
+    title = models.CharField(max_length=255)
+    date = models.DateTimeField()
+    body = models.TextField()
+    teaser = models.TextField()
