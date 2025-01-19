@@ -13,5 +13,5 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """ Return the last five published questions."""
-        return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded ")[:20]
+        return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded")[:20]
 
