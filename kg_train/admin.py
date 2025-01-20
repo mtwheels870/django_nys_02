@@ -4,7 +4,7 @@ from django.contrib import admin
 
 import file_picker
 
-from .models import Post
+from .models import Post, TextFile
 
 class PostForm(forms.ModelForm):
 
