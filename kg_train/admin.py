@@ -24,6 +24,14 @@ class PostForm(forms.ModelForm):
 
 
 class PostAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.TextField: {
+            'widget': file_picker.widgets.SimpleFilePickerWidget(pickers={
+                'image': "images", # a picker named "images" from file_picker.uploads
+                'file': "files", # a picker named "files" from file_picker.uploads
+            }),
+        },
+    }
 
     form = PostForm
 
