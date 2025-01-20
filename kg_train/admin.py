@@ -2,6 +2,8 @@ from django import forms
 from django.db import models
 from django.contrib import admin
 
+import file_picker
+
 from .models import Post
 
 class PostForm(forms.ModelForm):
