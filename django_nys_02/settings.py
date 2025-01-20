@@ -34,8 +34,8 @@ ALLOWED_HOSTS = ["18.208.200.162"]
 #    'admin_appmenu',
 #    'django_celery_beat',
 #    'schedule',
-#    'mycalendar.apps.MyCalendarConfig',
 INSTALLED_APPS = [
+    'mycalendar.apps.MyCalendarConfig',
     'centralny.apps.CentralNyConfig',
     'tutorial.apps.TutorialConfig',
     'django.contrib.admin',
