@@ -35,10 +35,10 @@ class TextFileForm(forms.ModelForm):
         pickers = {'image': "images", 'file': "files"}
         # simple widget
         simple_widget = SimpleFilePickerWidget(pickers=pickers)
-        self.fields['body'].widget = simple_widget
+        self.fields['file_name'].widget = simple_widget
         # wymeditor widget
         wym_widget = WYMeditorWidget(pickers=pickers)
-        self.fields['teaser'].widget = wym_widget
+        self.fields['aws_file_path'].widget = wym_widget
 
     class Meta(object):
         model = TextFile
