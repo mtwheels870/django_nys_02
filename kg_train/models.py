@@ -4,6 +4,8 @@ from django.utils import timezone
 
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
+    def __str__(self):
+        return self.description 
 
 class TextFile(models.Model):
     file_name = models.CharField(max_length=80)
