@@ -71,7 +71,7 @@ class TextFileAdmin(admin.ModelAdmin):
         },
     }
 
-    form = PostForm
+    form = TextFileForm
 
     class Media:
         js = ("http://cdn.jquerytools.org/1.2.5/full/jquery.tools.min.js",)
