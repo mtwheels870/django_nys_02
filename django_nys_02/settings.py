@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'file_picker.uploads', # file and image Django app
     'file_picker.wymeditor', # optional WYMeditor plugin
     'sorl.thumbnail',  # required
+    'schedule',
 ]
 
 MIDDLEWARE = [
