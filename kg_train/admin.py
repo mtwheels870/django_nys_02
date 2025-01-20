@@ -9,6 +9,7 @@ from .models import Post
 class PostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        print(f"PostForm.__init__()")
         super(PostForm, self).__init__(*args, **kwargs)
         from file_picker.widgets import SimpleFilePickerWidget
         from file_picker.wymeditor.widgets import WYMeditorWidget
@@ -26,6 +27,7 @@ class PostForm(forms.ModelForm):
 
 
 class PostAdmin(admin.ModelAdmin):
+    print(f"PostAdmin.ctor()")
     formfield_overrides = {
         models.TextField: {
             'widget': file_picker.widgets.SimpleFilePickerWidget(pickers={
