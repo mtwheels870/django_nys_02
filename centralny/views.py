@@ -32,8 +32,6 @@ from centralny.serializers import (
 
 # Import our neighbors
 
-from mycalendar import views
-
 # /maps/api/markers (through DefaultRouter)
 class MarkerViewSet(
     viewsets.ReadOnlyModelViewSet):

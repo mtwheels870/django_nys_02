@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("centralny/", include("centralny.urls")),
     path("centralny/api/", include("centralny.api")),
-    path("mycalendar/", include("mycalendar.urls")),
     path("tutorial/", include("tutorial.urls")),
     path("kg_admin/", include("kg_admin.urls")),
     path("kg_train/", include("kg_train.urls")),
