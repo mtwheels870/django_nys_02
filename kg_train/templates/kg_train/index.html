@@ -19,7 +19,7 @@
         <p>No files uploaded.</p>
     {% endif %}
     {% block content %}
-        <form method="post" action="{%url 'app_kg_train:add_new' %}">
+        <form method="post" action="{%url 'app_kg_train:upload_file' %}">
             {% csrf_token %}
             <button type="submit">Add New</button>
         </form>

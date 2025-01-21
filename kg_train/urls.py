@@ -6,7 +6,6 @@ app_name = "app_kg_train"
 urlpatterns = [
     # ex: /tutorial/.  Note, these are all formal classes (IndexView, DetailView...) inside views.py
     path("", views.IndexView.as_view(), name="index"),
-    path("add_new", views.AddNewView.as_view(), name="add_new"),
     # ex: /tutorial/5/
 ]
 #    path("<int:pk>/", views.DetailView.as_view(), name="detail"),
