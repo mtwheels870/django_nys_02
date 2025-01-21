@@ -21,9 +21,12 @@ def upload_file(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
+            print(f"upload_file(), VALID")
             form.save()
             handle_uploaded_file(request.FILES["file"])
             return render("success.html")
+        else:
+            print(f"upload_file(), INVALID")
     else:
         form = UploadFileForm()
-    return render(request, "kg_train/upload.html", {"form": form})
+    return render(request, "kg_train/index.html", {"form": form})
