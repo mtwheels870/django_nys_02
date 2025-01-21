@@ -26,4 +26,4 @@ def upload_file(request):
             return render("success.html")
     else:
         form = UploadFileForm()
-    return render(request, "upload.html", {"form": form})
+    return render(request, "kg_train/upload1.html", {"form": form})
