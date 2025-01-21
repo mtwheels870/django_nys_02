@@ -17,7 +17,7 @@ class IndexView(generic.ListView):
         # return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded")[:20]
         return TextFile.objects.all()
 
-def StartForm(generic.DetailView):
+class StartForm(generic.DetailView):
     template_name = "kg_train/upload_form.html"
     context_object_name = "abc"
 
