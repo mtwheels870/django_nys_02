@@ -17,10 +17,12 @@ class IndexView(generic.ListView):
         # return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded")[:20]
         return TextFile.objects.all()
 
-class StartForm(generic.DetailView):
+# Start the form on this view
+class StartForm(FormView):
     template_name = "kg_train/upload.html"
-    context_object_name = "abc"
+    form_class = UploadFileForm
 
+# On hitting "upload" button, we end up here
 def upload_file(request):
     print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
     if request.method == "POST":
