@@ -19,7 +19,6 @@ class IndexView(generic.ListView):
 def upload_file(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
-class UploadFileForm(forms.ModelForm):
         if form.is_valid():
             form.save()
             handle_uploaded_file(request.FILES["file"])
