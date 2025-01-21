@@ -34,8 +34,9 @@ ALLOWED_HOSTS = ["18.208.200.162"]
 #    'admin_appmenu',
 #    'django_celery_beat',
 #    'schedule',
+#    'mycalendar.apps.MyCalendarConfig',
+#    'file_picker',
 INSTALLED_APPS = [
-    'mycalendar.apps.MyCalendarConfig',
     'centralny.apps.CentralNyConfig',
     'tutorial.apps.TutorialConfig',
     'django.contrib.admin',
@@ -52,11 +53,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'kg_admin.apps.KgAdminConfig',
     'kg_train.apps.KgTrainConfig',
-    'file_picker',
-    'file_picker.uploads', # file and image Django app
-    'file_picker.wymeditor', # optional WYMeditor plugin
-    'sorl.thumbnail',  # required
-    'schedule',
 ]
 
 MIDDLEWARE = [
