@@ -197,4 +197,4 @@ BOWER_INSTALLED_APPS = (
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # URL for accessing uploaded files
-MEDIA_URL = '/media'
+MEDIA_URL = '/media/'
