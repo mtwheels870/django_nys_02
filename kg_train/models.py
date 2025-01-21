@@ -5,13 +5,13 @@ from django.utils import timezone
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
     def __str__(self):
-        return self.description 
+        return f"{self.id}: {self.description}"
 
 class TextFile(models.Model):
     file_name = models.CharField(max_length=80)
     date_uploaded = models.DateTimeField("date published")
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
-    aws_file_path = models.CharField(max_length=120)
+    aws_file_path = models.CharField(max_length=120, null=True)
     def __str__(self):
         return self.file_name
 

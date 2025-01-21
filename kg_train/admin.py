@@ -63,6 +63,7 @@ class PostAdmin(admin.ModelAdmin):
 class TextFileAdmin(admin.ModelAdmin):
     print(f"TextFileAdmin.ctor()")
     formfield_overrides = {
+        # This overrides all text fields (not by name)
         models.TextField: {
             'widget': file_picker.widgets.SimpleFilePickerWidget(pickers={
                 'image': "images", # a picker named "images" from file_picker.uploads
