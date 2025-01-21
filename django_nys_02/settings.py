@@ -193,3 +193,8 @@ BOWER_INSTALLED_APPS = (
     'fullcalendar#3.8.2'
 )
 
+# Directory where uploaded files will be stored
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# URL for accessing uploaded files
+MEDIA_URL = '/media'

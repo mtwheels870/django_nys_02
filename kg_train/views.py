@@ -6,6 +6,7 @@ from django.views import generic
 from django.utils import timezone
 
 from .models import TextFileStatus, TextFile
+from .forms import UploadFileForm
 
 class IndexView(generic.ListView):
     template_name = "kg_train/index.html"
@@ -15,6 +16,14 @@ class IndexView(generic.ListView):
         """ Return the last five published questions."""
         return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded")[:20]
 
-class AddNewView(generic.DetailView):
-    model = TextFile
-    template_name = "kg_train/add_new.html"
+def upload_file(request):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+class UploadFileForm(forms.ModelForm):
+        if form.is_valid():
+            form.save()
+            handle_uploaded_file(request.FILES["file"])
+            return render("success.html")
+    else:
+        form = UploadFileForm()
+    return render(request, "upload.html", {"form": form})
