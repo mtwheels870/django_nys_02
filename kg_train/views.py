@@ -18,6 +18,7 @@ class IndexView(generic.ListView):
         return TextFile.objects.all()
 
 def upload_file(request):
+    print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
