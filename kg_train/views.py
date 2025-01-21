@@ -18,7 +18,7 @@ class IndexView(generic.ListView):
         return TextFile.objects.all()
 
 class StartForm(generic.DetailView):
-    template_name = "kg_train/upload_form.html"
+    template_name = "kg_train/upload.html"
     context_object_name = "abc"
 
 def upload_file(request):
