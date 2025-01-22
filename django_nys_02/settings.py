@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'kg_admin.apps.KgAdminConfig',
     'kg_train.apps.KgTrainConfig',
-    'colorfield'
+    'colorfield',
     'prose',
 ]
 
