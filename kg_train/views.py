@@ -24,8 +24,9 @@ class IndexView(generic.ListView):
 #    form_class = UploadFileForm
 
 def debug_post(dictionary):
-    for key, value in enumerate(dictionary):
-        print(f"d_p(), key[{key}] = {value}")
+    for index, key in enumerate(dictionary):
+        value = dictionary[key]
+        print(f"d_p(), key[{index}]: {key} = {value}")
     
 # On hitting "upload" button, we end up here
 # Actually, this view handles both GET and POST requests.
