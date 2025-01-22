@@ -76,4 +76,4 @@ def edit_file(request, textfile_id):
     file_content = text_file.file.read()
     initial_content = file_content[:100]
     print(f"initial_content:\n{initial_content}")
-    return render(request, reverse("app_kg_train:prose")), {"content": file_content})
+    return render(request, reverse("app_kg_train:prose"), {"content": file_content})
