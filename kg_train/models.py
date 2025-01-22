@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.utils import timezone
+import colorfield.fields import ColorField
 
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
@@ -19,5 +20,6 @@ class TextFile(models.Model):
 class NerLabel(models.Model):
     short_name = models.CharField("Short", max_length=10)
     description = models.CharField("Long", max_length=80)
+    color = Colorfield(default="'#ff0000')
     def __str__(self):
         return self.short_name
