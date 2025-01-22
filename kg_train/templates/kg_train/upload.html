@@ -8,7 +8,7 @@
     <p>Upload Form:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <!-- form method="post" action="{% url 'app_kg_train:upload_file' %}" -->
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit</button>
