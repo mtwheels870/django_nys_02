@@ -3,11 +3,10 @@ from django.urls import path
 from . import views
 
 app_name = "app_kg_train"
+#    path("form/", views.StartForm.as_view(), name="upload_form"),
 urlpatterns = [
     # ex: /tutorial/.  Note, these are all formal classes (IndexView, DetailView...) inside views.py
     path("", views.IndexView.as_view(), name="index"),
-
-    path("form/", views.StartForm.as_view(), name="upload_form"),
 
     path("form/upload/", views.upload_file, name="upload_file"),
     # ex: /tutorial/5/
