@@ -54,6 +54,6 @@ class DetailView(generic.DetailView, pk):
     model = TextFile
     template_name = "kg_train/detail.html"
 
-    def get_queryset(self):
-        """ We should have a queryset of 1 (based on the pk)   """
-        return TextFile.objects.filter(pk__eq=pk)
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return super().get_object(pk=pk)
