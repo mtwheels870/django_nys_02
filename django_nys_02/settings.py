@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'kg_admin.apps.KgAdminConfig',
     'kg_train.apps.KgTrainConfig',
     'colorfield'
+    'prose',
 ]
 
 MIDDLEWARE = [
