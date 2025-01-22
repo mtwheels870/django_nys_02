@@ -56,4 +56,4 @@ class DetailView(generic.DetailView):
 
     def get_queryset(self):
         """ We should have a queryset of 1 (based on the pk)   """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        return TextFile.objects.filter(pk__eq=pk)
