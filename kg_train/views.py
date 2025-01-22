@@ -39,7 +39,10 @@ def upload_file(request):
             file = form.cleaned_data['file']
             text_file.file_name = file.name
             text_file.file_size = file.size
+            file_content = text_file.file.read()
             print(f"upload_file(), (cleaned) file_name = {file.name}, file_size ={file.size}")
+            body_document = Document.objects.create(content=file_content)
+            text_file.body = body_document
             # Should overwrite file_name here
             text_file.save()
             return HttpResponseRedirect(reverse("app_kg_train:index"))
