@@ -34,15 +34,15 @@ def upload_file(request):
     print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
     if request.method == "POST":
         debug_post(request.POST)
-        # form = UploadFileForm(request.POST, request.FILES)
-        form = UploadFileForm(request.POST)
+        form = UploadFileForm(request.POST, request.FILES)
+        # form = UploadFileForm(request.POST)
         if form.is_valid():
             print(f"upload_file(), VALID")
             form.save()
             handle_uploaded_file(request.FILES["file"])
             return render("success.html")
         else:
-            print(f"upload_file(), INVALID")
+            print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
     else:
         form = UploadFileForm()
