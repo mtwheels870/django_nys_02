@@ -47,8 +47,8 @@ def upload_file(request):
     # else, we're == GET
     else:
         initial_data = {
-            'file_name' = "Extracted from file name",
-            'status' = 1
+            'file_name' : "Extracted from file name",
+            'status' : 1
         }
         form = UploadFileForm(initial=initial_data)
         # This will fall through to the following with an empty form to be populated
