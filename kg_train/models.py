@@ -3,7 +3,8 @@ from django.db import models
 from django.utils import timezone
 from colorfield.fields import ColorField
 
-MAX_DISPLAY_LENGTH = 30
+MAX_DISPLAY_LENGTH = 40
+ELLIPSIS = "..."
 
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
@@ -23,7 +24,7 @@ class TextFile(models.Model):
         if self.short_name:
             return self.short_name
         if len(self.file_name) > MAX_DISPLAY_LENGTH:
-            self.short_name = self.file_name[:MAX_DISPLAY_LENGTH]
+            self.short_name = self.file_name[:MAX_DISPLAY_LENGTH] + ELLIPSIS 
             return self.short_name
         return self.file_name
 
