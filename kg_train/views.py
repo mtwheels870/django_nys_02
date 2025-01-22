@@ -42,7 +42,7 @@ def upload_file(request):
             text_file.save()
             # print(f"upload_file(), after save, id = {text_file.id}")
             #return render(request, "kg_train/index.html")
-            return render(request, "index")
+            return render(request, "app_kg_train:index")
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
