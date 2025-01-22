@@ -20,9 +20,8 @@ class IndexView(generic.ListView):
         return TextFile.objects.all()
 
 # Start the form on this view
-class StartForm(FormView):
-    template_name = "kg_train/upload.html"
-    form_class = UploadFileForm
+#class StartForm(FormView):
+#    form_class = UploadFileForm
 
 # On hitting "upload" button, we end up here
 # Actually, this view handles both GET and POST requests.
@@ -40,4 +39,5 @@ def upload_file(request):
     # else, we're == GET
     else:
         form = UploadFileForm()
-    return render(request, "kg_train/index.html", {"form": form})
+        # This will fall through to the following
+    return render(request, "kg_train/upload.html", {"form": form})
