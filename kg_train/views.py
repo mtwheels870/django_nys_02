@@ -76,5 +76,4 @@ def edit_file(request, textfile_id):
     file_content = text_file.file.read()
     initial_content = file_content[:100]
     print(f"initial_content:\n{initial_content}")
-            self.short_name = self.file_name[:MAX_DISPLAY_LENGTH] + ELLIPSIS 
     return render(request, reverse("app_kg_train:prose")), {"content": file_content})
