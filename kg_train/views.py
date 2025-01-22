@@ -37,9 +37,9 @@ def upload_file(request):
         form = UploadFileForm(request.POST, request.FILES)
         # form = UploadFileForm(request.POST)
         if form.is_valid():
-            print(f"upload_file(), VALID")
-            form.save()
-            handle_uploaded_file(request.FILES["file"])
+            text_file = form.save()
+            print(f"upload_file(), VALID, text_file = {text_file}")
+            text_file.save()
             return render("success.html")
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
