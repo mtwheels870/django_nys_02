@@ -41,9 +41,8 @@ def upload_file(request):
             # print(f"upload_file(), VALID, text_file = {text_file}")
             text_file.save()
             # print(f"upload_file(), after save, id = {text_file.id}")
-            # return render("index.html")
-            # return render(request, "kg_train/index.html")
-            return render("kg_train/index.html")
+            #return render(request, "kg_train/index.html")
+            return render(request, "index")
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
