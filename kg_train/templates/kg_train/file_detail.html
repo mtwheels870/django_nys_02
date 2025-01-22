@@ -7,6 +7,7 @@
   <body>
     <h2>File: {{ textfile.display_name }}</h2>
     <h3>Status: {{ textfile.status }}</h3>
+    <div>{{ textfile.body.content | safe }}</div>
     <p>New Stuff Below:</p>
     <form action="{% url 'app_kg_train:edit_file' textfile.id %}" method="post">
         {% csrf_token %}
