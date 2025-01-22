@@ -71,8 +71,8 @@ class DetailView(generic.DetailView):
             #return render(request, "kg_train/index.html")
             # return render(request, reverse("app_kg_train:index"))
 
-def edit_file(request, textfile_id):
-    text_file = get_object_or_404(TextFile, pk=textfile_id)
+def edit_file(request, pk):
+    text_file = get_object_or_404(TextFile, pk=pk)
     file_content = text_file.file.read()
     initial_content = file_content[:100]
     print(f"initial_content:\n{initial_content}")
