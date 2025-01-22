@@ -25,6 +25,7 @@ class StartForm(FormView):
     form_class = UploadFileForm
 
 # On hitting "upload" button, we end up here
+# Actually, this view handles both GET and POST requests.
 def upload_file(request):
     print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
     if request.method == "POST":
@@ -36,6 +37,7 @@ def upload_file(request):
             return render("success.html")
         else:
             print(f"upload_file(), INVALID")
+    # else, we're == GET
     else:
         form = UploadFileForm()
     return render(request, "kg_train/index.html", {"form": form})
