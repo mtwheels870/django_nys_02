@@ -31,20 +31,29 @@ def debug_post(dictionary):
 # On hitting "upload" button, we end up here
 # Actually, this view handles both GET and POST requests.
 def upload_file(request):
-    print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
+    # print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
     if request.method == "POST":
         debug_post(request.POST)
         form = UploadFileForm(request.POST, request.FILES)
         # form = UploadFileForm(request.POST)
         if form.is_valid():
             text_file = form.save()
-            print(f"upload_file(), VALID, text_file = {text_file}")
+            # print(f"upload_file(), VALID, text_file = {text_file}")
             text_file.save()
-            return render("success.html")
+            # print(f"upload_file(), after save, id = {text_file.id}")
+            return render("index.html")
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
     else:
         form = UploadFileForm()
-        # This will fall through to the following
+        # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/upload.html", {"form": form})
+
+class DetailView(generic.DetailView):
+    model = TextFile
+    template_name = "kg_train/detail.html"
+
+    def get_queryset(self):
+        """ We should have a queryset of 1 (based on the pk)   """
+        return Question.objects.filter(pub_date__lte=timezone.now())

@@ -8,7 +8,11 @@ urlpatterns = [
     # ex: /tutorial/.  Note, these are all formal classes (IndexView, DetailView...) inside views.py
     path("", views.IndexView.as_view(), name="index"),
 
-    path("form/upload/", views.upload_file, name="upload_file"),
+    # To upload a new file to the server (GET and POST)
+    path("upload/", views.upload_file, name="upload_file"),
+
+    # To view an individual file details (and start labeling)
+    path("<int:pk>/", views.DetailView.as_view(), name="detail"),
     # ex: /tutorial/5/
 ]
 #    path("<int:pk>/", views.DetailView.as_view(), name="detail"),

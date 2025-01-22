@@ -2,12 +2,11 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
-    <title>My test page</title>
+    <title>Upload New File</title>
   </head>
   <body>
     <p>Upload Form:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
-    <!-- form method="post" action="{% url 'app_kg_train:upload_file' %}" -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}

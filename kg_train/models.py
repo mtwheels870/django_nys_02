@@ -12,4 +12,4 @@ class TextFile(models.Model):
     file = models.FileField(upload_to="uploads/")
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     def __str__(self):
-        return self.file_name
+        return f"{self.file_name}, status = {self.status}"
