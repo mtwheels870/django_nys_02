@@ -46,7 +46,11 @@ def upload_file(request):
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
     else:
-        form = UploadFileForm()
+        initial_data = {
+            'file_name' = "Extracted from file name",
+            'status' = 1
+        }
+        form = UploadFileForm(initial=initial_data)
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/upload.html", {"form": form})
 
