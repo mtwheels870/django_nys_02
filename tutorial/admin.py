@@ -4,6 +4,7 @@ from .models import Question, Choice
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
+    # Extra text items so we can add new choices
     extra = 3
 
 class QuestionAdmin(admin.ModelAdmin):
