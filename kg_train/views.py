@@ -7,6 +7,8 @@ from django.views.generic.edit import FormView
 
 from django.utils import timezone
 
+from prose.models import Document
+
 from .models import TextFileStatus, TextFile
 from .forms import UploadFileForm
 

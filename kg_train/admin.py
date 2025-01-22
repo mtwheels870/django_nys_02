@@ -26,7 +26,6 @@ class TextFileForm(forms.ModelForm):
         fields = '__all__'
 
 class TextFileAdmin(admin.ModelAdmin):
-    print(f"TextFileAdmin.ctor()")
     formfield_overrides = {
         # This overrides all text fields (not by name)
         models.TextField: {
