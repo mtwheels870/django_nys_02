@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
 from django.utils import timezone
-import colorfield.fields import ColorField
+from colorfield.fields import ColorField
 
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
