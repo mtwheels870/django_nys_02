@@ -37,7 +37,9 @@ def upload_file(request):
             # This uses the Form to create an instance (TextFile)
             text_file = form.save()
             file = form.cleaned_data['file']
-            print(f"upload_file(), (cleaned) file = {file}")
+            file_name = file.file_name
+            file_size = file.file_size
+            print(f"upload_file(), (cleaned) file_name = {file_name}, file_size ={file_size}")
             # Should overwrite file_name here
             text_file.save()
             return HttpResponseRedirect(reverse("app_kg_train:index"))
