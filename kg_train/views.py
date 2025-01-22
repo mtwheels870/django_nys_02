@@ -11,7 +11,7 @@ from .models import TextFileStatus, TextFile
 from .forms import UploadFileForm
 
 class IndexView(generic.ListView):
-    template_name = "kg_train/index.html"
+    template_name = "kg_train/file_index.html"
     context_object_name = "uploaded_files_list"
 
     def get_queryset(self):
@@ -53,11 +53,11 @@ def upload_file(request):
         }
         form = UploadFileForm(initial=initial_data)
         # This will fall through to the following with an empty form to be populated
-    return render(request, "kg_train/upload.html", {"form": form})
+    return render(request, "kg_train/file_upload.html", {"form": form})
 
 class DetailView(generic.DetailView):
     model = TextFile
-    template_name = "kg_train/detail.html"
+    template_name = "kg_train/file_detail.html"
 
     def get_object(self):
         pk = self.kwargs.get('pk')
