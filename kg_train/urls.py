@@ -16,10 +16,10 @@ urlpatterns = [
 
     path("<int:pk>/", views.DetailView.as_view(), name="detail"),
 
-    path("edit/", views.edit_file, name="edit_file"),
+    path("<int:pk>/edit/", views.edit_file, name="edit_file"),
 
     # This breaks out to our editor
-    path("edit/prose/", include("prose.urls"), name="prose"),
+    path("<int:pk>/edit/prose/", include("prose.urls"), name="prose"),
 
     # ex: /tutorial/5/
 ]
