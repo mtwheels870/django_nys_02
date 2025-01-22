@@ -21,10 +21,10 @@ label_dictionary = {
     "DATE": "Absolute or relative dates or periods.",
     "TIME": "Times smaller than a day.",
     "QUANTITY": "Measurements, as of weight or distance.",
-    "ORDINAL", "first, second, etc.",
-    "CARDINAL", "one, two, three...",
-    "MILITARY", "Military forces, such as PLAN",
-    "CIVILIAN", "Civil forces, such as maritime militia, fishing fleets",
+    "ORDINAL": "first, second, etc.",
+    "CARDINAL": "one, two, three...",
+    "MILITARY": "Military forces, such as PLAN",
+    "CIVILIAN": "Civil forces, such as maritime militia, fishing fleets",
 }
 
 class Loader():
