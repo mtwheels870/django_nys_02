@@ -38,7 +38,7 @@ class Loader():
             ts.save()
 
     def create_labels(self, verbose=True):
-        for _, (key, value) in enumerate(label_dictionary):
+        for _, (key, value) in enumerate(label_dictionary.items()):
             print(f"create_labels(), {key} = {value}")
             ner_label = NerLabel(short_name=key, description=value)
             ner_label.save()
