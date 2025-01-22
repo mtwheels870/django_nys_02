@@ -1,7 +1,7 @@
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render, reverse
+# from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import FormView
 
@@ -42,7 +42,7 @@ def upload_file(request):
             text_file.save()
             # print(f"upload_file(), after save, id = {text_file.id}")
             #return render(request, "kg_train/index.html")
-            return render(request, reverse("index"))
+            return reverse("app_kg_train:index")
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
