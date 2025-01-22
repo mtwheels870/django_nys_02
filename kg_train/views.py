@@ -37,6 +37,8 @@ def upload_file(request):
             # This uses the Form to create an instance (TextFile)
             text_file = form.save()
             file = form.cleaned_data['file']
+            for key,value in enumerate(file.items()):
+                print(f"file[{key}] = {value}")
             file_name = file.file_name
             file_size = file.file_size
             print(f"upload_file(), (cleaned) file_name = {file_name}, file_size ={file_size}")
