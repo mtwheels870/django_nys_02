@@ -20,7 +20,7 @@ class TextFile(models.Model):
     file_size = models.IntegerField("File Size (bytes)", null=True)
     time_uploaded = models.DateTimeField(null=True)
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
-    body = models.OneToOneField(Document, on_delete=models.CASCADE)
+    body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)
     short_name = None
 
     @property
