@@ -1,10 +1,10 @@
+{% extends 'kg_train/file_base.html' %}
+
+{% block title %}GISA | Compass Blue KGs | File Upload{% endblock title %}
+{% block description %}Description here {% endblock description %}
+
+{% block content %}
 <!doctype html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
-    <title>Upload New File</title>
-  </head>
-  <body>
     <p>Upload Form:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form method="post" enctype="multipart/form-data">
@@ -12,6 +12,4 @@
         {{ form.as_p }}
         <button type="submit">Submit</button>
     </form>
-  </body>
-</html>
-
+{% endblock content %}

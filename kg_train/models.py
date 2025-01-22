@@ -1,7 +1,10 @@
 import datetime
 from django.db import models
 from django.utils import timezone
+
 from colorfield.fields import ColorField
+
+from prose.models import Document
 
 MAX_DISPLAY_LENGTH = 40
 ELLIPSIS = "..."
@@ -17,6 +20,7 @@ class TextFile(models.Model):
     file_size = models.IntegerField("File Size (bytes)", null=True)
     time_uploaded = models.DateTimeField(null=True)
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
+    body = models.OneToOneField(Document, on_delete=models.CASCADE)
     short_name = None
 
     @property
