@@ -56,4 +56,4 @@ class DetailView(generic.DetailView):
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        return super().get_object(pk=pk)
+        return TextFile.objects.get(pk=pk)
