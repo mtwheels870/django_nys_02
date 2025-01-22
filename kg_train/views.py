@@ -50,7 +50,7 @@ def upload_file(request):
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/upload.html", {"form": form})
 
-class DetailView(generic.DetailView):
+class DetailView(generic.DetailView, pk):
     model = TextFile
     template_name = "kg_train/detail.html"
 
