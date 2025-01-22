@@ -36,7 +36,7 @@ def upload_file(request):
         if form.is_valid():
             # This uses the Form to create an instance (TextFile)
             text_file = form.save()
-            file_name = form.cleaned_data['file_name']
+            file = form.cleaned_data['file']
             print(f"upload_file(), (cleaned) file = {file}")
             # Should overwrite file_name here
             text_file.save()
