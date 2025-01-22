@@ -4,7 +4,7 @@ from django.contrib import admin
 
 import file_picker
 
-from .models import TextFile
+from .models import TextFile, NerLabel
 
 class TextFileForm(forms.ModelForm):
 
