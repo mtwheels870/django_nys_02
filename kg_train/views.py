@@ -34,11 +34,12 @@ def upload_file(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
+            # This uses the Form to create an instance (TextFile)
             text_file = form.save()
+            file_name = form.cleaned_data['file_name']
+            print(f"upload_file(), (cleaned) file_name = {file_name}")
+            # Should overwrite file_name here
             text_file.save()
-            # print(f"upload_file(), after save, id = {text_file.id}")
-            #return render(request, "kg_train/index.html")
-            # return render(request, reverse("app_kg_train:index"))
             return HttpResponseRedirect(reverse("app_kg_train:index"))
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
@@ -64,3 +65,6 @@ class DetailView(generic.DetailView):
         # debug_post(request.POST)
         # form = UploadFileForm(request.POST)
             # print(f"upload_file(), VALID, text_file = {text_file}")
+            # print(f"upload_file(), after save, id = {text_file.id}")
+            #return render(request, "kg_train/index.html")
+            # return render(request, reverse("app_kg_train:index"))
