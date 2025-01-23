@@ -20,7 +20,7 @@ class DocumentSet(models.Model):
     time_uploaded = models.DateTimeField(null=True)
     total_pages = models.IntegerField("Total pages in original", null=True)
 
-class TextFile2(models.Model):
+class TextFile(models.Model):
     doc_set = models.ForeignKey(DocumentSet, on_delete=models.CASCADE)
     file_name = models.CharField("Name (windows / AWS)", max_length=80)
     file = models.FileField(upload_to="uploads/")
