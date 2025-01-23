@@ -32,7 +32,7 @@ def debug_post(dictionary):
     
 # On hitting "upload" button, we end up here
 # Actually, this view handles both GET and POST requests.
-def upload_file(request):
+def upload_folder(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -60,13 +60,13 @@ def upload_file(request):
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/file_upload.html", {"form": form})
 
-class DetailView(generic.DetailView):
-    model = TextFile
+class DocSetDetailView(generic.DetailView):
+    model = DocumentSet
     template_name = "kg_train/file_detail.html"
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        return TextFile.objects.get(pk=pk)
+        return DocumentSet.objects.get(pk=pk)
 
     # print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
         # debug_post(request.POST)

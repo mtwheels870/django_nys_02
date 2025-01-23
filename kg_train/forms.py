@@ -1,8 +1,8 @@
 from django import forms
 
-from .models import TextFile
+from .models import DocumentSet
 
-class UploadFileForm(forms.ModelForm):
+class UploadFolderForm(forms.ModelForm):
     class Meta:
         model = TextFile
         fields = [ 'file', 'file_name', 'status' ]

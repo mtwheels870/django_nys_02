@@ -9,12 +9,10 @@ urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
 
     # To upload a new file to the server (GET and POST)
-    path("upload/", views.upload_file, name="upload_file"),
+    path("upload/", views.upload_folder, name="upload_folder"),
 
     # To view an individual file details (and start labeling)
-    path("<int:pk>/", views.DetailView.as_view(), name="detail"),
-
-    path("<int:pk>/", views.DetailView.as_view(), name="detail"),
+    path("<int:pk>/", views.DocSetDetailView.as_view(), name="detail"),
 
     path("<int:pk>/edit/", views.edit_file, name="edit_file"),
 
