@@ -8,7 +8,7 @@ from prose.models import Document
 
 MAX_DISPLAY_LENGTH = 40
 ELLIPSIS = "..."
-INITIAL_PATH="/home/mtwheels66/AWS_Dev/RedBooks"
+INITIAL_PATH="/home/bitnami/cb"
 
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
