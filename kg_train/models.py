@@ -8,6 +8,7 @@ from prose.models import Document
 
 MAX_DISPLAY_LENGTH = 40
 ELLIPSIS = "..."
+INITIAL_PATH="/home/mtwheels66/AWS_Dev/RedBooks"
 
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
@@ -16,7 +17,7 @@ class TextFileStatus(models.Model):
 
 class TextFolder(models.Model):
     file_name = models.CharField("Name (windows / AWS)", max_length=80)
-    folder = models.FilePathField("Folder", allow_files=False, allow_folders=True)
+    folder = models.FilePathField("Folder", path=INITIAL_PATH, allow_files=False, allow_folders=True)
     time_uploaded = models.DateTimeField(null=True)
     total_pages = models.IntegerField("Total pages in original", null=True)
 
