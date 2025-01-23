@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from prose.models import Document
 
-from .models import TextFileStatus, TextFile
+from .models import TextFileStatus, TextFile, DocumentSet
 from .forms import UploadFolderForm
 
 class IndexView(generic.ListView):
