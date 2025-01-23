@@ -9,11 +9,11 @@ from django.utils import timezone
 
 from prose.models import Document
 
-from .models import TextFileStatus, TextFile, DocumentSet
+from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
 
 class IndexView(generic.ListView):
-    template_name = "kg_train/file_index.html"
+    template_name = "kg_train/folder_index.html"
     context_object_name = "uploaded_files_list"
 
     def get_queryset(self):
@@ -54,15 +54,15 @@ def upload_folder(request):
     else:
         form = UploadFolderForm()
         # This will fall through to the following with an empty form to be populated
-    return render(request, "kg_train/file_upload.html", {"form": form})
+    return render(request, "kg_train/folder_upload.html", {"form": form})
 
-class DocSetDetailView(generic.DetailView):
-    model = DocumentSet
-    template_name = "kg_train/file_detail.html"
+class TextFolderDetailView(generic.DetailView):
+    model = TextFolder
+    template_name = "kg_train/folder_detail.html"
 
     def get_object(self):
         pk = self.kwargs.get('pk')
-        return DocumentSet.objects.get(pk=pk)
+        return TextFolder.objects.get(pk=pk)
 
     # print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
         # debug_post(request.POST)

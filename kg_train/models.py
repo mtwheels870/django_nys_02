@@ -14,14 +14,14 @@ class TextFileStatus(models.Model):
     def __str__(self):
         return f"{self.id}: {self.description}"
 
-class DocumentSet(models.Model):
+class TextFolder(models.Model):
     file_name = models.CharField("Name (windows / AWS)", max_length=80)
-    file = models.FileField("Folder", upload_to="uploads/")
+    folder = models.FileField("Folder", upload_to="uploads/")
     time_uploaded = models.DateTimeField(null=True)
     total_pages = models.IntegerField("Total pages in original", null=True)
 
 class TextFile(models.Model):
-    doc_set = models.ForeignKey(DocumentSet, on_delete=models.CASCADE)
+    folder = models.ForeignKey(TextFolder, on_delete=models.CASCADE)
     file_name = models.CharField("Name (windows / AWS)", max_length=80)
     file = models.FileField(upload_to="uploads/")
     file_size = models.IntegerField("File Size (bytes)", null=True)
