@@ -14,12 +14,12 @@ from .forms import UploadFolderForm
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
-    context_object_name = "uploaded_files_list"
+    context_object_name = "uploaded_folders_list"
 
     def get_queryset(self):
         """ Return the last five published questions."""
         # return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded")[:20]
-        return TextFile.objects.all()
+        return TextFolder.objects.all()
 
 # Start the form on this view
 #class StartForm(FormView):
