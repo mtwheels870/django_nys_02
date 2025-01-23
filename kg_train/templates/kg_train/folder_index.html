@@ -4,10 +4,10 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
-    <title>Files uploaded to GISA</title>
+    <title>Folders uploaded to GISA</title>
   </head>
   <body>
-    <p>Uploaded files and status:</p>
+    <p>Uploaded folders (and their files) and status:</p>
     {% if uploaded_files_list %}
         <ul>
         {% for file in uploaded_files_list %}
@@ -19,7 +19,7 @@
         <p>No files in database.</p>
     {% endif %}
     {% block content %}
-        <form method="get" action="{% url 'app_kg_train:upload_file' %}">
+        <form method="get" action="{% url 'app_kg_train:upload_folder' %}">
             {% csrf_token %}
             <button type="submit">Add New</button>
         </form>
