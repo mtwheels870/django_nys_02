@@ -17,7 +17,7 @@ class TextFileStatus(models.Model):
 
 class TextFolder(models.Model):
     file_name = models.CharField("Name (windows / AWS)", max_length=80)
-    folder = models.FilePathField("Folder", path=INITIAL_PATH, allow_files=False, allow_folders=True)
+    folder = models.FilePathField(path=INITIAL_PATH, allow_folders=True)
     time_uploaded = models.DateTimeField(null=True)
     total_pages = models.IntegerField("Total pages in original", null=True)
 
