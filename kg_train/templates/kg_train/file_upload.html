@@ -1,11 +1,11 @@
 {% extends 'kg_train/file_base.html' %}
 
-{% block title %}GISA | Compass Blue KGs | File Upload{% endblock title %}
+{% block title %}GISA | Compass Blue KGs | Folder Upload{% endblock title %}
 {% block description %}Description here {% endblock description %}
 
 {% block content %}
 <!doctype html>
-    <p>Upload Form:</p>
+    <p>Upload Folder Form:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

@@ -16,7 +16,7 @@ class TextFileStatus(models.Model):
 
 class DocumentSet(models.Model):
     file_name = models.CharField("Name (windows / AWS)", max_length=80)
-    file = models.FileField(upload_to="uploads/")
+    file = models.FileField("Folder", upload_to="uploads/")
     time_uploaded = models.DateTimeField(null=True)
     total_pages = models.IntegerField("Total pages in original", null=True)
 

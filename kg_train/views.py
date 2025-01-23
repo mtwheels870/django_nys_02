@@ -10,7 +10,7 @@ from django.utils import timezone
 from prose.models import Document
 
 from .models import TextFileStatus, TextFile
-from .forms import UploadFileForm
+from .forms import UploadFolderForm
 
 class IndexView(generic.ListView):
     template_name = "kg_train/file_index.html"
@@ -34,7 +34,7 @@ def debug_post(dictionary):
 # Actually, this view handles both GET and POST requests.
 def upload_folder(request):
     if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
+        form = UploadFolderForm(request.POST, request.FILES)
         if form.is_valid():
             # This uses the Form to create an instance (TextFile)
             text_file = form.save()
@@ -52,11 +52,7 @@ def upload_folder(request):
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
     else:
-        initial_data = {
-            'file_name' : "(Extracted from file name)",
-            'status' : 1
-        }
-        form = UploadFileForm(initial=initial_data)
+        form = UploadFolderForm()
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/file_upload.html", {"form": form})
 
@@ -70,7 +66,7 @@ class DocSetDetailView(generic.DetailView):
 
     # print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
         # debug_post(request.POST)
-        # form = UploadFileForm(request.POST)
+        # form = UploadFolderForm(request.POST)
             # print(f"upload_file(), VALID, text_file = {text_file}")
             # print(f"upload_file(), after save, id = {text_file.id}")
             #return render(request, "kg_train/index.html")
