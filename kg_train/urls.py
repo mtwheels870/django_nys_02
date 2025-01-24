@@ -17,7 +17,7 @@ urlpatterns = [
     path("<int:folder_id>/edit/", views.edit_file, name="edit_file"),
 
     # This breaks out to our editor
-    path("/prose/", include("prose.urls"), name="prose"),
+    path("prose/attachment/", include("prose.urls"), name="prose"),
 
     # ex: /tutorial/5/
 ]
