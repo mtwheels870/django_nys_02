@@ -5,4 +5,4 @@ from .models import TextFolder
 class UploadFolderForm(forms.ModelForm):
     class Meta:
         model = TextFolder
-        fields = [ 'folder' ]
+        fields = [ 'input_path' ]
