@@ -122,15 +122,15 @@ class TextFolderDetailView(SingleTableView):
 #        print(f"TFDV.get_object(), pk = {pk}")
 #        return TextFolder.objects.get(pk=pk)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        print(f"TFDV.get_context_data(), qs = {self.queryset}")
-            # This would work, but we're not in a DetailView
-        context['table'] = TextFileTable(self.queryset)
-        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
-        # Use pk to access the object or do other operations
-        # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
-        return context
+#    def get_context_data(self, **kwargs):
+#        context = super().get_context_data(**kwargs)
+#        print(f"TFDV.get_context_data(), qs = {self.queryset}")
+#            # This would work, but we're not in a DetailView
+#        context['table'] = TextFileTable(self.queryset)
+#        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
+#        # Use pk to access the object or do other operations
+#        # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
+#        return context
 
 def edit_file(request, pk):
     text_file = get_object_or_404(TextFile, pk=pk)
