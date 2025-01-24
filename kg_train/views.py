@@ -16,7 +16,7 @@ import django_tables2 as tables
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
-from .tables import PageTable
+from .tables import TextFileTable
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
