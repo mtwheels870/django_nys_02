@@ -16,6 +16,7 @@ import django_tables2 as tables
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
+from .tables import PageTable
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
@@ -103,15 +104,9 @@ def upload_folder(request):
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/folder_upload.html", {"form": form})
 
-class PageTable(tables.Table):
-    class Meta:
-        model = TextFile
-        template_name = "django_tables2/bootstrap.html"
-        fields = ["page_number", "file_name", "file_size", "status", "body"]
-
 class TextFolderDetailView(generic.DetailView):
     model = TextFolder
-    table_class = PageTable
+    table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
 
     def get_object(self):
