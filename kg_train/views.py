@@ -38,7 +38,7 @@ def read_directory(directory_path):
     pattern = r"(\w+)@(\w+)\.(\w+)"
     path = pathlib.PurePath(directory_path)
     directory_name = path.name
-    print(f"read_directory(), directory_name = {directory_name}")
+    print(f"read_directory(), path = {directory_path}, directory_name = {directory_name}")
     files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
     for file in files:
         name = file.name
