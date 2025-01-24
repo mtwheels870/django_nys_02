@@ -17,7 +17,7 @@ from prose.models import Document
 from django_tables2 import SingleTableView
 
 from .models import TextFileStatus, TextFile, TextFolder
-from .forms import UploadFolderForm
+from .forms import UploadFolderForm, EditForm
 from .tables import TextFileTable
 
 class IndexView(generic.ListView):

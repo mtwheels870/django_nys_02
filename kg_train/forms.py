@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import TextFolder
+from .models import TextFolder, TextFile
 
 class UploadFolderForm(forms.ModelForm):
     class Meta:
