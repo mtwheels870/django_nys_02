@@ -9,7 +9,7 @@
   <body>
     <h3>Pages:</h3>
     {% render_table table %}
-    <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="post">
+    <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
         {% csrf_token %}
         <button type="submit">Edit</button>
     </form>
