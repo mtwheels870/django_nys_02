@@ -114,7 +114,8 @@ class TextFolderDetailView(SingleTableView):
     def get_queryset(self):
         folder_id = self.kwargs.get('folder_id')
         print(f"TFDV.get_qs(), folder_id = {folder_id}")
-        return TextFile.objects.get(folder_id=folder_id)
+        return TextFile.objects.filter(folder_id__eq=folder_id).order_by("page_number")
+        # return TextFile.objects.get(folder_id=folder_id)
 
     # MTW: This should happen "for free" (somewhere in the bowels of the views)
 #    def get_object(self):
