@@ -13,7 +13,8 @@ INITIAL_PATH="/home/bitnami/cb"
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
     def __str__(self):
-        return f"{self.id}: {self.description}"
+        return self.description
+        # return f"{self.id}: {self.description}"
 
 class TextFolder(models.Model):
     folder_name = models.CharField("Folder name (original PDF file)", max_length=40)
