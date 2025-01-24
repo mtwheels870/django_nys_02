@@ -30,15 +30,49 @@ def debug_post(dictionary):
         value = dictionary[key]
         print(f"d_p(), key[{index}]: {key} = {value}")
     
+# Returns a dictionary of: path : page number
+def read_directory(directory_path):
+    page_files = {}
+    pattern = r"(\w+)@(\w+)\.(\w+)"
+    directory_name = os.path.basename(directory_path)
+    print(f"read_directory(), directory_name = {directory_name}")
+    files = [f for f in os.listdir(directory) if f.endswith(".txt")]
+    for file in files:
+        name = file.name
+        match = re.search(pattern, name)
+        if match:
+            print(f"read_directory(), name: {name} matched")
+            page_file[name] = 23
+
+    return page_files
+
+def read_page_files(text_folder, page_files):
+    for i, key in enumerate(page_files):
+        page_number = page_files[key]
+        print(f"r_p_f(), page[{key}] = {page_number}")
+
 # On hitting "upload" button, we end up here
 # Actually, this view handles both GET and POST requests.
 def upload_folder(request):
     if request.method == "POST":
-        form = UploadFolderForm(request.POST, request.FILES)
+        # form = UploadFolderForm(request.POST, request.FILES)
+        form = UploadFolderForm(request.POST)
         if form.is_valid():
             # This uses the Form to create an instance (TextFile)
-            text_file = form.save()
-            file = form.cleaned_data['file']
+            text_folder = form.save()
+            directory_path = form.cleaned_data['input_path']
+            page_files = read_directory(directory_path)
+            text_folder.time_uploaded = timezone.now()
+            text_folder.total_pages = len(page_files)
+            text_folder.save()
+            print(f"upload_file(), path = {directory_path}, num_pages = {text_folder.total_pages}")
+
+            # Now, read the individual pages
+            read_page_files(text_folder, page_files)
+kk
+    time_uploaded = models.DateTimeField(null=True)
+    total_pages = models.IntegerField("Total pages in original", null=True)
+        fields = [ '' ]
             text_file.file_name = file.name
             text_file.file_size = file.size
             file_content = str(text_file.file.read())
