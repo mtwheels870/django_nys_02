@@ -111,6 +111,11 @@ class TextFolderDetailView(SingleTableView):
     table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
 
+    def get_queryset(self):
+        folder_id = self.kwargs.get('folder_id')
+        print(f"TFDV.get_qs(), folder_id = {folder_id}")
+        return TextFile.objects.get(folder_id=folder_id)
+
     # MTW: This should happen "for free" (somewhere in the bowels of the views)
 #    def get_object(self):
 #        pk = self.kwargs.get('pk')
@@ -119,8 +124,7 @@ class TextFolderDetailView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if not hasattr(self, "object"):
-            print(f"TFDV.get_context_data(), invoking get_object()")
+        print(f"TFDV.get_context_data(), invoking get_object()")
             # This would work, but we're not in a DetailView
             self.object = super(generic.DetailView, self).get_object()
         print(f"TFDV.get_context_data(), object = {self.object}")
