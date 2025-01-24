@@ -124,12 +124,9 @@ class TextFolderDetailView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(f"TFDV.get_context_data(), invoking get_object()")
+        print(f"TFDV.get_context_data(), qs = {self.queryset}")
             # This would work, but we're not in a DetailView
-            self.object = super(generic.DetailView, self).get_object()
-        print(f"TFDV.get_context_data(), object = {self.object}")
-        child_objects = self.object.textfile_set.all()
-        context['child_table'] = TextFileTable(child_objects)
+        context['table'] = TextFileTable(self.queryset)
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
         # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
