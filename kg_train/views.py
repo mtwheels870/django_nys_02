@@ -118,7 +118,7 @@ class TextFolderDetailView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if not self.object:
+        if not hasattr(self, object):
             print(f"TFDV.get_context_data(), invoking get_object()")
             self.object = self.get_object()
         print(f"TFDV.get_context_data(), object = {self.object}")
