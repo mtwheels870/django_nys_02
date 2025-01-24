@@ -44,7 +44,7 @@ class TextFile(models.Model):
     file_size = models.IntegerField("File Size (bytes)", null=True)
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     # body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)
-    prose_editor = ProseEditorField("text", preset="announcements")
+    stuff = ProseEditorField("stuff01", preset="announcements")
 
     def __str__(self):
         return self.display_name()

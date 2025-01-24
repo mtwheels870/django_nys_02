@@ -14,4 +14,4 @@ class EditForm(forms.ModelForm):
         fields = [ 'file_name' ]
 
 class EditorForm(forms.Form):
-    text = ProseEditorFormField()
+    stuff02 = ProseEditorFormField()
