@@ -106,7 +106,8 @@ def upload_folder(request):
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/folder_upload.html", {"form": form})
 
-class TextFolderDetailView(SingleTableView):
+# class TextFolderDetailView(SingleTableView):
+class TextFolderDetailView(DetailView):
     model = TextFolder
     table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
@@ -121,7 +122,7 @@ class TextFolderDetailView(SingleTableView):
         context = super().get_context_data(**kwargs)
         if not hasattr(self, "object"):
             print(f"TFDV.get_context_data(), invoking get_object()")
-            # self.object = self.get_object()
+            # This would work, but we're not in a DetailView
             self.object = super(generic.DetailView, self).get_object()
         print(f"TFDV.get_context_data(), object = {self.object}")
         child_objects = self.object.textfile_set.all()
