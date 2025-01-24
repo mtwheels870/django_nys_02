@@ -55,7 +55,7 @@ def read_directory(directory_path):
                 if new_max != max_page_num:
                     print(f"WARNING! Previous max = {max_page_num}, new max = {new_max}")
             print(f"read_directory(), name: {file_name} matched, page = {page_num}")
-            page_file[name] = page_num
+            page_files[name] = page_num
     return page_files, max_page_num
 
 def read_page_files(text_folder, page_files):
