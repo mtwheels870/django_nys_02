@@ -120,6 +120,7 @@ class TextFolderDetailView(SingleTableView):
         # Use pk to access the object or do other operations
         # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
         context['folder_id'] = self.folder_id
+        print(f"TFDW.get_context_data(), folder_id = {self.folder_id}")
         return context
 
     def get_queryset(self):
