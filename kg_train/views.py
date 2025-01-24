@@ -35,15 +35,14 @@ def debug_post(dictionary):
 # Returns a dictionary of: path : page number
 def read_directory(directory_path):
     page_files = {}
-    pattern = r"(\w+)@(\w+)\.(\w+)"
+    pattern = r"(\d+)_(\d+)\.txt"
     path = pathlib.PurePath(directory_path)
     directory_name = path.name
     print(f"read_directory(), path = {directory_path}, directory_name = {directory_name}")
     files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
-    for file in files:
-        name = file.name
-        print(f"read_directory(), checking file name {name}")
-        match = re.search(pattern, name)
+    for file_name in files:
+        print(f"read_directory(), checking file name {file_name}")
+        match = re.search(pattern, file_name)
         if match:
             print(f"read_directory(), name: {name} matched")
             page_file[name] = 23
