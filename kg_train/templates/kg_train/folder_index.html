@@ -12,7 +12,8 @@
         <ul>
         {% for folder in uploaded_folders_list %}
             <!-- MTW, note, this uses app_name=nys below -->
-            <li><a href="{% url 'app_kg_train:detail' folder.id %}">{{folder.id}}: {{ folder }} ({{folder.pages_db}} pages in db</a></li>
+            <li><a href="{% url 'app_kg_train:detail' folder.id %}">
+                {{folder.id}}: {{ folder }} ({{folder.pages_db}} pages in db)</a></li>
         {% endfor %}
         </ul>
     {% else %}
