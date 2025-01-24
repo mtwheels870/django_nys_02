@@ -10,7 +10,7 @@
     <h2>Folder: {{ textfolder.folder_name }}</h2>
     <h3>Num Pages: {{ textfolder.pages_db }}</h3>
     <h3>Pages:</h3>
-    {% render_table table %}
+    {% render_table textfolder.table %}
     <p>Form here:</p>
   </body>
 </html>
