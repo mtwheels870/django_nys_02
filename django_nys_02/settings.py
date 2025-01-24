@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'kg_admin.apps.KgAdminConfig',
     'kg_train.apps.KgTrainConfig',
     'colorfield',
-    'prose',                    # Text Editor
+    'prose_prose_editor',       # Text Editor
     'django_tables2',           # Tables
 ]
 
