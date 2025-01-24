@@ -136,5 +136,5 @@ def edit_file(request, folder_id):
     initial_content = "Four score and seven years ago, our faathers brought forth upon this continent"
     # folder = get_object_or_404(TextFolder, pk=folder_id)
     print(f"initial_content:\n{initial_content}")
-    return render(request, reverse("app_kg_train:prose"), {"content": initial_content})
+    return render(request, "/kg_train/prose/attachment/", {"content": initial_content})
 
