@@ -1,4 +1,5 @@
 import os
+import pathlib
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -35,11 +36,13 @@ def debug_post(dictionary):
 def read_directory(directory_path):
     page_files = {}
     pattern = r"(\w+)@(\w+)\.(\w+)"
-    directory_name = os.path.basename(directory_path)
+    path = pathlib.PurePath(directory_path)
+    directory_name = path.name
     print(f"read_directory(), directory_name = {directory_name}")
     files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
     for file in files:
         name = file.name
+        print(f"read_directory(), checking file name {name}")
         match = re.search(pattern, name)
         if match:
             print(f"read_directory(), name: {name} matched")
