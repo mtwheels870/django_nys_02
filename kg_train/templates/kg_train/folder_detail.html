@@ -8,7 +8,6 @@
   </head>
   <body>
     <h3>Pages:</h3>
-    <!-- % render_table textfolder.table % -->
     {% render_table table %}
     <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="post">
         {% csrf_token %}

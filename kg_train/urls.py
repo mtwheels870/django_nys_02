@@ -14,7 +14,7 @@ urlpatterns = [
     # To view an individual file details (and start labeling)
     path("<int:folder_id>/", views.TextFolderDetailView.as_view(), name="detail"),
 
-    path("<table>/edit/", views.edit_file, name="edit_file"),
+    path("<int:folder_id>/edit/", views.edit_file, name="edit_file"),
 
     # This breaks out to our editor
     path("<int:pk>/edit/prose/", include("prose.urls"), name="prose"),
