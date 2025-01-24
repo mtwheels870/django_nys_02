@@ -4,13 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <title>Details for single folder </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
   </head>
   <body>
     <h2>Folder: {{ textfolder.folder_name }}</h2>
     <h3>Num Pages: {{ textfolder.pages_db }}</h3>
     <h3>Pages:</h3>
-    {% render_table textfolder.textfile_set.all %}
-    <!-- div>{{ textfile.body.content | safe }}</div -->
+    {% render_table table %}
     <p>Form here:</p>
   </body>
 </html>

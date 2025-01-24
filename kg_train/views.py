@@ -12,6 +12,7 @@ from django.views.generic.edit import FormView
 from django.utils import timezone
 
 from prose.models import Document
+import django_tables2 as tables
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
@@ -102,21 +103,20 @@ def upload_folder(request):
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/folder_upload.html", {"form": form})
 
+class PageTable(tables.Table):
+    class Meta:
+        model = TextFile
+        template_name = "django_tables2/bootstrap.html"
+        fields = ["page_number", "file_name", "file_size", "status", "body"]
+
 class TextFolderDetailView(generic.DetailView):
     model = TextFolder
+    table_class = PageTable
     template_name = "kg_train/folder_detail.html"
 
     def get_object(self):
         pk = self.kwargs.get('pk')
         return TextFolder.objects.get(pk=pk)
-
-    # print(f"upload_file(), request.method = {request.method}, files: {request.FILES}")
-        # debug_post(request.POST)
-        # form = UploadFolderForm(request.POST)
-            # print(f"upload_file(), VALID, text_file = {text_file}")
-            # print(f"upload_file(), after save, id = {text_file.id}")
-            #return render(request, "kg_train/index.html")
-            # return render(request, reverse("app_kg_train:index"))
 
 def edit_file(request, pk):
     text_file = get_object_or_404(TextFile, pk=pk)
@@ -125,14 +125,3 @@ def edit_file(request, pk):
     print(f"initial_content:\n{initial_content}")
     return render(request, reverse("app_kg_train:prose"), {"content": file_content})
 
-#    time_uploaded = models.DateTimeField(null=True)
-#    total_pages = models.IntegerField("Total pages in original", null=True)
-#        fields = [ '' ]
-#            text_file.file_name = file.name
-#            text_file.file_size = file.size
-#            file_content = str(text_file.file.read())
-#            print(f"upload_file(), (cleaned) file_name = {file.name}, file_size ={file.size}")
-#            body_document = Document.objects.create(content=file_content)
-#            text_file.body = body_document
-#            # Should overwrite file_name here
-#            text_file.save()
