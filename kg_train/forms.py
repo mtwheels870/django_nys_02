@@ -5,12 +5,6 @@ from js_asset import JS
 
 from .models import TextFolder, TextFile
 
-DJANGO_PROSE_EDITOR_PRESETS = {
-    "announcements": [
-        JS("prose-editors/announcements.js", {"defer": True}),
-    ],
-}
-
 class UploadFolderForm(forms.ModelForm):
     class Meta:
         model = TextFolder
@@ -22,4 +16,4 @@ class EditForm(forms.ModelForm):
         fields = [ 'file_name' ]
 
 class EditorForm(forms.Form):
-    text = ProseEditorFormField("text", preset="announcements")
+    text = ProseEditorFormField()

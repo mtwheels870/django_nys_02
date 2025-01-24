@@ -11,6 +11,12 @@ MAX_DISPLAY_LENGTH = 40
 ELLIPSIS = "..."
 INITIAL_PATH="/home/bitnami/cb"
 
+DJANGO_PROSE_EDITOR_PRESETS = {
+    "announcements": [
+        JS("prose-editors/announcements.js", {"defer": True}),
+    ],
+}
+
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 
     def __str__(self):
@@ -36,7 +42,7 @@ class TextFile(models.Model):
     file_size = models.IntegerField("File Size (bytes)", null=True)
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     # body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)
-    prose_editor = ProseEditorField("Editor")
+    prose_editor = ProseEditorField(_("text"), preset="announcements")
 
     def __str__(self):
         return self.display_name()
