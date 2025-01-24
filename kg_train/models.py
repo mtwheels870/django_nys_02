@@ -2,6 +2,8 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
+from js_asset import JS
+
 from colorfield.fields import ColorField
 
 # from prose.models import Document

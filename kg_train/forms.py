@@ -1,8 +1,6 @@
 from django import forms
 from django_prose_editor.fields import ProseEditorFormField
 
-from js_asset import JS
-
 from .models import TextFolder, TextFile
 
 class UploadFolderForm(forms.ModelForm):
