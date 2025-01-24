@@ -53,7 +53,7 @@ def read_directory(directory_path):
             else:
                 new_max = int(match.group(2))
                 if new_max != max_page_num:
-                    print(f"WARNING! Previous max = {max_page_num}, new max = {new_max}"
+                    print(f"WARNING! Previous max = {max_page_num}, new max = {new_max}")
             print(f"read_directory(), name: {file_name} matched, page = {page_num}")
             page_file[name] = page_num
     return page_files, max_page_num
