@@ -113,25 +113,7 @@ class TextFolderDetailView(SingleTableView):
 
     def get_queryset(self):
         folder_id = self.kwargs.get('folder_id')
-        print(f"TFDV.get_qs(), folder_id = {folder_id}")
         return TextFile.objects.filter(folder_id=folder_id).order_by("page_number")
-        # return TextFile.objects.get(folder_id=folder_id)
-
-    # MTW: This should happen "for free" (somewhere in the bowels of the views)
-#    def get_object(self):
-#        pk = self.kwargs.get('pk')
-#        print(f"TFDV.get_object(), pk = {pk}")
-#        return TextFolder.objects.get(pk=pk)
-
-#    def get_context_data(self, **kwargs):
-#        context = super().get_context_data(**kwargs)
-#        print(f"TFDV.get_context_data(), qs = {self.queryset}")
-#            # This would work, but we're not in a DetailView
-#        context['table'] = TextFileTable(self.queryset)
-#        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
-#        # Use pk to access the object or do other operations
-#        # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
-#        return context
 
 def edit_file(request, pk):
     text_file = get_object_or_404(TextFile, pk=pk)
