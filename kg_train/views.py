@@ -17,7 +17,7 @@ from django.utils import timezone
 from django_tables2 import SingleTableView
 
 from .models import TextFileStatus, TextFile, TextFolder
-from .forms import UploadFolderForm, EditForm
+from .forms import UploadFolderForm, EditorForm
 from .tables import TextFileTable
 
 class IndexView(generic.ListView):
