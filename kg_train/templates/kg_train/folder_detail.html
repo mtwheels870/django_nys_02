@@ -1,4 +1,5 @@
 <!doctype html>
+{% load render_table from django_tables2 %}
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
@@ -8,9 +9,7 @@
     <h2>Folder: {{ textfolder.folder_name }}</h2>
     <h3>Num Pages: {{ textfolder.pages_db }}</h3>
     <h3>Pages:</h3>
-    {% for page in textfolder.textfile_set.all %}
-        <li>{{ page.file_name }}</li>
-    {% endfor %}
+    {% render_table textfolder.textfile_set.all %}
     <!-- div>{{ textfile.body.content | safe }}</div -->
     <p>Form here:</p>
   </body>
