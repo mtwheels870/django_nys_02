@@ -41,7 +41,7 @@ class TextFileAdmin(admin.ModelAdmin):
     class Media:
         js = ("http://cdn.jquerytools.org/1.2.5/full/jquery.tools.min.js",)
 
-admin.site.register(TextFile, TextFileAdmin)
+# admin.site.register(TextFile, TextFileAdmin)
 
 # Don't need a custom admin for this one
 admin.site.register(NerLabel)
