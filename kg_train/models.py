@@ -25,7 +25,7 @@ class TextFile(models.Model):
     folder = models.ForeignKey(TextFolder, on_delete=models.CASCADE)
     file_name = models.CharField("Name (windows / AWS)", max_length=80)
     page_number = models.IntegerField("Page Number")
-    file = models.FileField(upload_to="uploads/")
+    # file = models.FileField(upload_to="uploads/")
     file_size = models.IntegerField("File Size (bytes)", null=True)
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)

@@ -41,10 +41,10 @@ def read_directory(directory_path):
     path = pathlib.PurePath(directory_path)
     directory_name = path.name
     max_page_num = None
-    print(f"read_directory(), path = {directory_path}, directory_name = {directory_name}")
+    # print(f"read_directory(), path = {directory_path}, directory_name = {directory_name}")
     files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
     for file_name in files:
-        print(f"read_directory(), checking file name {file_name}")
+        # print(f"read_directory(), checking file name {file_name}")
         match = re.search(pattern, file_name)
         if match:
             page_num = int(match.group(1))
@@ -54,14 +54,24 @@ def read_directory(directory_path):
                 new_max = int(match.group(2))
                 if new_max != max_page_num:
                     print(f"WARNING! Previous max = {max_page_num}, new max = {new_max}")
-            print(f"read_directory(), name: {file_name} matched, page = {page_num}")
+            # print(f"read_directory(), name: {file_name} matched, page = {page_num}")
             page_files[file_name] = page_num
     return page_files, max_page_num
 
-def read_page_files(text_folder, page_files):
+def read_page_files(text_folder, directory_path, page_files):
+    initial_status = TextFileStatus.objects.get(pk=1)
     for i, key in enumerate(page_files):
         page_number = page_files[key]
         print(f"r_p_f(), page[{key}] = {page_number}")
+        full_path = os.join(directory_path, key)
+        file_content = str(full_path.read())
+        file_size = len(file_content)
+        body_document = Document.objects.create(content=file_content)
+        text_file = TextFile(folder=text_folder, file_name=key, page_number=page_number,
+            file_size=file_size, status=initial_status, body=body_document)
+        text_file.save()
+#            # Should overwrite file_name here
+#            text_file.save()
 
 # On hitting "upload" button, we end up here
 # Actually, this view handles both GET and POST requests.
@@ -77,10 +87,10 @@ def upload_folder(request):
             text_folder.time_uploaded = timezone.now()
             text_folder.total_pages = len(page_files)
             text_folder.save()
-            print(f"upload_file(), path = {directory_path}, num_pages = {text_folder.total_pages}, max_page = {max_page_num}")
+            print(f"u_f(), path = {directory_path}, num_pages = {text_folder.total_pages}, max_page = {max_page_num}")
 
             # Now, read the individual pages
-            read_page_files(text_folder, page_files)
+            read_page_files(text_folder, directory_path, page_files)
             return HttpResponseRedirect(reverse("app_kg_train:index"))
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
