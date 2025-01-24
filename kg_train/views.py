@@ -91,7 +91,7 @@ def upload_folder(request):
             text_folder.pages_original = max_page_num
             text_folder.pages_db = len(page_files)
             text_folder.save()
-            print(f"u_f(), path = {directory_path}, num_pages = {text_folder.total_pages}, max_page = {max_page_num}")
+            print(f"u_f(), path = {directory_path}, num_pages = {text_folder.pages_db}, max_page = {max_page_num}")
 
             # Now, read the individual pages
             read_page_files(text_folder, directory_path, page_files)
