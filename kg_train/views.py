@@ -142,5 +142,6 @@ def edit_file(request, folder_id):
     # else, we're == GET
     else:
         form = EditorForm(stuff02="Four Score and Seven Years ago, our fathers brought forth upon this continent")
+        print(f"Before render, form = {form}")
         # This will fall through to the following with an empty form to be populated
-    return render(request, "kg_train/file_edit.html", {"form": form})
+    return render(request, "kg_train/file_edit.html", {"form": form, "stuff02" : "more stuff here"})
