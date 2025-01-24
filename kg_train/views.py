@@ -107,7 +107,7 @@ def upload_folder(request):
     return render(request, "kg_train/folder_upload.html", {"form": form})
 
 # class TextFolderDetailView(SingleTableView):
-class TextFolderDetailView(DetailView):
+class TextFolderDetailView(generic.DetailView):
     model = TextFolder
     table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
