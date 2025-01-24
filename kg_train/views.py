@@ -12,7 +12,7 @@ from django.views.generic.edit import FormView
 
 from django.utils import timezone
 
-from prose.models import Document
+# from prose.models import Document
 # import django_tables2 as tables
 from django_tables2 import SingleTableView
 
