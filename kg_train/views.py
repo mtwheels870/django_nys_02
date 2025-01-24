@@ -128,7 +128,7 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
 def edit_file(request, folder_id):
-    print(f"edit_file(), POST, folder_id = {folder_id}:")
+    print(f"edit_file(), method = {request.method}, folder_id = {folder_id}:")
     if request.method == "POST":
         # form = UploadFolderForm(request.POST, request.FILES)
         form = EditorForm(request.POST)
