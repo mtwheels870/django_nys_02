@@ -114,9 +114,17 @@ class TextFolderDetailView(SingleTableView):
         "per_page": 10
     }
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
+        # Use pk to access the object or do other operations
+        # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
+        context['folder_id'] = self.folder_id
+        return context
+
     def get_queryset(self):
-        folder_id = self.kwargs.get('folder_id')
-        return TextFile.objects.filter(folder_id=folder_id).order_by("page_number")
+        self.folder_id = self.kwargs.get('folder_id')
+        return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
 def edit_file(request, pk):
     text_file = get_object_or_404(TextFile, pk=pk)
