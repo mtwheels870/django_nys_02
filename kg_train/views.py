@@ -62,7 +62,7 @@ def read_page_files(text_folder, directory_path, page_files):
     initial_status = TextFileStatus.objects.get(pk=1)
     for i, key in enumerate(page_files):
         page_number = page_files[key]
-        print(f"r_p_f(), page[{key}] = {page_number}")
+        # print(f"r_p_f(), page[{key}] = {page_number}")
         full_path = os.path.join(directory_path, key)
         with open(full_path, "r") as file_reader:
             file_content = file_reader.read()
@@ -70,10 +70,8 @@ def read_page_files(text_folder, directory_path, page_files):
             body_document = Document.objects.create(content=file_content)
             text_file = TextFile(folder=text_folder, file_name=key, page_number=page_number,
                 file_size=file_size, status=initial_status, body=body_document)
-            print(f"r_p_f(), saving here...")
+            # print(f"r_p_f(), saving page here...")
             text_file.save()
-#            # Should overwrite file_name here
-#            text_file.save()
 
 # On hitting "upload" button, we end up here
 # Actually, this view handles both GET and POST requests.
