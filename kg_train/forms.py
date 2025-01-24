@@ -22,4 +22,4 @@ class EditForm(forms.ModelForm):
         fields = [ 'file_name' ]
 
 class EditorForm(forms.Form):
-    text = ProseEditorFormField(_("text"), preset="announcements")
+    text = ProseEditorFormField("text", preset="announcements")
