@@ -128,10 +128,13 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
 def edit_file(request, table):
-    print(f"edit_file(), table = {table}")
-    folder = get_object_or_404(TextFolder, pk=folder_id)
-    file_content = text_file.file.read()
-    initial_content = file_content[:100]
+    print(f"edit_file(), POST:")
+    for index, key in enumerate(request.POST):
+        value = request.POST[key]
+        print(f"   {index}: [{key}] = {value}")
+    
+    initial_content = "Four score and seven years ago, our faathers brought forth upon this continent"
+    # folder = get_object_or_404(TextFolder, pk=folder_id)
     print(f"initial_content:\n{initial_content}")
     return render(request, reverse("app_kg_train:prose"), {"content": file_content})
 
