@@ -23,7 +23,8 @@ class TextFolder(models.Model):
     pages_original = models.IntegerField("Total pages in original", null=True)
     pages_db = models.IntegerField("Pages in database (to be labeled)", null=True)
     def __str__(self):
-        return f"{self.id}: {self.folder_name} ({self.pages_db} in database)"
+        return self.folder_name
+        # return f"{self.id}: {self.folder_name} ({self.pages_db} in database)"
 
 class TextFile(models.Model):
     folder = models.ForeignKey(TextFolder, on_delete=models.CASCADE)
