@@ -112,10 +112,12 @@ class TextFolderDetailView(SingleTableView):
 
     def get_object(self):
         pk = self.kwargs.get('pk')
+        print(f"TFDV.get_object(), pk = {pk}")
         return TextFolder.objects.get(pk=pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print(f"TFDV.get_context_data(), object = {self.object}")
         child_objects = self.object.textfile_set.all()
         context['child_table'] = TextFileTable(child_objects)
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
