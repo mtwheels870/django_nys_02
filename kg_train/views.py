@@ -110,6 +110,7 @@ class TextFolderDetailView(SingleTableView):
     table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
 
+    # MTW: This should happen "for free" (somewhere in the bowels of the views)
     def get_object(self):
         pk = self.kwargs.get('pk')
         print(f"TFDV.get_object(), pk = {pk}")
@@ -117,6 +118,9 @@ class TextFolderDetailView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        if not self.object:
+            print(f"TFDV.get_context_data(), invoking get_object()")
+            self.object = self.get_object()
         print(f"TFDV.get_context_data(), object = {self.object}")
         child_objects = self.object.textfile_set.all()
         context['child_table'] = TextFileTable(child_objects)
