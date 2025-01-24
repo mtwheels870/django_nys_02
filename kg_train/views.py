@@ -110,6 +110,9 @@ class TextFolderDetailView(SingleTableView):
     model = TextFile
     table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
+    table_pagination = {
+        "per_page": 10
+    }
 
     def get_queryset(self):
         folder_id = self.kwargs.get('folder_id')
