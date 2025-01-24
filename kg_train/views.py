@@ -127,8 +127,9 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
-def edit_file(request, pk):
-    text_file = get_object_or_404(TextFile, pk=pk)
+def edit_file(request, folder_id):
+    print(f"edit_file(), folder_id = {folder_id}")
+    folder = get_object_or_404(TextFolder, pk=folder_id)
     file_content = text_file.file.read()
     initial_content = file_content[:100]
     print(f"initial_content:\n{initial_content}")
