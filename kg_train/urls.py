@@ -12,7 +12,7 @@ urlpatterns = [
     path("upload/", views.upload_folder, name="upload_folder"),
 
     # To view an individual file details (and start labeling)
-    path("<int:pk>/", views.TextFolderDetailView.as_view(), name="detail"),
+    path("<int:folder_id>/", views.TextFolderDetailView.as_view(), name="detail"),
 
     path("<int:pk>/edit/", views.edit_file, name="edit_file"),
 

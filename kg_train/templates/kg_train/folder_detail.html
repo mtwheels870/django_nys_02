@@ -7,11 +7,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
   </head>
   <body>
-    <h2>Folder name: {{ textfolder.folder_name }} </h2>
-    <h3>Num pages in db: {{ textfolder.pages_db }} </h3>
     <h3>Pages:</h3>
     <!-- % render_table textfolder.table % -->
-    {% render_table child_table %}
+    {% render_table table %}
     <p>Form here:</p>
   </body>
 </html>
