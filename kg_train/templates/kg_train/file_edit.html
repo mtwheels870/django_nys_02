@@ -1,16 +1,15 @@
 {% block title %}GISA | Compass Blue KGs | Folder Upload{% endblock title %}
 {% block description %}Description here {% endblock description %}
 
-{% load prose_tags %}
 {% block content %}
 <!doctype html>
     <p>Edit File Form:</p>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form method="post" 
         {% csrf_token %}
+        {{ form.errors }}
         {{ form.media }}
-        {{ form.content }}
-        {{ form.as_p }}
+        {{ form.as_div }}
         <button type="submit">Submit</button>
     </form>
 {% endblock content %}
