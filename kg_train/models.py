@@ -4,7 +4,8 @@ from django.utils import timezone
 
 from colorfield.fields import ColorField
 
-from prose.models import Document
+# from prose.models import Document
+from django_prose_editor.fields import ProseEditorField
 
 MAX_DISPLAY_LENGTH = 40
 ELLIPSIS = "..."
@@ -34,7 +35,8 @@ class TextFile(models.Model):
     # file = models.FileField(upload_to="uploads/")
     file_size = models.IntegerField("File Size (bytes)", null=True)
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
-    body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)
+    # body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)
+    prose_editor = ProseEditorField("Editor", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.display_name()

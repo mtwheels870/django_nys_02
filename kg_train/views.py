@@ -131,7 +131,7 @@ def edit_file(request, folder_id):
     print(f"edit_file(), POST, folder_id = {folder_id}:")
     if request.method == "POST":
         # form = UploadFolderForm(request.POST, request.FILES)
-        form = EditForm(request.POST)
+        form = EditorForm(request.POST)
         if form.is_valid():
             # This uses the Form to create an instance (TextFile)
             text_file = form.save()
@@ -141,6 +141,6 @@ def edit_file(request, folder_id):
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
     else:
-        form = EditForm()
+        form = EditorForm()
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/file_edit.html", {"form": form})
