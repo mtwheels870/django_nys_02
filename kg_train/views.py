@@ -40,16 +40,23 @@ def read_directory(directory_path):
     pattern = r"(\d+)_(\d+)\.txt"
     path = pathlib.PurePath(directory_path)
     directory_name = path.name
+    max_page_num = None
     print(f"read_directory(), path = {directory_path}, directory_name = {directory_name}")
     files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
     for file_name in files:
         print(f"read_directory(), checking file name {file_name}")
         match = re.search(pattern, file_name)
         if match:
-            print(f"read_directory(), name: {name} matched")
-            page_file[name] = 23
-
-    return page_files
+            page_num = int(match.group(1))
+            if not max_page_num:
+                max_page_num = int(match.group(2))
+            else:
+                new_max = int(match.group(2))
+                if new_max != max_page_num:
+                    print(f"WARNING! Previous max = {max_page_num}, new max = {new_max}"
+            print(f"read_directory(), name: {file_name} matched, page = {page_num}")
+            page_file[name] = page_num
+    return page_files, max_page_num
 
 def read_page_files(text_folder, page_files):
     for i, key in enumerate(page_files):
@@ -66,11 +73,11 @@ def upload_folder(request):
             # This uses the Form to create an instance (TextFile)
             text_folder = form.save()
             directory_path = form.cleaned_data['input_path']
-            page_files = read_directory(directory_path)
+            page_files, max_page_num = read_directory(directory_path)
             text_folder.time_uploaded = timezone.now()
             text_folder.total_pages = len(page_files)
             text_folder.save()
-            print(f"upload_file(), path = {directory_path}, num_pages = {text_folder.total_pages}")
+            print(f"upload_file(), path = {directory_path}, num_pages = {text_folder.total_pages}, max_page = {max_page_num}")
 
             # Now, read the individual pages
             read_page_files(text_folder, page_files)
