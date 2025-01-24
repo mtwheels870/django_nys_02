@@ -1,7 +1,15 @@
 from django import forms
 from django_prose_editor.fields import ProseEditorFormField
 
+from js_asset import JS
+
 from .models import TextFolder, TextFile
+
+DJANGO_PROSE_EDITOR_PRESETS = {
+    "announcements": [
+        JS("prose-editors/announcements.js", {"defer": True}),
+    ],
+}
 
 class UploadFolderForm(forms.ModelForm):
     class Meta:
