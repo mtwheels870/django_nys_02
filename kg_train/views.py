@@ -64,12 +64,14 @@ def read_page_files(text_folder, directory_path, page_files):
         page_number = page_files[key]
         print(f"r_p_f(), page[{key}] = {page_number}")
         full_path = os.path.join(directory_path, key)
-        file_content = str(full_path.read())
-        file_size = len(file_content)
-        body_document = Document.objects.create(content=file_content)
-        text_file = TextFile(folder=text_folder, file_name=key, page_number=page_number,
-            file_size=file_size, status=initial_status, body=body_document)
-        text_file.save()
+        with open(full_path, "r") as file_reader;
+            file_content = file_reader.read()
+            file_size = len(file_content)
+            body_document = Document.objects.create(content=file_content)
+            text_file = TextFile(folder=text_folder, file_name=key, page_number=page_number,
+                file_size=file_size, status=initial_status, body=body_document)
+            print(f"r_p_f(), saving here...")
+            text_file.save()
 #            # Should overwrite file_name here
 #            text_file.save()
 
