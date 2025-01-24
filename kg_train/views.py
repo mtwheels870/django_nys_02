@@ -63,7 +63,7 @@ def read_page_files(text_folder, directory_path, page_files):
     for i, key in enumerate(page_files):
         page_number = page_files[key]
         print(f"r_p_f(), page[{key}] = {page_number}")
-        full_path = os.join(directory_path, key)
+        full_path = os.path.join(directory_path, key)
         file_content = str(full_path.read())
         file_size = len(file_content)
         body_document = Document.objects.create(content=file_content)
