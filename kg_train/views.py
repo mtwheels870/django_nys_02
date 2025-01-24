@@ -71,9 +71,9 @@ def read_page_files(text_folder, directory_path, page_files):
         with open(full_path, "r") as file_reader:
             file_content = file_reader.read()
             file_size = len(file_content)
-            body_document = Document.objects.create(content=file_content)
+            # body_document = Document.objects.create(content=file_content)
             text_file = TextFile(folder=text_folder, file_name=key, page_number=page_number,
-                file_size=file_size, status=initial_status, body=body_document)
+                file_size=file_size, status=initial_status, prose_editor=file_content)
             # print(f"r_p_f(), saving page here...")
             text_file.save()
 

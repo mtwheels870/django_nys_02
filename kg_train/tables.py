@@ -7,4 +7,4 @@ class TextFileTable(tables.Table):
     class Meta:
         model = TextFile
         template_name = "django_tables2/bootstrap-responsive.html"
-        fields = ["selection", "page_number", "file_name", "file_size", "status", "body"]
+        fields = ["selection", "page_number", "file_name", "file_size", "status"]
