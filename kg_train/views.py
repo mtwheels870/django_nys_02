@@ -111,10 +111,10 @@ class TextFolderDetailView(SingleTableView):
     template_name = "kg_train/folder_detail.html"
 
     # MTW: This should happen "for free" (somewhere in the bowels of the views)
-    def get_object(self):
-        pk = self.kwargs.get('pk')
-        print(f"TFDV.get_object(), pk = {pk}")
-        return TextFolder.objects.get(pk=pk)
+#    def get_object(self):
+#        pk = self.kwargs.get('pk')
+#        print(f"TFDV.get_object(), pk = {pk}")
+#        return TextFolder.objects.get(pk=pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
