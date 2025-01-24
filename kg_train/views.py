@@ -129,12 +129,18 @@ class TextFolderDetailView(SingleTableView):
 
 def edit_file(request, folder_id):
     print(f"edit_file(), POST, folder_id = {folder_id}:")
-    for index, key in enumerate(request.POST):
-        value = request.POST[key]
-        print(f"   {index}: [{key}] = {value}")
-    
-    initial_content = "Four score and seven years ago, our faathers brought forth upon this continent"
-    # folder = get_object_or_404(TextFolder, pk=folder_id)
-    print(f"initial_content:\n{initial_content}")
-    return render(request, "/kg_train/prose/attachment/", {"content": initial_content})
-
+    if request.method == "POST":
+        # form = UploadFolderForm(request.POST, request.FILES)
+        form = EditForm(request.POST)
+        if form.is_valid():
+            # This uses the Form to create an instance (TextFile)
+            text_file = form.save()
+            text_file.save()
+            return HttpResponseRedirect(reverse("app_kg_train:index"))
+        else:
+            print(f"upload_file(), INVALID, errors = {form.errors}")
+    # else, we're == GET
+    else:
+        form = EditForm()
+        # This will fall through to the following with an empty form to be populated
+    return render(request, "kg_train/file_edit.html", {"form": form})
