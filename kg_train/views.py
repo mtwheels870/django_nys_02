@@ -6,7 +6,8 @@ from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views import generic, SingleObjectMixin
+from django.views import generic
+from django.views.generic import SingleObjectMixin
 from django.views.generic.edit import FormView
 
 from django.utils import timezone
