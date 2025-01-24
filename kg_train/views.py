@@ -122,7 +122,7 @@ class TextFolderDetailView(SingleTableView):
         if not hasattr(self, "object"):
             print(f"TFDV.get_context_data(), invoking get_object()")
             # self.object = self.get_object()
-            self.object = super(generic.SingleObjectMixin, self).get_object()
+            self.object = super(generic.DetailView, self).get_object()
         print(f"TFDV.get_context_data(), object = {self.object}")
         child_objects = self.object.textfile_set.all()
         context['child_table'] = TextFileTable(child_objects)
