@@ -37,7 +37,7 @@ def read_directory(directory_path):
     pattern = r"(\w+)@(\w+)\.(\w+)"
     directory_name = os.path.basename(directory_path)
     print(f"read_directory(), directory_name = {directory_name}")
-    files = [f for f in os.listdir(directory) if f.endswith(".txt")]
+    files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
     for file in files:
         name = file.name
         match = re.search(pattern, name)
