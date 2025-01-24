@@ -56,7 +56,7 @@ def read_directory(directory_path):
                     print(f"WARNING! Previous max = {max_page_num}, new max = {new_max}")
             # print(f"read_directory(), name: {file_name} matched, page = {page_num}")
             page_files[file_name] = page_num
-    return page_files, max_page_num
+    return directory_name, page_files, max_page_num
 
 def read_page_files(text_folder, directory_path, page_files):
     initial_status = TextFileStatus.objects.get(pk=1)
@@ -85,9 +85,11 @@ def upload_folder(request):
             # This uses the Form to create an instance (TextFile)
             text_folder = form.save()
             directory_path = form.cleaned_data['input_path']
-            page_files, max_page_num = read_directory(directory_path)
+            directory_name, page_files, max_page_num = read_directory(directory_path)
+            text_folder.folder_name = directory_name
             text_folder.time_uploaded = timezone.now()
-            text_folder.total_pages = len(page_files)
+            text_folder.pages_original = max_page_num
+            text_folder.pages_db = len(page_files)
             text_folder.save()
             print(f"u_f(), path = {directory_path}, num_pages = {text_folder.total_pages}, max_page = {max_page_num}")
 

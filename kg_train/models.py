@@ -16,10 +16,14 @@ class TextFileStatus(models.Model):
         return f"{self.id}: {self.description}"
 
 class TextFolder(models.Model):
+    folder_name = models.CharField("Folder name (original PDF file)", max_length=40)
     input_path = models.CharField("File Path (as string)", max_length=120)
     # folder = models.FilePathField(path=INITIAL_PATH, allow_folders=True)
     time_uploaded = models.DateTimeField(null=True)
-    total_pages = models.IntegerField("Total pages in original", null=True)
+    pages_original = models.IntegerField("Total pages in original", null=True)
+    pages_db = models.IntegerField("Pages in database (to be labeled)", null=True)
+    def __str__(self):
+        return f"self.folder_name ({self.pages_db} in database)")
 
 class TextFile(models.Model):
     folder = models.ForeignKey(TextFolder, on_delete=models.CASCADE)
