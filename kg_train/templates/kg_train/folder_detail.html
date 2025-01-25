@@ -10,7 +10,16 @@
     <script type='module' defer src="{% static 'kg_train/folder_detail.js'%}" crossorigin=""> </script>
   </head>
   <body>
-    <script>
+    <h3>Pages:</h3>
+    {% render_table table %}
+    <!-- form onsubmit="return checkForSelected();" -->
+    <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
+        <button type="submit">Edit</button>
+    </form>
+  </body>
+</html>
+
+    <!-- script>
         let global_id = 23;
 
         // SHould be global here
@@ -21,12 +30,4 @@
         // Return true to allow the form to submit
         return true;
     }
-    </script>
-    <h3>Pages:</h3>
-    {% render_table table %}
-    <form onsubmit="return checkForSelected();" action="{% url 'app_kg_train:edit_file' global_id %}" method="get">
-        <button type="submit">Edit</button>
-    </form>
-  </body>
-</html>
-
+    </script -->
