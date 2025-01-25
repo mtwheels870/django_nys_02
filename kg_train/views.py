@@ -164,6 +164,7 @@ def edit_file(request, file_id):
         form = EditorForm(initial={'text_editor': initial_text})
         # print(f"Before render, form = {form}")
         # This will fall through to the following with an empty form to be populated
+    print(f"edit_file(), setting up context here")
     context = {"form": form, "file_id": file_id}
     return render(request, "kg_train/file_edit.html", context)
 
