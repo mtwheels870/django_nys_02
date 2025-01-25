@@ -116,13 +116,8 @@ class TextFolderDetailView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
-        # Use pk to access the object or do other operations
-        # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
         context['folder_id'] = self.folder_id
         context['form'] = MyForm()
-        # context['table'] = TextFileTable(self.object_list)
-        # context['form'] = MyForm()
         print(f"TFDW.get_context_data(), folder_id = {self.folder_id}")
         return context
 
@@ -132,15 +127,9 @@ class TextFolderDetailView(SingleTableView):
 
     def post(self, request, *args, **kwargs):
         form = MyForm(request.POST)
-        #table = self.get_table()
-        #print(f"table = {table}")
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            print(f"TFDV.post(), cleaned_data:")
-            for i, key in enumerate(cleaned_data):
-                value = cleaned_data[key]
-                print(f"{i}: [{key}] = {value}")
-            selected_pks = table.getlist('selection')
+            selected_pks = cleaned_data['selection_rows']
             print(f"TFDV.post(), selected_pks = {selected_pks}")
             num_selected = len(selected_pks)
             if num_selected  == 0:
@@ -187,3 +176,7 @@ def edit_file(request, folder_id):
 
 # attrs = dir(form)
 # print(f"attrs: {attrs}")
+#            print(f"TFDV.post(), cleaned_data:")
+#            for i, key in enumerate(cleaned_data):
+#                value = cleaned_data[key]
+#                print(f"{i}: [{key}] = {value}")
