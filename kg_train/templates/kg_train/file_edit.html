@@ -4,8 +4,7 @@
 {% block content %}
 <!doctype html>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
-    <form method="post" enctype="multipart/form-data" 
-        action="{% url 'app_kg_train:edit_file' file_id %}">
+    <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
         {{ form.errors }}
         {{ form.media }}
