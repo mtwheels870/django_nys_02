@@ -140,8 +140,11 @@ class TextFolderDetailView(SingleTableView):
             # selected_rows = TextFile.objects.filter(pk__in=selected_pks)
             #file_id = selected_rows[0]
             file_id = selected_pks[0]
-            print(f"Selected file id: {file_id}")
-            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(file_id,)))
+            context_data = get_context_data()
+            print(f"Selected file id: {file_id}, folder_id = {folder_id}, context_data={context_data}")
+            # Load content data here
+            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(file_id,),
+                kwargs={"context_data" : context_data})
 
 def edit_file(request, file_id):
     print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
@@ -183,6 +186,13 @@ class TextFileEditView(generic.edit.FormView):
         print(f"TFEV.get_initial()")
         initial["text_editor"] = "Four score and seven years ago"
         return initial
+
+    # Straight override (so we can use reverse)
+    def get_success_url(self):
+        context_data = get_context_data()
+        folder_id = context_data["folder_id"]
+        print(f"TFEV.get_success_url(), folder_id = {folder_id}")
+        return reverse("app_kg_train:detail", args=(folder_id,))
 
 
 # attrs = dir(form)
