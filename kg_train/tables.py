@@ -9,3 +9,4 @@ class TextFileTable(tables.Table):
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ["selection", "page_number", "file_name", "file_size", "status"]
         table_pagination = { "per_page": 5 }
+        per_page = 5
