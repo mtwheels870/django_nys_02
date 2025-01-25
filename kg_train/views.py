@@ -131,8 +131,8 @@ class TextFolderDetailView(SingleTableView):
 
     def post(self, request, *args, **kwargs):
         form = MyForm(request.POST)
-        table = self.get_table()
-        print(f"table = {table}")
+        #table = self.get_table()
+        #print(f"table = {table}")
         if form.is_valid():
             cleaned_data = form.cleaned_data
             print(f"TFDV.post(), cleaned_data:")

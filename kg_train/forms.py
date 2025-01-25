@@ -18,5 +18,4 @@ class EditorForm(forms.Form):
     text_editor = ProseEditorFormField()
 
 class MyForm(forms.Form):
-    # Add any other fields you need here
-    pass
+    selected_rows = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
