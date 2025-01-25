@@ -5,7 +5,7 @@
 <!doctype html>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form method="post" enctype="multipart/form-data" 
-        action="{% url 'app_tut:vote' question.id %}">
+        action="{% url 'app_kg_train:edit_file' folder_id %}">
         {% csrf_token %}
         {{ form.errors }}
         {{ form.media }}
