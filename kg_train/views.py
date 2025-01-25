@@ -133,7 +133,7 @@ def edit_file(request, folder_id):
         # form = UploadFolderForm(request.POST, request.FILES)
         form = EditorForm(request.POST)
         if form.is_valid():
-            attrs = form.dir()
+            attrs = dir(form)
             print(f"attrs: {attrs}")
 
             # This is NOT a model based ford (so no save)
