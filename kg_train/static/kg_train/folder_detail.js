@@ -1,3 +1,5 @@
+alert("Hi, I'm here")
+
 const checkbox = document.getElementById("myCheckbox");
 
 checkbox.addEventListener("click", function() {
