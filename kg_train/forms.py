@@ -14,4 +14,4 @@ class EditForm(forms.ModelForm):
         fields = [ 'file_name' ]
 
 class EditorForm(forms.Form):
-    text_editor = ProseEditorFormField(preset={"key1": "stuff", "key2" "more stuff"})
+    text_editor = ProseEditorFormField(preset={"key1": "stuff", "key2" : "more stuff"})
