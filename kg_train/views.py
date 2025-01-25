@@ -17,7 +17,7 @@ from django.utils import timezone
 from django_tables2 import SingleTableView
 
 from .models import TextFileStatus, TextFile, TextFolder
-from .forms import UploadFolderForm, EditorForm, MyForm
+from .forms import UploadFolderForm, EditorForm
 from .tables import TextFileTable
 
 class IndexView(generic.ListView):
@@ -117,7 +117,6 @@ class TextFolderDetailView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['folder_id'] = self.folder_id
-        # context['form'] = MyForm()
         print(f"TFDW.get_context_data(), folder_id = {self.folder_id}")
         return context
 
@@ -126,7 +125,6 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def post(self, request, *args, **kwargs):
-        # form = MyForm(request.POST)
         selected_pks = request.POST.getlist('selection')
         print(f"DEBUG: TFDV.post(), selected_pks = {selected_pks}")
         num_selected = len(selected_pks)
@@ -168,7 +166,8 @@ def edit_file(request, file_id):
         # This will fall through to the following with an empty form to be populated
         print(f"edit_file(), setting up context here, form = {form}")
         context = {"form": form, "file_id": file_id}
-        return render(request, "kg_train/file_edit.html", context)
+        # return render(request, "kg_train/file_edit.html", context)
+        return HttpResponseRedirect(reverse("app_kg_train:edit_file", args(file_id)))
 
 # attrs = dir(form)
 # print(f"attrs: {attrs}")
