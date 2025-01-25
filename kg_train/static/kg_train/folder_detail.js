@@ -1,12 +1,13 @@
-alert("Hi, I'm here")
+"use strict";
 
-const checkbox = document.getElementById("myCheckbox");
-
-checkbox.addEventListener("click", function() {
-  // Code to execute when the checkbox is clicked
-  if (this.checked) {
-    console.log("Checkbox is checked");
-  } else {
-    console.log("Checkbox is unchecked");
-  }
-});
+function get_file_picker_types(el) {
+    var picker_names = {};
+    $.each($(el).attr('class').split(' '), function(idx, class_name) {
+        if (class_name.substr(0, 17) == 'file_picker_name_') {
+            var type = class_name.split('_')[3];
+            var name = class_name.split('_')[4];
+            picker_names[type] = name;
+        }
+    });
+    return picker_names;
+}
