@@ -40,7 +40,7 @@ def vote(request, question_id):
             {
                 "question": question,
                 "error_message": "You didn't select a choice.",
-            },
+            },      # This dictionary = context
         )
     else:
         # What does F() do?

@@ -147,6 +147,7 @@ class TextFolderDetailView(SingleTableView):
 
 def edit_file(request, file_id):
     print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
+    text_file = get_object_or_404(TextFile, pk=file_id)
     if request.method == "POST":
         # form = UploadFolderForm(request.POST, request.FILES)
         form = EditorForm(request.POST)
@@ -155,18 +156,19 @@ def edit_file(request, file_id):
             text_editor_data = form.cleaned_data['text_editor']
             print(f"edit_file(), text_editor_data = {text_editor_data}")
             # print(f"edit_file(), new_text_area = {new_text_area}")
-            return HttpResponseRedirect(reverse("app_kg_train:index"))
         else:
-            print(f"upload_file(), INVALID, errors = {form.errors}")
+            print(f"ERROR: upload_file(), INVALID, errors = {form.errors}")
+        folder_id = text_file.folder.id
+        return HttpResponseRedirect(reverse("app_kg_train:detail", args(folder_id))
     # else, we're == GET
     else:
         initial_text = "Four score and seven years ago"
         form = EditorForm(initial={'text_editor': initial_text})
         # print(f"Before render, form = {form}")
         # This will fall through to the following with an empty form to be populated
-    print(f"edit_file(), setting up context here")
-    context = {"form": form, "file_id": file_id}
-    return render(request, "kg_train/file_edit.html", context)
+        print(f"edit_file(), setting up context here, form = {form}")
+        context = {"form": form, "file_id": file_id}
+        return render(request, "kg_train/file_edit.html", context)
 
 # attrs = dir(form)
 # print(f"attrs: {attrs}")
