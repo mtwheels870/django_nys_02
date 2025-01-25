@@ -110,7 +110,7 @@ class TextFolderDetailView(SingleTableView):
     model = TextFile
     table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
-    paginate_by = 10
+    paginate = { "per_page": 10}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -127,14 +127,14 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
-    def post(self, request, *args, **kwargs):
-        form = MyForm(request.POST)
-        if form.is_valid():
-            selected_pks = request.POST.getlist('selection')
-            selected_rows = YourModel.objects.filer(pk__in=selected_pks)
-            return HttpResponseRedirect("/")
-        else:
-            return render(request, self.template_name, self.get_context_data())
+#    def post(self, request, *args, **kwargs):
+#        form = MyForm(request.POST)
+#        if form.is_valid():
+#            selected_pks = request.POST.getlist('selection')
+#            selected_rows = YourModel.objects.filer(pk__in=selected_pks)
+#            return HttpResponseRedirect("/")
+#        else:
+#            return render(request, self.template_name, self.get_context_data())
 
 
 def edit_file(request, folder_id):
