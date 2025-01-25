@@ -142,7 +142,7 @@ def edit_file(request, folder_id):
     # else, we're == GET
     else:
         form = EditorForm()
-        form.stuff02 = "Four score and seven years ago"
+        form.text_editor = "Four score and seven years ago"
         print(f"Before render, form = {form}")
         # This will fall through to the following with an empty form to be populated
-    return render(request, "kg_train/file_edit.html", {"form": form, "stuff02" : "more stuff here"})
+    return render(request, "kg_train/file_edit.html", {"form": form, "text_editor" : "more stuff here"})

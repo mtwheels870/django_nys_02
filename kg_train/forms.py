@@ -14,4 +14,4 @@ class EditForm(forms.ModelForm):
         fields = [ 'file_name' ]
 
 class EditorForm(forms.Form):
-    stuff02 = ProseEditorFormField()
+    text_editor = ProseEditorFormField(preset="four score and seven years ago")
