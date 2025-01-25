@@ -110,7 +110,9 @@ class TextFolderDetailView(SingleTableView):
     model = TextFile
     table_class = TextFileTable
     template_name = "kg_train/folder_detail.html"
-    paginate = { "per_page": 10}
+    table_pagination = {
+        "per_page": 10
+    }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
