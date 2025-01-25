@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
   </head>
   <body>
-    <script src="{% static 'folder_detail.js' %}></script>
+    <script src="{% static 'kg_train/folder_detail.js' %}></script>
     <h3>Pages:</h3>
     {% render_table table %}
     <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
