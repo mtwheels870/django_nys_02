@@ -134,7 +134,7 @@ class TextFolderDetailView(SingleTableView):
         if form.is_valid():
             selected_pks = request.POST.getlist('selection')
             print(f"TFDV.post(), selected_pks = {selected_pks}")
-            selected_rows = TextFile.objects.filer(pk__in=selected_pks)
+            selected_rows = TextFile.objects.filter(pk__in=selected_pks)
             return HttpResponseRedirect("/")
         else:
             return render(request, self.template_name, self.get_context_data())
