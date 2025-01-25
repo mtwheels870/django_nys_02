@@ -10,11 +10,11 @@
   </head>
   <body>
     <h3>Pages:</h3>
-    {% render_table table %}
     <!-- form onsubmit="return checkForSelected();" -->
     <!-- Was form action="{ % url 'app_kg_train:edit_file' folder_id %}" method="get" -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {% render_table table %}
         <button type="submit">Edit</button>
     </form>
   </body>
