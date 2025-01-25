@@ -120,7 +120,7 @@ class TextFolderDetailView(SingleTableView):
         # Use pk to access the object or do other operations
         # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
         context['folder_id'] = self.folder_id
-        context['table'] = TextFileTable(self.object_list)
+        context['table'] = TextFileTable(self.object_list, table_pagination = { "per_page": 5 })
         context['form'] = MyForm()
         print(f"TFDW.get_context_data(), folder_id = {self.folder_id}")
         return context
