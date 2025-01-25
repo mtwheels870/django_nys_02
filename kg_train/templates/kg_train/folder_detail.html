@@ -11,8 +11,10 @@
   </head>
   <body>
     <script>
+        let global_id = 23;
+
         // SHould be global here
-        function doSomethingBeforeSubmit2() {
+        function checkForSelected() {
         // Your JavaScript code here
         console.log("Doing something before submit...");
 
@@ -22,7 +24,7 @@
     </script>
     <h3>Pages:</h3>
     {% render_table table %}
-    <form onsubmit="return doSomethingBeforeSubmit2();" action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
+    <form onsubmit="return checkForSelected();" action="{% url 'app_kg_train:edit_file' global_id %}" method="get">
         <button type="submit">Edit</button>
     </form>
   </body>
