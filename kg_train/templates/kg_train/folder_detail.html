@@ -13,7 +13,8 @@
     <h3>Pages:</h3>
     {% render_table table %}
     <!-- form onsubmit="return checkForSelected();" -->
-    <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
+    <!-- Was form action="{ % url 'app_kg_train:edit_file' folder_id %}" method="get" -->
+    <form method="post">
         <button type="submit">Edit</button>
     </form>
   </body>
