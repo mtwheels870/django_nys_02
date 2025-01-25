@@ -117,7 +117,7 @@ class TextFolderDetailView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['folder_id'] = self.folder_id
-        context['form'] = MyForm()
+        # context['form'] = MyForm()
         print(f"TFDW.get_context_data(), folder_id = {self.folder_id}")
         return context
 
@@ -126,7 +126,7 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def post(self, request, *args, **kwargs):
-        form = MyForm(request.POST)
+        # form = MyForm(request.POST)
         selected_pks = request.POST.getlist('selection')
         print(f"TFDV.post(), selected_pks = {selected_pks}")
         if form.is_valid():
