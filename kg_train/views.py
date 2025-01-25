@@ -17,7 +17,7 @@ from django.utils import timezone
 from django_tables2 import SingleTableView
 
 from .models import TextFileStatus, TextFile, TextFolder
-from .forms import UploadFolderForm, EditorForm
+from .forms import UploadFolderForm, EditorForm, MyForm
 from .tables import TextFileTable
 
 class IndexView(generic.ListView):
@@ -120,7 +120,7 @@ class TextFolderDetailView(SingleTableView):
         # Use pk to access the object or do other operations
         # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
         context['folder_id'] = self.folder_id
-        context['table'] = MyTable(self.object_list)
+        context['table'] = TextFileTable(self.object_list)
         context['form'] = MyForm()
         print(f"TFDW.get_context_data(), folder_id = {self.folder_id}")
         return context
