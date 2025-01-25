@@ -143,7 +143,7 @@ class TextFolderDetailView(SingleTableView):
             context_data = get_context_data()
             print(f"Selected file id: {file_id}, folder_id = {folder_id}, context_data={context_data}")
             # Load content data here
-            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(file_id,),
+            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(file_id,)),
                 kwargs={"context_data" : context_data})
 
 def edit_file(request, file_id):
