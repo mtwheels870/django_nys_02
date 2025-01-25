@@ -16,3 +16,7 @@ class EditForm(forms.ModelForm):
 class EditorForm(forms.Form):
     selected_file_id = forms.IntegerField(widget=forms.HiddenInput(), required=False, initial=0)
     text_editor = ProseEditorFormField()
+
+class MyForm(forms.Form):
+    # Add any other fields you need here
+    pass
