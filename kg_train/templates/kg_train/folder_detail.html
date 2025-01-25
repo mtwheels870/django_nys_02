@@ -1,14 +1,18 @@
-{% block title %}GISA | Compass Blue KGs | Folder Upload{% endblock title %}
-{% block description %}Description here {% endblock description %}
-
-{% load static %}
+<!doctype html>
 {% load render_table from django_tables2 %}
-
-{% block content %}
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Details for single folder </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  </head>
+  <body>
     <h3>Pages:</h3>
     {% render_table table %}
     <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
         {% csrf_token %}
         <button type="submit">Edit</button>
     </form>
-{% endblock content %}
+  </body>
+</html>
+
