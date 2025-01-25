@@ -135,9 +135,8 @@ def edit_file(request, folder_id):
         if form.is_valid():
             attrs = dir(form)
             print(f"attrs: {attrs}")
-
             # This is NOT a model based ford (so no save)
-            new_text_area = form.text_editor
+            new_text_area = form.fields['text_editor']
             print(f"edit_file(), new_text_area = {new_text_area}")
             return HttpResponseRedirect(reverse("app_kg_train:index"))
         else:
