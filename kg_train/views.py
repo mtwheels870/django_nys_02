@@ -133,10 +133,8 @@ def edit_file(request, folder_id):
         # form = UploadFolderForm(request.POST, request.FILES)
         form = EditorForm(request.POST)
         if form.is_valid():
-            attrs = dir(form)
-            print(f"attrs: {attrs}")
             # This is NOT a model based ford (so no save)
-            new_text_area = form.fields['text_editor']
+            new_text_area = form.fields['text_editor'].value
             print(f"edit_file(), new_text_area = {new_text_area}")
             return HttpResponseRedirect(reverse("app_kg_train:index"))
         else:
@@ -149,3 +147,6 @@ def edit_file(request, folder_id):
         # This will fall through to the following with an empty form to be populated
     context = {"form": form, "text_editor" : "more stuff here", "folder_id": folder_id}
     return render(request, "kg_train/file_edit.html", context)
+
+# attrs = dir(form)
+# print(f"attrs: {attrs}")
