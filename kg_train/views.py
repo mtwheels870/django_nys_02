@@ -157,6 +157,7 @@ def edit_file(request, file_id):
         else:
             print(f"ERROR: upload_file(), INVALID, errors = {form.errors}")
         folder_id = text_file.folder.id
+        # This should go back to the folder view (with all of the pages)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
     # else, we're == GET
     else:
@@ -178,6 +179,7 @@ class TextFileEditView(generic.edit.FormView):
 
     def get_initial(self):
         initial = super().get_initial()
+        print(f"TFEV.get_initial()")
         initial["text_editor"] = "Four score and seven years ago"
         return initial
 
