@@ -1,7 +1,6 @@
 <!doctype html>
 {% load static %}
 {% load render_table from django_tables2 %}
-<script src="{% static 'folder_detail.js' %}></script>
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
@@ -9,6 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
   </head>
   <body>
+    <script src="{% static 'folder_detail.js' %}></script>
     <h3>Pages:</h3>
     {% render_table table %}
     <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
