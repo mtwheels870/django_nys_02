@@ -131,13 +131,14 @@ class TextFolderDetailView(SingleTableView):
 
     def post(self, request, *args, **kwargs):
         form = MyForm(request.POST)
-        print(f"TFDV.post(), request:")
-        print(f"    {dir(request.POST)}")
-        print(f"TFDV.post(), request.keys:")
-        print(f"    {dir(request.POST.keys)}")
         table = self.get_table()
         print(f"table = {table}")
         if form.is_valid():
+            cleaned_data = form.cleaned_data
+            print(f"TFDV.post(), cleaned_data:")
+            for i, key in enumerate(cleaned_data):
+                value = cleaned_data[key]
+                print(f"{i}: [{key}] = {value}")
             selected_pks = table.getlist('selection')
             print(f"TFDV.post(), selected_pks = {selected_pks}")
             num_selected = len(selected_pks)
