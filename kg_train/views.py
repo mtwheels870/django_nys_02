@@ -167,7 +167,9 @@ def edit_file(request, file_id):
         print(f"edit_file(), setting up context here, form = {form}")
         context = {"form": form, "file_id": file_id}
         # return render(request, "kg_train/file_edit.html", context)
-        return HttpResponseRedirect(reverse("app_kg_train:edit_file", args=(file_id,)))
+        result = HttpResponseRedirect(reverse("app_kg_train:edit_file", args=(file_id,)))
+        print(f"edit_file(), result = {result}")
+        return result
 
 # attrs = dir(form)
 # print(f"attrs: {attrs}")
