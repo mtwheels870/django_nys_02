@@ -133,6 +133,8 @@ class TextFolderDetailView(SingleTableView):
         form = MyForm(request.POST)
         print(f"TFDV.post(), request:")
         print(f"    {dir(request.POST)}")
+        print(f"TFDV.post(), request.keys:")
+        print(f"    {dir(request.POST.keys)}")
         if form.is_valid():
             selected_pks = request.POST.getlist('selection')
             print(f"TFDV.post(), selected_pks = {selected_pks}")
