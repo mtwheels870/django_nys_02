@@ -10,9 +10,19 @@
     <script type='module' defer src="{% static 'folder_detail2.js'%}" crossorigin=""> </script>
   </head>
   <body>
+    <script>
+        // SHould be global here
+        function doSomethingBeforeSubmit2() {
+        // Your JavaScript code here
+        console.log("Doing something before submit...");
+
+        // Return true to allow the form to submit
+        return true;
+    }
+    </script>
     <h3>Pages:</h3>
     {% render_table table %}
-    <form onsubmit="return doSomethingBeforeSubmit();" action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
+    <form onsubmit="return doSomethingBeforeSubmit2();" action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
         <button type="submit">Edit</button>
     </form>
   </body>

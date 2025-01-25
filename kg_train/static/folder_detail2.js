@@ -1,5 +1,6 @@
 "use strict";
 
+// SHould be global here
 function doSomethingBeforeSubmit() {
     // Your JavaScript code here
     console.log("Doing something before submit...");
