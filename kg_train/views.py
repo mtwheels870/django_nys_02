@@ -141,8 +141,8 @@ def edit_file(request, folder_id):
             print(f"upload_file(), INVALID, errors = {form.errors}")
     # else, we're == GET
     else:
-        form = EditorForm()
-        form.text_editor = "Four score and seven years ago"
+        initial_text = "Four score and seven years ago"
+        form = EditorForm(initial={'text_editor': initial_text})
         print(f"Before render, form = {form}")
         # This will fall through to the following with an empty form to be populated
     return render(request, "kg_train/file_edit.html", {"form": form, "text_editor" : "more stuff here"})
