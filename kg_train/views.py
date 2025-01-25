@@ -133,6 +133,9 @@ def edit_file(request, folder_id):
         # form = UploadFolderForm(request.POST, request.FILES)
         form = EditorForm(request.POST)
         if form.is_valid():
+            attrs = form.dir()
+            print(f"attrs: {attrs}")
+
             # This is NOT a model based ford (so no save)
             new_text_area = form.text_editor
             print(f"edit_file(), new_text_area = {new_text_area}")
