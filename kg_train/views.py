@@ -158,6 +158,7 @@ class TextFolderDetailView(SingleTableView):
                 print(f"Selected file: {file_id}")
                 edit_file(request, file_id)
         else:
+            print(f"TFDV.post(), form not valid")
             return render(request, self.template_name, self.get_context_data())
 
 
