@@ -128,25 +128,25 @@ class TextFolderDetailView(SingleTableView):
     def post(self, request, *args, **kwargs):
         # form = MyForm(request.POST)
         selected_pks = request.POST.getlist('selection')
-        print(f"TFDV.post(), selected_pks = {selected_pks}")
+        print(f"DEBUG: TFDV.post(), selected_pks = {selected_pks}")
         num_selected = len(selected_pks)
         if num_selected  == 0:
-            print(f"No selected rows")
+            print(f"TFDV.post(), no selected rows")
             return redirect(request.path)
         elif num_selected > 1:
-            print(f"More than one row selected")
-            current_url = request.build_absolute_uri()
+            print(f"TFDV.post(), >1 selected rows")
             return redirect(request.path)
         else:
             # Good case (1 selected)
             request.method = "GET"
-            selected_rows = TextFile.objects.filter(pk__in=selected_pks)
-            file_id = selected_rows[0]
+            # selected_rows = TextFile.objects.filter(pk__in=selected_pks)
+            #file_id = selected_rows[0]
+            file_id = selected_pks[0]
             print(f"Selected file id: {file_id}")
             edit_file(request, file_id)
 
-def edit_file(request, folder_id):
-    print(f"edit_file(), method = {request.method}, folder_id = {folder_id}:")
+def edit_file(request, file_id):
+    print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
     if request.method == "POST":
         # form = UploadFolderForm(request.POST, request.FILES)
         form = EditorForm(request.POST)
@@ -164,7 +164,7 @@ def edit_file(request, folder_id):
         form = EditorForm(initial={'text_editor': initial_text})
         # print(f"Before render, form = {form}")
         # This will fall through to the following with an empty form to be populated
-    context = {"form": form, "folder_id": folder_id}
+    context = {"form": form, "file_id": file_id}
     return render(request, "kg_train/file_edit.html", context)
 
 # attrs = dir(form)
