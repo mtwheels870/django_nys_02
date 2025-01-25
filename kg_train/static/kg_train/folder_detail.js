@@ -1,5 +1,16 @@
 "use strict";
 
+function doSomethingBeforeSubmit() {
+    // Your JavaScript code here
+    console.log("Doing something before submit...");
+
+    // Example: Update a hidden field with the current timestamp
+    document.getElementById("timestamp").value = Date.now();
+
+    // Return true to allow the form to submit
+    return true;
+}
+
 function get_file_picker_types(el) {
     var picker_names = {};
     $.each($(el).attr('class').split(' '), function(idx, class_name) {
