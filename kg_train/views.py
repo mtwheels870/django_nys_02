@@ -173,7 +173,8 @@ def edit_file(request, file_id):
         return result
 
 class TextFileEditView(generic.edit.FormView):
-    model = TextFile
+    # model = TextFile
+    form_class = EditorForm
     template_name = "kg_train/file_edit.html"
     success_url = "kg_train/index.html"
 
