@@ -13,8 +13,9 @@ class EditForm(forms.ModelForm):
         model = TextFile
         fields = [ 'file_name' ]
 
+# This doesn't strictly edit the TextFile, just the prose_editor field
 class EditorForm(forms.Form):
     text_editor = ProseEditorFormField()
 
-class MyForm(forms.Form):
-    selected_rows = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+#class MyForm(forms.Form):
+#    selected_rows = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)

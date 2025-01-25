@@ -141,7 +141,7 @@ class TextFolderDetailView(SingleTableView):
             #file_id = selected_rows[0]
             file_id = selected_pks[0]
             print(f"Selected file id: {file_id}")
-            return edit_file(request, file_id)
+            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(file_id,)))
 
 def edit_file(request, file_id):
     print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
@@ -170,6 +170,17 @@ def edit_file(request, file_id):
         result = HttpResponseRedirect(reverse("app_kg_train:edit_file", args=(file_id,)))
         print(f"edit_file(), result = {result}")
         return result
+
+class TextFileEditView(generic.edit.FormView):
+    model = TextFile
+    template_name = "kg_train/file_edit.html"
+    success_url = "kg_train/index.html"
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["text_editor"] = "Four score and seven years ago"
+        return initial
+
 
 # attrs = dir(form)
 # print(f"attrs: {attrs}")
