@@ -141,7 +141,7 @@ class TextFolderDetailView(SingleTableView):
             #file_id = selected_rows[0]
             file_id = selected_pks[0]
             print(f"Selected file id: {file_id}")
-            edit_file(request, file_id)
+            return edit_file(request, file_id)
 
 def edit_file(request, file_id):
     print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
