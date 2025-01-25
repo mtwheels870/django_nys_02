@@ -134,8 +134,9 @@ def edit_file(request, folder_id):
         form = EditorForm(request.POST)
         if form.is_valid():
             # This is NOT a model based ford (so no save)
-            new_text_area = form.fields['text_editor'].value
-            print(f"edit_file(), new_text_area = {new_text_area}")
+            text_editor = form.fields['text_editor']
+            print(f"edit_file(), attrs = {dir(text_editr}")
+            # print(f"edit_file(), new_text_area = {new_text_area}")
             return HttpResponseRedirect(reverse("app_kg_train:index"))
         else:
             print(f"upload_file(), INVALID, errors = {form.errors}")
