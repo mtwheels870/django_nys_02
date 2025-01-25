@@ -134,8 +134,23 @@ class TextFolderDetailView(SingleTableView):
         if form.is_valid():
             selected_pks = request.POST.getlist('selection')
             print(f"TFDV.post(), selected_pks = {selected_pks}")
-            selected_rows = TextFile.objects.filter(pk__in=selected_pks)
-            return HttpResponseRedirect("/")
+            num_selected = len(selected_pks)
+            if num_selected  == 0:
+                print(f"No selected rows")
+                current_url = request.build_absolute_uri()
+
+                return render(request, self.template_name, {'current_url': current_url})
+            elif num_selected > 1:
+                print(f"More than one selected")
+                current_url = request.build_absolute_uri()
+                return render(request, self.template_name, {'current_url': current_url})
+            else:
+                # Good case (1 selected)
+                request.method = "GET"
+                selected_rows = TextFile.objects.filter(pk__in=selected_pks)
+                file_id = selected_rows[0]
+                print(f"Selected file: {file_id}")
+                edit_file(request, file_id)
         else:
             return render(request, self.template_name, self.get_context_data())
 
