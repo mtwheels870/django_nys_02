@@ -134,10 +134,8 @@ def edit_file(request, folder_id):
         form = EditorForm(request.POST)
         if form.is_valid():
             # This is NOT a model based ford (so no save)
-            text_editor = form.cleaned_data['text_editor']
-            attrs = dir(text_editor)
-            print(f"edit_file(), text_editor = {text_editor}")
-            print(f"edit_file(), attrs = {attrs}")
+            text_editor_data = form.cleaned_data['text_editor']
+            print(f"edit_file(), text_editor_data = {text_editor_data}")
             # print(f"edit_file(), new_text_area = {new_text_area}")
             return HttpResponseRedirect(reverse("app_kg_train:index"))
         else:
@@ -146,9 +144,9 @@ def edit_file(request, folder_id):
     else:
         initial_text = "Four score and seven years ago"
         form = EditorForm(initial={'text_editor': initial_text})
-        print(f"Before render, form = {form}")
+        # print(f"Before render, form = {form}")
         # This will fall through to the following with an empty form to be populated
-    context = {"form": form, "text_editor" : "more stuff here", "folder_id": folder_id}
+    context = {"form": form, "folder_id": folder_id}
     return render(request, "kg_train/file_edit.html", context)
 
 # attrs = dir(form)

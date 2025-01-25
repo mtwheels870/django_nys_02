@@ -1,8 +1,11 @@
 {% block title %}GISA | Compass Blue KGs | Folder Upload{% endblock title %}
 {% block description %}Description here {% endblock description %}
 
+{% load static %}
+
 {% block content %}
 <!doctype html>
+    <script src="{% static 'file_edit.js' %}></script>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form method="post" enctype="multipart/form-data" 
         action="{% url 'app_kg_train:edit_file' folder_id %}">
@@ -10,6 +13,6 @@
         {{ form.errors }}
         {{ form.media }}
         {{ form.as_div }}
-        <button type="submit">Submit</button>
+        <button id="myButton" type="submit">Submit</button>
     </form>
 {% endblock content %}
