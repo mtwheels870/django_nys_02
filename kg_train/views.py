@@ -138,7 +138,7 @@ class TextFolderDetailView(SingleTableView):
         table = self.get_table()
         print(f"table = {table}")
         if form.is_valid():
-            selected_pks = request.POST.getlist('selection')
+            selected_pks = table.getlist('selection')
             print(f"TFDV.post(), selected_pks = {selected_pks}")
             num_selected = len(selected_pks)
             if num_selected  == 0:
