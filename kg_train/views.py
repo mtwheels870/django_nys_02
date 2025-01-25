@@ -137,9 +137,8 @@ class TextFolderDetailView(SingleTableView):
             num_selected = len(selected_pks)
             if num_selected  == 0:
                 print(f"No selected rows")
-                current_url = request.build_absolute_uri()
-
-                return render(request, self.template_name, {'current_url': current_url})
+                # current_url = request.build_absolute_uri()
+                return redirect(request.path)
             elif num_selected > 1:
                 print(f"More than one selected")
                 current_url = request.build_absolute_uri()
