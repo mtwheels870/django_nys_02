@@ -2,9 +2,8 @@
 {% block description %}Description here {% endblock description %}
 
 {% load static %}
-<script src="{% static 'folder_detail.js' %}></script>
-
 {% load render_table from django_tables2 %}
+
 {% block content %}
     <h3>Pages:</h3>
     {% render_table table %}
