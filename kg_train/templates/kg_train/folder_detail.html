@@ -1,20 +1,18 @@
+{% extends 'kg_train/file_base.html' %}
+
+<head>
 {% block title %}GISA | Compass Blue KGs | Folder Detail (pages) {% endblock title %}
-{% block description %}Description here {% endblock description %}
-<!doctype html>
-{% load render_table from django_tables2 %}
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
+{% block description %}Pages that make up a Text Folder {% endblock description %}
     <title>Details for single folder </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-  </head>
-  <body>
+</head>
+
+{% load render_table from django_tables2 %}
+{% block content %}
     <h3>Pages:</h3>
     {% render_table table %}
     <form action="{% url 'app_kg_train:edit_file' folder_id %}" method="get">
         {% csrf_token %}
         <button type="submit">Edit</button>
     </form>
-  </body>
-</html>
-
+{% endblock content %}
