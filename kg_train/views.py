@@ -159,7 +159,7 @@ def edit_file(request, file_id):
         else:
             print(f"ERROR: upload_file(), INVALID, errors = {form.errors}")
         folder_id = text_file.folder.id
-        return HttpResponseRedirect(reverse("app_kg_train:detail", args(folder_id)))))))
+        return HttpResponseRedirect(reverse("app_kg_train:detail", args(folder_id)))
     # else, we're == GET
     else:
         initial_text = "Four score and seven years ago"
