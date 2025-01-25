@@ -45,9 +45,8 @@ class TextFile(models.Model):
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     # body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)
     prose_editor = ProseEditorField("text", preset="announcements")
-
     def __str__(self):
-        return self.display_name()
+        return self.file_name
 
 class NerLabel(models.Model):
     short_name = models.CharField("Short", max_length=10)
