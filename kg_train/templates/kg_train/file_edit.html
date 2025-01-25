@@ -5,7 +5,6 @@
 
 {% block content %}
 <!doctype html>
-    <script src="{% static 'file_edit.js' %}></script>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <form method="post" enctype="multipart/form-data" 
         action="{% url 'app_kg_train:edit_file' folder_id %}">
