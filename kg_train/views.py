@@ -129,10 +129,10 @@ class TextFolderDetailView(SingleTableView):
         form = MyForm(request.POST)
         if form.is_valid():
             print(f"TFDV.post(), form IS valid")
-            return render(request, self.template_name, self.get_context_data())
+            return redirect(request.path)
         else:
             print(f"TFDV.post(), form not valid")
-            return render(request, self.template_name, self.get_context_data())
+            return redirect(request.path)
 
 
 def edit_file(request, folder_id):
