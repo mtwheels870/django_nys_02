@@ -198,9 +198,10 @@ class TextFileLabelView(generic.DetailView):
 
     def get_object(self):
         print(f"TFLV.g_o(), looking up file_id (1st), kwargs = {self.kwargs}")
-        context_data = self.get_context_data()
-        file_id = self.context_data['file_id']
-        print(f"TFLV.g_o(), file_id = {file_id}")
+        file_id = self.kwargs['file_id']
+        # context_data = self.get_context_data()
+        # file_id = self.context_data['file_id']
+        # print(f"TFLV.g_o(), file_id = {file_id}")
         return TextFile.objects.filter(file_id=file_id)
 
     def get_context_data(self, **kwargs):
