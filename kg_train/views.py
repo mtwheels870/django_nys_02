@@ -147,6 +147,10 @@ class TextFileEditView(generic.edit.FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print(f"TFEV.g_c_d(), context data:")
+        for i, key in enumerate(context_data):
+            value = context_data[key]
+            print(f"  {i}: [{key}] = {value}")
         file_id = self.kwargs.get('file_id')
         folder_id = self.kwargs.get('folder_id')
         print(f"TFEV.g_c_d(), folder_id = {folder_id}, file_id = {file_id}")
