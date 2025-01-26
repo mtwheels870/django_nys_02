@@ -127,10 +127,10 @@ class TextFolderDetailView(SingleTableView):
     def post(self, request, *args, **kwargs):
         print(f"TFDV.post(), self = {self}, request = {request}")
         print(f"          args = {args}, kwargs = {kwargs}")
-        folder_id = request.POST.get("folder_id")
+        folder_id = kwargs["folder_id"]
         print(f"TFDV.post(), folder_id = {folder_id}")
-        context_data = self.get_context_data(**kwargs)
-        print(f"TFDV.post(), after call")
+        # context_data = self.get_context_data(**kwargs)
+        # print(f"TFDV.post(), after call")
         #folder_id = context_data["folder_id"]
         #print(f"TFDV.post(), folder_id = {folder_id}")
         selected_pks = request.POST.getlist('selection')
