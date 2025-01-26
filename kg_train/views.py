@@ -135,7 +135,8 @@ class TextFolderDetailView(SingleTableView):
             elif 'label' in request.POST:
                 return self.label_page(request, folder_id, file_id)
             else:
-                print(f"TFDV.post(), unrecognized button")
+                name = request.POST['name']
+                print(f"TFDV.post(), unrecognized button, name = {name}")
                 return redirect(request.path)
 
 class TextFileEditView(generic.edit.FormView):
