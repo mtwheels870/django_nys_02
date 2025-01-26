@@ -141,6 +141,7 @@ class TextFileEditView(generic.edit.FormView):
         context_data['file_id'] = file_id
         text_file = get_object_or_404(TextFile, pk=file_id)
         context_data['page_number'] = text_file.page_number 
+        self.initial_text = "Here is some juicy text"
 
         # Folder stuff
         folder_id = self.kwargs.get('folder_id')
@@ -151,10 +152,11 @@ class TextFileEditView(generic.edit.FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        context_data = self.get_context_data()
-        file_id = content_data['file_id']
-        print(f"TFEV.get_initial(), file_id = {file_id}")
-        initial["text_editor"] = "Four score and seven years ago"
+        #context_data = self.get_context_data()
+        #file_id = content_data['file_id']
+        #print(f"TFEV.get_initial(), file_id = {file_id}")
+        # initial["text_editor"] = "Four score and seven years ago"
+        initial["text_editor"] = self.initial_text
         return initial
 
     # Straight override (so we can use reverse)
