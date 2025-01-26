@@ -193,13 +193,14 @@ class TextFileLabelView(generic.DetailView):
     template_name = "kg_train/file_label.html"
 
     def get_object(self):
-        print(f"TFLV.g_o(), looking up file_id")
+        print(f"TFLV.g_o(), looking up file_id (1st)")
+        context_data = self.get_context_data()
         file_id = self.context_data['file_id']
         print(f"TFLV.g_o(), file_id = {file_id}")
         return TextFile.objects.filter(file_id=file_id)
 
     def get_context_data(self, **kwargs):
-        print(f"TFLV.g_c_d(), loading other objects")
+        print(f"TFLV.g_c_d(), loading other objects (2nd)")
         # print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
         # After this, the form is created
