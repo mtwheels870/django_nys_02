@@ -156,7 +156,9 @@ class TextFileEditView(generic.edit.FormView):
         form = context_data['form']
         print(f"TFEV.get_context_data(), form = {form}")
         print(f"            dir(form) = {dir(form)}")
-        print(f"            dir(form.data) = {dir(form.data)}")
+        for i, key in enumerate(form.data):
+            value = form.data[key]
+            print(f"[{i}]: {key} = {value}")
         return context_data
 
     def get_initial(self):
