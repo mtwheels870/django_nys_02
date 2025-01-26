@@ -195,7 +195,8 @@ class TextFileEditView(generic.edit.FormView):
         for i, key in enumerate(context_data):
             value = context_data[key]
             print(f"  {i}: [{key}] = {value}")
-        return super.get(self, request, *args, **kwargs)
+# class ProcessFormView(View):
+        return super().get(self, request, *args, **kwargs)
 
     # Straight override (so we can use reverse)
     def get_success_url(self):
