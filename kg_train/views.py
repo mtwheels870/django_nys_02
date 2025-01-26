@@ -134,6 +134,7 @@ class TextFileEditView(generic.edit.FormView):
     success_url = "kg_train/index.html"
 
     def get_context_data(self, **kwargs):
+        print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
 
         # File stuff
@@ -151,6 +152,7 @@ class TextFileEditView(generic.edit.FormView):
         return context_data
 
     def get_initial(self):
+        print(f"TFEV.get_inital()")
         initial = super().get_initial()
         #context_data = self.get_context_data()
         #file_id = content_data['file_id']
