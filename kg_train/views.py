@@ -125,9 +125,11 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def post(self, request, *args, **kwargs):
+        print(f"TFDV.post(), about to call g_c_d()")
         context_data = self.get_context_data(**kwargs)
-        folder_id = context_data["folder_id"]
-        print(f"TFDV.post(), folder_id = {folder_id}")
+        print(f"TFDV.post(), after call")
+        #folder_id = context_data["folder_id"]
+        #print(f"TFDV.post(), folder_id = {folder_id}")
         selected_pks = request.POST.getlist('selection')
         # print(f"DEBUG: TFDV.post(), selected_pks = {selected_pks}")
         num_selected = len(selected_pks)
