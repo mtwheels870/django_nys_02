@@ -166,6 +166,7 @@ class TextFileEditView(generic.edit.FormView):
         text_editor = form.fields['text_editor']
         print(f"text_editor = {text_editor}")
         print(f"  dir(text_editor) = {dir(text_editor)}")
+        text_editor.initial = "Here is some newer text"
         return context_data
 
     def get_initial(self):
