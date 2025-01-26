@@ -7,13 +7,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
-# from django.views.generic import SingleObjectMixin
 from django.views.generic.edit import FormView
 
 from django.utils import timezone
 
-# from prose.models import Document
-# import django_tables2 as tables
 from django_tables2 import SingleTableView
 
 from .models import TextFileStatus, TextFile, TextFolder
@@ -28,15 +25,6 @@ class IndexView(generic.ListView):
         """ Return the last five published questions."""
         # return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded")[:20]
         return TextFolder.objects.all()
-
-# Start the form on this view
-#class StartForm(FormView):
-#    form_class = UploadFileForm
-
-def debug_post(dictionary):
-    for index, key in enumerate(dictionary):
-        value = dictionary[key]
-        print(f"d_p(), key[{index}]: {key} = {value}")
     
 # Returns a dictionary of: path : page number
 def read_directory(directory_path):
@@ -147,43 +135,20 @@ class TextFileEditView(generic.edit.FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        print(f"TFEV.g_c_d(), context data:")
-        for i, key in enumerate(context_data):
-            value = context_data[key]
-            print(f"  {i}: [{key}] = {value}")
-        file_id = self.kwargs.get('file_id')
-        context_data['file_id'] = file_id
-        folder_id = self.kwargs.get('folder_id')
-        context_data['folder_id'] = folder_id
-        print(f"TFEV.g_c_d(), folder_id = {folder_id}, file_id = {file_id}")
+        context_data['file_id'] = self.kwargs.get('file_id')
+        context_data['folder_id'] = self.kwargs.get('folder_id')
         return context_data
-        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
 
     def get_initial(self):
         initial = super().get_initial()
-        # print(f"TFEV.get_initial(), getting context data here...")
-        # context_data = super.get_context_data()
         initial["text_editor"] = "Four score and seven years ago"
         return initial
 
-#    def get(self, request, *args, **kwargs):
-#        context_data = self.get_context_data()
-#        print(f"TFEV.get(), context data:")
-#        for i, key in enumerate(context_data):
-#            value = context_data[key]
-#            print(f"  {i}: [{key}] = {value}")
-# class ProcessFormView(View):
-#        return super().get(self, request, *args, **kwargs)
-
     # Straight override (so we can use reverse)
     def get_success_url(self):
-        print(f"g_s_u(), self = {self}")
         context_data = self.get_context_data()
         folder_id = context_data['folder_id']
-        print(f"TFEV.g_s_u(), context data:")
-        for i, key in enumerate(context_data):
-            value = context_data[key]
-            print(f"  {i}: [{key}] = {value}")
+        print(f"TFEV.get_success_url(), folder_id = {folder_id}")
         return reverse("app_kg_train:detail", args=(folder_id,))
 
 def edit_file(request, file_id):
@@ -215,32 +180,3 @@ def edit_file(request, file_id):
         print(f"edit_file(), result = {result}")
         return result
 
-# attrs = dir(form)
-# print(f"attrs: {attrs}")
-#            print(f"TFDV.post(), cleaned_data:")
-#            for i, key in enumerate(cleaned_data):
-#                value = cleaned_data[key]
-#                print(f"{i}: [{key}] = {value}")
-#        print(f"TFDV.post(), self = {self}, request = {request}")
-#        print(f"          args = {args}, kwargs = {kwargs}")
-#        print(f"TFDV.post(), folder_id = {folder_id}")
-        # context_data = self.get_context_data(**kwargs)
-        # print(f"TFDV.post(), after call")
-        #folder_id = context_data["folder_id"]
-        #print(f"TFDV.post(), folder_id = {folder_id}")
-            # Good case (1 selected)
-            # request.method = "GET"
-            # selected_rows = TextFile.objects.filter(pk__in=selected_pks)
-            #file_id = selected_rows[0]
-            # context_data = self.get_context_data()
-            # Load content data here
-#                kwargs={"context_data" : context_data})
-#        context_data = self.get_context_data()
-#        view = context_data['view']
-#        context_data2 = view.get_context_data()
-#        print(f"TFEV.get_success_url(), context data:")
-#        for i, key in enumerate(context_data2):
-#            value = context_data2[key]
-#            print(f"  {i}: [{key}] = {value}")
-#        folder_id = context_data2["folder_id"]
-#        print(f"TFEV.get_success_url(), folder_id = {folder_id}")
