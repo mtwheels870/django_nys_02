@@ -112,7 +112,7 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
-    def label_page(self, folder_id, file_id):
+    def label_page(self, request, folder_id, file_id):
         print(f"TFDV.label_page(), calling command")
         return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
