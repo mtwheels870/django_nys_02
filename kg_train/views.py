@@ -155,9 +155,13 @@ class TextFileEditView(generic.edit.FormView):
 
         form = context_data['form']
         print(f"TFEV.get_context_data(), form = {form}")
-        print(f"            dir(form) = {dir(form)}")
+        print(f"form.data.dictionary:")
         for i, key in enumerate(form.data):
             value = form.data[key]
+            print(f"[{i}]: {key} = {value}")
+        print(f"form.fields.dictionary:")
+        for i, key in enumerate(form.fields):
+            value = form.fields[key]
             print(f"[{i}]: {key} = {value}")
         return context_data
 
