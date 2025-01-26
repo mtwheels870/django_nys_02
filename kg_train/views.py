@@ -114,7 +114,7 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         print(f"TFDV.label_page(), calling command")
-        return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, pk=file_id,)))
+        return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
