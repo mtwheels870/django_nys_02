@@ -125,16 +125,8 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def post(self, request, *args, **kwargs):
-        print(f"TFDV.post(), self = {self}, request = {request}")
-        print(f"          args = {args}, kwargs = {kwargs}")
         folder_id = kwargs["folder_id"]
-        print(f"TFDV.post(), folder_id = {folder_id}")
-        # context_data = self.get_context_data(**kwargs)
-        # print(f"TFDV.post(), after call")
-        #folder_id = context_data["folder_id"]
-        #print(f"TFDV.post(), folder_id = {folder_id}")
         selected_pks = request.POST.getlist('selection')
-        # print(f"DEBUG: TFDV.post(), selected_pks = {selected_pks}")
         num_selected = len(selected_pks)
         if num_selected  == 0:
             print(f"TFDV.post(), no selected rows")
@@ -143,16 +135,9 @@ class TextFolderDetailView(SingleTableView):
             print(f"TFDV.post(), >1 selected rows")
             return redirect(request.path)
         else:
-            # Good case (1 selected)
-            # request.method = "GET"
-            # selected_rows = TextFile.objects.filter(pk__in=selected_pks)
-            #file_id = selected_rows[0]
             file_id = selected_pks[0]
-            # context_data = self.get_context_data()
             print(f"BEFORE edit_view(), Selected file id: {file_id}, folder_id = {folder_id}")
-            # Load content data here
             return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(folder_id, file_id,)))
-#                kwargs={"context_data" : context_data})
 
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
@@ -176,7 +161,6 @@ class TextFileEditView(generic.edit.FormView):
 
     def get(self, request, *args, **kwargs):
         context_data = self.get_context_data()
-        context_data["folder_id"] = 1
         print(f"TFEV.get(), context data:")
         for i, key in enumerate(context_data):
             value = context_data[key]
@@ -186,15 +170,8 @@ class TextFileEditView(generic.edit.FormView):
 
     # Straight override (so we can use reverse)
     def get_success_url(self):
-        context_data = self.get_context_data()
-        view = context_data['view']
-        context_data2 = view.get_context_data()
-        print(f"TFEV.get_success_url(), context data:")
-        for i, key in enumerate(context_data2):
-            value = context_data2[key]
-            print(f"  {i}: [{key}] = {value}")
-        folder_id = context_data2["folder_id"]
-        print(f"TFEV.get_success_url(), folder_id = {folder_id}")
+        print(f"g_s_u(), self = {self}")
+        folder_id = 1
         return reverse("app_kg_train:detail", args=(folder_id,))
 
 def edit_file(request, file_id):
@@ -232,3 +209,26 @@ def edit_file(request, file_id):
 #            for i, key in enumerate(cleaned_data):
 #                value = cleaned_data[key]
 #                print(f"{i}: [{key}] = {value}")
+#        print(f"TFDV.post(), self = {self}, request = {request}")
+#        print(f"          args = {args}, kwargs = {kwargs}")
+#        print(f"TFDV.post(), folder_id = {folder_id}")
+        # context_data = self.get_context_data(**kwargs)
+        # print(f"TFDV.post(), after call")
+        #folder_id = context_data["folder_id"]
+        #print(f"TFDV.post(), folder_id = {folder_id}")
+            # Good case (1 selected)
+            # request.method = "GET"
+            # selected_rows = TextFile.objects.filter(pk__in=selected_pks)
+            #file_id = selected_rows[0]
+            # context_data = self.get_context_data()
+            # Load content data here
+#                kwargs={"context_data" : context_data})
+#        context_data = self.get_context_data()
+#        view = context_data['view']
+#        context_data2 = view.get_context_data()
+#        print(f"TFEV.get_success_url(), context data:")
+#        for i, key in enumerate(context_data2):
+#            value = context_data2[key]
+#            print(f"  {i}: [{key}] = {value}")
+#        folder_id = context_data2["folder_id"]
+#        print(f"TFEV.get_success_url(), folder_id = {folder_id}")
