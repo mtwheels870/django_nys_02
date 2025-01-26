@@ -125,7 +125,6 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
         context_data = self.get_context_data(**kwargs)
         folder_id = context_data["folder_id"]
         print(f"TFDV.post(), folder_id = {folder_id}")
