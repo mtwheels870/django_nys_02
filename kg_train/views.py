@@ -184,7 +184,12 @@ class TextFileEditView(generic.edit.FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        print(f"TFEV.get_initial()")
+        print(f"TFEV.get_initial(), getting context data here...")
+        context_data = super.get_context_data()
+        print(f"TFEV.get_initial(), context data:")
+        for i, key in enumerate(context_data):
+            value = context_data[key]
+            print(f"  {i}: [{key}] = {value}")
         initial["text_editor"] = "Four score and seven years ago"
         return initial
 
