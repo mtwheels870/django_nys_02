@@ -154,19 +154,18 @@ class TextFileEditView(generic.edit.FormView):
         context_data['folder_name'] = text_folder.folder_name 
 
         form = context_data['form']
-        print(f"TFEV.get_context_data(), form = {form}")
-        print(f"form.data.dictionary:")
-        for i, key in enumerate(form.data):
-            value = form.data[key]
-            print(f"[{i}]: {key} = {value}")
-        print(f"form.fields.dictionary:")
-        for i, key in enumerate(form.fields):
-            value = form.fields[key]
-            print(f"[{i}]: {key} = {value}")
+#        print(f"TFEV.get_context_data(), form = {form}")
+#        print(f"form.data.dictionary:")
+#        for i, key in enumerate(form.data):
+#            value = form.data[key]
+#            print(f"[{i}]: {key} = {value}")
+#        print(f"form.fields.dictionary:")
+#        for i, key in enumerate(form.fields):
+#            value = form.fields[key]
+#            print(f"[{i}]: {key} = {value}")
         text_editor = form.fields['text_editor']
         print(f"text_editor = {text_editor}")
-        value = text_editor.value
-        print(f"text_editor.value = {value}")
+        print(f"  dir(text_editor) = {dir(text_editor)}")
         return context_data
 
     def get_initial(self):
