@@ -194,8 +194,6 @@ class TextFileLabelView(generic.DetailView):
     model = TextFile
     template_name = "kg_train/file_label.html"
 
-        print(f"TFDV.label_page(), calling command")
-
     def get_object(self):
         file_id = self.kwargs['file_id']
         return TextFile.objects.filter(id=file_id)
