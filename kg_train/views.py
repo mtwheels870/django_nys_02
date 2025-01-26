@@ -153,7 +153,7 @@ class TextFileEditView(generic.edit.FormView):
         return context_data
 
     def get_initial(self):
-        print(f"TFEV.get_inital()")
+        print(f"TFEV.get_inital(), current initial = {self.initial}")
         initial = super().get_initial()
         #context_data = self.get_context_data()
         #file_id = content_data['file_id']
