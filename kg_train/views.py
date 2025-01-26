@@ -192,8 +192,12 @@ class TextFileLabelView(generic.DetailView):
     model = TextFile
     template_name = "kg_train/file_label.html"
 
+    def get_queryset(self):
+        """ Excludes any Qs that aren't published, yet.  """
+        return Question.objects.filter(pub_date__lte=timezone.now())
+
     def get_object(self):
-        print(f"TFLV.g_o(), looking up file_id (1st)")
+        print(f"TFLV.g_o(), looking up file_id (1st), kwargs = {self.kwargs}")
         context_data = self.get_context_data()
         file_id = self.context_data['file_id']
         print(f"TFLV.g_o(), file_id = {file_id}")
