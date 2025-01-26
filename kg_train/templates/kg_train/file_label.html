@@ -7,7 +7,7 @@
     <p>Folder name: <b>{{ folder_name }}</b></p>
     <p>Page number: <b>{{ page_number }}</b></p>
     <p>Invoking prodigy here</p>
-    <form method="post" 
+    <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
         <button id="myButton" type="submit">Return</button>
     </form>
