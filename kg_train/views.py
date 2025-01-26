@@ -143,7 +143,7 @@ class TextFileEditView(generic.edit.FormView):
         context_data['file_id'] = file_id
         text_file = get_object_or_404(TextFile, pk=file_id)
         context_data['page_number'] = text_file.page_number 
-        self.initial_text = "Here is some juicy text"
+        initial_text = "Here is some juicy text"
 
         # Folder stuff
         folder_id = self.kwargs.get('folder_id')
