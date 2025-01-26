@@ -1,0 +1,14 @@
+{% block title %}GISA | Compass Blue KGs | Single File (Page) Label{% endblock title %}
+{% block description %}Text editor built on Django Prose {% endblock description %}
+
+{% block content %}
+<!doctype html>
+    <!-- use of app_name = nys below, csrf = cross site request forgeries -->
+    <p>Folder name: <b>{{ folder_name }}</b></p>
+    <p>Page number: <b>{{ page_number }}</b></p>
+    <p>Invoking prodigy here</p>
+    <form method="post" 
+        {% csrf_token %}
+        <button id="myButton" type="submit">Return</button>
+    </form>
+{% endblock content %}

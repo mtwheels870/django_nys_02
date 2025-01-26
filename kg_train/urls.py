@@ -14,8 +14,9 @@ urlpatterns = [
     # To view an individual file details (and start labeling)
     path("<int:folder_id>/", views.TextFolderDetailView.as_view(), name="detail"),
 
-    path("<int:file_id>/edit/", views.edit_file, name="edit_file"),
-    path("<int:folder_id>/<int:file_id>/edit-file/", views.TextFileEditView.as_view(), name="edit_view"),
+    # path("<int:file_id>/edit/", views.edit_file, name="edit_file"),
+    path("<int:folder_id>/<int:file_id>/file-edit/", views.TextFileEditView.as_view(), name="file_edit"),
+    path("<int:folder_id>/<int:file_id>/file-label/", views.TextFileEditView.as_view(), name="file_label"),
 
     # This breaks out to our editor
     # path("prose/attachment/", include("prose.urls"), name="prose"),

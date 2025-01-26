@@ -15,20 +15,8 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% render_table table %}
-        <button type="submit">Edit</button>
+        <button type="submit" name="edit">Edit</button>
+        <button type="submit" name="label">Label</button>
     </form>
   </body>
 </html>
-
-    <!-- script>
-        let global_id = 23;
-
-        // SHould be global here
-        function checkForSelected() {
-        // Your JavaScript code here
-        console.log("Doing something before submit...");
-
-        // Return true to allow the form to submit
-        return true;
-    }
-    </script -->

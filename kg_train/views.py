@@ -112,6 +112,9 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
+    return label_page(self, file_id):
+        return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
+
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
         selected_pks = request.POST.getlist('selection')
@@ -123,9 +126,23 @@ class TextFolderDetailView(SingleTableView):
             print(f"TFDV.post(), >1 selected rows")
             return redirect(request.path)
         else:
+            # Check which button we're in: edit or label
             file_id = selected_pks[0]
+            if 'edit' in request.POST:
+                print(f"TFDV.post(), editing page")
+                return HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(folder_id, file_id,)))
+            elif 'label' in request.POST:
+                return self.label_page(request, file_id)
+            else:
+                print(f"TFDV.post(), unrecognized button")
+                return redirect(request.path)
+
+            
+class TextFolderDetailView(SingleTableView):
+            if req
+        <button type="submit" name="edit">Edit</button>
+        <button type="submit" name="label">Label</button>
             # print(f"BEFORE edit_view(), Selected file id: {file_id}, folder_id = {folder_id}")
-            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(folder_id, file_id,)))
 
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
@@ -202,7 +219,7 @@ def edit_file(request, file_id):
         print(f"edit_file(), setting up context here, form = {form}")
         context = {"form": form, "file_id": file_id}
         # return render(request, "kg_train/file_edit.html", context)
-        result = HttpResponseRedirect(reverse("app_kg_train:edit_file", args=(file_id,)))
+        result = HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(file_id,)))
         print(f"edit_file(), result = {result}")
         return result
 
