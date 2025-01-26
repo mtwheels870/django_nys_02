@@ -165,6 +165,8 @@ class TextFileEditView(generic.edit.FormView):
             print(f"[{i}]: {key} = {value}")
         text_editor = form.fields['text_editor']
         print(f"text_editor = {text_editor}")
+        value = text_editor.value
+        print(f"text_editor.value = {value}")
         return context_data
 
     def get_initial(self):
