@@ -165,6 +165,10 @@ class TextFileEditView(generic.edit.FormView):
 
     def post(self, request, *args, **kwargs):
         print(f"TFEV.post(), kwargs = {kwargs}")
+        file_id = kwargs["file_id"]
+        text_file = get_object_or_404(TextFile, pk=file_id)
+        text_file.time_edited = timezone.now()
+        text_file.save()
         return HttpResponseRedirect(self.get_success_url())
 
 def edit_file(request, file_id):
