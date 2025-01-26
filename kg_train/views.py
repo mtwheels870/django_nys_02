@@ -125,8 +125,12 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context_data = self.get_context_data(**kwargs)
+        folder_id = context_data["folder_id"]
+        print(f"TFDV.post(), folder_id = {folder_id}")
         selected_pks = request.POST.getlist('selection')
-        print(f"DEBUG: TFDV.post(), selected_pks = {selected_pks}")
+        # print(f"DEBUG: TFDV.post(), selected_pks = {selected_pks}")
         num_selected = len(selected_pks)
         if num_selected  == 0:
             print(f"TFDV.post(), no selected rows")
@@ -136,45 +140,17 @@ class TextFolderDetailView(SingleTableView):
             return redirect(request.path)
         else:
             # Good case (1 selected)
-            request.method = "GET"
+            # request.method = "GET"
             # selected_rows = TextFile.objects.filter(pk__in=selected_pks)
             #file_id = selected_rows[0]
             file_id = selected_pks[0]
+            context = self.get_context_data(form=form)
             folder_id = request.POST.get("folder_id")
             # context_data = self.get_context_data()
             print(f"BEFORE edit_view(), Selected file id: {file_id}, folder_id = {folder_id}, self.f_id = {self.folder_id}")
             # Load content data here
             return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(folder_id, file_id,)))
 #                kwargs={"context_data" : context_data})
-
-def edit_file(request, file_id):
-    print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
-    text_file = get_object_or_404(TextFile, pk=file_id)
-    if request.method == "POST":
-        # form = UploadFolderForm(request.POST, request.FILES)
-        form = EditorForm(request.POST)
-        if form.is_valid():
-            # This is NOT a model based ford (so no save)
-            text_editor_data = form.cleaned_data['text_editor']
-            print(f"edit_file(), text_editor_data = {text_editor_data}")
-            # print(f"edit_file(), new_text_area = {new_text_area}")
-        else:
-            print(f"ERROR: upload_file(), INVALID, errors = {form.errors}")
-        folder_id = text_file.folder.id
-        # This should go back to the folder view (with all of the pages)
-        return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
-    # else, we're == GET
-    else:
-        initial_text = "Four score and seven years ago"
-        form = EditorForm(initial={'text_editor': initial_text})
-        # print(f"Before render, form = {form}")
-        # This will fall through to the following with an empty form to be populated
-        print(f"edit_file(), setting up context here, form = {form}")
-        context = {"form": form, "file_id": file_id}
-        # return render(request, "kg_train/file_edit.html", context)
-        result = HttpResponseRedirect(reverse("app_kg_train:edit_file", args=(file_id,)))
-        print(f"edit_file(), result = {result}")
-        return result
 
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
@@ -219,6 +195,34 @@ class TextFileEditView(generic.edit.FormView):
         print(f"TFEV.get_success_url(), folder_id = {folder_id}")
         return reverse("app_kg_train:detail", args=(folder_id,))
 
+def edit_file(request, file_id):
+    print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
+    text_file = get_object_or_404(TextFile, pk=file_id)
+    if request.method == "POST":
+        # form = UploadFolderForm(request.POST, request.FILES)
+        form = EditorForm(request.POST)
+        if form.is_valid():
+            # This is NOT a model based ford (so no save)
+            text_editor_data = form.cleaned_data['text_editor']
+            print(f"edit_file(), text_editor_data = {text_editor_data}")
+            # print(f"edit_file(), new_text_area = {new_text_area}")
+        else:
+            print(f"ERROR: upload_file(), INVALID, errors = {form.errors}")
+        folder_id = text_file.folder.id
+        # This should go back to the folder view (with all of the pages)
+        return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
+    # else, we're == GET
+    else:
+        initial_text = "Four score and seven years ago"
+        form = EditorForm(initial={'text_editor': initial_text})
+        # print(f"Before render, form = {form}")
+        # This will fall through to the following with an empty form to be populated
+        print(f"edit_file(), setting up context here, form = {form}")
+        context = {"form": form, "file_id": file_id}
+        # return render(request, "kg_train/file_edit.html", context)
+        result = HttpResponseRedirect(reverse("app_kg_train:edit_file", args=(file_id,)))
+        print(f"edit_file(), result = {result}")
+        return result
 
 # attrs = dir(form)
 # print(f"attrs: {attrs}")
