@@ -152,7 +152,9 @@ class TextFileEditView(generic.edit.FormView):
             value = context_data[key]
             print(f"  {i}: [{key}] = {value}")
         file_id = self.kwargs.get('file_id')
+        context_data['file_id'] = file_id
         folder_id = self.kwargs.get('folder_id')
+        context_data['folder_id'] = folder_id
         print(f"TFEV.g_c_d(), folder_id = {folder_id}, file_id = {file_id}")
         return context_data
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
