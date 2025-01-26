@@ -202,7 +202,7 @@ class TextFileLabelView(generic.DetailView):
         # context_data = self.get_context_data()
         # file_id = self.context_data['file_id']
         # print(f"TFLV.g_o(), file_id = {file_id}")
-        return TextFile.objects.filter(file_id=file_id)
+        return TextFile.objects.filter(id=file_id)
 
     def get_context_data(self, **kwargs):
         print(f"TFLV.g_c_d(), loading other objects (2nd)")
