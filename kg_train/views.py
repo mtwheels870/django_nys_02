@@ -202,11 +202,13 @@ class TextFileEditView(generic.edit.FormView):
     # Straight override (so we can use reverse)
     def get_success_url(self):
         context_data = self.get_context_data()
+        view = context_data['view']
+        context_data2 = view.get_context_data()
         print(f"TFEV.get_success_url(), context data:")
-        for i, key in enumerate(context_data):
-            value = context_data[key]
+        for i, key in enumerate(context_data2):
+            value = context_data2[key]
             print(f"  {i}: [{key}] = {value}")
-        folder_id = context_data["folder_id"]
+        folder_id = context_data2["folder_id"]
         print(f"TFEV.get_success_url(), folder_id = {folder_id}")
         return reverse("app_kg_train:detail", args=(folder_id,))
 
