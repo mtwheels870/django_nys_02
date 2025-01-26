@@ -137,6 +137,7 @@ class TextFileEditView(generic.edit.FormView):
     def get_context_data(self, **kwargs):
         print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
+        # After this, the form is created
 
         # File stuff
         file_id = self.kwargs.get('file_id')
@@ -151,6 +152,10 @@ class TextFileEditView(generic.edit.FormView):
         context_data['folder_id'] = folder_id
         text_folder = get_object_or_404(TextFolder, pk=folder_id)
         context_data['folder_name'] = text_folder.folder_name 
+
+        form = context_data['form']
+        print(f"TFEV.get_context_data(), form = {form}")
+        print(f"            dir(form) = {dir(form)}")
         return context_data
 
     def get_initial(self):
