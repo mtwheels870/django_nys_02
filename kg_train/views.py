@@ -144,6 +144,7 @@ class TextFileEditView(generic.edit.FormView):
         text_file = get_object_or_404(TextFile, pk=file_id)
         context_data['page_number'] = text_file.page_number 
         self.initial["text_editor"] = "Here is some juicy text"
+        print(f"TFEV.get_context_data(), current initial = {self.initial}")
 
         # Folder stuff
         folder_id = self.kwargs.get('folder_id')
@@ -153,7 +154,7 @@ class TextFileEditView(generic.edit.FormView):
         return context_data
 
     def get_initial(self):
-        print(f"TFEV.get_inital(), current initial = {self.initial}")
+        print(f"TFEV.get_initial(), current initial = {self.initial}")
         initial = super().get_initial()
         #context_data = self.get_context_data()
         #file_id = content_data['file_id']
