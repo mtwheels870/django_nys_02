@@ -4,6 +4,8 @@
 {% block content %}
 <!doctype html>
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
+    <p>Folder name: {{ folder_name }}</p>
+    <p>Page number: {{ page_number }}</p>
     <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
         {{ form.errors }}

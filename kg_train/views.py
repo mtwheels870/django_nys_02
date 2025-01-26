@@ -124,7 +124,7 @@ class TextFolderDetailView(SingleTableView):
             return redirect(request.path)
         else:
             file_id = selected_pks[0]
-            print(f"BEFORE edit_view(), Selected file id: {file_id}, folder_id = {folder_id}")
+            # print(f"BEFORE edit_view(), Selected file id: {file_id}, folder_id = {folder_id}")
             return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(folder_id, file_id,)))
 
 class TextFileEditView(generic.edit.FormView):
@@ -135,8 +135,18 @@ class TextFileEditView(generic.edit.FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['file_id'] = self.kwargs.get('file_id')
-        context_data['folder_id'] = self.kwargs.get('folder_id')
+
+        # File stuff
+        file_id = self.kwargs.get('file_id')
+        context_data['file_id'] = file_id
+        text_file = get_object_or_404(TextFile, pk=file_id)
+        context_data['page_number'] = text_file.page_number 
+
+        # Folder stuff
+        folder_id = self.kwargs.get('folder_id')
+        context_data['folder_id'] = folder_id
+        text_folder = get_object_or_404(TextFolder, pk=folder_id)
+        context_data['folder_name'] = folder_name 
         return context_data
 
     def get_initial(self):
