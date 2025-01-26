@@ -54,8 +54,9 @@ INSTALLED_APPS = [
     'kg_admin.apps.KgAdminConfig',
     'kg_train.apps.KgTrainConfig',
     'colorfield',
-    'django_prose_editor',       # Text Editor
-    'django_tables2',           # Tables
+    'django_prose_editor',
+    'django_tables2', 
+    'django_celery_results',     
 ]
 
 MIDDLEWARE = [
@@ -197,3 +198,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # URL for accessing uploaded files
 MEDIA_URL = '/media/'
+
+# Celery Configuration Options
+CELERY_TIMEZONE = "America/New_York"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

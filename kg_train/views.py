@@ -113,7 +113,6 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def label_page(self, request, folder_id, file_id):
-        print(f"TFDV.label_page(), calling command")
         return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
@@ -195,16 +194,10 @@ class TextFileLabelView(generic.DetailView):
     model = TextFile
     template_name = "kg_train/file_label.html"
 
-    def get_queryset(self):
-        """ Excludes any Qs that aren't published, yet.  """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        print(f"TFDV.label_page(), calling command")
 
     def get_object(self):
-        print(f"TFLV.g_o(), looking up file_id (1st), kwargs = {self.kwargs}")
         file_id = self.kwargs['file_id']
-        # context_data = self.get_context_data()
-        # file_id = self.context_data['file_id']
-        # print(f"TFLV.g_o(), file_id = {file_id}")
         return TextFile.objects.filter(id=file_id)
 
     def get_context_data(self, **kwargs):
