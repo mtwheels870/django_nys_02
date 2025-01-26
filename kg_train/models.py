@@ -45,6 +45,8 @@ class TextFile(models.Model):
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     # body = models.OneToOneField(Document, on_delete=models.CASCADE, null=True)
     prose_editor = ProseEditorField("text", preset="announcements")
+    time_edited = models.DateTimeField(null=True)
+    time_labeled = models.DateTimeField(null=True)
     def __str__(self):
         return self.file_name
 

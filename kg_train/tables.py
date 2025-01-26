@@ -8,4 +8,4 @@ class TextFileTable(tables.Table):
         model = TextFile
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
-        fields = ["selection", "page_number", "file_name", "file_size", "status"]
+        fields = ["selection", "page_number", "file_name", "status", "time_edited", "time_labeled", "file_size"]
