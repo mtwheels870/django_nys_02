@@ -132,6 +132,7 @@ class TextFileEditView(generic.edit.FormView):
     form_class = EditorForm
     template_name = "kg_train/file_edit.html"
     success_url = "kg_train/index.html"
+    initial_text = "Placeholder here"
 
     def get_context_data(self, **kwargs):
         print(f"TFEV.get_context_data(*kwargs)")
@@ -167,6 +168,9 @@ class TextFileEditView(generic.edit.FormView):
         folder_id = context_data['folder_id']
         # print(f"TFEV.get_success_url(), folder_id = {folder_id}")
         return reverse("app_kg_train:detail", args=(folder_id,))
+
+    def post(self, request, *args, **kwargs):
+        print(f"TFEV.post(), kwargs = {kwargs}")
 
 def edit_file(request, file_id):
     print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
