@@ -188,6 +188,34 @@ class TextFileEditView(generic.edit.FormView):
             print(f"TFEV.post(), form is INVALID")
         return HttpResponseRedirect(self.get_success_url())
 
+class TextFileLabelView(generic.DetailView):
+    model = TextFile
+    template_name = "kg_train/file_label.html"
+
+    def get_context_data(self, **kwargs):
+        # print(f"TFEV.get_context_data(*kwargs)")
+        context_data = super().get_context_data(**kwargs)
+        # After this, the form is created
+
+        # File stuff
+        file_id = self.kwargs.get('file_id')
+        context_data['file_id'] = file_id
+        text_file = get_object_or_404(TextFile, pk=file_id)
+        context_data['page_number'] = text_file.page_number 
+
+        # Folder stuff
+        folder_id = self.kwargs.get('folder_id')
+        context_data['folder_id'] = folder_id
+        text_folder = get_object_or_404(TextFolder, pk=folder_id)
+        context_data['folder_name'] = text_folder.folder_name 
+
+        return context_data
+
+    def post(self, request, *args, **kwargs):
+        folder_id = kwargs["folder_id"]
+        file_id = kwargs["file_id"]
+        return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
+
 def edit_file(request, file_id):
     print(f"edit_file(), method = {request.method}, file_id = {file_id}:")
     text_file = get_object_or_404(TextFile, pk=file_id)
