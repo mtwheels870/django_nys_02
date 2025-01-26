@@ -151,6 +151,9 @@ class TextFileEditView(generic.edit.FormView):
 
     def get_initial(self):
         initial = super().get_initial()
+        context_data = self.get_context_data()
+        file_id = content_data['file_id']
+        print(f"TFEV.get_initial(), file_id = {file_id}")
         initial["text_editor"] = "Four score and seven years ago"
         return initial
 
@@ -158,7 +161,7 @@ class TextFileEditView(generic.edit.FormView):
     def get_success_url(self):
         context_data = self.get_context_data()
         folder_id = context_data['folder_id']
-        print(f"TFEV.get_success_url(), folder_id = {folder_id}")
+        # print(f"TFEV.get_success_url(), folder_id = {folder_id}")
         return reverse("app_kg_train:detail", args=(folder_id,))
 
 def edit_file(request, file_id):
