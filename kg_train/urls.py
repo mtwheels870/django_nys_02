@@ -15,7 +15,7 @@ urlpatterns = [
     path("<int:folder_id>/", views.TextFolderDetailView.as_view(), name="detail"),
 
     path("<int:file_id>/edit/", views.edit_file, name="edit_file"),
-    path("<int:file_id>/edit-file/", views.TextFileEditView.as_view(), name="edit_view"),
+    path("<int:folder_id>/<int:file_id>/edit-file/", views.TextFileEditView.as_view(), name="edit_view"),
 
     # This breaks out to our editor
     # path("prose/attachment/", include("prose.urls"), name="prose"),

@@ -144,7 +144,7 @@ class TextFolderDetailView(SingleTableView):
             # context_data = self.get_context_data()
             print(f"BEFORE edit_view(), Selected file id: {file_id}, folder_id = {folder_id}")
             # Load content data here
-            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(file_id,)))
+            return HttpResponseRedirect(reverse("app_kg_train:edit_view", args=(folder_id, file_id,)))
 #                kwargs={"context_data" : context_data})
 
 def edit_file(request, file_id):
@@ -181,6 +181,13 @@ class TextFileEditView(generic.edit.FormView):
     form_class = EditorForm
     template_name = "kg_train/file_edit.html"
     success_url = "kg_train/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        file_id = self.kwargs.get('file_id')
+        folder_id = self.kwargs.get('folder_id')
+        print(f"TFEV.g_c_d(), folder_id = {folder_id}, file_id = {file_id}")
+        # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
 
     def get_initial(self):
         initial = super().get_initial()
