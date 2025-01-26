@@ -135,7 +135,7 @@ class TextFolderDetailView(SingleTableView):
             elif 'label' in request.POST:
                 return self.label_page(request, folder_id, file_id)
             else:
-                print(f"TFDV.post(), unrecognized button, dir(POST) = {dir(request.POST)}")
+                print(f"TFDV.post(), unrecognized button:")
                 for i, key in enumerate(request.POST):
                     value = request.POST[key]
                     print(f"          [{i}]: {key} = {value}")
