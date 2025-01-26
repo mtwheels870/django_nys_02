@@ -113,6 +113,7 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def label_page(self, file_id):
+        print(f"TFDV.label_page(), calling command")
         return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
@@ -136,13 +137,6 @@ class TextFolderDetailView(SingleTableView):
             else:
                 print(f"TFDV.post(), unrecognized button")
                 return redirect(request.path)
-
-            
-class TextFolderDetailView(SingleTableView):
-            if req
-        <button type="submit" name="edit">Edit</button>
-        <button type="submit" name="label">Label</button>
-            # print(f"BEFORE edit_view(), Selected file id: {file_id}, folder_id = {folder_id}")
 
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
