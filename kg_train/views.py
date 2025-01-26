@@ -196,6 +196,7 @@ class TextFileEditView(generic.edit.FormView):
             value = context_data[key]
             print(f"  {i}: [{key}] = {value}")
 # class ProcessFormView(View):
+        context_data["folder_id"] = 1
         return super().get(self, request, *args, **kwargs)
 
     # Straight override (so we can use reverse)
