@@ -135,7 +135,7 @@ class TextFileEditView(generic.edit.FormView):
     initial_text = "Placeholder here"
 
     def get_context_data(self, **kwargs):
-        print(f"TFEV.get_context_data(*kwargs)")
+        # print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
         # After this, the form is created
 
@@ -164,11 +164,17 @@ class TextFileEditView(generic.edit.FormView):
         return reverse("app_kg_train:detail", args=(folder_id,))
 
     def post(self, request, *args, **kwargs):
-        print(f"TFEV.post(), kwargs = {kwargs}")
-        file_id = kwargs["file_id"]
-        text_file = get_object_or_404(TextFile, pk=file_id)
-        text_file.time_edited = timezone.now()
-        text_file.save()
+        # print(f"TFEV.post(), kwargs = {kwargs}")
+        form = EditorForm(request.POST)
+        if form.is_valid():
+            text_editor_data = form.cleaned_data['text_editor']
+            file_id = kwargs["file_id"]
+            text_file = get_object_or_404(TextFile, pk=file_id)
+            text_file.time_edited = timezone.now()
+            text_file.prose_editor = text_editor_data 
+            text_file.save()
+        else:
+            print(f"TFEV.post(), form is INVALID")
         return HttpResponseRedirect(self.get_success_url())
 
 def edit_file(request, file_id):
