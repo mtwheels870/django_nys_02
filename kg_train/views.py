@@ -179,11 +179,11 @@ class TextFileEditView(generic.edit.FormView):
     def get_success_url(self):
         print(f"g_s_u(), self = {self}")
         context_data = self.get_context_data()
+        folder_id = context_data['folder_id']
         print(f"TFEV.g_s_u(), context data:")
         for i, key in enumerate(context_data):
             value = context_data[key]
             print(f"  {i}: [{key}] = {value}")
-        folder_id = 1
         return reverse("app_kg_train:detail", args=(folder_id,))
 
 def edit_file(request, file_id):
