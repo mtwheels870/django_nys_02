@@ -115,8 +115,8 @@ class TextFolderDetailView(SingleTableView):
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
         async_result = invoke_prodigy.delay(3, 5, folder_id, file_id)
-        task = Task.objects.filter(id=async_result.id)[0]
-        print(f"class name (task) = {type(task)}")
+        # task = Task.objects.filter(id=async_result.id)[0]
+        # print(f"class name (task) = {type(task)}")
         request.session["task_id"] = async_result.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
