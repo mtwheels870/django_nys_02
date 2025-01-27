@@ -4,6 +4,7 @@
 import os
 import datetime
 from celery import shared_task, Task
+from celery.signals import task_completed
 from django.http import JsonResponse
 from django_celery_results.models import TaskResult
 
@@ -56,7 +57,9 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     print(f"tasks.py:invoke_prodigy(), self = {self}")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
-    return x + y
+    result = x + y
+    task_completed.send(sender=self, result=result)
+    return result
 
 @shared_task
 def callback_task(result):

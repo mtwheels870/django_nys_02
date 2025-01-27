@@ -14,6 +14,7 @@ from django.utils import timezone
 from django_tables2 import SingleTableView
 
 from celery import Task
+from celery.signals import task_completed
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm, EditorForm
@@ -115,6 +116,14 @@ class TextFolderDetailView(SingleTableView):
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
         async_result = invoke_prodigy.apply_async((3, 5, folder_id, file_id), link=callback_task.s())
+
+        def handle_task_completed(sender, result, **kwargs):
+            # Handle the result in your view
+            print(f"Djago.view.h_t_c(), task completed with result: {result}")
+
+        # Handle the signal when we're done
+        task_completed.connect(handle_task_completed)
+
         # task = Task.objects.filter(id=async_result.id)[0]
         # print(f"class name (task) = {type(task)}")
         request.session["task_id"] = async_result.id
