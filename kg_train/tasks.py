@@ -4,7 +4,7 @@
 import os
 import datetime
 from celery import shared_task, Task
-from celery.signals import task_completed
+from celery import signals
 from django.http import JsonResponse
 from django_celery_results.models import TaskResult
 
