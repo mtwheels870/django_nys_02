@@ -51,9 +51,9 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
 # Note, this just does the action.  Result is above 
-@shared_task(base=InvokeProdigyTask)
-def invoke_prodigy(x, y, folder_id, file_id):
-    print(f"tasks.py:invoke_prodigy()")
+@shared_task(bind=True, base=InvokeProdigyTask)
+def invoke_prodigy(self, x, y, folder_id, file_id):
+    print(f"tasks.py:invoke_prodigy(), self = {self}")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
     return x + y
