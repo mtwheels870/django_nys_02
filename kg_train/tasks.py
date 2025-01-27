@@ -41,10 +41,20 @@ def get_task_result(request, task_id):
         'result': task_result.result
     })
 
+class InvokeProdigyTask(celery.Task):
+    # args = tuple
+    # kwards = Dict
+    def on_failure(self, exception, task_id, args, kwargs, exception_info):
+        print(f'IPT.on_failure(), task: {task_id} failed, exception: {exception}'))
+
+    def on_success(self, retval, task_id, args, kwargs)
+        print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
+
 # Note, this just does the action.  Result is above 
-@shared_task
+@shared_task(base=InvokeProdigyTask)
 def invoke_prodigy(x, y, folder_id, file_id):
     print(f"tasks.py:invoke_prodigy()")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
     return x + y
+
