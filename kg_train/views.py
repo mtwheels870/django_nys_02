@@ -34,10 +34,8 @@ def read_directory(directory_path):
     path = pathlib.PurePath(directory_path)
     directory_name = path.name
     max_page_num = None
-    # print(f"read_directory(), path = {directory_path}, directory_name = {directory_name}")
     files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
     for file_name in files:
-        # print(f"read_directory(), checking file name {file_name}")
         match = re.search(pattern, file_name)
         if match:
             page_num = int(match.group(1))
@@ -47,7 +45,6 @@ def read_directory(directory_path):
                 new_max = int(match.group(2))
                 if new_max != max_page_num:
                     print(f"WARNING! Previous max = {max_page_num}, new max = {new_max}")
-            # print(f"read_directory(), name: {file_name} matched, page = {page_num}")
             page_files[file_name] = page_num
     return directory_name, page_files, max_page_num
 
@@ -116,18 +113,8 @@ class TextFolderDetailView(SingleTableView):
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
         task = invoke_prodigy.delay(3, 5, folder_id, file_id)
-        #print(f"Started celery task here, id = {task.id}, status = {task.status}, result = {task.result}")
-        #context = {"task_id" : task.id }
-        # Can't mix args and kwargs (in the _reverse_)
-        # file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,), kwargs={"task_id": task.id})
-        #  this doesn't work as the url doesn't match now
-        #file_label_url = reverse("app_kg_train:file_label", kwargs={
-        #    "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
         request.session["task_id"] = task.id
-        file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,))
-        # return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,), context=context))
-        #return HttpResponseRedirect(file_label_url, kwargs={"task_id": task.id})
-        return redirect(file_label_url)
+        return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
@@ -162,7 +149,6 @@ class TextFileEditView(generic.edit.FormView):
     initial_text = "Placeholder here"
 
     def get_context_data(self, **kwargs):
-        # print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
         # After this, the form is created
 
@@ -187,7 +173,6 @@ class TextFileEditView(generic.edit.FormView):
     def get_success_url(self):
         context_data = self.get_context_data()
         folder_id = context_data['folder_id']
-        # print(f"TFEV.get_success_url(), folder_id = {folder_id}")
         return reverse("app_kg_train:detail", args=(folder_id,))
 
     def post(self, request, *args, **kwargs):
@@ -213,16 +198,9 @@ class TextFileLabelView(generic.DetailView):
         return TextFile.objects.filter(id=file_id)
 
     def get_context_data(self, **kwargs):
-        # print(f"TFLV.g_c_d(), loading other objects (2nd)")
-        # print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
-        # task_id = self.kwargs["task_id"]
-        #print(f"TFLV.get_context_data(*kwargs), kwargs = {kwargs}")
-        #print(f"TFLV.get_context_data(*kwargs), self.request.session = {self.request.session}")
         task_id = self.request.session["task_id"]
         context_data["task_id"] = task_id
-        # print(f"TFLV.get_context_data(*kwargs), task_id = {task_id}")
-        # After this, the form is created
 
         # File stuff
         file_id = self.kwargs.get('file_id')
