@@ -124,7 +124,6 @@ class TextFolderDetailView(SingleTableView):
         #file_label_url = reverse("app_kg_train:file_label", kwargs={
         #    "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
         file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,))
-            "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
         # return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,), context=context))
         return HttpResponseRedirect(file_label_url, kwargs={"task_id": task.id})
 
