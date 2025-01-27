@@ -15,7 +15,9 @@ app = Celery('django_nys_02')
 # - namespace='CELERY' means all celery-related configuration keys
 #   should have a `CELERY_` prefix.
 # MTW: No Va.  app.config_from_object(f'django.conf:{settings.__name__}', namespace='CELERY')
-app.config_from_object("django_nys_02.config:CeleryConfig", namespace='CELERY')
+# This works:
+# app.config_from_object("django_nys_02.config:CeleryConfig", namespace='CELERY')
+app.config_from_object("django.conf:settings", namespace='CELERY')
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()

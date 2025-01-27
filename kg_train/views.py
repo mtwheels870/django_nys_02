@@ -16,6 +16,7 @@ from django_tables2 import SingleTableView
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm, EditorForm
 from .tables import TextFileTable
+from .tasks import add
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
@@ -113,6 +114,8 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def label_page(self, request, folder_id, file_id):
+        print(f"Starting celery task here")
+        add.delay(3, 5)
         return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
@@ -199,7 +202,7 @@ class TextFileLabelView(generic.DetailView):
         return TextFile.objects.filter(id=file_id)
 
     def get_context_data(self, **kwargs):
-        print(f"TFLV.g_c_d(), loading other objects (2nd)")
+        # print(f"TFLV.g_c_d(), loading other objects (2nd)")
         # print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
         # After this, the form is created
