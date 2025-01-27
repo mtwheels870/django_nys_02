@@ -31,15 +31,20 @@ def generate_prodigy_files(dir_path, file_id):
     print(f"tasks.py:generate_prodigy_files(), file_path_text = {file_path_text}")
     return file_path_text 
 
+# This returns the status of the worker/celery
+def get_task_result(request, task_id):
+    task_result = TaskResult.objects.get(task_id=task_id)
+    return JsonResponse({
+        'task_id': task_result.task_id,
+        'status': task_result.status,
+        'result': task_result.result
+    })
 
+# Note, this just does the action.  Result is above 
 @shared_task
 def invoke_prodigy(x, y, folder_id, file_id):
     print(f"tasks.py:add(), adding {x} and {y}, file_id = {file_id}")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
     task_result = TaskResult.objects.get(task_id=task_id)
-    return JsonResponse({
-        'task_id': task_result.task_id,
-        'status': task_result.status,
-        'result': task_result.result})
-
+    return x + y
