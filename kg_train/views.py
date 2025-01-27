@@ -16,7 +16,7 @@ from django_tables2 import SingleTableView
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm, EditorForm
 from .tables import TextFileTable
-from .tasks import add
+from .tasks import invoke_prodigy
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
@@ -115,7 +115,7 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         print(f"Starting celery task here")
-        add.delay(3, 5)
+        invoke_prodigy.delay(3, 5, folder_id, file_id)
         return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
