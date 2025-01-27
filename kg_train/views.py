@@ -18,7 +18,7 @@ from celery import Task
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm, EditorForm
 from .tables import TextFileTable
-from .tasks import invoke_prodigy
+from .tasks import invoke_prodigy, callback_task
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
