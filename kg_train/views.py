@@ -114,9 +114,11 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def label_page(self, request, folder_id, file_id):
+        # Invoke celery task here
         task = invoke_prodigy.delay(3, 5, folder_id, file_id)
-        print(f"Started celery task here, task = {task}")
-        return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
+        print(f"Started celery task here, id = {task.id}, status = {task.status}, result = {task.result}")
+        context = {"task_id"} : task.id }
+        return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)), context)
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
@@ -205,6 +207,8 @@ class TextFileLabelView(generic.DetailView):
         # print(f"TFLV.g_c_d(), loading other objects (2nd)")
         # print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
+        task_id = context_data["task_id"]
+        print(f"TFLV.get_context_data(*kwargs), task_id = {task_id}")
         # After this, the form is created
 
         # File stuff
