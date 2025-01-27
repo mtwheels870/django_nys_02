@@ -11,7 +11,8 @@ VENV_PYTHON_PATH="/home/bitnami/nlp/venv01/bin"
 
 def make_tmp_files(file_id):
     temp_directory = "/tmp/invoke_prodigy"
-    folder_snapshot = "%Y%m%d_%H%M%S")
+    now = datetime.datetime.now()
+    folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
     full_path = os.path.join(temp_directory, folder_snapshot)
     if not os.path.exists(full_path):
         os.makedirs(temp_directory)
