@@ -115,19 +115,19 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        task = invoke_prodigy.delay(3, 5, folder_id, file_id)
-        print(f"Started celery task here, id = {task.id}, status = {task.status}, result = {task.result}")
-        context = {"task_id" : task.id }
+        task = invoke_prodigy.delay(folder_id, file_id)
+        #print(f"Started celery task here, id = {task.id}, status = {task.status}, result = {task.result}")
+        #context = {"task_id" : task.id }
         # Can't mix args and kwargs (in the _reverse_)
         # file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,), kwargs={"task_id": task.id})
         #  this doesn't work as the url doesn't match now
         #file_label_url = reverse("app_kg_train:file_label", kwargs={
         #    "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
-        request.session["my_data"] = "some_value"
+        request.session["task"] = task
         file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,))
         # return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,), context=context))
         #return HttpResponseRedirect(file_label_url, kwargs={"task_id": task.id})
-        return redirect(file_label_url, kwargs={"task_id": task.id})
+        return redirect(file_label_url)
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
@@ -217,10 +217,10 @@ class TextFileLabelView(generic.DetailView):
         # print(f"TFEV.get_context_data(*kwargs)")
         context_data = super().get_context_data(**kwargs)
         # task_id = self.kwargs["task_id"]
-        print(f"TFLV.get_context_data(*kwargs), kwargs = {kwargs}")
-        print(f"TFLV.get_context_data(*kwargs), self.request.session = {self.request.session}")
-        my_data = self.request.session["my_data"]
-        print(f"TFLV.get_context_data(*kwargs), my_data = {my_data}")
+        #print(f"TFLV.get_context_data(*kwargs), kwargs = {kwargs}")
+        #print(f"TFLV.get_context_data(*kwargs), self.request.session = {self.request.session}")
+        task = self.request.session["task"]
+        print(f"TFLV.get_context_data(*kwargs), task = {task}")
         # After this, the form is created
 
         # File stuff
