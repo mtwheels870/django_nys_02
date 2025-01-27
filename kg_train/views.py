@@ -118,11 +118,15 @@ class TextFolderDetailView(SingleTableView):
         task = invoke_prodigy.delay(3, 5, folder_id, file_id)
         print(f"Started celery task here, id = {task.id}, status = {task.status}, result = {task.result}")
         context = {"task_id" : task.id }
+        # Can't mix args and kwargs (in the _reverse_)
         # file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,), kwargs={"task_id": task.id})
-        file_label_url = reverse("app_kg_train:file_label", kwargs={
+        #  this doesn't work as the url doesn't match now
+        #file_label_url = reverse("app_kg_train:file_label", kwargs={
+        #    "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
+        file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,))
             "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
         # return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,), context=context))
-        return HttpResponseRedirect(file_label_url)
+        return HttpResponseRedirect(file_label_url, kwargs={"task_id": task.id})
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
