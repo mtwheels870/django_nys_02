@@ -118,7 +118,7 @@ class TextFolderDetailView(SingleTableView):
         task = invoke_prodigy.delay(3, 5, folder_id, file_id)
         print(f"Started celery task here, id = {task.id}, status = {task.status}, result = {task.result}")
         context = {"task_id" : task.id }
-        return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)), context)
+        return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)), context=context)
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
