@@ -13,6 +13,8 @@ from django.utils import timezone
 
 from django_tables2 import SingleTableView
 
+from celery import Task
+
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm, EditorForm
 from .tables import TextFileTable
@@ -112,9 +114,10 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        task = invoke_prodigy.delay(3, 5, folder_id, file_id)
+        async_result = invoke_prodigy.delay(3, 5, folder_id, file_id)
+        task = Task.objects.filter(id=async_result.id)[0]
         print(f"class name (task) = {type(task)}")
-        request.session["task_id"] = task.id
+        request.session["task_id"] = async_result.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
