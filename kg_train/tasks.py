@@ -45,7 +45,7 @@ class InvokeProdigyTask(celery.Task):
     # args = tuple
     # kwards = Dict
     def on_failure(self, exception, task_id, args, kwargs, exception_info):
-        print(f'IPT.on_failure(), task: {task_id} failed, exception: {exception}'))
+        print(f'IPT.on_failure(), task: {task_id} failed, exception: {exception}')
 
     def on_success(self, retval, task_id, args, kwargs)
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
