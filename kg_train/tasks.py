@@ -33,7 +33,7 @@ def generate_prodigy_files(dir_path, file_id):
 @shared_task
 def invoke_prodigy(x, y, folder_id, file_id):
     print(f"tasks.py:add(), adding {x} and {y}, file_id = {file_id}")
-    dir_path = make_tmp_files(file_id)
+    dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
 
     return x + y
