@@ -115,7 +115,7 @@ class TextFolderDetailView(SingleTableView):
 
     @signals.task_postrun.connect
     def handle_task_postrun(sender, task_id, task, 
-            args, kwargs, retval, state):
+            *args, **kwargs, retval, state):
         # Handle the result in your view
         print(f"Djago.view.h_t_pr(), task completed with state: {state}")
 
