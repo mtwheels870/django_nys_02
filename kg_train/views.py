@@ -125,7 +125,8 @@ class TextFolderDetailView(SingleTableView):
         #    "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
         file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,))
         # return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,), context=context))
-        return HttpResponseRedirect(file_label_url, kwargs={"task_id": task.id})
+        #return HttpResponseRedirect(file_label_url, kwargs={"task_id": task.id})
+        return redirect(file_label_url, kwargs={"task_id": task.id})
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
