@@ -59,8 +59,8 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     file_path_text = generate_prodigy_files(dir_path, file_id)
     result = x + y
     providing_args={'task_id', 'task', 'args', 'kwargs', 'retval'},
-    send_postrun(self, self.task_id, self, args=[], kwargs={"key":"value"}, 
-                 retval=None, state=status.SUCCESS)
+    signals.send_postrun(self, self.task_id, self, args=[], kwargs={"key":"value"}, 
+                 retval=status.SUCCESS)
     # signals.task_success.send(sender=self, result=result)
     return result
 

@@ -117,7 +117,7 @@ class TextFolderDetailView(SingleTableView):
     def handle_task_postrun(sender, task_id, task, retval,
             *args, **kwargs):
         # Handle the result in your view
-        print(f"Djago.view.h_t_pr(), task completed with state: {state}")
+        print(f"Djago.view.h_t_pr(), task completed with retval: {retval}")
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
