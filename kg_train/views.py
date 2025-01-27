@@ -14,7 +14,7 @@ from django.utils import timezone
 from django_tables2 import SingleTableView
 
 from celery import Task
-from celery.signals import task_completed
+from celery import signals
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm, EditorForm
