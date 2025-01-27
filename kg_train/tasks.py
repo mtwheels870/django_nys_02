@@ -21,7 +21,7 @@ def make_tmp_files():
     return full_path
 
 def generate_prodigy_files(dir_path, file_id):
-    text_file = TextFile.objects.filter(id=file_id)
+    text_file = TextFile.objects.filter(id=file_id)[0]
     file_path_text = os.path.join(dir_path, FILE_TEXT)
     with open(file_path_text, "w") as file_writer:
         file_content = text_file.prose_editor 
