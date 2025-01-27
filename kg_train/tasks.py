@@ -4,7 +4,7 @@
 import os
 import datetime
 from celery import shared_task, Task
-from celery import signals
+from celery import signals, states
 from django.http import JsonResponse
 from django_celery_results.models import TaskResult
 
@@ -59,7 +59,7 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
     result = x + y
-    signals.task_postrun.send(self, self.request.id, self, retval=status.SUCCESS, args=[], kwargs={"key":"value"}) 
+    signals.task_postrun.send(self, self.request.id, self, retval=states.SUCCESS, args=[], kwargs={"key":"value"}) 
     # signals.task_success.send(sender=self, result=result)
     return result
 
