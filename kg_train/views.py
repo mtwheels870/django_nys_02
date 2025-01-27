@@ -114,8 +114,8 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     @signals.task_postrun.connect
-    def handle_task_postrun(sender, task_id, task, 
-            *args, **kwargs, retval, state):
+    def handle_task_postrun(sender, task_id, task, retval,
+            *args, **kwargs):
         # Handle the result in your view
         print(f"Djago.view.h_t_pr(), task completed with state: {state}")
 
