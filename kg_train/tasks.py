@@ -3,7 +3,7 @@
 
 import os
 import datetime
-from celery import shared_task
+from celery import shared_task, Task
 from django.http import JsonResponse
 from django_celery_results.models import TaskResult
 
@@ -41,7 +41,7 @@ def get_task_result(request, task_id):
         'result': task_result.result
     })
 
-class InvokeProdigyTask(celery.Task):
+class InvokeProdigyTask(Task):
     # args = tuple
     # kwards = Dict
     def on_failure(self, exception, task_id, args, kwargs, exception_info):
