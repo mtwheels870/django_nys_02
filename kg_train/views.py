@@ -220,7 +220,8 @@ class TextFileLabelView(generic.DetailView):
         #print(f"TFLV.get_context_data(*kwargs), kwargs = {kwargs}")
         #print(f"TFLV.get_context_data(*kwargs), self.request.session = {self.request.session}")
         task_id = self.request.session["task_id"]
-        print(f"TFLV.get_context_data(*kwargs), task_id = {task_id}")
+        context_data["task_id"] = task_id
+        # print(f"TFLV.get_context_data(*kwargs), task_id = {task_id}")
         # After this, the form is created
 
         # File stuff

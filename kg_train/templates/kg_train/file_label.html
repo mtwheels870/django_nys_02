@@ -6,7 +6,7 @@
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <p>Folder name: <b>{{ folder_name }}</b></p>
     <p>Page number: <b>{{ page_number }}</b></p>
-    <p>Invoking prodigy here</p>
+    <p>Clery task for invoking prodigy ( {{task_id }} )</p>
     <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
         <button id="myButton" type="submit">Return</button>
