@@ -58,7 +58,7 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
     result = x + y
-    task_completed.send(sender=self, result=result)
+    task_postrun.send(sender=self, result=result)
     return result
 
 @shared_task

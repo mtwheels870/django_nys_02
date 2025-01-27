@@ -113,10 +113,10 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
-    @signals.task_completed.connect
-    def handle_task_completed(sender, result, **kwargs):
+    @signals.task_postrun.connect
+    def handle_task_postrun(sender, result, **kwargs):
         # Handle the result in your view
-        print(f"Djago.view.h_t_c(), task completed with result: {result}")
+        print(f"Djago.view.h_t_pr(), task completed with result: {result}")
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
