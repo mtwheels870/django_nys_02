@@ -113,16 +113,17 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
+    @signals.task_completed.connect
+    def handle_task_completed(sender, result, **kwargs):
+        # Handle the result in your view
+        print(f"Djago.view.h_t_c(), task completed with result: {result}")
+
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
         async_result = invoke_prodigy.apply_async((3, 5, folder_id, file_id), link=callback_task.s())
 
-        def handle_task_completed(sender, result, **kwargs):
-            # Handle the result in your view
-            print(f"Djago.view.h_t_c(), task completed with result: {result}")
-
         # Handle the signal when we're done
-        task_completed.connect(handle_task_completed)
+        # task_completed.connect(handle_task_completed)
 
         # task = Task.objects.filter(id=async_result.id)[0]
         # print(f"class name (task) = {type(task)}")
