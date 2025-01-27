@@ -33,6 +33,7 @@ def generate_prodigy_files(dir_path, file_id):
 
 # This returns the status of the worker/celery
 def get_task_result(request, task_id):
+    print(f"tasks.py:get_task_result(), task_id = {task_id}")
     task_result = TaskResult.objects.get(task_id=task_id)
     return JsonResponse({
         'task_id': task_result.task_id,
@@ -46,5 +47,4 @@ def invoke_prodigy(x, y, folder_id, file_id):
     print(f"tasks.py:add(), adding {x} and {y}, file_id = {file_id}")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
-    task_result = TaskResult.objects.get(task_id=task_id)
     return x + y
