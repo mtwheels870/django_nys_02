@@ -114,9 +114,10 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     @signals.task_postrun.connect
-    def handle_task_postrun(sender, result, **kwargs):
+    def handle_task_postrun(sender, task_id, task, 
+            args, kwargs, retval, state):
         # Handle the result in your view
-        print(f"Djago.view.h_t_pr(), task completed with result: {result}")
+        print(f"Djago.view.h_t_pr(), task completed with state: {state}")
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
