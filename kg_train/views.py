@@ -115,7 +115,7 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        task = invoke_prodigy.delay(folder_id, file_id)
+        task = invoke_prodigy.delay(3, 5, folder_id, file_id)
         #print(f"Started celery task here, id = {task.id}, status = {task.status}, result = {task.result}")
         #context = {"task_id" : task.id }
         # Can't mix args and kwargs (in the _reverse_)

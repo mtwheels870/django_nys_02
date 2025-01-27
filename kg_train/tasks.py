@@ -43,8 +43,8 @@ def get_task_result(request, task_id):
 
 # Note, this just does the action.  Result is above 
 @shared_task
-def invoke_prodigy(folder_id, file_id):
+def invoke_prodigy(x, y, folder_id, file_id):
     print(f"tasks.py:invoke_prodigy()")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
-    return dir_path
+    return x + y
