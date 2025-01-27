@@ -4,6 +4,8 @@
 import os
 import datetime
 from celery import shared_task
+from django.http import JsonResponse
+from django_celery_results.models import TaskResult
 
 from .models import TextFileStatus, TextFile, TextFolder
 
@@ -35,6 +37,9 @@ def invoke_prodigy(x, y, folder_id, file_id):
     print(f"tasks.py:add(), adding {x} and {y}, file_id = {file_id}")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
-
-    return x + y
+    task_result = TaskResult.objects.get(task_id=task_id)
+    return JsonResponse({
+        'task_id': task_result.task_id,
+        'status': task_result.status,
+        'result': task_result.result})
 
