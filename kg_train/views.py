@@ -123,6 +123,7 @@ class TextFolderDetailView(SingleTableView):
         #  this doesn't work as the url doesn't match now
         #file_label_url = reverse("app_kg_train:file_label", kwargs={
         #    "folder_id" : folder_id, "file_id" : file_id, "task_id": task.id})
+        request.session["my_data"] = "some_value"
         file_label_url = reverse("app_kg_train:file_label", args=(folder_id, file_id,))
         # return HttpResponseRedirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,), context=context))
         #return HttpResponseRedirect(file_label_url, kwargs={"task_id": task.id})
@@ -217,6 +218,7 @@ class TextFileLabelView(generic.DetailView):
         context_data = super().get_context_data(**kwargs)
         # task_id = self.kwargs["task_id"]
         print(f"TFLV.get_context_data(*kwargs), kwargs = {kwargs}")
+        print(f"TFLV.get_context_data(*kwargs), self.request.session = {self.request.session}")
         # After this, the form is created
 
         # File stuff
