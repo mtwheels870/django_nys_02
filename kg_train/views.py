@@ -114,7 +114,7 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        async_result = invoke_prodigy.delay(3, 5, folder_id, file_id)
+        async_result = invoke_prodigy.apply_async((3, 5, folder_id, file_id), link=callback_task.s())
         # task = Task.objects.filter(id=async_result.id)[0]
         # print(f"class name (task) = {type(task)}")
         request.session["task_id"] = async_result.id

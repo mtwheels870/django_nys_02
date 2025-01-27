@@ -58,3 +58,6 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     file_path_text = generate_prodigy_files(dir_path, file_id)
     return x + y
 
+@shared_task
+def callback_task(result):
+    print(f"Task completed with result = {result}")
