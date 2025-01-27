@@ -54,16 +54,16 @@ class InvokeProdigyTask(Task):
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, x, y, folder_id, file_id):
-    print(f"tasks.py:invoke_prodigy(), self = {self}")
-    print(f"                 dir(self) = {dir(self)}")
+    # print(f"tasks.py:invoke_prodigy(), self = {self}")
+    # print(f"                 dir(self) = {dir(self)}")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
     result = x + y
-    signals.task_postrun.send(sender=self, task_id=self.request.id, task=self, state=states.SUCCESS,
-        retval=states.SUCCESS, args=[], kwargs={"key":"value"}) 
+    #signals.task_postrun.send(sender=self, task_id=self.request.id, task=self, state=states.SUCCESS,
+    #    retval=states.SUCCESS, args=[], kwargs={"key":"value"}) 
     # signals.task_success.send(sender=self, result=result)
     return result
 
 @shared_task
 def callback_task(result):
-    print(f"Task completed with result = {result}")
+    print(f"tasks.py:callabck_task(), Task completed with result = {result}")
