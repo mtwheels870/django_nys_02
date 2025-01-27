@@ -55,6 +55,7 @@ class InvokeProdigyTask(Task):
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, x, y, folder_id, file_id):
     print(f"tasks.py:invoke_prodigy(), self = {self}")
+    print(f"                 dir(self) = {dir(self)}")
     dir_path = make_tmp_files()
     file_path_text = generate_prodigy_files(dir_path, file_id)
     result = x + y
