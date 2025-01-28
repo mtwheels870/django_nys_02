@@ -18,6 +18,7 @@ app = Celery('django_nys_02')
 # This works:
 # app.config_from_object("django_nys_02.config:CeleryConfig", namespace='CELERY')
 app.config_from_object("django.conf:settings", namespace='CELERY')
+# Same as the CELERY_... version (in settings.py)
 # app.conf.broker_connection_retry_on_startup = True
 
 # Load task modules from all registered Django apps.

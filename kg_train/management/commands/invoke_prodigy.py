@@ -5,6 +5,11 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils.inspect import get_func_args
 
 
+PRODIGY_EXECUTABLE = "prodigy"
+PRODIGY_RECIPE = "ner.manual"
+PRODIGY_DATASET = "SouthChinaSea01"
+LANGUAGE_MODEL = "en_core_web_sm"
+
 class LayerOptionAction(argparse.Action):
     """
     Custom argparse action for the `ogrinspect` `layer_key` keyword option
@@ -43,14 +48,12 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("data_source", help="Path to the data source.")
-        parser.add_argument("model_name", help="Name of the model to create.")
+        parser.add_argument("ner_model_name", help="Name of the NER model to create.")
         parser.add_argument(
-            "--blank",
+            "--label",
             action=ListOptionAction,
             default=False,
-            help="Use a comma separated list of OGR field names to add "
-            "the `blank=True` option to the field definition. Set to `true` "
-            "to apply to all applicable fields.",
+            help="File of labels to use",
         )
         parser.add_argument(
             "--decimal",
@@ -109,6 +112,12 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        subprocess.call([
+
+PRODIGY_EXECUTABLE = "prodigy"
+PRODIGY_RECIPE = "ner.manual"
+PRODIGY_DATASET = "SouthChinaSea01"
+LANGUAGE_MODEL = "en_core_web_sm"
         data_source, model_name = options.pop("data_source"), options.pop("model_name")
 
         # Getting the OGR DataSource from the string parameter.

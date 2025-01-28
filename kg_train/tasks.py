@@ -7,20 +7,22 @@ from celery import shared_task, Task
 from celery import signals, states
 from django.http import JsonResponse
 from django_celery_results.models import TaskResult
+from django.core.management import call_command
 
 from .models import TextFileStatus, TextFile, TextFolder
 
-VENV_PYTHON_PATH="/home/bitnami/nlp/venv01/bin"
+PYTHON_PATH="/home/bitnami/nlp/venv01/bin/python"
 FILE_TEXT = "text_file.txt"
+FILE_LABEL = "ner_labels"
 
-def make_tmp_files():
+def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
     now = datetime.datetime.now()
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
     full_path = os.path.join(temp_directory, folder_snapshot)
     if not os.path.exists(full_path):
         os.makedirs(full_path)
-    print(f"tasks.py:make_tmp_files(), full_path = {full_path}")
+    print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
     return full_path
 
 def generate_prodigy_files(dir_path, file_id):
@@ -30,7 +32,15 @@ def generate_prodigy_files(dir_path, file_id):
         file_content = text_file.prose_editor 
         file_writer.write(file_content)
     print(f"tasks.py:generate_prodigy_files(), file_path_text = {file_path_text}")
-    return file_path_text 
+
+    file_path_label = os.path.join(dir_path, FILE_LABEL)
+    all_labels = NerLabel.objects.all()
+    with open(file_path_label, "w") as file_writer:
+        for label in all_labels:
+            short_name = label.short_name + "\n"
+            file_write.write(short_name)
+
+    return file_path_text, file_path_label
 
 # This returns the status of the worker/celery
 def get_task_result(request, task_id):
@@ -56,9 +66,16 @@ class InvokeProdigyTask(Task):
 def invoke_prodigy(self, x, y, folder_id, file_id):
     # print(f"tasks.py:invoke_prodigy(), self = {self}")
     # print(f"                 dir(self) = {dir(self)}")
-    dir_path = make_tmp_files()
-    file_path_text = generate_prodigy_files(dir_path, file_id)
-    result = x + y
+    dir_path = make_temp_dir()
+    file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
+
+    recipe = "ner.manual"
+    ner_dataset = "ner_south_china_sea01"
+    command = [PYTHON_PATH, recipe, ner_dataset, file_path_text, "--label", file_path_label]
+    command_string = ", ".join(command)
+    print(f"invoke_prodigy(), command = {command_string}")
+    result = subprocess.run(command)
+    print(f"invoke_prodigy(), result = {result}")
     #signals.task_postrun.send(sender=self, task_id=self.request.id, task=self, state=states.SUCCESS,
     #    retval=states.SUCCESS, args=[], kwargs={"key":"value"}) 
     # signals.task_success.send(sender=self, result=result)
