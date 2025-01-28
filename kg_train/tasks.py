@@ -89,7 +89,8 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
 
     recipe = "ner.manual"
-    ner_dataset = "ner_south_china_sea01"
+    ner_dataset = "south_china_sea_01"
+    language_model = "en_core_web_sm"
 
     sys_path_string = ":".join(sys.path)
     new_path = f"{VENV_PATH}/bin:" + sys_path_string
@@ -98,7 +99,7 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     #command_string = ", ".join(command)
     # command = "python -c 'import numpy; print(numpy.__version__)'"
-    full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {file_path_text} --label {file_path_label}"
+    full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} --label {file_path_label}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
     # print(f"invoke_prodigy(), environemnt = {environment}")
