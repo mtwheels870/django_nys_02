@@ -42,3 +42,9 @@ class Loader():
             print(f"create_labels(), {key} = {value}")
             ner_label = NerLabel(short_name=key, description=value)
             ner_label.save()
+
+    def load_single_label(self, verbose=True);
+        ner_label = NerLabel(short_name="LOCATION",
+            description="Geospatial location on the earth (point, line, polygon)")
+        ner_label.save()
+
