@@ -87,8 +87,7 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
         return f"Error: {result.stderr}"
     try:
         output_json = json.loads(result.stdout)
-    except:
-        json.JSONDecodeError:
+    except json.JSONDecodeError:
         return f"Error: JSONDecodeError"
     return output_json
 
