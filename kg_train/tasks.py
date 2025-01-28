@@ -99,7 +99,8 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
 
     sys_path = sys.path
     print(f"invoke_prodigy(), sys_path = {sys_path}")
-    new_path = "VENV_PATH/bin:" + sys_path
+    sys_path_string = ":".join(sys_path)
+    new_path = "VENV_PATH/bin:" + sys_path_string
     environment = {"VIRTUAL_ENV" : VENV_PATH, "PATH" : new_path }
 
     #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
