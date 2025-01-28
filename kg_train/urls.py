@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from . import views_folder
+from . import views_folder, views_file
 
 app_name = "app_kg_train"
 #    path("form/", views.StartForm.as_view(), name="upload_form"),
@@ -15,8 +15,8 @@ urlpatterns = [
     path("<int:folder_id>/", views_folder.TextFolderDetailView.as_view(), name="detail"),
 
     # path("<int:file_id>/edit/", views.edit_file, name="edit_file"),
-    path("<int:folder_id>/<int:file_id>/file-edit/", views_folder.TextFileEditView.as_view(), name="file_edit"),
-    path("<int:folder_id>/<int:file_id>/file-label/", views_folder.TextFileLabelView.as_view(), name="file_label"),
+    path("<int:folder_id>/<int:file_id>/file-edit/", views_file.TextFileEditView.as_view(), name="file_edit"),
+    path("<int:folder_id>/<int:file_id>/file-label/", views_file.TextFileLabelView.as_view(), name="file_label"),
 
     # This breaks out to our editor
     # path("prose/attachment/", include("prose.urls"), name="prose"),
