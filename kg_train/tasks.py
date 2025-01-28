@@ -74,7 +74,7 @@ class InvokeProdigyTask(Task):
 def run_in_virtualenv(venv_path, command):
     """Runs a command in a virtual environment."""
 
-    activate_command = f"source {venv_path}/bin/activate"
+    activate_command = f"/usr/bin/bash 'source {venv_path}/bin/activate'"
     full_command = f"{activate_command} && {command}"
 
     print(f"run_in_venv(), full_command = {full_command}")
@@ -96,15 +96,16 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
 
     #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     #command_string = ", ".join(command)
-    # command = "python -c 'import numpy; print(numpy.__version__)'"
-    command = [PYTHON_PATH, PRODIGY_PATH,
-        f'ner.manual {recipe} {ner_dataset} {file_path_text} --label {file_path_label}']
-    command_string = ", ".join(command)
-    print(f"invoke_prodigy(), command = {command_string}")
+    command = "python -c 'import numpy; print(numpy.__version__)'"
+    stdout, stderr = run_in_virtualenv(VENV_PATH, command):
+    #command = [PYTHON_PATH, PRODIGY_PATH,
+    #    f'ner.manual {recipe} {ner_dataset} {file_path_text} --label {file_path_label}']
+    #command_string = ", ".join(command)
+    #print(f"invoke_prodigy(), command = {command_string}")
 
     # stdout, stderr = run_in_virtualenv(VENV_PATH, command)
-    result = subprocess.run(command, capture_output=True, text=True)
-    print(f"invoke_prodigy(), result = {result}")
+    #result = subprocess.run(command, capture_output=True, text=True)
+    print(f"invoke_prodigy(), stderr = {stderr}")
     return True
 
 @shared_task
