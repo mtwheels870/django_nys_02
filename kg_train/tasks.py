@@ -38,7 +38,7 @@ def generate_prodigy_files(dir_path, file_id):
     with open(file_path_label, "w") as file_writer:
         for label in all_labels:
             short_name = label.short_name + "\n"
-            file_write.write(short_name)
+            file_writer.write(short_name)
 
     return file_path_text, file_path_label
 
