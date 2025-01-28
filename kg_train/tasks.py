@@ -15,8 +15,8 @@ from django.core.management import call_command
 
 from .models import TextFile, NerLabel
 
-SOURCE0 = "/usr/bin/bash
-SOURCE1 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
+SOURCE1 = "/usr/bin/bash"
+SOURCE2 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
 PRODIGY_EXEC="prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
