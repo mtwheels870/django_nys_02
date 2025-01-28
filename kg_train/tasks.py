@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django_celery_results.models import TaskResult
 from django.core.management import call_command
 
-from .models import TextFileStatus, TextFile, TextFolder
+from .models import TextFile, NerLabel
 
 PYTHON_PATH="/home/bitnami/nlp/venv01/bin/python"
 FILE_TEXT = "text_file.txt"
