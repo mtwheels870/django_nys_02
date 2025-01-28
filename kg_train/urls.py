@@ -9,14 +9,14 @@ urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
 
     # To upload a new file to the server (GET and POST)
-    path("upload/", views.upload_folder, name="upload_folder"),
+    path("upload/", views_folder.upload_folder, name="upload_folder"),
 
     # To view an individual file details (and start labeling)
-    path("<int:folder_id>/", views.TextFolderDetailView.as_view(), name="detail"),
+    path("<int:folder_id>/", views_folder.TextFolderDetailView.as_view(), name="detail"),
 
     # path("<int:file_id>/edit/", views.edit_file, name="edit_file"),
-    path("<int:folder_id>/<int:file_id>/file-edit/", views.TextFileEditView.as_view(), name="file_edit"),
-    path("<int:folder_id>/<int:file_id>/file-label/", views.TextFileLabelView.as_view(), name="file_label"),
+    path("<int:folder_id>/<int:file_id>/file-edit/", views_folder.TextFileEditView.as_view(), name="file_edit"),
+    path("<int:folder_id>/<int:file_id>/file-label/", views_folder.TextFileLabelView.as_view(), name="file_label"),
 
     # This breaks out to our editor
     # path("prose/attachment/", include("prose.urls"), name="prose"),
