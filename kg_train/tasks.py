@@ -14,7 +14,7 @@ from django.core.management import call_command
 
 from .models import TextFile, NerLabel
 
-PYTHON_PATH="/home/bitnami/nlp/venv01/bin/python"
+PRODIGY_PATH="/home/bitnami/nlp/venv01/bin/prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
@@ -74,7 +74,7 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
 
     recipe = "ner.manual"
     ner_dataset = "ner_south_china_sea01"
-    command = [PYTHON_PATH, recipe, ner_dataset, file_path_text, "--label", file_path_label]
+    command = [PRODIGY_PATH, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     command_string = ", ".join(command)
     print(f"invoke_prodigy(), command = {command_string}")
     result = subprocess.run(command)
