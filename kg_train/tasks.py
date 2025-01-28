@@ -20,11 +20,9 @@ SOURCE1 = "/usr/bin/bash"
 
 # SOURCE2 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
 VENV_PATH = "/home/bitnami/nlp/venv01"
-VENV_BIN = VENV_PATH + "bin/"
-# PYTHON_PATH = VENV_BIN + "python"
+# VENV_BIN = VENV_PATH + "bin/"
 PYTHON_PATH = "python"
-PYTHONHOME = VENV_PATH + "lib/python3.12/"
-PRODIGY_PATH = PYTHONHOME + "site-packages/prodigy/__main__.py"
+PRODIGY_PATH = VENV_PATH + "/lib/python3.12/site-packages/prodigy/__main__.py"
 # PRODIGY_EXEC="prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
@@ -108,7 +106,6 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     #command_string = ", ".join(command)
     # command = "python -c 'import numpy; print(numpy.__version__)'"
     full_command = f"{PYTHON_PATH} {PRODIGY_PATH}"
-    # environment = {"PATH" : VENV_BIN}
 
     print(f"invoke_prodigy(), full_command = {full_command}")
     print(f"invoke_prodigy(), environemnt = {environment}")
