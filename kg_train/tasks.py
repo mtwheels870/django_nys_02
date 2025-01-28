@@ -16,9 +16,12 @@ from django.core.management import call_command
 from .models import TextFile, NerLabel
 
 SOURCE1 = "/usr/bin/bash"
-SOURCE2 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
+
+# SOURCE2 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
 VENV_PATH = "/home/bitnami/nlp/venv01/"
-PRODIGY_EXEC="prodigy"
+PYTHON_PATH = VENV_PATH + "bin/python"
+PRODIGY_PATH = VENV_PATH + "lib/python3.12/site-packages/prodigy/__main__.py"
+# PRODIGY_EXEC="prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
@@ -93,8 +96,8 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
 
     #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     #command_string = ", ".join(command)
-    command = "python -c 'import numpy; print(numpy.__version__)'"
-    command = ["/home/bitnami/nlp/venv01/bin/python", "-m prodigy",
+    # command = "python -c 'import numpy; print(numpy.__version__)'"
+    command = [PYTHON_PATH, PRODIGY_PATH 
         f'ner.manual {recipe} {ner_dataset} {file_path_text} --label {file_path_label}']
     command_string = ", ".join(command)
     print(f"invoke_prodigy(), command = {command_string}")
@@ -122,4 +125,4 @@ def callback_task(result):
 #    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 #    stdout, stderr = process.communicate()
 
-    return stdout.decode(), stderr.decode()
+#    return stdout.decode(), stderr.decode()
