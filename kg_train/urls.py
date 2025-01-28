@@ -6,7 +6,7 @@ app_name = "app_kg_train"
 #    path("form/", views.StartForm.as_view(), name="upload_form"),
 urlpatterns = [
     # ex: /tutorial/.  Note, these are all formal classes (IndexView, DetailView...) inside views.py
-    path("", views.IndexView.as_view(), name="index"),
+    path("", views_folder.IndexView.as_view(), name="index"),
 
     # To upload a new file to the server (GET and POST)
     path("upload/", views_folder.upload_folder, name="upload_folder"),
