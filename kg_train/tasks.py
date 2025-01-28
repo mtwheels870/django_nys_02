@@ -97,7 +97,7 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     #command_string = ", ".join(command)
     command = "python -c 'import numpy; print(numpy.__version__)'"
-    stdout, stderr = run_in_virtualenv(VENV_PATH, command):
+    stdout, stderr = run_in_virtualenv(VENV_PATH, command)
     #command = [PYTHON_PATH, PRODIGY_PATH,
     #    f'ner.manual {recipe} {ner_dataset} {file_path_text} --label {file_path_label}']
     #command_string = ", ".join(command)
