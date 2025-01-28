@@ -120,6 +120,7 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
 
     # stdout, stderr = run_in_virtualenv(VENV_PATH, command)
     #result = subprocess.run(command, capture_output=True, text=True)
+    print(f"invoke_prodigy(), stdout = {stdout}")
     print(f"invoke_prodigy(), stderr = {stderr}")
     return True
 
