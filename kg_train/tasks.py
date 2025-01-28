@@ -18,12 +18,9 @@ from .models import TextFile, NerLabel
 
 SOURCE1 = "/usr/bin/bash"
 
-# SOURCE2 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
 VENV_PATH = "/home/bitnami/nlp/venv01"
-# VENV_BIN = VENV_PATH + "bin/"
 PRODIGY_PATH = "prodigy"
-# PRODIGY_PATH = VENV_PATH + "/lib/python3.12/site-packages/prodigy/__main__.py"
-# PRODIGY_EXEC="prodigy"
+
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
@@ -88,38 +85,26 @@ def run_in_virtualenv(venv_path, command):
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, x, y, folder_id, file_id):
-    # print(f"tasks.py:invoke_prodigy(), self = {self}")
-    # print(f"                 dir(self) = {dir(self)}")
     dir_path = make_temp_dir()
     file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
 
     recipe = "ner.manual"
     ner_dataset = "ner_south_china_sea01"
 
-    sys_path = sys.path
-    print(f"invoke_prodigy(), sys_path = {sys_path}")
-    sys_path_string = ":".join(sys_path)
+    sys_path_string = ":".join(sys.path)
     new_path = f"{VENV_PATH}/bin:" + sys_path_string
     environment = {"VIRTUAL_ENV" : VENV_PATH, "PATH" : new_path }
 
     #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     #command_string = ", ".join(command)
     # command = "python -c 'import numpy; print(numpy.__version__)'"
-    full_command = f"{PRODIGY_PATH}"
+    full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {file_path_text} --label {file_path_label}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
-    print(f"invoke_prodigy(), environemnt = {environment}")
+    # print(f"invoke_prodigy(), environemnt = {environment}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
     stdout, stderr = process.communicate()
-    # stdout, stderr = run_in_virtualenv(VENV_PATH, command)
-    #command = [PYTHON_PATH, PRODIGY_PATH,
-    #    f'ner.manual {recipe} {ner_dataset} {file_path_text} --label {file_path_label}']
-    #command_string = ", ".join(command)
-    #print(f"invoke_prodigy(), command = {command_string}")
-
-    # stdout, stderr = run_in_virtualenv(VENV_PATH, command)
-    #result = subprocess.run(command, capture_output=True, text=True)
     print(f"invoke_prodigy(), stdout = {stdout}")
     print(f"invoke_prodigy(), stderr = {stderr}")
     return True
