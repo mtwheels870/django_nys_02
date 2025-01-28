@@ -100,8 +100,8 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     #command_string = ", ".join(command)
     # command = "python -c 'import numpy; print(numpy.__version__)'"
     full_command = f"{PYTHON_PATH} {PRODIGY_PATH}"
-    environment = {"PATH" : VENV_BIN}
-    # environment = {"PATH" : VENV_BIN, "PYTHONHOME" : PYTHONHOME }
+    # environment = {"PATH" : VENV_BIN}
+    environment = {"PATH" : VENV_BIN, "PYTHONHOME" : PYTHONHOME, "PYTHONPATH" : PYTHONHOME}
 
     print(f"invoke_prodigy(), full_command = {full_command}")
     print(f"invoke_prodigy(), environemnt = {environment}")
