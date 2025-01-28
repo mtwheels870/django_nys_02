@@ -106,7 +106,8 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
         env=environment)
     stdout, stderr = process.communicate()
     print(f"invoke_prodigy(), stdout = {stdout}")
-    print(f"invoke_prodigy(), stderr = {stderr}")
+    print("invoke_prodigy(), stderr:")
+    print(stderr)
     return True
 
 @shared_task
