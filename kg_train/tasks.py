@@ -19,8 +19,10 @@ SOURCE1 = "/usr/bin/bash"
 
 # SOURCE2 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
 VENV_PATH = "/home/bitnami/nlp/venv01/"
-PYTHON_PATH = VENV_PATH + "bin/python"
-PRODIGY_PATH = VENV_PATH + "lib/python3.12/site-packages/prodigy/__main__.py"
+VENV_BIN = VENV_PATH + "bin/"
+PYTHON_PATH = VENV_BIN + "python"
+PYTHONHOME = VENV_PATH + "lib/python3.12/"
+PRODIGY_PATH = PYTHONHOME + "site-packages/prodigy/__main__.py"
 # PRODIGY_EXEC="prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
@@ -96,8 +98,16 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
 
     #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     #command_string = ", ".join(command)
-    command = "python -c 'import numpy; print(numpy.__version__)'"
-    stdout, stderr = run_in_virtualenv(VENV_PATH, command)
+    # command = "python -c 'import numpy; print(numpy.__version__)'"
+    full_command = f"{PYTHON_PATH} {PRODIGY_PATH}"
+    environment = {"PATH" : VENV_BIN, "PYTHONHOME" : PYTHONHOME }
+
+    print("invoke_prodigy(), full_command = {full_command}")
+    print("invoke_prodigy(), environemnt = {environment}")
+    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        env=environment)
+    stdout, stderr = process.communicate()
+    # stdout, stderr = run_in_virtualenv(VENV_PATH, command)
     #command = [PYTHON_PATH, PRODIGY_PATH,
     #    f'ner.manual {recipe} {ner_dataset} {file_path_text} --label {file_path_label}']
     #command_string = ", ".join(command)
