@@ -74,6 +74,7 @@ def run_in_virtualenv(venv_path, command):
     activate_command = f"source {venv_path}/bin/activate"
     full_command = f"{activate_command} && {command}"
 
+    print(f"run_in_venv(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
 
