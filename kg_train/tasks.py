@@ -1,6 +1,7 @@
 # MTW: Celery tasks.  Autodiscovered, see celery.py
 # app.autodiscover_tasks()
 
+import sys
 import os
 import datetime
 import json
