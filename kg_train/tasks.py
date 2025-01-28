@@ -3,6 +3,7 @@
 
 import os
 import datetime
+import json
 import subprocess
 
 from celery import shared_task, Task
@@ -14,7 +15,9 @@ from django.core.management import call_command
 
 from .models import TextFile, NerLabel
 
-PRODIGY_PATH="/home/bitnami/nlp/venv01/bin/prodigy"
+SOURCE1 = "source"
+SOURCE2 = "/home/bitnami/nlp/venv01/bin/actvvate;"
+PRODIGY_EXEC="prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
@@ -74,15 +77,20 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
 
     recipe = "ner.manual"
     ner_dataset = "ner_south_china_sea01"
-    command = [PRODIGY_PATH, recipe, ner_dataset, file_path_text, "--label", file_path_label]
+
+    command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
     command_string = ", ".join(command)
     print(f"invoke_prodigy(), command = {command_string}")
-    result = subprocess.run(command)
+    result = subprocess.run(command, capture_output=True, text=True)
     print(f"invoke_prodigy(), result = {result}")
-    #signals.task_postrun.send(sender=self, task_id=self.request.id, task=self, state=states.SUCCESS,
-    #    retval=states.SUCCESS, args=[], kwargs={"key":"value"}) 
-    # signals.task_success.send(sender=self, result=result)
-    return result
+    if result.returncode != 0:
+        return f"Error: {result.stderr}"
+    try:
+        output_json = json.loads(result.stdout)
+    except:
+        json.JSONDecodeError:
+        return f"Error: JSONDecodeError"
+    return output_json
 
 @shared_task
 def callback_task(result):
