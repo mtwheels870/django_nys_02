@@ -17,6 +17,7 @@ from .models import TextFile, NerLabel
 
 SOURCE1 = "/usr/bin/bash"
 SOURCE2 = "'source /home/bitnami/nlp/venv01/bin/actvate';"
+VENV_PATH = "/home/bitnami/nlp/venv01/"
 PRODIGY_EXEC="prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
@@ -67,6 +68,17 @@ class InvokeProdigyTask(Task):
     def on_success(self, retval, task_id, args, kwargs):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
+def run_in_virtualenv(venv_path, command):
+    """Runs a command in a virtual environment."""
+
+    activate_command = f"source {venv_path}/bin/activate"
+    full_command = f"{activate_command} && {command}"
+
+    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+
+    return stdout.decode(), stderr.decode()
+
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, x, y, folder_id, file_id):
@@ -78,19 +90,22 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
     recipe = "ner.manual"
     ner_dataset = "ner_south_china_sea01"
 
-    command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
-    command_string = ", ".join(command)
-    print(f"invoke_prodigy(), command = {command_string}")
-    result = subprocess.run(command, capture_output=True, text=True)
-    print(f"invoke_prodigy(), result = {result}")
-    if result.returncode != 0:
-        return f"Error: {result.stderr}"
-    try:
-        output_json = json.loads(result.stdout)
-    except json.JSONDecodeError:
-        return f"Error: JSONDecodeError"
-    return output_json
+    #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
+    #command_string = ", ".join(command)
+    command = "python -c 'import numpy; print(numpy.__version__)'"
+    print(f"invoke_prodigy(), command = {command}")
+
+    stdout, stderr = run_in_virtualenv(VENV_PATH, command)
+    # result = subprocess.run(command, capture_output=True, text=True)
+    print(f"invoke_prodigy(), stdout = {stdout}")
+    print(f"invoke_prodigy(), stderr = {stderr}")
+    return True
 
 @shared_task
 def callback_task(result):
     print(f"tasks.py:callabck_task(), Task completed with result = {result}")
+
+#    try:
+#        output_json = json.loads(result.stdout)
+#    except json.JSONDecodeError:
+#        return f"Error: JSONDecodeError"
