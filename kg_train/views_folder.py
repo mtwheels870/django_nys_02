@@ -122,7 +122,7 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        async_result = invoke_prodigy.apply_async((request, folder_id, file_id))
+        async_result = invoke_prodigy.apply_async((folder_id, file_id))
 
         # Handle the signal when we're done
         # task_completed.connect(handle_task_completed)
