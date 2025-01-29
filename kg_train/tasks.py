@@ -135,4 +135,5 @@ def handle_task_revoke(sender, *args, **kwargs):
     signum = kwargs['signum']
     # Handle the result in your view
     print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
+    sender.revoke()
 
