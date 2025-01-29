@@ -70,6 +70,10 @@ class InvokeProdigyTask(Task):
     def on_success(self, retval, task_id, args, kwargs):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
+    def revoke(self):
+        print(f"IPT.revoke(), self = {self}")
+
+
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, folder_id, file_id):
@@ -98,6 +102,7 @@ def invoke_prodigy(self, folder_id, file_id):
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
+    # We never get here (b/c of the revoked)
     if process.returncode == 0:
         retval = True
         print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
@@ -118,20 +123,17 @@ def kill_child_process(process):
         print(f"kill_child_process(), kill()")
         process.kill()
 
-@signals.task_postrun.connect
-def handle_task_postrun(sender, task_id, task, retval,
-        *args, **kwargs):
-    # Handle the result in your view
-    print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
+#@signals.task_postrun.connect
+#def handle_task_postrun(sender, task_id, task, retval,
+        #*args, **kwargs):
+    ## Handle the result in your view
+    #print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
 
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
+    print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
     terminated = kwargs['terminated']
     signum = kwargs['signum']
     # Handle the result in your view
     print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
-
-@shared_task
-def callback_task(result):
-    print(f"tasks.py:callabck_task(), Task completed with result = {result}")
 
