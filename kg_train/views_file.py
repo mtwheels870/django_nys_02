@@ -102,9 +102,13 @@ class TextFileLabelView(generic.DetailView):
         # context_data = self.get_context_data()
         # task_id = context_data["task_id"]
         print(f"TFLV.post(), dir(self) = {dir(self)}")
+        print(f"     , request:")
         for i, key in request:
             value = request[key]
             print(f"    [{i}] {key} = {value}")
+        print(f"     , args:")
+        for arg in args:
+            print(f"arg = {arg}")
         if 'save' in request.POST:
             print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
         elif 'exit' in request.POST:
