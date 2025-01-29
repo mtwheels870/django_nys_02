@@ -113,9 +113,9 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
-    def label_page(self, request, folder_id, file_id):
+    def label_page(self, folder_id, file_id):
         # Invoke celery task here
-        async_result = invoke_prodigy.apply_async((request.session, folder_id, file_id))
+        async_result = invoke_prodigy.apply_async((folder_id, file_id))
 
         # Handle the signal when we're done
         # task_completed.connect(handle_task_completed)
@@ -140,7 +140,7 @@ class TextFolderDetailView(SingleTableView):
                 print(f"TFDV.post(), editing page")
                 return HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(folder_id, file_id,)))
             elif 'label' in request.POST:
-                return self.label_page(request, folder_id, file_id)
+                return self.label_page(folder_id, file_id)
             else:
                 print(f"TFDV.post(), unrecognized button:")
                 for i, key in enumerate(request.POST):
