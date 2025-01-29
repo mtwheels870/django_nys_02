@@ -140,7 +140,7 @@ class TextFolderDetailView(SingleTableView):
                 print(f"TFDV.post(), editing page")
                 return HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(folder_id, file_id,)))
             elif 'label' in request.POST:
-                return self.label_page(folder_id, file_id)
+                return self.label_page(request.session, folder_id, file_id)
             else:
                 print(f"TFDV.post(), unrecognized button:")
                 for i, key in enumerate(request.POST):
