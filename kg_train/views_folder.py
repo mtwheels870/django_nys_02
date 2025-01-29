@@ -113,13 +113,6 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
-    # Do we still use this?
-    @signals.task_postrun.connect
-    def handle_task_postrun(sender, task_id, task, retval,
-            *args, **kwargs):
-        # Handle the result in your view
-        print(f"Djago.view.h_t_pr(), task completed with retval: {retval}")
-
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
         async_result = invoke_prodigy.apply_async((folder_id, file_id))

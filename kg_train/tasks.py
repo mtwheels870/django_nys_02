@@ -107,6 +107,17 @@ def invoke_prodigy(self, folder_id, file_id):
     self.popen = popen
     return retval
 
+@signals.task_postrun.connect
+def handle_task_postrun(sender, task_id, task, retval,
+        *args, **kwargs):
+    # Handle the result in your view
+    print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
+
+@signals.task_revoke.connect
+def handle_task_revoke(sender, request, teerminated, signum, expired):
+    # Handle the result in your view
+    print(f"tasks.py:h_t_revoked(), async_request = {request}")
+
 @shared_task
 def callback_task(result):
     print(f"tasks.py:callabck_task(), Task completed with result = {result}")
