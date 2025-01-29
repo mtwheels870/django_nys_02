@@ -97,6 +97,7 @@ def invoke_prodigy(self, folder_id, file_id):
     print(f"invoke_prodigy(), full_command = {full_command}")
     popen = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
+    print(f"invoke_prodigy(), after Popen(), popen = {popen}")
     stdout, stderr = popen.communicate()
     if popen.returncode == 0:
         retval = True
@@ -125,18 +126,3 @@ def handle_task_revoke(self, sender, *args, **kwargs):
 def callback_task(result):
     print(f"tasks.py:callabck_task(), Task completed with result = {result}")
 
-#    try:
-#        output_json = json.loads(result.stdout)
-#    except json.JSONDecodeError:
-#        return f"Error: JSONDecodeError"
-#def run_in_virtualenv(venv_path, command):
-#    """Runs a command in a virtual environment."""
-#
-#    activate_command = f"source {venv_path}/bin/activate"
-#    full_command = f"{activate_command} && {command}"
-#
-#    print(f"run_in_venv(), full_command = {full_command}")
-#    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-#    stdout, stderr = process.communicate()
-
-#    return stdout.decode(), stderr.decode()
