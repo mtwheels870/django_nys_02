@@ -114,9 +114,11 @@ def handle_task_postrun(sender, task_id, task, retval,
     print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
 
 @signals.task_revoked.connect
-def handle_task_revoke(sender, request, teerminated, signum, expired):
+def handle_task_revoke(sender, *args, **kwargs):
+    terminated = kwargs['terminated']
+    signum = kwargs['signum']
     # Handle the result in your view
-    print(f"tasks.py:h_t_revoked(), async_request = {request}")
+    print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
 
 @shared_task
 def callback_task(result):
