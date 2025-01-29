@@ -6,6 +6,8 @@ from django.views.generic.edit import FormView
 
 from django.utils import timezone
 
+from celery.task.control import revoke
+
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
 
@@ -84,7 +86,7 @@ class TextFileLabelView(generic.edit.FormView):
         # Save this in our hidden form
         form = context_data['form']
         task_id_field = form.fields['task_id']
-        print(f"g_c_d(), task_id_field = {task_id_field}")
+        print(f"g_c_d(), task_id = {task_id}")
         task_id_field.initial = task_id
 
         return context_data
@@ -103,6 +105,7 @@ class TextFileLabelView(generic.edit.FormView):
                 print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
             elif 'exit' in request.POST:
                 print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
+            revoke(task_id, terminate=True)
         else:
             print(f"TFLV.post(), invalid form")
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
