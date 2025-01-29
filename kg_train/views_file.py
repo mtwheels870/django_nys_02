@@ -1,3 +1,6 @@
+import os
+import signal
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -99,9 +102,9 @@ class TextFileLabelView(generic.DetailView):
         # task_id = context_data["task_id"]
         form = TextLabelForm(request.POST)
         task_id = request.session.get('task_id', None)
-        popen_id = request.session.get('popen_id', None)
+        popen_pid = request.session.get('popen_pid', None)
         color = request.session.get('color', 'gray')
-        print(f"TFLV.post(), task_id = {task_id}, color = {color}, popen_id = {popen_id}")
+        print(f"TFLV.post(), task_id = {task_id}, color = {color}, popen_pid = {popen_pid}")
 #        if form.is_valid():
 #            task_id = form.cleaned_data['task_id']
 #            print(f"TFLV.post(), task_id = {task_id}")
