@@ -100,6 +100,8 @@ def invoke_prodigy(self, folder_id, file_id):
     pid = popen.pid
     returncode = popen.returncode
     print(f"invoke_prodigy(), after Popen(), pid = {pid}, returncode = {returncode}")
+
+    # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = popen.communicate()
     if popen.returncode == 0:
         retval = True
@@ -107,7 +109,7 @@ def invoke_prodigy(self, folder_id, file_id):
     else:
         retval = False
         print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    self.popen = popen
+    popen.terminate()
     # session['popen_pid'] = pid
     return retval
 
