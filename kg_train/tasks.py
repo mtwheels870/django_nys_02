@@ -109,9 +109,13 @@ def invoke_prodigy(self, folder_id, file_id):
     return retval
 
 def kill_child_process(process):
+    print(f"kill_child_process(), process.pid = {process.pid}")
     process.terminate()
+    print(f"kill_child_process(), waiting...")
     process.wait()
+    print(f"kill_child_process(), poll()")
     if process.poll():
+        print(f"kill_child_process(), kill()")
         process.kill()
 
 @signals.task_postrun.connect
