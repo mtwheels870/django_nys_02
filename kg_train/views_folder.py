@@ -126,9 +126,6 @@ class TextFolderDetailView(SingleTableView):
 
         # Handle the signal when we're done
         # task_completed.connect(handle_task_completed)
-
-        # task = Task.objects.filter(id=async_result.id)[0]
-        # print(f"class name (task) = {type(task)}")
         request.session["task_id"] = async_result.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 

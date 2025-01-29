@@ -105,7 +105,8 @@ class TextFileLabelView(generic.edit.FormView):
                 print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
             elif 'exit' in request.POST:
                 print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
-            revoke(task_id, terminate=True)
+            task = AsyncResult(task_id)
+            task.revoke(terminate=True)
         else:
             print(f"TFLV.post(), invalid form")
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
