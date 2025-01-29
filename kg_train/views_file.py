@@ -88,7 +88,7 @@ class TextFileLabelView(generic.DetailView):
         # form = context_data['form']
         # task_id_field = form.fields['task_id']
         print(f"g_c_d(), task_id = {task_id}")
-        task_id_field.initial = task_id
+        # task_id_field.initial = task_id
 
         return context_data
 
