@@ -99,8 +99,9 @@ class TextFileLabelView(generic.DetailView):
         # task_id = context_data["task_id"]
         form = TextLabelForm(request.POST)
         task_id = request.session.get('task_id', None)
+        popen_id = request.session.get('popen_id', None)
         color = request.session.get('color', 'gray')
-        print(f"TFLV.post(), task_id = {task_id}, color = {color}")
+        print(f"TFLV.post(), task_id = {task_id}, color = {color}, popen_id = {popen_id}")
 #        if form.is_valid():
 #            task_id = form.cleaned_data['task_id']
 #            print(f"TFLV.post(), task_id = {task_id}")

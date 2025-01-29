@@ -99,7 +99,7 @@ def invoke_prodigy(self, folder_id, file_id):
     else:
         retval = False
         print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    return retval
+    return retval, popen
 
 @shared_task
 def callback_task(result):
