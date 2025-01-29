@@ -131,7 +131,6 @@ def kill_child_process(process):
 
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
-    print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
     terminated = kwargs['terminated']
     signum = kwargs['signum']
     # Handle the result in your view
