@@ -85,8 +85,8 @@ class TextFileLabelView(generic.DetailView):
         context_data['folder_name'] = text_folder.folder_name 
 
         # Save this in our hidden form
-        form = context_data['form']
-        task_id_field = form.fields['task_id']
+        # form = context_data['form']
+        # task_id_field = form.fields['task_id']
         print(f"g_c_d(), task_id = {task_id}")
         task_id_field.initial = task_id
 

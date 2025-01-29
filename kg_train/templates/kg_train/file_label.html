@@ -9,8 +9,6 @@
     <p>Celery task for invoking prodigy ( {{task_id }} )</p>
     <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
-        {{ form.errors }}
-        {{ form.as_div }}
         <button type="submit" name="save">Save & Exit</button>
         <button type="submit" name="exit">Discard & Exit</button>
     </form>
