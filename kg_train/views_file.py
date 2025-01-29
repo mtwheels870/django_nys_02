@@ -94,7 +94,7 @@ class TextFileLabelView(generic.edit.FormView):
         file_id = kwargs["file_id"]
         # context_data = self.get_context_data()
         # task_id = context_data["task_id"]
-        form = EditorForm(request.POST)
+        form = TextLabelForm(request.POST)
         if form.is_valid():
             task_id = form.cleaned_data['task_id']
             print(f"TFLV.post(), task_id = {task_id}")
