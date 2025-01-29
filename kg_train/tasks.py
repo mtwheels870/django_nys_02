@@ -92,12 +92,14 @@ def invoke_prodigy(self, folder_id, file_id):
     print(f"invoke_prodigy(), full_command = {full_command}")
     popen = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    stdout, stderr = process.communicate()
+    stdout, stderr = popen.communicate()
     if popen.returncode == 0:
+        retval = True
         print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
     else:
+        retval = False
         print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    return True
+    return retval
 
 @shared_task
 def callback_task(result):
