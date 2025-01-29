@@ -98,6 +98,7 @@ def invoke_prodigy(self, folder_id, file_id):
     popen = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
     print(f"invoke_prodigy(), after Popen(), popen = {popen}")
+    print(f"      dir(popen) = {dir(popen)}")
     for i, key in enumerate(popen):
         value = popen[key]
         print(f"   [{i}] {key} = {value}")
