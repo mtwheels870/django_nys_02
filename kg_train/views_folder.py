@@ -17,7 +17,7 @@ from celery import Task
 from celery import signals
 
 from .models import TextFileStatus, TextFile, TextFolder
-from .forms import UploadFolderForm, EditorForm
+from .forms import UploadFolderForm
 from .tables import TextFileTable
 from .tasks import invoke_prodigy, callback_task
 

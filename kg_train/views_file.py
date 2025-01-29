@@ -1,9 +1,4 @@
-import os
-import pathlib
-import re
-
-from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
@@ -11,15 +6,8 @@ from django.views.generic.edit import FormView
 
 from django.utils import timezone
 
-from django_tables2 import SingleTableView
-
-from celery import Task
-from celery import signals
-
 from .models import TextFileStatus, TextFile, TextFolder
-from .forms import UploadFolderForm, EditorForm
-from .tables import TextFileTable
-from .tasks import invoke_prodigy, callback_task
+from .forms import EditorForm, TextLabelForm
 
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
