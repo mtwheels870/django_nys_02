@@ -89,6 +89,7 @@ class TextFileLabelView(generic.edit.FormView):
         print(f"g_c_d(), task_id = {task_id}")
         task_id_field.initial = task_id
 
+        self.request.session['color'] = "red"
         return context_data
 
     def post(self, request, *args, **kwargs):
@@ -97,14 +98,8 @@ class TextFileLabelView(generic.edit.FormView):
         # context_data = self.get_context_data()
         # task_id = context_data["task_id"]
         form = TextLabelForm(request.POST)
-        print(f"TFLV.post(), form = {form}")
-        print(f"       session:")
-        if len(request.session) != 0:
-            for i, key in enumerate(request.session):
-                value = request.session[key]
-                print(f"   [{i}]: {key} = {value}")
-        else:
-            print(f"       no keys:")
+        color = request.session.get('color', 'gray')
+        print(f"TFLV.post(), color = {color}")
         if form.is_valid():
             task_id = form.cleaned_data['task_id']
             print(f"TFLV.post(), task_id = {task_id}")
