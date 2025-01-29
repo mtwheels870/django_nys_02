@@ -18,5 +18,4 @@ class EditorForm(forms.Form):
     text_editor = ProseEditorFormField()
 
 class TextLabelForm(forms.Form):
-    # task_id = forms.IntegerField(widget=forms.HiddenInput())
-    task_id = forms.IntegerField()
+    task_id = forms.CharField(widget=forms.HiddenInput())
