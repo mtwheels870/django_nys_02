@@ -24,6 +24,8 @@ PRODIGY_PATH = "prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
+last_child_pid = None
+
 def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
     now = datetime.datetime.now()
@@ -74,17 +76,11 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
     def revoke(self):
-        process = self.process
-        print(f"IPT.revoke(), self = {self}, process = {process}")
-        print(f"kill_child_process(), process.pid = {process.pid}")
-        process.terminate()
-        print(f"kill_child_process(), waiting...")
-        process.wait()
-        print(f"kill_child_process(), poll()")
-        if process.poll():
-            print(f"kill_child_process(), kill()")
-            process.kill()
-
+        print(f"IPT.revoke(), self = {self}, last_child_pid = {last_child_pid}")
+        if last_child_pid:
+            print(f"kill_child_process(), last_child_pid = {last_child_pid}")
+            os.kill(last_child_pid)
+            last_child_pid = None
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
@@ -108,8 +104,8 @@ def invoke_prodigy(self, folder_id, file_id):
     print(f"invoke_prodigy(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    self.process = process
-    print(f"invoke_prodigy(), after Popen(), pid = {self.process.pid}, returncode = {self.process.returncode}")
+    last_child_pid = process.pid
+    print(f"invoke_prodigy(), after Popen(), pid = {process.pid}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
