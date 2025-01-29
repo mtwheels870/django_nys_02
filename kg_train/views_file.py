@@ -99,7 +99,8 @@ class TextFileLabelView(generic.DetailView):
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
         file_id = kwargs["file_id"]
-        task_id = kwargs["task_id"]
+        context_data = self.get_context_data()
+        task_id = context_data["task_id"]
         if 'save' in request.POST:
             print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
         elif 'exit' in request.POST:
