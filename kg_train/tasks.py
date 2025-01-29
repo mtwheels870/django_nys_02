@@ -72,7 +72,7 @@ class InvokeProdigyTask(Task):
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
-def invoke_prodigy(self, folder_id, file_id):
+def invoke_prodigy(self, request, folder_id, file_id):
     dir_path = make_temp_dir()
     file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
 
@@ -99,7 +99,8 @@ def invoke_prodigy(self, folder_id, file_id):
     else:
         retval = False
         print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    return retval, popen
+    request.session['popen_id'] = popen.id
+    return retval
 
 @shared_task
 def callback_task(result):

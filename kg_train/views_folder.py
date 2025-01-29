@@ -122,12 +122,12 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        async_result, popen = invoke_prodigy.apply_async((folder_id, file_id))
+        async_result = invoke_prodigy.apply_async((request, folder_id, file_id))
 
         # Handle the signal when we're done
         # task_completed.connect(handle_task_completed)
         request.session["task_id"] = async_result.id
-        request.session["popen_id"] = popen.id
+        # request.session["popen_id"] = popen.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
