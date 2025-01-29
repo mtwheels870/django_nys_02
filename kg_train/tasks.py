@@ -77,7 +77,7 @@ class InvokeProdigyTask(Task):
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
-def invoke_prodigy(self, folder_id, file_id):
+def invoke_prodigy(self, session, folder_id, file_id):
     dir_path = make_temp_dir()
     file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
 
@@ -97,11 +97,9 @@ def invoke_prodigy(self, folder_id, file_id):
     print(f"invoke_prodigy(), full_command = {full_command}")
     popen = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    print(f"invoke_prodigy(), after Popen(), popen = {popen}")
-    print(f"      dir(popen) = {dir(popen)}")
-    for i, key in enumerate(popen):
-        value = popen[key]
-        print(f"   [{i}] {key} = {value}")
+    pid = popen.pid
+    returncode = popen.returncode
+    print(f"invoke_prodigy(), after Popen(), pid = {pid}, returncode = {returncode}")
     stdout, stderr = popen.communicate()
     if popen.returncode == 0:
         retval = True
@@ -109,7 +107,7 @@ def invoke_prodigy(self, folder_id, file_id):
     else:
         retval = False
         print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    self.popen = popen
+    session['popen_pid'] = pid
     return retval
 
 @signals.task_postrun.connect
