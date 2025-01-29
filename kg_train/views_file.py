@@ -100,8 +100,8 @@ class TextFileLabelView(generic.edit.FormView):
         print(f"TFLV.post(), form = {form}")
         print(f"       session:")
         for i, key in request.session:
-            value = request.session[key]
-            print(f"       [{i}] {key} = {value}")
+            print(f"       pulling key = {key}")
+            #value = request.session[key]
         if form.is_valid():
             task_id = form.cleaned_data['task_id']
             print(f"TFLV.post(), task_id = {task_id}")
