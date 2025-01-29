@@ -109,8 +109,7 @@ def invoke_prodigy(self, folder_id, file_id):
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
     self.process = process
-    returncode = process.returncode
-    print(f"invoke_prodigy(), after Popen(), pid = {self.pid}, returncode = {returncode}")
+    print(f"invoke_prodigy(), after Popen(), pid = {self.process.pid}, returncode = {self.process.returncode}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
