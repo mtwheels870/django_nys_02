@@ -74,8 +74,8 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
     def revoke(self):
-        print(f"IPT.revoke(), self = {self}")
         process = self.process
+        print(f"IPT.revoke(), self = {self}, process = {process}")
         print(f"kill_child_process(), process.pid = {process.pid}")
         process.terminate()
         print(f"kill_child_process(), waiting...")
