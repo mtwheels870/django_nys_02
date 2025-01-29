@@ -85,6 +85,8 @@ class InvokeProdigyTask(Task):
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, folder_id, file_id):
+    global last_child_pid
+
     dir_path = make_temp_dir()
     file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
 
