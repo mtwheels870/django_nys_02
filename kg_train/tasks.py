@@ -62,6 +62,9 @@ def get_task_result(request, task_id):
     })
 
 class InvokeProdigyTask(Task):
+    def __init__(self):
+        self.process = None
+
     # args = tuple
     # kwards = Dict
     def on_failure(self, exception, task_id, args, kwargs, exception_info):
@@ -72,6 +75,15 @@ class InvokeProdigyTask(Task):
 
     def revoke(self):
         print(f"IPT.revoke(), self = {self}")
+        process = self.process
+        print(f"kill_child_process(), process.pid = {process.pid}")
+        process.terminate()
+        print(f"kill_child_process(), waiting...")
+        process.wait()
+        print(f"kill_child_process(), poll()")
+        if process.poll():
+            print(f"kill_child_process(), kill()")
+            process.kill()
 
 
 # Note, this just does the action.  Result is above 
@@ -96,32 +108,22 @@ def invoke_prodigy(self, folder_id, file_id):
     print(f"invoke_prodigy(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    pid = process.pid
+    self.process = process
     returncode = process.returncode
-    print(f"invoke_prodigy(), after Popen(), pid = {pid}, returncode = {returncode}")
+    print(f"invoke_prodigy(), after Popen(), pid = {self.pid}, returncode = {returncode}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
     # We never get here (b/c of the revoked)
-    if process.returncode == 0:
-        retval = True
-        print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
-    else:
-        retval = False
-        print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    kill_child_process(process)
+#    if process.returncode == 0:
+#        retval = True
+#        print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
+#    else:
+#        retval = False
+#        print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
+    # kill_child_process(process)
     # session['popen_pid'] = pid
-    return retval
-
-def kill_child_process(process):
-    print(f"kill_child_process(), process.pid = {process.pid}")
-    process.terminate()
-    print(f"kill_child_process(), waiting...")
-    process.wait()
-    print(f"kill_child_process(), poll()")
-    if process.poll():
-        print(f"kill_child_process(), kill()")
-        process.kill()
+    return True
 
 #@signals.task_postrun.connect
 #def handle_task_postrun(sender, task_id, task, retval,
