@@ -62,22 +62,17 @@ def get_task_result(request, task_id):
     })
 
 class InvokeProdigyTask(Task):
-    def __init__(self):
-        self.popen = None
-
     # args = tuple
     # kwards = Dict
     def on_failure(self, exception, task_id, args, kwargs, exception_info):
         print(f'IPT.on_failure(), task: {task_id} failed, exception: {exception}')
-        print(f'            popen = {self.popen}')
 
     def on_success(self, retval, task_id, args, kwargs):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
-        print(f'            popen = {self.popen}')
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
-def invoke_prodigy(self, folder_id, file_id):
+dpopenef invoke_prodigy(self, folder_id, file_id):
     dir_path = make_temp_dir()
     file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
 
@@ -95,23 +90,29 @@ def invoke_prodigy(self, folder_id, file_id):
     full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} --label {file_path_label}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
-    popen = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    pid = popen.pid
-    returncode = popen.returncode
+    pid = process.pid
+    returncode = process.returncode
     print(f"invoke_prodigy(), after Popen(), pid = {pid}, returncode = {returncode}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
-    stdout, stderr = popen.communicate()
-    if popen.returncode == 0:
+    stdout, stderr = process.communicate()
+    if process.returncode == 0:
         retval = True
         print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
     else:
         retval = False
         print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    popen.terminate()
+    kill_child_process(process)
     # session['popen_pid'] = pid
     return retval
+
+def kill_child_process(process):
+    process.terminate()
+    process.wait()
+    if process.poll():
+        process.kill()
 
 @signals.task_postrun.connect
 def handle_task_postrun(sender, task_id, task, retval,
