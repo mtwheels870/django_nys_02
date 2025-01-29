@@ -113,7 +113,7 @@ def handle_task_postrun(sender, task_id, task, retval,
     # Handle the result in your view
     print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
 
-@signals.task_revoke.connect
+@signals.task_revoked.connect
 def handle_task_revoke(sender, request, teerminated, signum, expired):
     # Handle the result in your view
     print(f"tasks.py:h_t_revoked(), async_request = {request}")
