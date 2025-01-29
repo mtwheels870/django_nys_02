@@ -26,7 +26,6 @@ class TextFileEditView(generic.edit.FormView):
     form_class = EditorForm
     template_name = "kg_train/file_edit.html"
     success_url = "kg_train/index.html"
-    initial_text = "Placeholder here"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -69,8 +68,8 @@ class TextFileEditView(generic.edit.FormView):
             print(f"TFEV.post(), form is INVALID")
         return HttpResponseRedirect(self.get_success_url())
 
-class TextFileLabelView(generic.DetailView):
-    model = TextFile
+class TextFileLabelView(generic.edit.FormView):
+    form_class = EditorForm
     template_name = "kg_train/file_label.html"
 
     def get_object(self):
@@ -94,6 +93,12 @@ class TextFileLabelView(generic.DetailView):
         text_folder = get_object_or_404(TextFolder, pk=folder_id)
         context_data['folder_name'] = text_folder.folder_name 
 
+        # Save this in our hidden form
+        form = context_data['form']
+        task_id_field = form.fields['task_id']
+        print(f"g_c_d(), task_id_field = {task_id_field}")
+        task_id_field.initial = task_id
+
         return context_data
 
     def post(self, request, *args, **kwargs):
@@ -101,17 +106,15 @@ class TextFileLabelView(generic.DetailView):
         file_id = kwargs["file_id"]
         # context_data = self.get_context_data()
         # task_id = context_data["task_id"]
-        print(f"TFLV.post(), dir(self) = {dir(self)}")
-        print(f"     , request:")
-        for i, key in request:
-            value = request[key]
-            print(f"    [{i}] {key} = {value}")
-        print(f"     , args:")
-        for arg in args:
-            print(f"arg = {arg}")
-        if 'save' in request.POST:
-            print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
-        elif 'exit' in request.POST:
-            print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
+        form = EditorForm(request.POST)
+        if form.is_valid():
+            task_id = form.cleaned_data['task_id']
+            print(f"TFLV.post(), task_id = {task_id}")
+            if 'save' in request.POST:
+                print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
+            elif 'exit' in request.POST:
+                print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
+        else:
+            print(f"TFLV.post(), invalid form")
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 

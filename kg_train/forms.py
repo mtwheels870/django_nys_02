@@ -17,5 +17,6 @@ class EditForm(forms.ModelForm):
 class EditorForm(forms.Form):
     text_editor = ProseEditorFormField()
 
-#class MyForm(forms.Form):
-#    selected_rows = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+class TextLabelForm(forms.Form):
+    model = TextFile
+    task_id = forms.IntegerField(widget=forms.HiddenInput())
