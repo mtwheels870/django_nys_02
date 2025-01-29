@@ -58,8 +58,9 @@ class TextFileEditView(generic.edit.FormView):
             print(f"TFEV.post(), form is INVALID")
         return HttpResponseRedirect(self.get_success_url())
 
-class TextFileLabelView(generic.edit.FormView):
-    form_class = TextLabelForm
+class TextFileLabelView(generic.DetailView):
+    model = TextFile
+    # form_class = TextLabelForm
     template_name = "kg_train/file_label.html"
 
     def get_object(self):
@@ -100,16 +101,14 @@ class TextFileLabelView(generic.edit.FormView):
         task_id = request.session.get('task_id', None)
         color = request.session.get('color', 'gray')
         print(f"TFLV.post(), task_id = {task_id}, color = {color}")
-        if form.is_valid():
-            task_id = form.cleaned_data['task_id']
-            print(f"TFLV.post(), task_id = {task_id}")
-            if 'save' in request.POST:
-                print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
-            elif 'exit' in request.POST:
-                print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
-            task = AsyncResult(task_id)
-            task.revoke(terminate=True)
-        else:
-            print(f"TFLV.post(), invalid form")
+#        if form.is_valid():
+#            task_id = form.cleaned_data['task_id']
+#            print(f"TFLV.post(), task_id = {task_id}")
+        if 'save' in request.POST:
+            print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
+        elif 'exit' in request.POST:
+            print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
+        task = AsyncResult(task_id)
+        task.revoke(terminate=True)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
