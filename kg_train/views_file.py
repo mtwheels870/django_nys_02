@@ -69,7 +69,7 @@ class TextFileEditView(generic.edit.FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 class TextFileLabelView(generic.edit.FormView):
-    form_class = EditorForm
+    form_class = TextLabelForm
     template_name = "kg_train/file_label.html"
 
     def get_object(self):
