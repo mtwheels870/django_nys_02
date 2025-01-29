@@ -31,7 +31,7 @@ def make_temp_dir():
     full_path = os.path.join(temp_directory, folder_snapshot)
     if not os.path.exists(full_path):
         os.makedirs(full_path)
-    print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
+    # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
     return full_path
 
 def generate_prodigy_files(dir_path, file_id):
@@ -40,7 +40,7 @@ def generate_prodigy_files(dir_path, file_id):
     with open(file_path_text, "w") as file_writer:
         file_content = text_file.prose_editor 
         file_writer.write(file_content)
-    print(f"tasks.py:generate_prodigy_files(), file_path_text = {file_path_text}")
+    # print(f"tasks.py:generate_prodigy_files(), file_path_text = {file_path_text}")
 
     file_path_label = os.path.join(dir_path, FILE_LABEL)
     all_labels = NerLabel.objects.all()
@@ -70,18 +70,6 @@ class InvokeProdigyTask(Task):
     def on_success(self, retval, task_id, args, kwargs):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
-def run_in_virtualenv(venv_path, command):
-    """Runs a command in a virtual environment."""
-
-    activate_command = f"/usr/bin/bash 'source {venv_path}/bin/activate'"
-    full_command = f"{activate_command} && {command}"
-
-    print(f"run_in_venv(), full_command = {full_command}")
-    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-
-    return stdout.decode(), stderr.decode()
-
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, x, y, folder_id, file_id):
@@ -99,19 +87,16 @@ def invoke_prodigy(self, x, y, folder_id, file_id):
         "PATH" : new_path,
         "PRODIGY_HOST" : "0.0.0.0" }
 
-    #command = [SOURCE1, SOURCE2, PRODIGY_EXEC, recipe, ner_dataset, file_path_text, "--label", file_path_label]
-    #command_string = ", ".join(command)
-    # command = "python -c 'import numpy; print(numpy.__version__)'"
     full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} --label {file_path_label}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
-    # print(f"invoke_prodigy(), environemnt = {environment}")
-    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    popen = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
     stdout, stderr = process.communicate()
-    print(f"invoke_prodigy(), stdout = {stdout}")
-    print("invoke_prodigy(), stderr:")
-    print(stderr)
+    if popen.returncode == 0:
+        print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
+    else:
+        print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
     return True
 
 @shared_task
