@@ -120,7 +120,9 @@ class TextFolderDetailView(SingleTableView):
         # Handle the signal when we're done
         # task_completed.connect(handle_task_completed)
         request.session["task_id"] = async_result.id
-        request.session["popen_pid"] = 37
+        pid = async_result.process.pid
+        print(f"label_page(), pid = {pid}")
+        request.session["popen_pid"] = pid
         # request.session["popen_id"] = popen.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
