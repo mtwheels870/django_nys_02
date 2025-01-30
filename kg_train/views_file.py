@@ -9,6 +9,7 @@ from django.views.generic.edit import FormView
 
 from django.utils import timezone
 
+from celery import signals
 from celery.result import AsyncResult
 
 from .models import TextFileStatus, TextFile, TextFolder
