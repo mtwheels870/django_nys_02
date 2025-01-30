@@ -75,7 +75,7 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
     def revoke(self):
-        task_id = self.task_id
+        task_id = self.id
         print(f"IPT.revoke(), task_id = {task_id}")
         task_info = control.query_tasks([task_id])
         print(f"IPT.revoke(), task_info = {task_info}")
