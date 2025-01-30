@@ -111,7 +111,7 @@ def invoke_prodigy(self, *args, **kwargs):
         env=environment)
     self.request.kwargs["pid"] = process.pid
     # kwargs['pid'] = process.pid
-    testing = self.reqest.kwargs['pid']
+    testing = self.request.kwargs['pid']
     print(f"invoke_prodigy(), after Popen(), pid = {testing}")
 #    print(f"              self = {dir(self)}")
 #    self_req = self.request
