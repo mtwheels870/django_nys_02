@@ -122,7 +122,7 @@ class TextFolderDetailView(SingleTableView):
         # task_completed.connect(handle_task_completed)
         request.session["task_id"] = async_result.id
         # get_result = async_result.get()
-        print(f"label_page(), get_result = {get_result}")
+        # print(f"label_page(), get_result = {get_result}")
         # request.session["popen_id"] = popen.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
