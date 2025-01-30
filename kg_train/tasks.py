@@ -80,6 +80,7 @@ class InvokeProdigyTask(Task):
         app = celery.current_app
         print(f"IPT.revoke(), app = {app}")
         inspect = app.control.inspect()
+        print(f"IPT.revoke(), inspect = {inspect}")
         task_id = 23
         task_info = inspect.query_task([task_id])
 #from celery.app import control 
@@ -142,6 +143,9 @@ def invoke_prodigy(self, *args, **kwargs):
 
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
+    print(f"tasks.py:h_t_revoked(), kwargs:")
+    for i, key in enumerate(kwargs):
+        print(f"    [{i}] {key} = {value}")
     terminated = kwargs['terminated']
     signum = kwargs['signum']
     # Handle the result in your view
