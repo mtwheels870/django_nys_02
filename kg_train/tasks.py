@@ -87,11 +87,6 @@ class InvokeProdigyTask(Task):
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, *args, **kwargs):
-
-#    print(f"invoke_prodigy(), kwargs = {kwargs}")
-#    for i, key in enumerate(kwargs):
-#        value = kwargs[key]
-#        print(f"        [{i}] {key} = {value}")
     folder_id = kwargs['folder_id']
     file_id = kwargs['file_id']
 
@@ -125,11 +120,6 @@ def invoke_prodigy(self, *args, **kwargs):
 
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
-    # There's a ton of stuff in kwargs['request']
-#    print(f"tasks.py:h_t_revoked(), kwargs:")
-#    for i, key in enumerate(kwargs):
-#        value = kwargs[key]
-#        print(f"    [{i}] {key} = {value}")
     terminated = kwargs['terminated']
     signum = kwargs['signum']
     request = kwargs["request"]
@@ -140,7 +130,6 @@ def handle_task_revoke(sender, *args, **kwargs):
         value = req_kwargs[key]
         print(f"    [{i}] {key} = {value}")
     task_id = request.id
-    # Handle the result in your view
     print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
     sender.revoke(task_id)
 
@@ -157,3 +146,12 @@ def handle_task_revoke(sender, *args, **kwargs):
         #*args, **kwargs):
     ## Handle the result in your view
     #print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
+#    print(f"invoke_prodigy(), kwargs = {kwargs}")
+#    for i, key in enumerate(kwargs):
+#        value = kwargs[key]
+#        print(f"        [{i}] {key} = {value}")
+    # There's a ton of stuff in kwargs['request']
+#    print(f"tasks.py:h_t_revoked(), kwargs:")
+#    for i, key in enumerate(kwargs):
+#        value = kwargs[key]
+#        print(f"    [{i}] {key} = {value}")
