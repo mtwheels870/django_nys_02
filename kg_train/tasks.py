@@ -144,13 +144,15 @@ def invoke_prodigy(self, *args, **kwargs):
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
     # There's a ton of stuff in kwargs['request']
-    print(f"tasks.py:h_t_revoked(), kwargs:")
-    for i, key in enumerate(kwargs):
-        value = kwargs[key]
-        print(f"    [{i}] {key} = {value}")
+#    print(f"tasks.py:h_t_revoked(), kwargs:")
+#    for i, key in enumerate(kwargs):
+#        value = kwargs[key]
+#        print(f"    [{i}] {key} = {value}")
     terminated = kwargs['terminated']
     signum = kwargs['signum']
-    task_id = kwargs['id']
+    request = kwargs["request"]
+    print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
+    task_id = request['id']
     # Handle the result in your view
     print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
     sender.revoke(task_id)
