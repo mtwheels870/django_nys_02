@@ -111,6 +111,7 @@ def invoke_prodigy(self, *args, **kwargs):
     print(f"invoke_prodigy(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
+    print(f"invoke_prodigy(), self = {dir(self)}")
     print(f"invoke_prodigy(), setting {self.id} = {process.pid}")
     set_pid(self.id, process.pid)
     # self.request.kwargs["pid"] = process.pid
