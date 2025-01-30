@@ -113,6 +113,9 @@ def invoke_prodigy(self, *args, **kwargs):
     testing = kwargs['pid']
     print(f"invoke_prodigy(), after Popen(), pid = {testing}")
     print(f"              self = {dir(self)}")
+    self_req = self.request
+    self_req_kwargs = self_req.kwargs
+    print(f"              self_req_kwargs = {self_req_kwargs}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
