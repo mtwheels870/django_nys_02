@@ -109,8 +109,10 @@ def invoke_prodigy(self, *args, **kwargs):
     print(f"invoke_prodigy(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    print(f"invoke_prodigy(), after Popen(), pid = {process.pid}")
     kwargs['pid'] = process.pid
+    testing = kwargs['pid']
+    print(f"invoke_prodigy(), after Popen(), pid = {testing}")
+    print(f"              self = {dir(self)}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
