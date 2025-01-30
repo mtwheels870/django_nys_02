@@ -145,6 +145,7 @@ def invoke_prodigy(self, *args, **kwargs):
 def handle_task_revoke(sender, *args, **kwargs):
     print(f"tasks.py:h_t_revoked(), kwargs:")
     for i, key in enumerate(kwargs):
+        value = kwargs[key]
         print(f"    [{i}] {key} = {value}")
     terminated = kwargs['terminated']
     signum = kwargs['signum']
