@@ -75,13 +75,16 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
     def revoke(self):
-        print(f"IPT.revoke(), self = {dir(self)}")
-        request = self.request
-        subtask = self.subtask
-        print(f"IPT.revoke(), r = {request}, s = {subtask}")
+        app = celery.current_app(self)
+        print(f"IPT.revoke(), app = {app}")
+        inspect = app.control.inspect()
         task_id = 23
-        task_info = control.query_task([task_id])
-        print(f"IPT.revoke(), task_info = {task_info}")
+        task_info = inspect.query_task([task_id])
+#from celery.app import control 
+#        request = self.request
+#        subtask = self.subtask
+#        print(f"IPT.revoke(), r = {request}, s = {subtask}")
+#        print(f"IPT.revoke(), task_info = {task_info}")
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
