@@ -10,7 +10,6 @@ from django.views.generic.edit import FormView
 from django.utils import timezone
 
 from celery.result import AsyncResult
-from celery.task import app
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
