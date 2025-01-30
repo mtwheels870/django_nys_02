@@ -9,6 +9,7 @@ import subprocess
 
 from celery import shared_task, Task
 from celery import signals, states
+from celery.app import control 
 
 from django.http import JsonResponse
 from django_celery_results.models import TaskResult
@@ -74,10 +75,10 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
     def revoke(self):
-        print(f"IPT.revoke(), kwargs:")
-        for i, key in enumerate(self.kwargs):
-            value = self.kwargs[key]
-            print(f"        [{i}] {key} = {value}")
+        task_id = self.task_id
+        print(f"IPT.revoke(), task_id = {task_id}")
+        task_info = control.query_tasks([task_id])
+        print(f"IPT.revoke(), task_info = {task_info}")
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
