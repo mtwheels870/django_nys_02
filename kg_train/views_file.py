@@ -61,6 +61,10 @@ class TextFileEditView(generic.edit.FormView):
             print(f"TFEV.post(), form is INVALID")
         return HttpResponseRedirect(self.get_success_url())
 
+@signals.task_success.connect
+def on_success(sender, result, **kwargs):
+    print(f"views_file.py:on_success(), sender = {sender}, result = {result}")
+    
 class TextFileLabelView(generic.DetailView):
     model = TextFile
     # form_class = TextLabelForm

@@ -109,33 +109,21 @@ def invoke_prodigy(self, *args, **kwargs):
     print(f"invoke_prodigy(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    print(f"invoke_prodigy(), self = {dir(self)}")
-    # print(f"invoke_prodigy(), setting {self.id} = {process.pid}")
-    # set_pid(self.id, process.pid)
-    # self.request.kwargs["pid"] = process.pid
-    # kwargs['pid'] = process.pid
-    # testing = self.request.kwargs['pid']
-    # print(f"invoke_prodigy(), after Popen(), pid = {testing}")
-#    print(f"              self = {dir(self)}")
-#    self_req = self.request
-#    self_req_kwargs = self_req.kwargs
-#    print(f"              self_req_kwargs = {self_req_kwargs}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     # stdout, stderr = process.communicate()
     # We never get here (b/c of the revoked)
     return process.pid
 
-@signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
-    terminated = kwargs['terminated']
-    signum = kwargs['signum']
-    request = kwargs["request"]
-    task_id = request.id
-    pid = get_pid(task_id)
+#    terminated = kwargs['terminated']
+#    signum = kwargs['signum']
+#    request = kwargs["request"]
+#    task_id = request.id
+#    pid = get_pid(task_id)
     print(f"h_t_revoke(), task_id = {task_id}, pid = {pid}")
-    print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
-    sender.revoke(task_id)
+#    print(f"tasks.py:h_t_revoked()")
+    # sender.revoke(task_id)
 
 
 #    print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
@@ -166,3 +154,14 @@ def handle_task_revoke(sender, *args, **kwargs):
 #    for i, key in enumerate(kwargs):
 #        value = kwargs[key]
 #        print(f"    [{i}] {key} = {value}")
+    # print(f"invoke_prodigy(), self = {dir(self)}")
+    # print(f"invoke_prodigy(), setting {self.id} = {process.pid}")
+    # set_pid(self.id, process.pid)
+    # self.request.kwargs["pid"] = process.pid
+    # kwargs['pid'] = process.pid
+    # testing = self.request.kwargs['pid']
+    # print(f"invoke_prodigy(), after Popen(), pid = {testing}")
+#    print(f"              self = {dir(self)}")
+#    self_req = self.request
+#    self_req_kwargs = self_req.kwargs
+#    print(f"              self_req_kwargs = {self_req_kwargs}")
