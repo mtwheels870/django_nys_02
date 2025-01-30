@@ -26,6 +26,8 @@ PRODIGY_PATH = "prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
+mapping_task_pids = {} 
+
 def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
     now = datetime.datetime.now()
@@ -109,10 +111,12 @@ def invoke_prodigy(self, *args, **kwargs):
     print(f"invoke_prodigy(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    self.request.kwargs["pid"] = process.pid
+    print(f"invoke_prodigy(), setting {self.id} = {process.pid}")
+    set_pid(self.id, process.pid)
+    # self.request.kwargs["pid"] = process.pid
     # kwargs['pid'] = process.pid
-    testing = self.request.kwargs['pid']
-    print(f"invoke_prodigy(), after Popen(), pid = {testing}")
+    # testing = self.request.kwargs['pid']
+    # print(f"invoke_prodigy(), after Popen(), pid = {testing}")
 #    print(f"              self = {dir(self)}")
 #    self_req = self.request
 #    self_req_kwargs = self_req.kwargs
@@ -124,18 +128,31 @@ def invoke_prodigy(self, *args, **kwargs):
     return True
 
 
+@shared_task
+def set_pid(task_id, pid):
+    mapping_task_pids[task_id] = pid
+
+@shared_task
+def get_pid(task_id)
+    if task_id in mapping_task_pids:
+        return mapping_task_pids[task_id]
+    else:
+        return None
+
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
     terminated = kwargs['terminated']
     signum = kwargs['signum']
     request = kwargs["request"]
-    print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
-    req_kwargs = request.kwargs
-    print(f"tasks.py:h_t_revoked(), req_kwargs:")
-    for i, key in enumerate(req_kwargs):
-        value = req_kwargs[key]
-        print(f"    [{i}] {key} = {value}")
+#    print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
+#    req_kwargs = request.kwargs
+#    print(f"tasks.py:h_t_revoked(), req_kwargs:")
+#    for i, key in enumerate(req_kwargs):
+#        value = req_kwargs[key]
+#        print(f"    [{i}] {key} = {value}")
     task_id = request.id
+    pid = get_pid(task_id)
+    print(f"h_t_revoke(), task_id = {task_id}, pid = {pid}")
     print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
     sender.revoke(task_id)
 
