@@ -74,12 +74,10 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
     def revoke(self):
-        global last_child_pid
-        print(f"IPT.revoke(), self = {self}, last_child_pid = {last_child_pid}")
-        if last_child_pid:
-            print(f"kill_child_process(), last_child_pid = {last_child_pid}")
-            os.kill(last_child_pid)
-            last_child_pid = None
+        print(f"IPT.revoke(), kwargs:")
+        for i, key in enumerate(self.kwargs):
+            value = self.kwargs[key]
+            print(f"        [{i}] {key} = {value}")
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
