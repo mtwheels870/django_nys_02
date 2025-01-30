@@ -10,6 +10,7 @@ from django.views.generic.edit import FormView
 from django.utils import timezone
 
 from celery.result import AsyncResult
+from celery.task import app
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
@@ -114,7 +115,7 @@ class TextFileLabelView(generic.DetailView):
         elif 'exit' in request.POST:
             print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
             signal2 = signal.SIGKILL
-        task = AsyncResult(task_id)
+        task = AsyncResult(task_id, app=app)
         get_result = task.get()
         print(f"TFLV.post(), get_result = {get_result}")
         task.revoke(terminate=True)
