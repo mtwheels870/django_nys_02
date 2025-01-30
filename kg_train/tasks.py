@@ -109,9 +109,10 @@ def invoke_prodigy(self, *args, **kwargs):
     full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} --label {file_path_label}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
-    self.process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
-    print(f"invoke_prodigy(), after Popen(), pid = {self.process.pid}")
+    print(f"invoke_prodigy(), after Popen(), pid = {process.pid}")
+    kwargs['pid'] = process.pid
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
