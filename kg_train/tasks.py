@@ -83,20 +83,15 @@ class InvokeProdigyTask(Task):
         print(f"IPT.revoke(), inspect = {inspect}")
         task_info = inspect.query_task([task_id])
         print(f"IPT.revoke(), task_info = {task_info}")
-#from celery.app import control 
-#        request = self.request
-#        subtask = self.subtask
-#        print(f"IPT.revoke(), r = {request}, s = {subtask}")
-#        print(f"IPT.revoke(), task_info = {task_info}")
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
 def invoke_prodigy(self, *args, **kwargs):
 
-    print(f"invoke_prodigy(), kwargs = {kwargs}")
-    for i, key in enumerate(kwargs):
-        value = kwargs[key]
-        print(f"        [{i}] {key} = {value}")
+#    print(f"invoke_prodigy(), kwargs = {kwargs}")
+#    for i, key in enumerate(kwargs):
+#        value = kwargs[key]
+#        print(f"        [{i}] {key} = {value}")
     folder_id = kwargs['folder_id']
     file_id = kwargs['file_id']
 
@@ -125,21 +120,8 @@ def invoke_prodigy(self, *args, **kwargs):
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     stdout, stderr = process.communicate()
     # We never get here (b/c of the revoked)
-#    if process.returncode == 0:
-#        retval = True
-#        print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
-#    else:
-#        retval = False
-#        print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    # kill_child_process(process)
-    # session['popen_pid'] = pid
     return True
 
-#@signals.task_postrun.connect
-#def handle_task_postrun(sender, task_id, task, retval,
-        #*args, **kwargs):
-    ## Handle the result in your view
-    #print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
 
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
@@ -152,8 +134,26 @@ def handle_task_revoke(sender, *args, **kwargs):
     signum = kwargs['signum']
     request = kwargs["request"]
     print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
+    req_kwargs = request.kwargs
+    print(f"tasks.py:h_t_revoked(), req_kwargs:")
+    for i, key in enumerate(req_kwargs):
+        value = req_kwargs[key]
+        print(f"    [{i}] {key} = {value}")
     task_id = request.id
     # Handle the result in your view
     print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
     sender.revoke(task_id)
 
+#    if process.returncode == 0:
+#        retval = True
+#        print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
+#    else:
+#        retval = False
+#        print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
+    # kill_child_process(process)
+    # session['popen_pid'] = pid
+#@signals.task_postrun.connect
+#def handle_task_postrun(sender, task_id, task, retval,
+        #*args, **kwargs):
+    ## Handle the result in your view
+    #print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
