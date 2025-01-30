@@ -115,6 +115,8 @@ class TextFileLabelView(generic.DetailView):
             print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
             signal2 = signal.SIGKILL
         task = AsyncResult(task_id)
+        get_result = task.get()
+        print(f"TFLV.post(), get_result = {get_result}")
         task.revoke(terminate=True)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
