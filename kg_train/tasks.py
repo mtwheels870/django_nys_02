@@ -26,8 +26,6 @@ PRODIGY_PATH = "prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
-mapping_task_pids = {} 
-
 def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
     now = datetime.datetime.now()
@@ -112,8 +110,8 @@ def invoke_prodigy(self, *args, **kwargs):
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
     print(f"invoke_prodigy(), self = {dir(self)}")
-    print(f"invoke_prodigy(), setting {self.id} = {process.pid}")
-    set_pid(self.id, process.pid)
+    # print(f"invoke_prodigy(), setting {self.id} = {process.pid}")
+    # set_pid(self.id, process.pid)
     # self.request.kwargs["pid"] = process.pid
     # kwargs['pid'] = process.pid
     # testing = self.request.kwargs['pid']
@@ -124,39 +122,28 @@ def invoke_prodigy(self, *args, **kwargs):
 #    print(f"              self_req_kwargs = {self_req_kwargs}")
 
     # Processing blocks here, so we can just use the popen object below (to kill the child)
-    stdout, stderr = process.communicate()
+    # stdout, stderr = process.communicate()
     # We never get here (b/c of the revoked)
-    return True
-
-
-@shared_task
-def set_pid(task_id, pid):
-    mapping_task_pids[task_id] = pid
-
-@shared_task
-def get_pid(task_id):
-    if task_id in mapping_task_pids:
-        return mapping_task_pids[task_id]
-    else:
-        return None
+    return process.pid
 
 @signals.task_revoked.connect
 def handle_task_revoke(sender, *args, **kwargs):
     terminated = kwargs['terminated']
     signum = kwargs['signum']
     request = kwargs["request"]
-#    print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
-#    req_kwargs = request.kwargs
-#    print(f"tasks.py:h_t_revoked(), req_kwargs:")
-#    for i, key in enumerate(req_kwargs):
-#        value = req_kwargs[key]
-#        print(f"    [{i}] {key} = {value}")
     task_id = request.id
     pid = get_pid(task_id)
     print(f"h_t_revoke(), task_id = {task_id}, pid = {pid}")
     print(f"tasks.py:h_t_revoked(), sender = {sender}, terminated = {terminated}")
     sender.revoke(task_id)
 
+
+#    print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
+#    req_kwargs = request.kwargs
+#    print(f"tasks.py:h_t_revoked(), req_kwargs:")
+#    for i, key in enumerate(req_kwargs):
+#        value = req_kwargs[key]
+#        print(f"    [{i}] {key} = {value}")
 #    if process.returncode == 0:
 #        retval = True
 #        print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
