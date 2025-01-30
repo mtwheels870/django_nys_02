@@ -24,8 +24,6 @@ PRODIGY_PATH = "prodigy"
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
 
-last_child_pid = None
-
 def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
     now = datetime.datetime.now()
@@ -85,8 +83,12 @@ class InvokeProdigyTask(Task):
 
 # Note, this just does the action.  Result is above 
 @shared_task(bind=True, base=InvokeProdigyTask)
-def invoke_prodigy(self, folder_id, file_id):
-    global last_child_pid
+def invoke_prodigy(folder_id, file_id, **kwargs):
+
+    print(f"invoke_prodigy(), kwargs = {kwargs}")
+    for i, key in enumerate(kwargs):
+        value = kwargs[key]
+        print(f"        [{i}] {key} = {value}")
 
     dir_path = make_temp_dir()
     file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)

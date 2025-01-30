@@ -115,14 +115,11 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        async_result = invoke_prodigy.apply_async((folder_id, file_id))
+        async_result = invoke_prodigy.apply_async((folder_id, file_id), {'pid': 37)
 
         # Handle the signal when we're done
         # task_completed.connect(handle_task_completed)
         request.session["task_id"] = async_result.id
-        pid = async_result.process.pid
-        print(f"label_page(), pid = {pid}")
-        request.session["popen_pid"] = pid
         # request.session["popen_id"] = popen.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
