@@ -133,7 +133,7 @@ def set_pid(task_id, pid):
     mapping_task_pids[task_id] = pid
 
 @shared_task
-def get_pid(task_id)
+def get_pid(task_id):
     if task_id in mapping_task_pids:
         return mapping_task_pids[task_id]
     else:
