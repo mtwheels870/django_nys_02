@@ -75,7 +75,8 @@ class InvokeProdigyTask(Task):
         print(f'IPT.on_success(), task: {task_id} sucess, retval = {retval}')
 
     def revoke(self):
-        app = celery.current_app(self)
+        from celery import current_app
+        app = celery.current_app
         print(f"IPT.revoke(), app = {app}")
         inspect = app.control.inspect()
         task_id = 23
