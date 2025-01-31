@@ -53,19 +53,9 @@ def generate_prodigy_files(dir_path, file_id):
 
     return file_path_text, file_path_label
 
-# This returns the status of the worker/celery
-def get_task_result(request, task_id):
-    print(f"tasks.py:get_task_result(), task_id = {task_id}")
-    task_result = TaskResult.objects.get(task_id=task_id)
-    return JsonResponse({
-        'task_id': task_result.task_id,
-        'status': task_result.status,
-        'result': task_result.result
-    })
-
-# Note, this just does the action.  Result is above 
-@shared_task
-def prodigy_start(*args, **kwargs):
+@shared_task(bind=True)
+def prodigy_start(self, *args, **kwargs):
+    print(f"invoke_prodigy(), self = {self}")
     file_id = kwargs['file_id']
 
     dir_path = make_temp_dir()
@@ -85,69 +75,8 @@ def prodigy_start(*args, **kwargs):
     full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} --label {file_path_label}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
-    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    process = subprocess.Popen(full_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
 
     return process.pid
 
-    # Processing blocks here, so we can just use the popen object below (to kill the child)
-    # stdout, stderr = process.communicate()
-    # We never get here (b/c of the revoked)
-#def handle_task_revoke(sender, *args, **kwargs):
-#    terminated = kwargs['terminated']
-#    signum = kwargs['signum']
-#    request = kwargs["request"]
-#    task_id = request.id
-#    pid = get_pid(task_id)
-#    print(f"h_t_revoke(), task_id = {task_id}, pid = {pid}")
-#    print(f"tasks.py:h_t_revoked()")
-    # sender.revoke(task_id)
-
-
-#    print(f"tasks.py:h_t_revoked(), request: {dir(request)}")
-#    req_kwargs = request.kwargs
-#    print(f"tasks.py:h_t_revoked(), req_kwargs:")
-#    for i, key in enumerate(req_kwargs):
-#        value = req_kwargs[key]
-#        print(f"    [{i}] {key} = {value}")
-#    if process.returncode == 0:
-#        retval = True
-#        print(f"invoke_prodigy(), SUCCESS, stdout = {stdout}")
-#    else:
-#        retval = False
-#        print(f"invoke_prodigy(), FAILURE, stderr = {stderr}")
-    # kill_child_process(process)
-    # session['popen_pid'] = pid
-#@signals.task_postrun.connect
-#def handle_task_postrun(sender, task_id, task, retval,
-        #*args, **kwargs):
-    ## Handle the result in your view
-    #print(f"tasks.py:h_t_pr(), task completed with retval: {retval}")
-#    print(f"invoke_prodigy(), kwargs = {kwargs}")
-#    for i, key in enumerate(kwargs):
-#        value = kwargs[key]
-#        print(f"        [{i}] {key} = {value}")
-    # There's a ton of stuff in kwargs['request']
-#    print(f"tasks.py:h_t_revoked(), kwargs:")
-#    for i, key in enumerate(kwargs):
-#        value = kwargs[key]
-#        print(f"    [{i}] {key} = {value}")
-    # print(f"invoke_prodigy(), self = {dir(self)}")
-    # print(f"invoke_prodigy(), setting {self.id} = {process.pid}")
-    # set_pid(self.id, process.pid)
-    # self.request.kwargs["pid"] = process.pid
-    # kwargs['pid'] = process.pid
-    # testing = self.request.kwargs['pid']
-    # print(f"invoke_prodigy(), after Popen(), pid = {testing}")
-#    print(f"              self = {dir(self)}")
-#    self_req = self.request
-#    self_req_kwargs = self_req.kwargs
-#    print(f"              self_req_kwargs = {self_req_kwargs}")
-#    def revoke(self, task_id):
-#        from celery import current_app
-#        app = celery.current_app
-#        print(f"IPT.revoke(), app = {app}, task_id = {task_id}")
-#        inspect = app.control.inspect()
-#        print(f"IPT.revoke(), inspect = {inspect}")
-#        task_info = inspect.query_task([task_id])
-#        print(f"IPT.revoke(), task_info = {task_info}")
