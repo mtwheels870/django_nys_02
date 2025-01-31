@@ -16,8 +16,6 @@ from celery.result import AsyncResult
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
 
-child_pid_to_kill = None
-
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
     form_class = EditorForm
@@ -99,9 +97,25 @@ class TextFileLabelView(generic.DetailView):
 
         return context_data
 
-    def post(self, request, *args, **kwargs):
-        global child_pid_to_kill 
+    def kill_process_and_children(pid):
+        try:
+            parent = psutil.Process(pid)
+        except psutil.NoSuchProcess:
+            return
 
+        children = parent.children(recursive=True)
+        for child in children:
+            try:
+                child.kill()
+            except psutil.NoSuchProcess:
+                pass
+
+        try:
+            parent.kill()
+        except psutil.NoSuchProcess:
+            pass
+
+    def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
         file_id = kwargs["file_id"]
         form = TextLabelForm(request.POST)
@@ -117,6 +131,6 @@ class TextFileLabelView(generic.DetailView):
             elif 'exit' in request.POST:
                 print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
                 signal2 = signal.SIGKILL
-            psutil.kill_process_and_children(pid)
+            kill_process_and_children(pid)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
