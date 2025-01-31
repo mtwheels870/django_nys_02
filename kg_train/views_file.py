@@ -117,6 +117,6 @@ class TextFileLabelView(generic.DetailView):
             elif 'exit' in request.POST:
                 print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
                 signal2 = signal.SIGKILL
-            kill_process_and_children(pid)
+            psutil.kill_process_and_children(pid)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
