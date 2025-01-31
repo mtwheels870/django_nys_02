@@ -36,6 +36,19 @@ def make_temp_dir():
     # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
     return full_path
 
+def generate_prodigy_config(dir_path):
+    data = {
+        "name" : "John",
+        "age" : 30,
+        "city" : "New York"
+    }
+    json_string = json.dumps(data)
+
+    config_file = os.path.join(dir_path, FILE_PRODIGY_CONFIG)
+    with open(config_file, "w") as file_writer:
+        file_writer.write(config_file)
+    return config_file
+
 def generate_prodigy_files(dir_path, file_id):
     text_file = TextFile.objects.filter(id=file_id)[0]
     file_path_text = os.path.join(dir_path, FILE_TEXT)
@@ -51,7 +64,9 @@ def generate_prodigy_files(dir_path, file_id):
             short_name = label.short_name + "\n"
             file_writer.write(short_name)
 
-    return file_path_text, file_path_label
+    prodigy_config = generate_prodigy_config(dir_path)
+
+    return file_path_text, file_path_label, prodigy_config
 
 @shared_task(bind=True)
 def prodigy_start(self, *args, **kwargs):
@@ -59,7 +74,7 @@ def prodigy_start(self, *args, **kwargs):
     file_id = kwargs['file_id']
 
     dir_path = make_temp_dir()
-    file_path_text, file_path_label = generate_prodigy_files(dir_path, file_id)
+    file_path_text, file_path_label, config_file = generate_prodigy_files(dir_path, file_id)
 
     recipe = "ner.manual"
     ner_dataset = "south_china_sea_01"
@@ -72,7 +87,8 @@ def prodigy_start(self, *args, **kwargs):
         "PATH" : new_path,
         "PRODIGY_HOST" : "0.0.0.0" }
 
-    full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} --label {file_path_label}"
+    full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} "
+            "{file_path_text} --label {file_path_label} --config {config_file}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
