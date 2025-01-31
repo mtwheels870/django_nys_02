@@ -64,6 +64,7 @@ def get_task_result(request, task_id):
     })
 
 # Note, this just does the action.  Result is above 
+@shared_task
 def prodigy_start(self, *args, **kwargs):
     file_id = kwargs['file_id']
 
