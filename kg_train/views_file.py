@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import FormView
-
 from django.utils import timezone
+from django_celery_results.model import TaskResult
 
 from celery import signals
 from celery.result import AsyncResult
