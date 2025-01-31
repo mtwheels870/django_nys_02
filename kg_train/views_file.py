@@ -109,7 +109,7 @@ class TextFileLabelView(generic.DetailView):
         tr = TaskResult.objects.filter(task_id=task_id)[0]
         if tr:
             print(f"TFLV.post(), result = {tr.result}")
-            pid = tr.result
+            pid = int(tr.result)
             if 'save' in request.POST:
                 print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
                 signal2 = signal.SIGTERM
