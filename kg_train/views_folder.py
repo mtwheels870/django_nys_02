@@ -116,14 +116,9 @@ class TextFolderDetailView(SingleTableView):
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
         async_result = invoke_prodigy.apply_async(kwargs={'folder_id': folder_id,
-            'file_id': file_id, 'pid': 37})
+            'file_id': file_id})
 
-        # Handle the signal when we're done
-        # task_completed.connect(handle_task_completed)
         request.session["task_id"] = async_result.id
-        # get_result = async_result.get()
-        # print(f"label_page(), get_result = {get_result}")
-        # request.session["popen_id"] = popen.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
     def post(self, request, *args, **kwargs):
@@ -150,3 +145,9 @@ class TextFolderDetailView(SingleTableView):
                     value = request.POST[key]
                     print(f"          [{i}]: {key} = {value}")
                 return redirect(request.path)
+
+        # Handle the signal when we're done
+        # task_completed.connect(handle_task_completed)
+        # get_result = async_result.get()
+        # print(f"label_page(), get_result = {get_result}")
+        # request.session["popen_id"] = popen.id
