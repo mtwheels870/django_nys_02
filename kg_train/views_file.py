@@ -64,15 +64,6 @@ class TextFileEditView(generic.edit.FormView):
             print(f"TFEV.post(), form is INVALID")
         return HttpResponseRedirect(self.get_success_url())
 
-@signals.task_success.connect
-def on_success(sender, result, **kwargs):
-    global child_pid_to_kill
-    print(f"views_file.py:on_success(), sender = {sender}, result = {result}")
-    if not child_pid_to_kill:
-        child_pid_to_kill = result
-    else:
-        print(f"views_file.py:on_success(), never killed last child = {child_pid_to_kill}")
-    
 class TextFileLabelView(generic.DetailView):
     model = TextFile
     # form_class = TextLabelForm
@@ -112,21 +103,19 @@ class TextFileLabelView(generic.DetailView):
 
         folder_id = kwargs["folder_id"]
         file_id = kwargs["file_id"]
-        # context_data = self.get_context_data()
-        # task_id = context_data["task_id"]
         form = TextLabelForm(request.POST)
         task_id = request.session.get('task_id', None)
-        popen_pid = request.session.get('popen_pid', None)
-        color = request.session.get('color', 'gray')
-        print(f"TFLV.post(), child_pid_to_kill = {child_pid_to_kill}")
-        if child_pid_to_kill:
+        print(f"TFLV.post(), task_id = {task_id}")
+        tr = TaskResult.object.filter(task_id=task_id)
+        if tr:
+            print(f"TFLV.post(), result = {tr.result}")
+            pid = tr.result
             if 'save' in request.POST:
                 print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
                 signal2 = signal.SIGTERM
             elif 'exit' in request.POST:
                 print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
                 signal2 = signal.SIGKILL
-            os.kill(child_pid_to_kill, signal2)
-            child_pid_to_kill = None
+            os.kill(pid, signal2)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
