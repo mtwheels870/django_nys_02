@@ -92,7 +92,8 @@ def prodigy_start(self, *args, **kwargs):
         "PRODIGY_HOST" : "0.0.0.0" }
 
     first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
-    second = f"--label {file_path_label} --config {config_file}"
+    # second = f"--label {file_path_label} --config {config_file}"
+    second = f"--label {file_path_label}"
     full_command = first + second
 
     print(f"invoke_prodigy(), full_command = {full_command}, output_file = {output_file}")
