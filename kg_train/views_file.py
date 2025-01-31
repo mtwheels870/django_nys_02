@@ -108,6 +108,8 @@ class TextFileLabelView(generic.DetailView):
         return context_data
 
     def post(self, request, *args, **kwargs):
+        global child_pid_to_kill 
+
         folder_id = kwargs["folder_id"]
         file_id = kwargs["file_id"]
         # context_data = self.get_context_data()
