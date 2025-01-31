@@ -15,6 +15,8 @@ from celery.result import AsyncResult
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
 
+child_pid_to_kill = None
+
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
     form_class = EditorForm
@@ -64,7 +66,12 @@ class TextFileEditView(generic.edit.FormView):
 
 @signals.task_success.connect
 def on_success(sender, result, **kwargs):
+    global child_pid_to_kill
     print(f"views_file.py:on_success(), sender = {sender}, result = {result}")
+    if not child_pid_to_kill:
+        child_pid_to_kill = result
+    else:
+        print(f"views_file.py:on_success(), never killed last child = {child_pid_to_kill}")
     
 class TextFileLabelView(generic.DetailView):
     model = TextFile
@@ -109,19 +116,15 @@ class TextFileLabelView(generic.DetailView):
         task_id = request.session.get('task_id', None)
         popen_pid = request.session.get('popen_pid', None)
         color = request.session.get('color', 'gray')
-        print(f"TFLV.post(), task_id = {task_id}, color = {color}, popen_pid = {popen_pid}")
-#        if form.is_valid():
-#            task_id = form.cleaned_data['task_id']
-#            print(f"TFLV.post(), task_id = {task_id}")
-        if 'save' in request.POST:
-            print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
-            signal2 = signal.SIGTERM
-        elif 'exit' in request.POST:
-            print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
-            signal2 = signal.SIGKILL
-        task = AsyncResult(task_id, app=app)
-        get_result = task.get()
-        print(f"TFLV.post(), get_result = {get_result}")
-        task.revoke(terminate=True)
+        print(f"TFLV.post(), child_pid_to_kill = {child_pid_to_kill}")
+        if child_pid_to_kill:
+            if 'save' in request.POST:
+                print(f"TFLV.post(), save labels before we leave, task_id = {task_id}")
+                signal2 = signal.SIGTERM
+            elif 'exit' in request.POST:
+                print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
+                signal2 = signal.SIGKILL
+            os.kill(child_pid_to_kill, signal2)
+            child_pid_to_kill = None
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
