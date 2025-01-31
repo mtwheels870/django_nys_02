@@ -75,7 +75,7 @@ def prodigy_start(self, *args, **kwargs):
     full_command = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} --label {file_path_label}"
 
     print(f"invoke_prodigy(), full_command = {full_command}")
-    process = subprocess.Popen(full_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
 
     return process.pid
