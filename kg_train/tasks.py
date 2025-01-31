@@ -64,9 +64,7 @@ def get_task_result(request, task_id):
     })
 
 # Note, this just does the action.  Result is above 
-@shared_task(bind=True, base=InvokeProdigyTask)
-def invoke_prodigy(self, *args, **kwargs):
-    folder_id = kwargs['folder_id']
+def prodigy_start(self, *args, **kwargs):
     file_id = kwargs['file_id']
 
     dir_path = make_temp_dir()
@@ -89,11 +87,11 @@ def invoke_prodigy(self, *args, **kwargs):
     process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         env=environment)
 
+    return process.pid
+
     # Processing blocks here, so we can just use the popen object below (to kill the child)
     # stdout, stderr = process.communicate()
     # We never get here (b/c of the revoked)
-    return process.pid
-
 #def handle_task_revoke(sender, *args, **kwargs):
 #    terminated = kwargs['terminated']
 #    signum = kwargs['signum']

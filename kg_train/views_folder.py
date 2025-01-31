@@ -19,7 +19,7 @@ from celery import signals
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
 from .tables import TextFileTable
-from .tasks import invoke_prodigy
+from .tasks import prodigy_start
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
@@ -115,9 +115,7 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
-        async_result = invoke_prodigy.apply_async(kwargs={'folder_id': folder_id,
-            'file_id': file_id})
-
+        async_result = prodigy_start.apply_async(kwargs={'file_id': file_id})
         request.session["task_id"] = async_result.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
