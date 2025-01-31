@@ -1,5 +1,6 @@
 import os
 import signal
+import psutil
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
@@ -116,6 +117,6 @@ class TextFileLabelView(generic.DetailView):
             elif 'exit' in request.POST:
                 print(f"TFLV.post(), discard labels before we leave, task_id = {task_id}")
                 signal2 = signal.SIGKILL
-            os.kill(pid, signal2)
+            kill_process_and_children(pid)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
