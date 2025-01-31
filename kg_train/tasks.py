@@ -95,7 +95,7 @@ def prodigy_start(self, *args, **kwargs):
     second = f"--label {file_path_label} --config {config_file}"
     full_command = first + second
 
-    print(f"invoke_prodigy(), full_command = {full_command}, logfile = {logfile}")
+    print(f"invoke_prodigy(), full_command = {full_command}, output_file = {output_file}")
     with open(output_file, "w") as logfile:
         process = subprocess.Popen(full_command, shell=True, stdout=logfile, stderr=logfile,
             env=environment)
