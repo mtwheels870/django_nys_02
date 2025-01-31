@@ -16,6 +16,24 @@ from celery.result import AsyncResult
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
 
+def kill_process_and_children(pid):
+    try:
+        parent = psutil.Process(pid)
+    except psutil.NoSuchProcess:
+        return
+
+    children = parent.children(recursive=True)
+    for child in children:
+        try:
+            child.kill()
+        except psutil.NoSuchProcess:
+            pass
+
+    try:
+        parent.kill()
+    except psutil.NoSuchProcess:
+        pass
+
 class TextFileEditView(generic.edit.FormView):
     # model = TextFile
     form_class = EditorForm
@@ -96,24 +114,6 @@ class TextFileLabelView(generic.DetailView):
         # task_id_field.initial = task_id
 
         return context_data
-
-    def kill_process_and_children(pid):
-        try:
-            parent = psutil.Process(pid)
-        except psutil.NoSuchProcess:
-            return
-
-        children = parent.children(recursive=True)
-        for child in children:
-            try:
-                child.kill()
-            except psutil.NoSuchProcess:
-                pass
-
-        try:
-            parent.kill()
-        except psutil.NoSuchProcess:
-            pass
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
