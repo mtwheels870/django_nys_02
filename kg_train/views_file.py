@@ -106,7 +106,7 @@ class TextFileLabelView(generic.DetailView):
         form = TextLabelForm(request.POST)
         task_id = request.session.get('task_id', None)
         print(f"TFLV.post(), task_id = {task_id}")
-        tr = TaskResult.object.filter(task_id=task_id)
+        tr = TaskResult.objects.filter(task_id=task_id)
         if tr:
             print(f"TFLV.post(), result = {tr.result}")
             pid = tr.result
