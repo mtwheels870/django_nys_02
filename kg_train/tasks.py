@@ -25,6 +25,7 @@ PRODIGY_PATH = "prodigy"
 
 FILE_TEXT = "text_file.txt"
 FILE_LABEL = "ner_labels"
+FILE_PRODIGY_CONFIG = "config.json"
 
 def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
