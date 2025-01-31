@@ -92,12 +92,13 @@ def prodigy_start(self, *args, **kwargs):
         "PRODIGY_HOST" : "0.0.0.0" }
 
     first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
-    second = f"--label {file_path_label} --config {config_file} >& {output_file} "
+    second = f"--label {file_path_label} --config {config_file}"
     full_command = first + second
 
-    print(f"invoke_prodigy(), full_command = {full_command}")
-    process = subprocess.Popen(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        env=environment)
+    print(f"invoke_prodigy(), full_command = {full_command}, logfile = {logfile}")
+    with open(output_file, "w") as logfile:
+        process = subprocess.Popen(full_command, shell=True, stdout=logfile, stderr=logfile,
+            env=environment)
 
     return process.pid
 
