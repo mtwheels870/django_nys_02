@@ -37,9 +37,11 @@ def cleanup_temp_dir(temp_directory):
         full_path = os.path.join(temp_directory, file)
         if os.path.isdir(full_path):
             directory_list.append(full_path)
-    print(f"cleanup_temp(), len(directory_list) = {len(directory_list)}")
+    directory_list.sort()
+    len = len(directory_list)
+    print(f"cleanup_temp(), len(directory_list) = {len}")
     preserve_list = directory_list[-PRESERVE_COUNT:]
-    kill_list = directory_list[:PRESERVE_COUNT]
+    kill_list = directory_list[:(len - PRESERVE_COUNT)]
     print(f"kill_list{len(kill_list)}: {kill_list}")
     print(f"preserve_list{len(preserve_list)}: {preserve_list}")
 
