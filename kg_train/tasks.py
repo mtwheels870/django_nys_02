@@ -29,7 +29,7 @@ FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 
 def cleanup_temp_dir(temp_directory):
-    directories = [f for f in os.listdir(directory_path) if os.path.isdir(f)]
+    directories = [f for f in os.listdir(temp_directory) if os.path.isdir(f)]
     print(f"cleanup_temp(), len(directories) = {len(directories)}")
 
 def make_temp_dir():
