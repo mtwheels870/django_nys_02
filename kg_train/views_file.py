@@ -13,8 +13,9 @@ from django_celery_results.models import TaskResult
 from celery import signals
 from celery.result import AsyncResult
 
-from .models import TextFileStatus, TextFile, TextFolder
+from .models import TextFileStatus, TextFile, TextFolder, NerLabel
 from .forms import EditorForm, TextLabelForm
+from .tables import NerLabelTable
 
 PRODIGY_SHORTCUT_DICTIONARY = {
     "a" : "Accept [Green button]",

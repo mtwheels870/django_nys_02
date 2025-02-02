@@ -1,6 +1,6 @@
 import django_tables2 as tables
 
-from .models import TextFile
+from .models import TextFile, NerLabel
 
 class TextFileTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
