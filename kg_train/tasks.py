@@ -6,6 +6,7 @@ import os
 import datetime
 import json
 import subprocess
+import shutil
 
 import celery
 from celery import shared_task, Task
@@ -43,8 +44,10 @@ def cleanup_temp_dir(temp_directory):
     preserve_list = directory_list[-PRESERVE_COUNT:]
     kill_count = directory_len - PRESERVE_COUNT
     kill_list = directory_list[:kill_count]
-    print(f"kill_list{len(kill_list)}: {kill_list}")
-    print(f"preserve_list{len(preserve_list)}: {preserve_list}")
+    print(f"kill_list({len(kill_list)}): {kill_list}")
+    print(f"preserve_list({len(preserve_list)}): {preserve_list}")
+    for directory in kill_list:
+        shutil.rmtree(directory)
 
 def make_temp_dir():
     now = datetime.datetime.now()
