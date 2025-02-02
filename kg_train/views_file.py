@@ -17,8 +17,12 @@ from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
 
 PRODIGY_SHORTCUT_DICTIONARY = {
-    "key1" : "(key) action1",
-    "key2" : "(key) action2",
+    "a" : "Accept [Green button]",
+    "x" : "Reject (ignore entire sentence) [Red Button]",
+    " (space)" : "Ignore entire sentence (no labels)",
+    "del/backspace" : "Undo current annotations",
+    "NO BUTTON:" : "",
+    "Ctrl+S" : "Save Annotations",
 }
 
 def kill_process_and_children(pid):
