@@ -10,6 +10,8 @@ from django.views.generic.edit import FormView
 from django.utils import timezone
 from django_celery_results.models import TaskResult
 
+from django_tables2 import SingleTableView
+
 from celery import signals
 from celery.result import AsyncResult
 
