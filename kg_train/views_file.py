@@ -16,6 +16,11 @@ from celery.result import AsyncResult
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import EditorForm, TextLabelForm
 
+PRODIGY_SHORTCUT_DICTIONARY = {
+    "key1" : "(key) action1",
+    "key2" : "(key) action2",
+}
+
 def kill_process_and_children(pid):
     try:
         parent = psutil.Process(pid)
@@ -106,6 +111,7 @@ class TextFileLabelView(generic.DetailView):
         context_data['folder_id'] = folder_id
         text_folder = get_object_or_404(TextFolder, pk=folder_id)
         context_data['folder_name'] = text_folder.folder_name 
+        context_data['prodigy_shortcuts'] = PRODIGY_SHORTCUT_DICTIONARY
 
         # Save this in our hidden form
         # form = context_data['form']

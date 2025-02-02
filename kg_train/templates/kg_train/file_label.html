@@ -7,6 +7,23 @@
     <p>Folder name: <b>{{ folder_name }}</b></p>
     <p>Page number: <b>{{ page_number }}</b></p>
     <p>Celery task for invoking prodigy ( {{task_id }} )</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Column 1</th>
+          <th>Column 2</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for shortcut in prodigy_shortcuts %}
+        <tr>
+          <td>{{ shortcut.column1 }}</td>
+          <td>{{ shortcut.column2 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+        context_data[''] = PRODIGY_SHORTCUT_DICTIONARY
     <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
         <button type="submit" name="save">Save & Exit</button>
