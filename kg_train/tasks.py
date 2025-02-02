@@ -28,9 +28,14 @@ FILE_LABEL = "ner_labels"
 FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 
+def cleanup_temp_dir(temp_directory):
+    directories = [f for f in os.listdir(directory_path) if os.path.isdir(f)]
+    print(f"cleanup_temp(), len(directories) = {len(directories)}"
+
 def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
     now = datetime.datetime.now()
+    cleanup_temp_dir(temp_directory)
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
     full_path = os.path.join(temp_directory, folder_snapshot)
     if not os.path.exists(full_path):

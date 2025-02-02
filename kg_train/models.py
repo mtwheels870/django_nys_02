@@ -44,6 +44,7 @@ class TextFile(models.Model):
     prose_editor = ProseEditorField("text", preset="announcements")
     time_edited = models.DateTimeField(null=True)
     time_label_start = models.DateTimeField(null=True)
+    prodigy_dataset = models.CharField("Prodigy DataSet Name", max_length=80)
     def __str__(self):
         return self.file_name
 

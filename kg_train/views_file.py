@@ -18,11 +18,11 @@ from .forms import EditorForm, TextLabelForm
 
 PRODIGY_SHORTCUT_DICTIONARY = {
     "a" : "Accept [Green button]",
-    "x" : "Reject (ignore entire sentence) [Red Button]",
-    " (space)" : "Ignore entire sentence (no labels)",
-    "del/backspace" : "Undo current annotations",
+    "x" : "Reject (don't include sentence in ML training) [Red Button]",
+    " (space)" : "Ignore entire sentence (no labels, but ML trains on that) [Cancel icon]",
+    "del/backspace" : "Undo current annotations (abort current annotations) [Return icon]",
     "NO BUTTON:" : "",
-    "Ctrl+S" : "Save Annotations",
+    "Ctrl+S" : "Save Annotations (to Prodigy DB)",
 }
 
 def kill_process_and_children(pid):
