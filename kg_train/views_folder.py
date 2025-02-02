@@ -116,6 +116,13 @@ class TextFolderDetailView(SingleTableView):
     def label_page(self, request, folder_id, file_id):
         # Invoke celery task here
         async_result = prodigy_start.apply_async(kwargs={'file_id': file_id})
+
+        # Update the time (start labeling)
+        text_file = TextFile.objects.filter(id=file_id)
+        text_file.time_label_start = timezone.now()
+        new_status = TextFileStatus.objects.filter(id=2)
+        text_file.status = new_status
+        text_file.save()
         request.session["task_id"] = async_result.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
 
