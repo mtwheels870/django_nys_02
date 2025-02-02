@@ -30,7 +30,7 @@ FILE_OUTPUT = "prodigy_output.txt"
 
 def cleanup_temp_dir(temp_directory):
     directory_list = []
-    for file in os.listdir(temp_directory) 
+    for file in os.listdir(temp_directory):
         full_path = os.path.join(temp_directory, file)
         if os.path.isdir(full_path):
             directory_list.append(full_path)
