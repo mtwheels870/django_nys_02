@@ -144,3 +144,16 @@ class TextFileLabelView(generic.DetailView):
             kill_process_and_children(pid)
         return HttpResponseRedirect(reverse("app_kg_train:detail", args=(folder_id,)))
 
+class NerLabelDetailView(SingleTableView):
+    model = NerLabel
+    table_class = NerLabelTable
+    template_name = "kg_train/label_detail.html"
+    table_pagination = {
+        "per_page": 10
+    }
+
+    def get_queryset(self):
+        return NerLabel.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse("app_kg_train:index"))
