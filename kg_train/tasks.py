@@ -41,7 +41,8 @@ def cleanup_temp_dir(temp_directory):
     directory_len = len(directory_list)
     print(f"cleanup_temp(), len(directory_list) = {directory_len}")
     preserve_list = directory_list[-PRESERVE_COUNT:]
-    kill_list = directory_list[:(len - PRESERVE_COUNT)]
+    kill_count = directory_len - PRESERVE_COUNT
+    kill_list = directory_list[:kill_count]
     print(f"kill_list{len(kill_list)}: {kill_list}")
     print(f"preserve_list{len(preserve_list)}: {preserve_list}")
 
