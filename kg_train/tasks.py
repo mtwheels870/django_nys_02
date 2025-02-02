@@ -28,6 +28,9 @@ FILE_LABEL = "ner_labels"
 FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 
+TEMP_DIRECTORY = "/tmp/invoke_prodigy"
+PRESERVE_COUNT = 3
+
 def cleanup_temp_dir(temp_directory):
     directory_list = []
     for file in os.listdir(temp_directory):
@@ -35,13 +38,16 @@ def cleanup_temp_dir(temp_directory):
         if os.path.isdir(full_path):
             directory_list.append(full_path)
     print(f"cleanup_temp(), len(directory_list) = {len(directory_list)}")
+    preserve_list = directory_list[-PRESERVE_COUNT:]
+    kill_list = directory_list[:PRESERVE_COUNT]
+    print(f"kill_list{len(kill_list)}: {kill_list}")
+    print(f"preserve_list{len(preserve_list)}: {preserve_list}")
 
 def make_temp_dir():
-    temp_directory = "/tmp/invoke_prodigy"
     now = datetime.datetime.now()
-    cleanup_temp_dir(temp_directory)
+    cleanup_temp_dir(TEMP_DIRECTORY)
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
-    full_path = os.path.join(temp_directory, folder_snapshot)
+    full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
     if not os.path.exists(full_path):
         os.makedirs(full_path)
     # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
@@ -105,7 +111,8 @@ def prodigy_start(self, *args, **kwargs):
     second = f"--label {file_path_label}"
     full_command = first + second
 
-    print(f"invoke_prodigy(), full_command:\n{full_command}, output_file = {output_file}")
+    print(f"invoke_prodigy(), full_command:\n{full_command}")
+    print(f"                    output_file = {output_file}")
     with open(output_file, "w") as logfile:
         process = subprocess.Popen(full_command, shell=True, stdout=logfile, stderr=logfile,
             env=environment)
