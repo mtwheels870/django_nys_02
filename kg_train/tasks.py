@@ -29,8 +29,12 @@ FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 
 def cleanup_temp_dir(temp_directory):
-    directories = [f for f in os.listdir(temp_directory) if os.path.isdir(f)]
-    print(f"cleanup_temp(), len(directories) = {len(directories)}")
+    directory_list = []
+    for file in os.listdir(temp_directory) 
+        full_path = os.path.join(temp_directory, file)
+        if os.path.isdir(full_path):
+            directory_list.append(full_path)
+    print(f"cleanup_temp(), len(directory_list) = {len(directory_list)}")
 
 def make_temp_dir():
     temp_directory = "/tmp/invoke_prodigy"
@@ -101,7 +105,7 @@ def prodigy_start(self, *args, **kwargs):
     second = f"--label {file_path_label}"
     full_command = first + second
 
-    print(f"invoke_prodigy(), full_command = {full_command}, output_file = {output_file}")
+    print(f"invoke_prodigy(), full_command:\n{full_command}, output_file = {output_file}")
     with open(output_file, "w") as logfile:
         process = subprocess.Popen(full_command, shell=True, stdout=logfile, stderr=logfile,
             env=environment)
