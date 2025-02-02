@@ -15,15 +15,14 @@
         </tr>
       </thead>
       <tbody>
-        {% for shortcut in prodigy_shortcuts %}
+        {% for key, value in prodigy_shortcuts.items %}
         <tr>
-          <td>{{ shortcut.column1 }}</td>
-          <td>{{ shortcut.column2 }}</td>
+          <td>{{ key }}</td>
+          <td>{{ value }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-        context_data[''] = PRODIGY_SHORTCUT_DICTIONARY
     <form method="post" enctype="multipart/form-data" >
         {% csrf_token %}
         <button type="submit" name="save">Save & Exit</button>
