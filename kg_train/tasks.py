@@ -63,7 +63,7 @@ def make_temp_dir():
     if not os.path.exists(full_path):
         os.makedirs(full_path)
     # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
-    return temp_directory_port 
+    return full_path
 
 #        "host": "0.0.0.0",
 #        "port": PRODIGY_PORT,
