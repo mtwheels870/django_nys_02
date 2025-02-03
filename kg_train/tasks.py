@@ -125,7 +125,7 @@ def prodigy_start(self, *args, **kwargs):
     environment = {
         "VIRTUAL_ENV" : VENV_PATH,
         "PATH" : new_path, 
-        "PRODIGY_PORT" : PRODIGY_PORT,
+        "PRODIGY_PORT" : str(PRODIGY_PORT),
         "PRODIGY_HOST" : "0.0.0.0" }
 
     first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
