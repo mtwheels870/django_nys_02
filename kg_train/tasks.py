@@ -71,6 +71,7 @@ def generate_prodigy_config(dir_path):
                 "password": "Ch0c0late!",
                 "host": "localhost",
                 "port": 5432
+            }
         }
     }
     json_string = json.dumps(data) + "\n"
