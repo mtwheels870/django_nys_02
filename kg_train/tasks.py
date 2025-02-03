@@ -30,7 +30,7 @@ FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 
 # PRODUCTION CHANGE
-PRODIGY_PORT = 8081
+PRODIGY_PORT = 8080
 
 TEMP_DIRECTORY = "/tmp/invoke_prodigy/"
 PRESERVE_COUNT = 3
@@ -59,16 +59,16 @@ def make_temp_dir():
         os.makedirs(temp_directory_port)
     cleanup_temp_dir(temp_directory_port)
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
-    full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
+    full_path = os.path.join(temp_directory_port, folder_snapshot)
     if not os.path.exists(full_path):
         os.makedirs(full_path)
     # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
     return temp_directory_port 
 
+#        "host": "0.0.0.0",
+#        "port": PRODIGY_PORT,
 def generate_prodigy_config(dir_path):
     data = {
-        "host": "0.0.0.0",
-        "port": PRODIGY_PORT,
         "db": "postgresql",
         "db_settings": {
             "postgresql": {
@@ -124,8 +124,9 @@ def prodigy_start(self, *args, **kwargs):
     new_path = f"{VENV_PATH}/bin:" + sys_path_string
     environment = {
         "VIRTUAL_ENV" : VENV_PATH,
-        "PATH" : new_path}
-#        "PRODIGY_HOST" : "0.0.0.0" }
+        "PATH" : new_path, 
+        "PRODIGY_PORT" : PRODIGY_PORT,
+        "PRODIGY_HOST" : "0.0.0.0" }
 
     first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
     second = f"--label {file_path_label} --config {config_file}"
