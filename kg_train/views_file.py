@@ -20,7 +20,7 @@ from .forms import EditorForm, TextLabelForm
 from .tables import NerLabelTable
 
 # PRODUCTION CHANGE
-PRODIGY_URL = "http://18.208.200.162:8080/"
+PRODIGY_URL = "http://18.208.200.162:8081/"
 
 PRODIGY_SHORTCUT_DICTIONARY = {
     "a" : "Accept [Green button]",
