@@ -18,6 +18,7 @@ from celery.result import AsyncResult
 from .models import TextFileStatus, TextFile, TextFolder, NerLabel
 from .forms import EditorForm, TextLabelForm
 from .tables import NerLabelTable
+from .urls import PRODIGY_URL
 
 PRODIGY_SHORTCUT_DICTIONARY = {
     "a" : "Accept [Green button]",
@@ -119,7 +120,7 @@ class TextFileLabelView(generic.DetailView):
         text_folder = get_object_or_404(TextFolder, pk=folder_id)
         context_data['folder_name'] = text_folder.folder_name 
 
-        context_data['prodigy_url'] = urls.PRODIGY_URL
+        context_data['prodigy_url'] = PRODIGY_URL
         context_data['prodigy_shortcuts'] = PRODIGY_SHORTCUT_DICTIONARY
 
         # Save this in our hidden form
