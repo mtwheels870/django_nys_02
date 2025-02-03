@@ -19,6 +19,7 @@ from .models import TextFileStatus, TextFile, TextFolder, NerLabel
 from .forms import EditorForm, TextLabelForm
 from .tables import NerLabelTable
 
+# PRODUCTION CHANGE
 PRODIGY_URL = "http://18.208.200.162:8080/"
 
 PRODIGY_SHORTCUT_DICTIONARY = {

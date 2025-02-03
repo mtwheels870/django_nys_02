@@ -6,6 +6,7 @@ from celery import Celery
 
 # Set the default Django settings module for the 'celery' program.
 # MTW os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
+# PRODUCTION CHANGE (2x)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 
 app = Celery('django_nys_02')

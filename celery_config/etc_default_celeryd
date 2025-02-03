@@ -1,0 +1,4 @@
+CELERYD_NODES="worker1"
+CELERY_BIN="/opt/bitnami/python/bin/celery"
+CELERY_APP="django_nys_03"
+CELERYD_CHDIR="/home/bitnami/cb_production/"
