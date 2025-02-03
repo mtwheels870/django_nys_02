@@ -61,11 +61,19 @@ def make_temp_dir():
 
 def generate_prodigy_config(dir_path):
     data = {
-        "name" : "John",
-        "age" : 30,
-        "city" : "New York"
+        "host": "0.0.0.0",
+        "port": 8081,
+        "db": "postgresql",
+        "db_settings": {
+            "postgresql": {
+                "dbname": "prodigy",
+                "user": "cb_admin",
+                "password": "Ch0c0late!",
+                "host": "localhost",
+                "port": 5432
+        }
     }
-    json_string = json.dumps(data)
+    json_string = json.dumps(data) + "\n"
 
     config_file = os.path.join(dir_path, FILE_PRODIGY_CONFIG)
     with open(config_file, "w") as file_writer:
@@ -109,12 +117,12 @@ def prodigy_start(self, *args, **kwargs):
     new_path = f"{VENV_PATH}/bin:" + sys_path_string
     environment = {
         "VIRTUAL_ENV" : VENV_PATH,
-        "PATH" : new_path,
-        "PRODIGY_HOST" : "0.0.0.0" }
+        "PATH" : new_path}
+#        "PRODIGY_HOST" : "0.0.0.0" }
 
     first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
-    # second = f"--label {file_path_label} --config {config_file}"
-    second = f"--label {file_path_label}"
+    second = f"--label {file_path_label} --config {config_file}"
+    # second = f"--label {file_path_label}"
     full_command = first + second
 
     print(f"invoke_prodigy(), full_command:\n{full_command}")
