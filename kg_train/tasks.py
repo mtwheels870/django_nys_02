@@ -29,7 +29,10 @@ FILE_LABEL = "ner_labels"
 FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 
-TEMP_DIRECTORY = "/tmp/invoke_prodigy"
+# PRODUCTION CHANGE
+PRODIGY_PORT = 8081
+
+TEMP_DIRECTORY = "/tmp/invoke_prodigy/"
 PRESERVE_COUNT = 3
 
 def cleanup_temp_dir(temp_directory):
@@ -51,7 +54,8 @@ def cleanup_temp_dir(temp_directory):
 
 def make_temp_dir():
     now = datetime.datetime.now()
-    cleanup_temp_dir(TEMP_DIRECTORY)
+    temp_directory_port = TEMP_DIRECTORY + PRODIGY_PORT
+    cleanup_temp_dir(temp_directory_port)
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
     full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
     if not os.path.exists(full_path):
@@ -62,7 +66,7 @@ def make_temp_dir():
 def generate_prodigy_config(dir_path):
     data = {
         "host": "0.0.0.0",
-        "port": 8081,
+        "port": PRODIGY_PORT,
         "db": "postgresql",
         "db_settings": {
             "postgresql": {
