@@ -54,7 +54,9 @@ def cleanup_temp_dir(temp_directory):
 
 def make_temp_dir():
     now = datetime.datetime.now()
-    temp_directory_port = TEMP_DIRECTORY + PRODIGY_PORT
+    temp_directory_port = TEMP_DIRECTORY + str(PRODIGY_PORT)
+    if not os.path.exists(temp_directory_port):
+        os.makedirs(temp_directory_port)
     cleanup_temp_dir(temp_directory_port)
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
     full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
