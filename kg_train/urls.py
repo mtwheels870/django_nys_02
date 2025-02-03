@@ -2,8 +2,6 @@ from django.urls import path, include
 
 from . import views_folder, views_file
 
-PRODIGY_URL = "http://18.208.200.162:8080/"
-
 app_name = "app_kg_train"
 #    path("form/", views.StartForm.as_view(), name="upload_form"),
 urlpatterns = [

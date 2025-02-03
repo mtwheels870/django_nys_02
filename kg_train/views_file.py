@@ -20,6 +20,8 @@ from .forms import EditorForm, TextLabelForm
 from .tables import NerLabelTable
 from .urls import PRODIGY_URL
 
+PRODIGY_URL = "http://18.208.200.162:8080/"
+
 PRODIGY_SHORTCUT_DICTIONARY = {
     "a" : "Accept [Green button]",
     "x" : "Reject (don't include sentence in ML training) [Red Button]",
