@@ -18,7 +18,6 @@ from celery.result import AsyncResult
 from .models import TextFileStatus, TextFile, TextFolder, NerLabel
 from .forms import EditorForm, TextLabelForm
 from .tables import NerLabelTable
-from .urls import PRODIGY_URL
 
 PRODIGY_URL = "http://18.208.200.162:8080/"
 
