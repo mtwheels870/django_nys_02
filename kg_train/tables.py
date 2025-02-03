@@ -16,7 +16,7 @@ class NerLabelTable(tables.Table):
         model = NerLabel
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
-        fields = ["short_name", "description", "color"]
+        fields = ["selection", "short_name", "description", "color"]
 
 
 

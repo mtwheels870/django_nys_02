@@ -99,6 +99,7 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
+# PRODUCTION.  Change NAME = "cb_production",
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -109,7 +110,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

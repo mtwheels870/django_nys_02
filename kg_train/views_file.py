@@ -118,6 +118,8 @@ class TextFileLabelView(generic.DetailView):
         context_data['folder_id'] = folder_id
         text_folder = get_object_or_404(TextFolder, pk=folder_id)
         context_data['folder_name'] = text_folder.folder_name 
+
+        context_data['prodigy_url'] = urls.PRODIGY_URL
         context_data['prodigy_shortcuts'] = PRODIGY_SHORTCUT_DICTIONARY
 
         # Save this in our hidden form
