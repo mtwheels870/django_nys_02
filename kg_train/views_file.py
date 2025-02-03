@@ -113,6 +113,8 @@ class TextFileLabelView(generic.DetailView):
         file_id = self.kwargs.get('file_id')
         context_data['file_id'] = file_id
         text_file = get_object_or_404(TextFile, pk=file_id)
+        text_file.time_label_start = timezone.now()
+        text_file.save()
         context_data['page_number'] = text_file.page_number 
 
         # Folder stuff

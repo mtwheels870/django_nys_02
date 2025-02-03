@@ -108,8 +108,19 @@ DATABASES = {
         'PASSWORD': 'Ch0c0late!',
         'HOST': 'localhost',
         'PORT': '5432',
+    },
+    'secondary': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'prodigy',
+        'USER': 'cb_admin',
+        'PASSWORD': 'Ch0c0late!',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
+# This is a little weird that we're in the kg_train part of the world (and not the top-level like django_nys_02
+DATABASE_ROUTERS = ['kg_train.routers.SecondaryRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
