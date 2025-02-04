@@ -1,7 +1,6 @@
 import django_tables2 as tables
 
 from .models import TextFile, NerLabel
-from .models_prodigy import PrdgyDataset
 
 class TextFileTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
@@ -19,10 +18,3 @@ class NerLabelTable(tables.Table):
         # template_name = "django_tables2/bootstrap.html"
         fields = ["selection", "short_name", "description", "color"]
 
-class DatasetTable(tables.Table):
-    selection = tables.CheckBoxColumn(accessor="pk")
-    class Meta:
-        model = PrdgyDataset
-        template_name = "django_tables2/bootstrap-responsive.html"
-        # template_name = "django_tables2/bootstrap.html"
-        fields = ["selection", "name", "created", "meta", "session" ]
