@@ -1,9 +1,7 @@
 from django_tables2 import SingleTableView
 
-from .models import TextFileStatus, TextFile, TextFolder
-from .forms import UploadFolderForm
+from .models_prodigy import PrdgyDataset
 from .tables import TextFileTable
-from .tasks import prodigy_start
 
 class DatasetDetailView(SingleTableView):
     model = PrdgyDataset
