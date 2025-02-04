@@ -115,6 +115,7 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def label_page(self, request, folder_id, file_id):
+        app_name = celery_app.__name__()
         inspect = celery_app.control.inspect()
         print(f"label_page(), celery app = {inspect}")
         # Invoke celery task here
