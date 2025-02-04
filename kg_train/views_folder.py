@@ -112,7 +112,15 @@ class TextFolderDetailView(SingleTableView):
 
     def get_queryset(self):
         self.folder_id = self.kwargs.get('folder_id')
-        return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
+        print(f"TFDV.get_queryset(), doing query")
+        queryset = TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
+        for file in queryset:
+            time_labeled = file.time_label_start 
+            if time_labeled:
+                page_number = file.page_number
+                print(f"      page[{page_number}], labeled @: {time_labeled}")
+        return queryset
+
 
     def label_page(self, request, folder_id, file_id):
         main = celery_app.main
