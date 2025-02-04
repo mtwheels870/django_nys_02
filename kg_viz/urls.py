@@ -9,5 +9,5 @@ urlpatterns = [
     path("", views.DatasetIndexView.as_view(), name="index"),
 
     # To view an individual file details (and start labeling)
-    path("<int:pk>/", views_folder.DatasetDetailView.as_view(), name="detail"),
+    path("<int:pk>/", views.DatasetDetailView.as_view(), name="detail"),
 ]
