@@ -1,6 +1,5 @@
 import django_tables2 as tables
 
-from .models import TextFile, NerLabel
 from .models import PrdgyDataset
 
 class DatasetTable(tables.Table):
