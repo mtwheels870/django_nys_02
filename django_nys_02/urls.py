@@ -25,5 +25,6 @@ urlpatterns = [
     path("tutorial/", include("tutorial.urls")),
     path("kg_admin/", include("kg_admin.urls")),
     path("kg_train/", include("kg_train.urls")),
+    path("kg_viz/", include("kg_viz.urls")),
 ]
 #print(f"project.urlpatterns = {urlpatterns}")
