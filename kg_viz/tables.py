@@ -1,6 +1,6 @@
 import django_tables2 as tables
 
-from .models import PrdgyDataset
+from .models import PrdgyDataset, PrdgyLink
 
 class DatasetTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
