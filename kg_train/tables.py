@@ -1,6 +1,7 @@
 import django_tables2 as tables
 
 from .models import TextFile, NerLabel
+from .models_prodigy import PrdgyDataset
 
 class TextFileTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
