@@ -15,7 +15,7 @@ from django_tables2 import SingleTableView
 
 from celery import Task
 from celery import signals
-from .celery import app as celery_app
+from django_nys_02.celery import app as celery_app
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
