@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from . import views_folder, views_file
+from . import views_folder, views_file, views_prodigy
 
 app_name = "app_kg_train"
 #    path("form/", views.StartForm.as_view(), name="upload_form"),
