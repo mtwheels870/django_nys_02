@@ -12,8 +12,12 @@ class TextFileTable(tables.Table):
         # template_name = "django_tables2/bootstrap.html"
         fields = ["selection", "page_number", "file_name", "status", "time_edited", "time_labeled", "file_size"]
 
-    def render_file_name(self, value, record):
+    def render_page_number(self, value, record):
         return format_html("<b>{}</b>", value)
+
+    def render_time_labeled(self, value, record):
+        string_value = value.strftime("%m%d %H%M")
+        return format_html("<b>{}</b>", string_value)
 
 class NerLabelTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
