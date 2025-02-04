@@ -116,8 +116,9 @@ class TextFolderDetailView(SingleTableView):
 
     def label_page(self, request, folder_id, file_id):
         main = celery_app.main
-        inspect = celery_app.control.inspect()
-        print(f"label_page(), celery app = {inspect}, main = {main}")
+        # inspect = celery_app.control.inspect()
+        # print(f"label_page(), celery app = {inspect}, main = {main}")
+        print(f"label_page(), celery main = {main}")
         # Invoke celery task here
         async_result = prodigy_start.apply_async(kwargs={'file_id': file_id})
         print(f"label_page(), async_result = {async_result}")
