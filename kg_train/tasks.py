@@ -83,6 +83,7 @@ def generate_prodigy_config(dir_path):
     }
     json_string = json.dumps(data) + "\n"
 
+    print(f"generate_prodigy_config(), writing config file")
     config_file = os.path.join(dir_path, FILE_PRODIGY_CONFIG)
     with open(config_file, "w") as file_writer:
         file_writer.write(json_string)
@@ -106,6 +107,7 @@ def generate_prodigy_files(dir_path, file_id):
     prodigy_config = generate_prodigy_config(dir_path)
 
     file_output = os.path.join(dir_path, FILE_OUTPUT)
+    print(f"generate_prodigy_files(), file_output = {file_output}")
 
     return file_path_text, file_path_label, prodigy_config, file_output 
 
