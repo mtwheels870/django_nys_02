@@ -15,6 +15,7 @@ from django_tables2 import SingleTableView
 
 from celery import Task
 from celery import signals
+from .celery import app as celery_app
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
@@ -114,6 +115,8 @@ class TextFolderDetailView(SingleTableView):
         return TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
 
     def label_page(self, request, folder_id, file_id):
+        inspect = celery_app.control.inspect()
+        print(f"label_page(), celery app = {inspect}")
         # Invoke celery task here
         async_result = prodigy_start.apply_async(kwargs={'file_id': file_id})
 
