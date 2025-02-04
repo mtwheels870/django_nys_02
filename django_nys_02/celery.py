@@ -9,7 +9,7 @@ from celery import Celery
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 
 # PRODUCTION CHANGE 
-app = Celery('celery_django_dev')
+app = Celery('django_nys_02')
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
