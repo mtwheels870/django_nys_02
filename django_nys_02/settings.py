@@ -73,7 +73,6 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-# PRODUCTION CHANGE
 ROOT_URLCONF = 'django_nys_02.urls'
 
 # MTW: Can override default templates here
