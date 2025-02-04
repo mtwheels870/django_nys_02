@@ -1,7 +1,7 @@
 from django_tables2 import SingleTableView
 
 from .models_prodigy import PrdgyDataset
-from .tables import TextFileTable
+from .tables import DatasetTable
 
 class DatasetDetailView(SingleTableView):
     model = PrdgyDataset
