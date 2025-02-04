@@ -19,7 +19,7 @@ urlpatterns = [
     path("<int:folder_id>/<int:file_id>/file-label/", views_file.TextFileLabelView.as_view(), name="file_label"),
 
     path("labels/", views_file.NerLabelDetailView.as_view(), name="labels"),
-    path("datasets/", views_prodigy.DatasetDetailView, name="datasets"),
+    path("datasets/", views_prodigy.DatasetDetailView.as_view(), name="datasets"),
     # This breaks out to our editor
     # path("prose/attachment/", include("prose.urls"), name="prose"),
 
