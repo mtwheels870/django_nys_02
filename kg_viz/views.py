@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django_tables2 import SingleTableView
 
 from .models import PrdgyDataset, PrdgyLink
-from .tables import DatasetTable
+from .tables import DatasetTable, LinkTable
 
 class DatasetIndexView(SingleTableView):
     model = PrdgyDataset
