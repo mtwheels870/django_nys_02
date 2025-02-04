@@ -10,11 +10,12 @@ class TextFileTable(tables.Table):
         model = TextFile
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
-        fields = ["selection", "page_number", "file_name", "status", "time_edited", "time_labeled", "file_size"]
+        fields = ["selection", "page_number", "file_name", "status", "time_edited", "time_label_start", "file_size"]
 
     def render_page_number(self, value, record):
         return format_html("<b>{}</b>", value)
 
+    # Never gets in here.
     def render_time_labeled(self, value, record):
         string_value = value.strftime("%m%d %H%M")
         print(f"render_time(), value = {value}, string_value = {string_value}")
