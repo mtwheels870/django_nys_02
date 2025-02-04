@@ -69,6 +69,7 @@ def make_temp_dir():
 #        "port": PRODIGY_PORT,
 def generate_prodigy_config(dir_path):
     data = {
+        "port": PRODIGY_PORT,
         "db": "postgresql",
         "db_settings": {
             "postgresql": {
@@ -125,11 +126,11 @@ def prodigy_start(self, *args, **kwargs):
     environment = {
         "VIRTUAL_ENV" : VENV_PATH,
         "PATH" : new_path, 
-        "PRODIGY_PORT" : str(PRODIGY_PORT),
+        "PRODIGY_CONFIG" : config_file,
         "PRODIGY_HOST" : "0.0.0.0" }
 
     first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
-    second = f"--label {file_path_label} --config {config_file}"
+    second = f"--label {file_path_label}"
     # second = f"--label {file_path_label}"
     full_command = first + second
 
