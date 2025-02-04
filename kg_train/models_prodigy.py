@@ -3,7 +3,7 @@ from django.db import models
 class PrdgyDataset(models.Model):
     name = models.CharField(max_length=255)
     created = models.BigIntegerField()
-    meta = models.BindaryField()
+    meta = models.BinaryField()
     session = models.BooleanField()
 
     class Meta:
