@@ -8,12 +8,10 @@
     <title>My test page</title>
   </head>
   <body>
-    <p>Sample HTML Page</p>
-    <p>Test of class stuff</p>
+    <p>Knowledge Graph (KG) Functions</p>
     {% if kg_apps %}
         <ul>
         {% for key, value in kg_apps.items %}
-            {{ key }}: {{ value }}
             <li><a href="{{ value }}">{{ key }}</a></li>
         {% endfor %}
         </ul>

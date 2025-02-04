@@ -21,8 +21,8 @@ class IndexView(generic.ListView):
         context = super().get_context_data(**kwargs)
         # dictionary = { 'kg_train' : "{% url 'app_kg_admin:index'%}",
         dictionary = { 'kg_train' : "/kg_train/",
-                'kg_test' : "../../test.html", 
-                'kg_viz' : "../../viz.html"} 
+                'kg_viz' : "kg_viz", 
+                'kg_test' : "../../test.html"} 
         context['kg_apps'] = dictionary
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
