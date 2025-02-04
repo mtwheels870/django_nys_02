@@ -112,8 +112,8 @@ def generate_prodigy_files(dir_path, file_id):
     return file_path_text, file_path_label, prodigy_config, file_output 
 
 @shared_task(bind=True)
-def prodigy_start(self, *args, **kwargs):
-    print(f"invoke_prodigy(), self = {self}")
+def prodigy_ner_manual(self, *args, **kwargs):
+    print(f"prodigy_ner_manual(), self = {self}")
     file_id = kwargs['file_id']
 
     dir_path = make_temp_dir()

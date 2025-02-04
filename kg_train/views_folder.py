@@ -20,7 +20,7 @@ from django_nys_02.celery import app as celery_app
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
 from .tables import TextFileTable
-from .tasks import prodigy_start
+from .tasks import prodigy_ner_manual
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
@@ -117,17 +117,16 @@ class TextFolderDetailView(SingleTableView):
     def label_page(self, request, folder_id, file_id):
         main = celery_app.main
         # inspect = celery_app.control.inspect()
-        # print(f"label_page(), celery app = {inspect}, main = {main}")
         print(f"label_page(), celery main = {main}")
         # Invoke celery task here
-        async_result = prodigy_start.apply_async(kwargs={'file_id': file_id})
-        print(f"label_page(), async_result = {async_result}")
+        async_result = prodigy_ner_manual.apply_async(kwargs={'file_id': file_id})
 
         # Update the time (start labeling)
         text_file = TextFile.objects.filter(id=file_id)[0]
         text_file.time_label_start = timezone.now()
         new_status = TextFileStatus.objects.filter(id=2)[0]
         text_file.status = new_status
+        print(f"label_page(), time_label_start = {text_file.time_label_start}, saving now")
         text_file.save()
         request.session["task_id"] = async_result.id
         return redirect(reverse("app_kg_train:file_label", args=(folder_id, file_id,)))
