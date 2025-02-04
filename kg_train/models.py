@@ -42,8 +42,8 @@ class TextFile(models.Model):
     file_size = models.IntegerField("File Size (bytes)", null=True)
     status = models.ForeignKey(TextFileStatus, on_delete=models.CASCADE)
     prose_editor = ProseEditorField("text", preset="announcements")
-    time_edited = models.DateTimeField(null=True)
-    time_label_start = models.DateTimeField(null=True)
+    time_edited = models.DateTimeField(null=True, format="m-d H:i")
+    time_label_start = models.DateTimeField(null=True, format="m-d H:i")
     prodigy_dataset = models.CharField("Prodigy DataSet Name", max_length=80)
     def __str__(self):
         return self.file_name
