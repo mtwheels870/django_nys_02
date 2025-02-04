@@ -1,3 +1,5 @@
+from django.utils.html import format_html
+
 import django_tables2 as tables
 
 from .models import TextFile, NerLabel
