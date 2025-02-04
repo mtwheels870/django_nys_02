@@ -120,6 +120,7 @@ class TextFolderDetailView(SingleTableView):
         print(f"label_page(), celery app = {inspect}, main = {main}")
         # Invoke celery task here
         async_result = prodigy_start.apply_async(kwargs={'file_id': file_id})
+        print(f"label_page(), async_result = {async_result}")
 
         # Update the time (start labeling)
         text_file = TextFile.objects.filter(id=file_id)[0]
