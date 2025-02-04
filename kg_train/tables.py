@@ -17,6 +17,7 @@ class TextFileTable(tables.Table):
 
     def render_time_labeled(self, value, record):
         string_value = value.strftime("%m%d %H%M")
+        print(f"render_time(), value = {value}, string_value = {string_value}")
         return format_html("<b>{}</b>", string_value)
 
 class NerLabelTable(tables.Table):
