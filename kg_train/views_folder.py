@@ -71,7 +71,6 @@ def read_page_files(text_folder, directory_path, page_files):
 # Actually, this view handles both GET and POST requests.
 def upload_folder(request):
     if request.method == "POST":
-        # form = UploadFolderForm(request.POST, request.FILES)
         form = UploadFolderForm(request.POST)
         if form.is_valid():
             # This uses the Form to create an instance (TextFile)
@@ -114,11 +113,6 @@ class TextFolderDetailView(SingleTableView):
         self.folder_id = self.kwargs.get('folder_id')
         # print(f"TFDV.get_queryset(), doing query")
         queryset = TextFile.objects.filter(folder_id=self.folder_id).order_by("page_number")
-#        for file in queryset:
-#            time_labeled = file.time_label_start 
-#            if time_labeled:
-#                page_number = file.page_number
-#                print(f"      page[{page_number}], labeled @: {time_labeled}")
         return queryset
 
 
@@ -127,7 +121,10 @@ class TextFolderDetailView(SingleTableView):
         # inspect = celery_app.control.inspect()
         print(f"label_page(), celery main = {main}")
         # Invoke celery task here
-        async_result = prodigy_ner_manual.apply_async(kwargs={'file_id': file_id})
+        async_result = prodigy_ner_manual.apply_async(
+            kwargs={'file_id': file_id},
+            queue='feed_tasks',
+            routing_key='feed.import')
 
         # Update the time (start labeling)
         text_file = TextFile.objects.filter(id=file_id)[0]
@@ -163,3 +160,10 @@ class TextFolderDetailView(SingleTableView):
                     value = request.POST[key]
                     print(f"          [{i}]: {key} = {value}")
                 return redirect(request.path)
+
+#        for file in queryset:
+#            time_labeled = file.time_label_start 
+#            if time_labeled:
+#                page_number = file.page_number
+#                print(f"      page[{page_number}], labeled @: {time_labeled}")
+        # form = UploadFolderForm(request.POST, request.FILES)
