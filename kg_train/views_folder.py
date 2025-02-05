@@ -27,7 +27,7 @@ class IndexView(generic.ListView):
     context_object_name = "uploaded_folders_list"
 
     def get_queryset(self):
-        """ Return the last five published questions."""
+        """ Return uploaded folders list. """
         # return TextFile.objects.filter(date_uploaded=timezone.now()).order_by("-date_uploaded")[:20]
         return TextFolder.objects.all()
     

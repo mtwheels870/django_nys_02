@@ -12,19 +12,17 @@ from .models import (
     NerLabel)
 
 label_dictionary = {
-    "PERSON":"People, including fictional.",
-    "NORP" : "Nationalities or religious or political groups.",
-    "FAC" : "Buildings, airports, highways, bridges, etc.",
-    "ORG" : "Companies, agencies, institutions, etc.",
+    "LOC" : "Named Location",
+    "DATE" :"Absolute or relative dates or periods.", 
+    "EVENT" : "Named political, military, social, or atmospheric event",
     "GPE" : "Countries, cities, states.",
-    "EVENT" : "Named hurricanes, battles, wars, sports events, etc.",
-    "DATE": "Absolute or relative dates or periods.",
-    "TIME": "Times smaller than a day.",
-    "QUANTITY": "Measurements, as of weight or distance.",
-    "ORDINAL": "first, second, etc.",
-    "CARDINAL": "one, two, three...",
-    "MILITARY": "Military forces, such as PLAN",
-    "CIVILIAN": "Civil forces, such as maritime militia, fishing fleets",
+    "ORG" : "Companies, agencies, institutions, etc.",
+    "NORP" : "Nationalities, political, or religious groups.",
+    "FORCE_MILITIA" : "Quasi-military forces (e.g. maritime militia)",
+    "FORCE_NATL" : "Military forces (e.g. PLAN)",
+    "FORCE_CIVIL" : "Civilian forces (e.g. fishing fleets, hydrocarbon exploration)",
+    "BASE": "Military base, including ports, airstrips, etc.",
+    "PERSON" : "People, usually political or military leaders",
 }
 
 class Loader():
