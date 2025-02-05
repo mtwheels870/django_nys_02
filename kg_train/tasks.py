@@ -18,6 +18,7 @@ from django_celery_results.models import TaskResult
 from django.core.management import call_command
 
 from .models import TextFile, NerLabel
+from .models import PRODIGY_PORT
 
 SOURCE1 = "/usr/bin/bash"
 
