@@ -49,7 +49,7 @@ class TextFile(models.Model):
         return self.file_name
 
 class NerLabel(models.Model):
-    short_name = models.CharField("Short", max_length=10)
+    short_name = models.CharField("Short", max_length=20)
     description = models.CharField("Long", max_length=80)
     color = ColorField(default="#ff0000")
     def __str__(self):
