@@ -21,6 +21,10 @@ app = Celery('celery_django_dev')
 app.config_from_object("django.conf:settings", namespace='CELERY')
 # Same as the CELERY_... version (in settings.py)
 # app.conf.broker_connection_retry_on_startup = True
+app.conf.task_routes = ([
+    ('feed.tasks.*', {'queue': 'feeds'}),
+    ('web.tasks.*', {'queue': 'web'}),
+],)
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
