@@ -12,7 +12,7 @@ from django_prose_editor.fields import ProseEditorField
 # PRODUCTION CHANGE
 # Here, so we don't get circular imports
 PRODIGY_PORT = 8080
-PRODIGY_URL_BASE = "http://18.208.200.162:" + PRODIGY_PORT
+PRODIGY_URL_BASE = "http://18.208.200.162:" + str(PRODIGY_PORT)
 
 
 #MAX_DISPLAY_LENGTH = 40
