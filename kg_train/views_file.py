@@ -122,7 +122,9 @@ class TextFileLabelView(generic.DetailView):
         text_folder = get_object_or_404(TextFolder, pk=folder_id)
         context_data['folder_name'] = text_folder.folder_name 
 
-        context_data['prodigy_url'] = PRODIGY_URL
+        # Use the folder name as the session (so we build up one NER model for corpus)
+        prodigy_url = PRODIGY_URL_BASE + "?session=" + str(folder_id)
+        context_data['prodigy_url'] = prodigy_url 
         context_data['prodigy_shortcuts'] = PRODIGY_SHORTCUT_DICTIONARY
 
         # Save this in our hidden form
