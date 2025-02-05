@@ -9,15 +9,21 @@ from colorfield.fields import ColorField
 # from prose.models import Document
 from django_prose_editor.fields import ProseEditorField
 
-MAX_DISPLAY_LENGTH = 40
-ELLIPSIS = "..."
-INITIAL_PATH="/home/bitnami/cb"
+# PRODUCTION CHANGE
+# Here, so we don't get circular imports
+PRODIGY_PORT = 8080
+PRODIGY_URL_BASE = "http://18.208.200.162:" + PRODIGY_PORT
 
-DJANGO_PROSE_EDITOR_PRESETS = {
-    "announcements": [
-        JS("prose-editors/announcements.js", {"defer": True}),
-    ],
-}
+
+#MAX_DISPLAY_LENGTH = 40
+# ELLIPSIS = "..."
+#INITIAL_PATH="/home/bitnami/cb"
+
+#DJANGO_PROSE_EDITOR_PRESETS = {
+#    "announcements": [
+#        JS("prose-editors/announcements.js", {"defer": True}),
+#    ],
+#}
 
 class TextFileStatus(models.Model):
     description = models.CharField(max_length=80) 

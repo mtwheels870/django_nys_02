@@ -29,8 +29,6 @@ FILE_LABEL = "ner_labels"
 FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 
-# PRODUCTION CHANGE
-PRODIGY_PORT = 8080
 
 TEMP_DIRECTORY = "/tmp/invoke_prodigy/"
 PRESERVE_COUNT = 3

@@ -16,11 +16,9 @@ from celery import signals
 from celery.result import AsyncResult
 
 from .models import TextFileStatus, TextFile, TextFolder, NerLabel
+from .models import PRODIGY_URL_BASE
 from .forms import EditorForm, TextLabelForm
 from .tables import NerLabelTable
-
-# PRODUCTION CHANGE
-PRODIGY_URL = "http://18.208.200.162:8080/"
 
 PRODIGY_SHORTCUT_DICTIONARY = {
     "a" : "Accept [Green button]",
