@@ -24,6 +24,10 @@ class LayerCircle extends CbLayer {
   }
 }
 
+function tract_count_clicked(censusTract) {
+    console.log('tract_count_clicked(), censusTract = ' + censusTract);
+};
+
 /*
  * TractCounts -> Circle -> Base
  */ 
@@ -43,6 +47,7 @@ class LayerTractCounts extends LayerCircle {
     layer.setStyle(copiedStyle)
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>Census Tract: " + censusTract + "<br>IP Range Count: " + rangeCount + "</b>")
+    layer.on('click', 'tract_count_clicked', censusTract)
   } 
 }
 
