@@ -10,7 +10,7 @@ from . import views, api
 app_name = "app_centralny"
 
 urlpatterns = [
-    path("map/", TemplateView.as_view(template_name="centralny/map.html")),
+    path("map/", TemplateView.as_view(template_name="centralny/map_viewer.html")),
     path("ping/", views.PingStrategyIndexView.as_view(), name="ping_strat_index"),
     # ex: /tutorial/5/
     path("ping/<int:pk>/", views.PingStrategyDetailView.as_view(), name="ping_strat_detail"),
