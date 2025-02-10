@@ -1,6 +1,7 @@
 /*  height: 500px; /* Adjust as needed */
 .split-container {
     width: 100%;
+    height: 100%;
     display: flex; /* Use flexbox for easy layout */
 }
 
