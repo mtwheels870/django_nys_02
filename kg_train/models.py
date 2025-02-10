@@ -73,3 +73,5 @@ class NerLabel(models.Model):
         func="NEW.updated_at = NOW(); RETURN NEW;",
     )
 )
+def mtw_dummy_function():
+    print(f'mtw_dummy_function(), dummy function on trigger')
