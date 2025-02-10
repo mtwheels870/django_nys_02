@@ -11,7 +11,7 @@ from .models import (
     TextFile,
     NerLabel)
 
-label_dictionary = {
+label_dictionary_scs = {
     "LOC" : "Named Location",
     "DATE" :"Absolute or relative dates or periods.", 
     "EVENT" : "Named political, military, social, or atmospheric event",
@@ -21,6 +21,19 @@ label_dictionary = {
     "FORCE_MILITIA" : "Quasi-military forces (e.g. maritime militia)",
     "FORCE_NATL" : "Military forces (e.g. PLAN)",
     "FORCE_CIVIL" : "Civilian forces (e.g. fishing fleets, hydrocarbon exploration)",
+    "BASE": "Military base, including ports, airstrips, etc.",
+    "PERSON" : "People, usually political or military leaders",
+}
+
+label_dictionary_other = {
+    "LOC" : "Named Location",
+    "DATE" :"Absolute or relative dates or periods.", 
+    "EVENT" : "Named political, military, social, or atmospheric event",
+    "GPE" : "Countries, cities, states.",
+    "ORG" : "Companies, agencies, institutions, etc.",
+    "NORP" : "Nationalities, political, or religious groups.",
+    "UNIT_MILITARY" : "Military forces (e.g. British Army)",
+    "UNIT_MILITIA" : "Quasi-military forces (e.g. minutemen)",
     "BASE": "Military base, including ports, airstrips, etc.",
     "PERSON" : "People, usually political or military leaders",
 }
@@ -35,9 +48,15 @@ class Loader():
             ts = TextFileStatus(description=single_status)
             ts.save()
 
-    def create_labels(self, verbose=True):
-        for _, (key, value) in enumerate(label_dictionary.items()):
-            print(f"create_labels(), {key} = {value}")
+    def create_labels_scs(self, verbose=True):
+        for _, (key, value) in enumerate(label_dictionary_scs.items()):
+            print(f"create_labels_scs(), {key} = {value}")
+            ner_label = NerLabel(short_name=key, description=value)
+            ner_label.save()
+
+    def create_labels_other(self, verbose=True):
+        for _, (key, value) in enumerate(label_dictionary_other.items()):
+            print(f"create_labels_other(), {key} = {value}")
             ner_label = NerLabel(short_name=key, description=value)
             ner_label.save()
 
