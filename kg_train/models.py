@@ -1,4 +1,5 @@
 import datetime
+import pgtrigger
 from django.db import models
 from django.utils import timezone
 
@@ -50,6 +51,8 @@ class TextFile(models.Model):
     prose_editor = ProseEditorField("text", preset="announcements")
     time_edited = models.DateTimeField(null=True)
     time_label_start = models.DateTimeField(null=True)
+    label_batches_total = models.IntegerField("Total batchs to label", null=True)
+    label_batches_done = models.IntegerField("Batchs actually labeled", null=True)
     prodigy_dataset = models.CharField("Prodigy DataSet Name", max_length=80)
     def __str__(self):
         return self.file_name
@@ -60,3 +63,13 @@ class NerLabel(models.Model):
     color = ColorField(default="#ff0000")
     def __str__(self):
         return self.short_name
+
+@pgtrigger.register(
+    pgtrigger.Trigger(
+        name='update_timestamp',
+        when=pgtrigger.Before,
+        operation=pgtrigger.Update,
+        fields=['field1', 'field2'],
+        func="NEW.updated_at = NOW(); RETURN NEW;",
+    )
+)
