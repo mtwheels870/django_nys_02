@@ -64,14 +64,14 @@ class NerLabel(models.Model):
     def __str__(self):
         return self.short_name
 
-@pgtrigger.register(
-    pgtrigger.Trigger(
-        name='update_timestamp',
-        when=pgtrigger.Before,
-        operation=pgtrigger.Update,
-        fields=['field1', 'field2'],
-        func="NEW.updated_at = NOW(); RETURN NEW;",
-    )
-)
+#@pgtrigger.register(
+#    pgtrigger.Trigger(
+#        name='update_timestamp',
+#        when=pgtrigger.Before,
+#        operation=pgtrigger.Update,
+#        fields=['field1', 'field2'],
+#        func="NEW.updated_at = NOW(); RETURN NEW;",
+#    )
+#)
 def mtw_dummy_function():
     print(f'mtw_dummy_function(), dummy function on trigger')
