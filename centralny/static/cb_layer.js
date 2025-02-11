@@ -44,7 +44,7 @@ function circle_clicked(e) {
     const context = e.target.options.context;
     // var stringified = JSON.stringify(e);
     // var typeof_e = typeof e;
-    console.log('circle_clicked(), name: ', context.name);
+    console.log('circle_clicked(), id: ', context.id);
 }
 
 /*
