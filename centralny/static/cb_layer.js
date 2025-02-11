@@ -39,6 +39,11 @@ function tract_count_clicked(censusTract) {
     console.log('tract_count_clicked(), censusTract = ' + censusTract);
 };
 
+
+function circle_clicked(e, arg1, arg2) {
+    console.log('circle_clicked(), e = ' + e + ", arg1 = " + arg1 + ", arg2 = " + arg2);
+}
+
 /*
  * TractCounts -> Circle -> Base
  */ 
@@ -57,13 +62,12 @@ class LayerTractCounts extends LayerCircle {
     // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
-    var debug = JSON.stringify(layer.feature);
-    console.log('LTC.oEC(), debug = ' + debug);
     var id = feature["id"]
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
             rangeCount + "<br>Database ID: " + id + "</b>")
-  } 
+    layer.on('click', circle_clicked, "arg1", "arg2");
+  }
 }
 
 // Instantiate
@@ -99,6 +103,9 @@ class LayerCountyCounts extends LayerCircle {
     var countyCode = feature.properties["county_code"]
     var id = feature["id"]
     layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + rangeCount + "<br>ID: " + id + "</b>")
+    layer.on('click', function(e) {
+      console.log('circle clicked');
+    });
   } 
 }
 
@@ -118,7 +125,7 @@ class LayerIpRanges extends LayerCircle {
   // Inside a class, format if methodName: function
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
-    console.log("LIP.onEachCircle(), feature.props = " + keys);
+    // console.log("LIP.onEachCircle(), feature.props = " + keys);
     layer.setStyle(this.style);
     // console.log("LIP.onEachCircle(), feature.props = " + keys);
     var id = feature["id"]
@@ -184,11 +191,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
   const targets = await load_target(classObject.urlComponent, boundsString);
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
-        var layer = new L.CircleMarker(latLong, classObject.myStyle);
-        layer.on('click', function(e) {
-          console.log('circle clicked');
-        });
-        return layer;
+        return new L.CircleMarker(latLong, classObject.myStyle);
       },
       onEachFeature: classObject.onEachCircle,
       pane: 'circles',
@@ -216,3 +219,5 @@ export function cb_render_all(map, layerGroupAll, layerControl, zoom, boundsStri
         alert('censusTractCircle(), censusTract = ' + censusTract)
     } ) */
     // layer.on('click', tract_count_clicked, censusTract)
+    /* var debug = JSON.stringify(layer.feature);
+    console.log('LTC.oEC(), debug = ' + debug); */
