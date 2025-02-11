@@ -108,3 +108,20 @@ def approve_ping(request, id):
     survey.approve()
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_my_scheduler:schedule_survey_detail", args=(id,)))
+
+class MapNavigationView(generic.edit.FormView):
+    # model = TextFile
+    form_class = SelectedCensusTractForm
+    template_name = "centralny/map_viewer.html"
+    success_url = template_name
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # After this, the form is created
+
+        context_data['map_title'] = "Map Title Here"
+
+        form = context_data['form']
+        id = form.fields['id']
+        id.initial = 0
+        return context_data
