@@ -186,8 +186,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
       pointToLayer: function(feature, latLong) {
         var layer = new L.CircleMarker(latLong, classObject.myStyle);
         layer.on('click', function(e) {
-          var id = layer.feature.properties[classObject.clickedField];
-          console.log('circle clicked, id = ' + id)
+          console.log('circle clicked');
         });
         return layer;
       },
