@@ -115,7 +115,6 @@ class MapNavigationView(generic.edit.FormView):
     # model = TextFile
     form_class = SelectedCensusTractForm
     template_name = "centralny/map_viewer.html"
-    success_url = template_name
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -125,5 +124,15 @@ class MapNavigationView(generic.edit.FormView):
 
         form = context_data['form']
         id = form.fields['id']
-        id.initial = 0
+        id.initial = 23
         return context_data
+
+    def post(self, request, *args, **kwargs):
+        form = SelectedCensusTractForm(request.POST)
+        if form.is_valid():
+            id = form.cleaned_data['id']
+            print(f"MNV.post(), id = {id}")
+            text_file.save()
+        else:
+            print(f"MNV.post(), form is INVALID")
+        return HttpResponseRedirect(request.path)
