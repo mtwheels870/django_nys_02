@@ -121,7 +121,7 @@ class LayerIpRanges extends LayerCircle {
     console.log("LIP.onEachCircle(), feature.props = " + keys);
     layer.setStyle(this.style);
     // console.log("LIP.onEachCircle(), feature.props = " + keys);
-    var ip = feature["id"]
+    var id = feature["id"]
     var ipRangeStart = feature.properties["ip_range_start"]
     var companyName = feature.properties["company_name"]
     layer.bindPopup("<b>First IP Range (@ this location):<br>IP Range Start:" + ipRangeStart + 
@@ -175,7 +175,7 @@ async function render_target(classObject, map, layerGroup, layerControl,boundsSt
   // console.log("render_target(). style = " + classObject.style);
   L.geoJSON(targets, { style: classObject.style })
     .bindPopup(
-      (layer) => classObject.description + ": <b>id = ??" + 
+      (layer) => classObject.description + ": <b>" + 
         layer.feature.properties[classObject.popupField] + "</b>")
     .addTo(layerGroup);
 }
