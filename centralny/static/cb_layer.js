@@ -185,23 +185,33 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
 
 export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
   layerGroupAll.clearLayers();
-  var layerGroupPolys = L.layerGroup().addTo(layerGroupAll);
-  var layerGroupCircles = L.layerGroup().addTo(layerGroupAll);
+  // var layerGroupPolys = L.layerGroup().addTo(layerGroupAll);
+  // var layerGroupCircles = L.layerGroup().addTo(layerGroupAll);
     
   // console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
-    layerCountyCounts.renderClass(layerGroupCircles, layerControl, boundsString);
-    layerCounties.renderClass(layerGroupPolys, layerControl, boundsString);
+    layerCountyCounts.renderClass(layerGroupAll, layerControl, boundsString);
+    layerCounties.renderClass(layerGroupAll, layerControl, boundsString);
   } else if (zoom >= 15) {
     // Actual IP ranges
-    layerIpRanges.renderClass(layerGroupCircles, layerControl, boundsString);
+    layerIpRanges.renderClass(layerGroupAll, layerControl, boundsString);
   } else {
     // Tracts + their counts
-    layerTracts.renderClass(layerGroupPolys, layerControl, boundsString);
-    layerTractCounts.renderClass(layerGroupCircles, layerControl, boundsString);
+    layerTracts.renderClass(layerGroupAll, layerControl, boundsString);
+    layerTractCounts.renderClass(layerGroupAll, layerControl, boundsString);
   } 
-  layerGroupPolys.setZIndex(400)
-  layerGroupCircles.setZIndex(200)
+  // layerGroupPolys.setZIndex(400);
+  // layerGroupCircles.setZIndex(200);
+  debug_layers(layerGroupAll);
+}
+
+function debug_layers(lg) {
+  layers = lg.getLayers();
+  for (i = 0; i < layers.length; i++) {
+    layer = layers[i];
+    style = layer.style;
+    console.log('d_l(), layer[' + i + '], style = ' + style);
+  }
 }
 
