@@ -55,7 +55,7 @@ class LayerTractCounts extends LayerCircle {
     // range 1... 100 ... 200 ... 400
     var radiusGraduated = Math.ceil(rangeCount / 120) * 3.5;
     var copiedStyle = {...this.style};
-    console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
+    // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
     var censusTract = feature.properties["census_tract"]
@@ -162,6 +162,9 @@ async function load_target(url_field, boundsString) {
 
 async function render_target(classObject, map, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
+  var debug = JSON.stringify(layer.feature.properties);
+  console.log('render_target(), debug = ' + debug);
+    // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
   // Clears our layer group
   // console.log("render_target(). style = " + classObject.style);
   L.geoJSON(targets, { style: classObject.style })
