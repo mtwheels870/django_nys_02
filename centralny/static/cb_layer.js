@@ -178,7 +178,14 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
   const targets = await load_target(classObject.urlComponent, boundsString);
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
-        return new L.CircleMarker(latLong, classObject.myStyle);
+        var layer = new L.CircleMarker(latLong, classObject.myStyle);
+        layer.on('click', function(e) {
+          console.log('circle clicked')
+        }
+        return layer;
+    /* this.on('click', function(e) {
+        alert('censusTractCircle(), censusTract = ' + censusTract)
+    } ) */
       },
       onEachFeature: classObject.onEachCircle,
       pane: 'circles',
