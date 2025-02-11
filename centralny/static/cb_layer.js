@@ -70,7 +70,7 @@ class LayerTractCounts extends LayerCircle {
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
             rangeCount + "<br>Database ID: " + id + "</b>")
-    var context = { name: feature.properties.name, id: feature.properties.id };
+    const context = { name: feature.properties.name, id: feature.properties.id };
     layer.on('click', circle_clicked, context);
   }
 }
