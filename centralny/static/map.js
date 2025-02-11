@@ -22,7 +22,7 @@ var baseMaps = {
 import { cb_render_all } from './cb_layer.js';
 
 // Start with no overlays
-var overlayMaps = { "Pinp01nt 360": layerGroup }
+var overlayMaps = { "Pinp01nt 360": layerGroupAll }
 
 const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
