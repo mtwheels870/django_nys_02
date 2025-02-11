@@ -59,7 +59,7 @@ class LayerTractCounts extends LayerCircle {
 // Instantiate
 //   radius: 5, weight: 0.6,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
-  { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 1, }
+  { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
 
@@ -93,7 +93,7 @@ class LayerCountyCounts extends LayerCircle {
 
 // Instantiate
 const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", "range_counts",
-  { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 1, }
+  { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
 /*
@@ -138,11 +138,11 @@ class LayerPolygon extends CbLayer {
 
 // Instantiate Tractgs
 const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
-{ color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 400 })
+{ color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 200 })
 
 // Instantiate Counties
 const layerCounties = new LayerPolygon('counties', 'County Name', 'county_name',
-{ color: "#20bb80", fillOpacity: 0.25, weight: 1, zIndex: 400 })
+{ color: "#20bb80", fillOpacity: 0.25, weight: 1, zIndex: 200 })
 
 async function load_target(url_field, boundsString) {
   const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
