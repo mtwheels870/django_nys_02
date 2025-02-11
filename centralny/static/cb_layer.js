@@ -42,10 +42,10 @@ function tract_count_clicked(censusTract) {
 
 function circle_clicked(event, context) {
     // const context = e.target.options.context;
-    // var stringified = JSON.stringify(e);
+    var stringified = JSON.stringify(context);
     // var typeof_e = typeof e;
     // console.log('circle_clicked(), target: ' + e.target + ', context = ' + context );
-    console.log('circle_clicked(), context: ' + context + ', event: ' + event);
+    console.log('circle_clicked(), context: ' + stringified + ', event: ' + event);
 }
 
 /*
