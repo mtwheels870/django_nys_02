@@ -50,7 +50,7 @@ class LayerTractCounts extends LayerCircle {
     layer.on('click', function(e) {
         console.log('censusTractCircle(), censusTract = ' + censusTract)
     } )
-    # layer.on('click', tract_count_clicked, censusTract)
+    // layer.on('click', tract_count_clicked, censusTract)
   } 
 }
 
