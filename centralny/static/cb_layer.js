@@ -44,7 +44,7 @@ function circle_clicked(event, context) {
     // const context = e.target.options.context;
     // var stringified = JSON.stringify(context);
     var typeof_1 = typeof event;
-    var typeof_2 = typeof context;
+    var typeof_2 = JSON.stringify(context);
 
     // var typeof_e = typeof e;
     // console.log('circle_clicked(), target: ' + e.target + ', context = ' + context );
