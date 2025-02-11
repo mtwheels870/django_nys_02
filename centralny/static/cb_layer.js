@@ -45,6 +45,10 @@ function handleCircleClick(context, e) {
   console.log("Event: ", e);
   const form1 = document.forms['selected_tract_form'];
   console.log('circle_clicked(), form1 = ' + form1);
+  for (const [key, value] of Object.entries(form1)) {
+    console.log('${key}: ${value}')
+  }
+    
 }
 
 /*
