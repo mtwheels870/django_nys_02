@@ -58,7 +58,7 @@ class LayerTractCounts extends LayerCircle {
     // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
-    var debug = JSON.stringify(layer.feature.properties);
+    var debug = JSON.stringify(layer.feature);
     console.log('LTC.oEC(), debug = ' + debug);
     var id = feature.properties["id"]
     var censusTract = feature.properties["census_tract"]
