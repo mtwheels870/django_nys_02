@@ -50,6 +50,8 @@ function circle_clicked(event, context) {
     // var stringified = JSON.stringify(context);
     console.log('circle_clicked(), context = ' + context + ', event = ' + event);
     console.log('circle_clicked(), this = ' + this);
+    const form1 = document.forms['selected_tract_form'];
+    console.log('circle_clicked(), form1 = ' + form1);
 }
 
 /*
