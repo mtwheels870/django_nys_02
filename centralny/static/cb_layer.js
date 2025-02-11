@@ -40,7 +40,7 @@ function tract_count_clicked(censusTract) {
 };
 
 
-function handleMarkerClick(e, context) {
+function handleMarkerClick(context, e) {
   console.log("Clicked marker with context:", context);
   console.log("Event: ", e);
   // Access context-specific data here
