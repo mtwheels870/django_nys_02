@@ -181,7 +181,8 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
         return new L.CircleMarker(latLong, classObject.myStyle);
       },
       onEachFeature: classObject.onEachCircle,
-    }).addTo(layerGroup);
+      pane: 'labels',
+    }).addTo(map);
 }
 
 export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {

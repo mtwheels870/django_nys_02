@@ -14,6 +14,7 @@ map.setView(initial_position, initial_zoom)
 
 // Layer group
 const layerGroupAll = L.layerGroup().addTo(map);
+const pane = map.createPanel('labels');
 
 var baseMaps = {
     "OpenStreetMap": layerOsm
