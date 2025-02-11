@@ -181,7 +181,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
         return new L.CircleMarker(latLong, classObject.myStyle);
       },
       onEachFeature: classObject.onEachCircle,
-      pane: 'labels',
+      pane: 'marker',
     }).addTo(map);
 }
 
