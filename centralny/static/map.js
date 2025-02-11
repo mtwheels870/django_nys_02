@@ -14,7 +14,9 @@ map.setView(initial_position, initial_zoom)
 
 // Layer group
 const layerGroupAll = L.layerGroup().addTo(map);
-const pane = map.createPane('labels');
+
+// Create custom circle pane to get popups before we hit the polygons
+const pane = map.createPane('circles');
 
 var baseMaps = {
     "OpenStreetMap": layerOsm
