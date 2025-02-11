@@ -40,6 +40,12 @@ function tract_count_clicked(censusTract) {
 };
 
 
+function handleMarkerClick(e, context) {
+  console.log("Clicked marker with context:", context);
+  console.log("Event: ", e);
+  // Access context-specific data here
+}
+
 function circle_clicked(event, context) {
     // var stringified = JSON.stringify(context);
     console.log('circle_clicked(), context = ' + context + ', event = ' + event);
@@ -70,7 +76,12 @@ class LayerTractCounts extends LayerCircle {
             rangeCount + "<br>Database ID: " + id + "</b>")
     const context = { name: feature.properties.name, id: feature.properties.id };
     // layer.on('click', circle_clicked.bind(null, layer));
-    layer.on('click', circle_clicked.bind(null, context));
+    // Example usage
+    let myOtherData = { id: 2, name: "Marker 2" };
+    // let otherMarker = L.marker([latitude, longitude]).addTo(map);
+    layer.on('click', handleMarkerClick.bind(null, myOtherData));
+
+    // layer.on('click', circle_clicked.bind(null, context));
   }
 }
 
