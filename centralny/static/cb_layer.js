@@ -183,9 +183,11 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
     }).addTo(layerGroup);
 }
 
-export function cb_render_all(layerGroupPolys, layerGroupCircles, layerControl, zoom, boundsString) {
-  layerGroupPolys.clearLayers();
-  layerGroupCircles.clearLayers()
+export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
+  layerGroupAll.clearLayers();
+  var layerGroupPolys = L.layerGroup().addTo(layerGroupAll);
+  var layerGroupCircles = L.layerGroup().addTo(layerGroupAll);
+    
   // console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
