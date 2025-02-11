@@ -118,20 +118,20 @@ class MapNavigationView(generic.edit.FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        # After this, the form is created
-
         context_data['map_title'] = "Map Title Here"
-
         form = context_data['form']
         id = form.fields['id']
         id.initial = 23
+        agg_type = form.fields['agg_type']
+        agg_type.initial = "Cherry"
         return context_data
 
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
         if form.is_valid():
             id = form.cleaned_data['id']
-            print(f"MNV.post(), id = {id}")
+            agg_type = form.cleaned_data['agg_type']
+            print(f"MNV.post(), id = {id}, agg_type = {agg_type}")
         else:
             print(f"MNV.post(), form is INVALID")
         return HttpResponseRedirect(request.path)
