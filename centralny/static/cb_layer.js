@@ -40,12 +40,12 @@ function tract_count_clicked(censusTract) {
 };
 
 
-function circle_clicked(e, context) {
+function circle_clicked(context, event) {
     // const context = e.target.options.context;
     // var stringified = JSON.stringify(e);
     // var typeof_e = typeof e;
     // console.log('circle_clicked(), target: ' + e.target + ', context = ' + context );
-    console.log('circle_clicked(), target: ' + e.target);
+    console.log('circle_clicked(), context: ' + context + ', event: ' + event);
 }
 
 /*
