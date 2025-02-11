@@ -58,8 +58,10 @@ class LayerTractCounts extends LayerCircle {
     // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
+    var id = feature.properties["id"]
     var censusTract = feature.properties["census_tract"]
-    layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + rangeCount + "</b>")
+    layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
+            rangeCount + "<br>ID: " + id + "</b>")
   } 
 }
 
@@ -94,7 +96,8 @@ class LayerCountyCounts extends LayerCircle {
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
     var countyCode = feature.properties["county_code"]
-    layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + rangeCount + "</b>")
+    var id = feature.properties["id"]
+    layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + rangeCount + "<br>ID: " + id + "</b>")
   } 
 }
 
@@ -116,10 +119,12 @@ class LayerIpRanges extends LayerCircle {
     var keys = Object.keys(feature.properties);
     console.log("LIP.onEachCircle(), feature.props = " + keys);
     layer.setStyle(this.style);
+    // console.log("LIP.onEachCircle(), feature.props = " + keys);
+    var ip = feature.properties["id"]
     var ipRangeStart = feature.properties["ip_range_start"]
-    var companyName = feature.properties["de_company_name"]
+    var companyName = feature.properties["company_name"]
     layer.bindPopup("<b>First IP Range (@ this location):<br>IP Range Start:" + ipRangeStart + 
-        "<br>Company Name: " + companyName + "</b>")
+        "<br>Company Name: " + companyName + "<br>ID: " + id + "</b>")
   } 
 };
 
@@ -162,8 +167,8 @@ async function load_target(url_field, boundsString) {
 
 async function render_target(classObject, map, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
-  var debug = JSON.stringify(layer.feature.properties);
-  console.log('render_target(), debug = ' + debug);
+  // var debug = JSON.stringify(layer.feature.properties);
+  // console.log('render_target(), debug = ' + debug);
     // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
   // Clears our layer group
   // console.log("render_target(). style = " + classObject.style);
