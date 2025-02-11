@@ -35,20 +35,16 @@ class LayerCircle extends CbLayer {
   }
 }
 
-function tract_count_clicked(censusTract) {
-    console.log('tract_count_clicked(), censusTract = ' + censusTract);
-};
-
-
 function handleCircleClick(context, e) {
   console.log("Clicked marker with context:", context);
   console.log("Event: ", e);
   const form1 = document.forms['selected_tract_form'];
-  console.log('circle_clicked(), form1 = ' + form1);
+  /* console.log('circle_clicked(), form1 = ' + form1);
   for (const [key, value] of Object.entries(form1)) {
     console.log(`${key}: ${value}`)
-  }
+  } */
   form1["id"].value = context["id"]
+  form1["agg_type"].value = context["agg_type"]
   form1.submit()
 }
 
@@ -74,14 +70,8 @@ class LayerTractCounts extends LayerCircle {
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
             rangeCount + "<br>Database ID: " + id + "</b>")
-    let context = { name: "CensusTract", id: id };
-    // layer.on('click', circle_clicked.bind(null, layer));
-    // Example usage
-    // let myOtherData = { id: 2, name: "Marker 2" };
-    // let otherMarker = L.marker([latitude, longitude]).addTo(map);
+    let context = { agg_type: "CountRangeTract", id: id };
     layer.on('click', handleCircleClick.bind(null, context));
-
-    // layer.on('click', circle_clicked.bind(null, context));
   }
 }
 
@@ -118,9 +108,8 @@ class LayerCountyCounts extends LayerCircle {
     var countyCode = feature.properties["county_code"]
     var id = feature["id"]
     layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + rangeCount + "<br>ID: " + id + "</b>")
-    layer.on('click', function(e) {
-      console.log('circle clicked');
-    });
+    let context = { agg_type: "CountRangeCounty", id: id };
+    layer.on('click', handleCircleClick.bind(null, context));
   } 
 }
 
@@ -148,6 +137,8 @@ class LayerIpRanges extends LayerCircle {
     var companyName = feature.properties["company_name"]
     layer.bindPopup("<b>First IP Range (@ this location):<br>IP Range Start:" + ipRangeStart + 
         "<br>Company Name: " + companyName + "<br>ID: " + id + "</b>")
+    let context = { agg_type: "DeIpRange", id: id };
+    layer.on('click', handleCircleClick.bind(null, context));
   } 
 };
 
