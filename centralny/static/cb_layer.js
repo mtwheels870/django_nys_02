@@ -181,7 +181,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
         var layer = new L.CircleMarker(latLong, classObject.myStyle);
         layer.on('click', function(e) {
           console.log('circle clicked')
-        }
+        });
         return layer;
     /* this.on('click', function(e) {
         alert('censusTractCircle(), censusTract = ' + censusTract)
