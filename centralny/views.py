@@ -127,6 +127,8 @@ class MapNavigationView(generic.edit.FormView):
         return context_data
 
     def post(self, request, *args, **kwargs):
+        in_bbox = request.POST.get('in_bbox')
+        print(f"in_bbox = {in_bbox}")
         form = SelectedCensusTractForm(request.POST)
         if form.is_valid():
             id = form.cleaned_data['id']
