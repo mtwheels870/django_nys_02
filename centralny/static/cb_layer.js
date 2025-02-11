@@ -40,8 +40,9 @@ function tract_count_clicked(censusTract) {
 };
 
 
-function circle_clicked(e, arg1, arg2) {
-    console.log('circle_clicked(), e = ' + e + ", arg1 = " + arg1 + ", arg2 = " + arg2);
+function circle_clicked(e) {
+    var debug = JSON.stringify(e);
+    console.log('circle_clicked(), e = ' + debug)
 }
 
 /*
