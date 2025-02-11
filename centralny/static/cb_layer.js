@@ -152,7 +152,7 @@ async function load_target(url_field, boundsString) {
   return geojson;
 }
 
-async function render_target3(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
+async function unused_render_target(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
   const targets = await load_target(url_component, boundsString);
   // Clears our layer group
   var layer = L.geoJSON(targets, { style: myStyle })
@@ -198,15 +198,15 @@ export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
     layerTracts.renderClass(layerGroup, layerControl, boundsString);
     layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
   } 
-  // debug_layers(layerGroup, layerControl);
+  debug_layers(layerGroup, layerControl);
 }
 
 function debug_layers(layerGroup, layerControl) {
   console.log("Layer Group:");
   var i = 0;
   for (const layer in layerGroup) {
-    // name = layerGroup[i].name
-    // console.log("layer[" + i + "]: " + name);
+    name = layerGroup[i].name
+    console.log("layer[" + i + "]: " + name);
     /* for (const key in layerGroup[i]) {
     } */
     i = i + 1;
