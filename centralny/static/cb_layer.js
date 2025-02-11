@@ -59,7 +59,7 @@ class LayerTractCounts extends LayerCircle {
 // Instantiate
 //   radius: 5, weight: 0.6,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
-  { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 300, }
+  { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 300, pane: 'labels'}
 );
 
 
