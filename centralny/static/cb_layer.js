@@ -44,11 +44,11 @@ function circle_clicked(event, context) {
     // const context = e.target.options.context;
     // var stringified = JSON.stringify(context);
     var typeof_1 = typeof event;
-    var typeof_2 = JSON.stringify(context);
+    var typeof_2 = typeof this;
 
     // var typeof_e = typeof e;
     // console.log('circle_clicked(), target: ' + e.target + ', context = ' + context );
-    console.log('circle_clicked(), context: ' + typeof_2 + ', event: ' + typeof_1);
+    console.log('circle_clicked(), this: ' + typeof_2 + ', event: ' + typeof_1);
 }
 
 /*
