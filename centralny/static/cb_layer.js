@@ -207,7 +207,7 @@ export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
 }
 
 function debug_layers(lg) {
-  layers = lg.getLayers();
+  var layers = lg.getLayers();
   for (i = 0; i < layers.length; i++) {
     layer = layers[i];
     style = layer.style;
