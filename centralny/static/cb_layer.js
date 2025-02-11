@@ -41,8 +41,8 @@ function tract_count_clicked(censusTract) {
 
 
 function circle_clicked(event, context) {
-    var stringified = JSON.stringify(context);
-    console.log('circle_clicked(), context = ' + stringified + ', event = ' + event);
+    // var stringified = JSON.stringify(context);
+    console.log('circle_clicked(), context = ' + context + ', event = ' + event);
     console.log('circle_clicked(), this = ' + this);
 }
 
