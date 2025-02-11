@@ -201,7 +201,7 @@ export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
     layerTracts.renderClass(layerGroupPolys, layerControl, boundsString);
     layerTractCounts.renderClass(layerGroupCircles, layerControl, boundsString);
   } 
-  layerGroupPolys(200)
+  layerGroupPolys.setZIndex(200)
   layerGroupCircles.setZIndex(400)
   debug_layers(layerGroup, layerControl);
 }
