@@ -58,6 +58,8 @@ class LayerTractCounts extends LayerCircle {
     // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
+    var debug = JSON.stringify(layer.feature.properties);
+    console.log('LTC.oEC(), debug = ' + debug);
     var id = feature.properties["id"]
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
