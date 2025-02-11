@@ -208,7 +208,9 @@ export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
 
 function debug_layers(lg) {
   var layers = lg.getLayers();
-  for (var i = 0; i < layers.length; i++) {
+  var num_layers = layers.length;
+  console.log('d_l(), num_layers = ' + num_layers);
+  for (var i = 0; i < num_layers; i++) {
     layer = layers[i];
     style = layer.style;
     console.log('d_l(), layer[' + i + '], style = ' + style);
