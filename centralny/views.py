@@ -132,7 +132,6 @@ class MapNavigationView(generic.edit.FormView):
         if form.is_valid():
             id = form.cleaned_data['id']
             print(f"MNV.post(), id = {id}")
-            text_file.save()
         else:
             print(f"MNV.post(), form is INVALID")
         return HttpResponseRedirect(request.path)
