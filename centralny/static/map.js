@@ -32,7 +32,7 @@ async function render_all() {
   var zoom = map.getZoom()
   var boundsString = map.getBounds().toBBoxString()
   // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
-  cb_render_all(layerGroupAll, layerControl, zoom, boundsString);
+  cb_render_all(map, layerGroupAll, layerControl, zoom, boundsString);
 }
 
 map.on("moveend", render_all)

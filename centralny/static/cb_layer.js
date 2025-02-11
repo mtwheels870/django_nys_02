@@ -18,9 +18,9 @@ class LayerCircle extends CbLayer {
     super(urlComponent, description, popupField, myStyle);
   }
   // Wrap the render function
-  renderClass = (layerGroup, layerControl, boundsString) => {
+  renderClass = (map, layerGroup, layerControl, boundsString) => {
     // Call render circle
-    render_circle(this, layerGroup, layerControl, boundsString);
+    render_circle(this, map, layerGroup, layerControl, boundsString);
   }
 }
 
@@ -130,9 +130,9 @@ class LayerPolygon extends CbLayer {
     super(urlComponent, description, popupField, myStyle);
   }
   // Wrap the render function
-  renderClass = (layerGroup, layerControl, boundsString) => {
+  renderClass = (map, layerGroup, layerControl, boundsString) => {
     // Call render circle
-    render_target(this, layerGroup, layerControl, boundsString);
+    render_target(this, map, layerGroup, layerControl, boundsString);
   }
 }
 
@@ -164,7 +164,7 @@ async function unused_render_target(layerGroup, layerControl, url_component, des
   // layerControl.addOverlay(layer, description);
 }
 
-async function render_target(classObject, layerGroup, layerControl,boundsString) {
+async function render_target(classObject, map, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
   // console.log("render_target(). style = " + classObject.style);
@@ -174,7 +174,7 @@ async function render_target(classObject, layerGroup, layerControl,boundsString)
     .addTo(layerGroup);
 }
 
-async function render_circle(classObject, layerGroup, layerControl, boundsString) {
+async function render_circle(classObject, map, layerGroup, layerControl, boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
@@ -185,7 +185,7 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
     }).addTo(map);
 }
 
-export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
+export function cb_render_all(map, layerGroupAll, layerControl, zoom, boundsString) {
   layerGroupAll.clearLayers();
   // var layerGroupPolys = L.layerGroup().addTo(layerGroupAll);
   // var layerGroupCircles = L.layerGroup().addTo(layerGroupAll);
@@ -193,15 +193,15 @@ export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
   // console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
-    layerCountyCounts.renderClass(layerGroupAll, layerControl, boundsString);
-    layerCounties.renderClass(layerGroupAll, layerControl, boundsString);
+    layerCountyCounts.renderClass(map, layerGroupAll, layerControl, boundsString);
+    layerCounties.renderClass(map, layerGroupAll, layerControl, boundsString);
   } else if (zoom >= 15) {
     // Actual IP ranges
-    layerIpRanges.renderClass(layerGroupAll, layerControl, boundsString);
+    layerIpRanges.renderClass(map, layerGroupAll, layerControl, boundsString);
   } else {
     // Tracts + their counts
-    layerTracts.renderClass(layerGroupAll, layerControl, boundsString);
-    layerTractCounts.renderClass(layerGroupAll, layerControl, boundsString);
+    layerTracts.renderClass(map, layerGroupAll, layerControl, boundsString);
+    layerTractCounts.renderClass(map, layerGroupAll, layerControl, boundsString);
   } 
   // layerGroupPolys.setZIndex(400);
   // layerGroupCircles.setZIndex(200);
