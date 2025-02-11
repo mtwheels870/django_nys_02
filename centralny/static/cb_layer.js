@@ -43,15 +43,8 @@ function tract_count_clicked(censusTract) {
 function handleCircleClick(context, e) {
   console.log("Clicked marker with context:", context);
   console.log("Event: ", e);
-  // Access context-specific data here
-}
-
-function circle_clicked(event, context) {
-    // var stringified = JSON.stringify(context);
-    console.log('circle_clicked(), context = ' + context + ', event = ' + event);
-    console.log('circle_clicked(), this = ' + this);
-    const form1 = document.forms['selected_tract_form'];
-    console.log('circle_clicked(), form1 = ' + form1);
+  const form1 = document.forms['selected_tract_form'];
+  console.log('circle_clicked(), form1 = ' + form1);
 }
 
 /*
