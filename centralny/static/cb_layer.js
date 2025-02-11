@@ -41,14 +41,7 @@ function tract_count_clicked(censusTract) {
 
 
 function circle_clicked(event, context) {
-    // const context = e.target.options.context;
-    // var stringified = JSON.stringify(context);
-    var typeof_1 = typeof event;
-    var typeof_2 = JSON.stringify(this);
-
-    // var typeof_e = typeof e;
-    // console.log('circle_clicked(), target: ' + e.target + ', context = ' + context );
-    console.log('circle_clicked(), this: ' + typeof_2 + ', event: ' + typeof_1);
+    console.log('circle_clicked(), context = ' + context + ', event = ' + event);
 }
 
 /*
@@ -75,7 +68,7 @@ class LayerTractCounts extends LayerCircle {
             rangeCount + "<br>Database ID: " + id + "</b>")
     const context = { name: feature.properties.name, id: feature.properties.id };
     // layer.on('click', circle_clicked.bind(null, layer));
-    layer.on('click', L.bind(circle_clicked, null, context));
+    layer.on('click', circle_clicked.bind(null, context));
   }
 }
 
