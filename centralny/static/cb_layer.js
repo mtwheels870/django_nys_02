@@ -203,7 +203,6 @@ export function cb_render_all(layerGroupAll, layerControl, zoom, boundsString) {
   } 
   layerGroupPolys.setZIndex(200)
   layerGroupCircles.setZIndex(400)
-  debug_layers(layerGroup, layerControl);
 }
 
 /* function debug_layers(layerGroup, layerControl) {
