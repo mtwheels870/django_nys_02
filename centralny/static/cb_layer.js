@@ -1,10 +1,22 @@
 /*
  * Base Class
  */ 
+function debug_layers(lg) {
+  var layers = lg.getLayers();
+  var num_layers = layers.length;
+  console.log('d_l(), num_layers = ' + num_layers);
+  for (var i = 0; i < num_layers; i++) {
+    layer = layers[i];
+    style = layer.style;
+    console.log('d_l(), layer[' + i + '], style = ' + style);
+  }
+}
+
 class CbLayer {
-  constructor(urlComponent, description, popupField, myStyle) {
+  constructor(urlComponent, description, clickedField, popupField, myStyle) {
     this.urlComponent = urlComponent;
     this.description = description;
+    this.clickedField = clickedField;
     this.popupField = popupField;
     this.style = myStyle;
   }
@@ -14,8 +26,8 @@ class CbLayer {
  * Circle (intermediate)
  */ 
 class LayerCircle extends CbLayer {
-  constructor(urlComponent, description, popupField, myStyle) {
-    super(urlComponent, description, popupField, myStyle);
+  constructor(urlComponent, description, clickedField, popupField, myStyle) {
+    super(urlComponent, description, clickedField, popupField, myStyle);
   }
   // Wrap the render function
   renderClass = (map, layerGroup, layerControl, boundsString) => {
@@ -32,8 +44,8 @@ function tract_count_clicked(censusTract) {
  * TractCounts -> Circle -> Base
  */ 
 class LayerTractCounts extends LayerCircle {
-  constructor(urlComponent, description, popupField, myStyle) {
-    super(urlComponent, description, popupField, myStyle);
+  constructor(urlComponent, description, clickedField, popupField, myStyle) {
+    super(urlComponent, description, clickedField, popupField, myStyle);
   }
 
   // Inside a class, format if methodName: function
@@ -48,17 +60,12 @@ class LayerTractCounts extends LayerCircle {
     layer.setStyle(copiedStyle)
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + rangeCount + "</b>")
-    // Doesn't work: layer.on('click', function(e) {
-    /* this.on('click', function(e) {
-        alert('censusTractCircle(), censusTract = ' + censusTract)
-    } ) */
-    // layer.on('click', tract_count_clicked, censusTract)
   } 
 }
 
 // Instantiate
 //   radius: 5, weight: 0.6,
-const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
+const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "id", "range_count",
   { color: "#2F118F", fillOpacity: 0.80, weight: 0, pane: 'circles'}
 );
 
@@ -67,8 +74,8 @@ const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ran
  * CountyCounts -> Circle -> Base
  */ 
 class LayerCountyCounts extends LayerCircle {
-  constructor(urlComponent, description, popupField, myStyle) {
-    super(urlComponent, description, popupField, myStyle);
+  constructor(urlComponent, description, clickedField, popupField, myStyle) {
+    super(urlComponent, description, clickedField, popupField, myStyle);
   }
 
   // Inside a class, format if methodName: function
@@ -92,16 +99,16 @@ class LayerCountyCounts extends LayerCircle {
 }
 
 // Instantiate
-const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", "range_counts",
-  { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
+const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", "id", 
+    "range_counts", { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
 /*
  * IP Ranges -> Circle -> Base
  */ 
 class LayerIpRanges extends LayerCircle {
-  constructor(urlComponent, description, popupField, myStyle) {
-    super(urlComponent, description, popupField, myStyle);
+  constructor(urlComponent, description, clickedField, popupField, myStyle) {
+    super(urlComponent, description, clickedField, popupField, myStyle);
   }
 
   // Inside a class, format if methodName: function
@@ -117,7 +124,7 @@ class LayerIpRanges extends LayerCircle {
 };
 
 // Instantiate
-const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_range_start",
+const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "id", "ip_range_start",
   { radius: 7, fillColor: "#9A0669", color: "#000", weight: 0, fillOpacity: 0.8 }
 );
 
@@ -126,8 +133,8 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_ran
  * Polygon 
  */ 
 class LayerPolygon extends CbLayer {
-  constructor(urlComponent, description, popupField, myStyle) {
-    super(urlComponent, description, popupField, myStyle);
+  constructor(urlComponent, description, clickedField, popupField, myStyle) {
+    super(urlComponent, description, clickedField, popupField, myStyle);
   }
   // Wrap the render function
   renderClass = (map, layerGroup, layerControl, boundsString) => {
@@ -137,11 +144,11 @@ class LayerPolygon extends CbLayer {
 }
 
 // Instantiate Tractgs
-const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
+const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'id', 'short_name', 
 { color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 200 })
 
 // Instantiate Counties
-const layerCounties = new LayerPolygon('counties', 'County Name', 'county_name',
+const layerCounties = new LayerPolygon('counties', 'County Name', 'id', 'county_name',
 { color: "#20bb80", fillOpacity: 0.25, weight: 1, zIndex: 200 })
 
 async function load_target(url_field, boundsString) {
@@ -153,24 +160,15 @@ async function load_target(url_field, boundsString) {
   return geojson;
 }
 
-async function unused_render_target(layerGroup, layerControl, url_component, description, popup_field, myStyle, boundsString) {
-  const targets = await load_target(url_component, boundsString);
-  // Clears our layer group
-  var layer = L.geoJSON(targets, { style: myStyle })
-    .bindPopup(
-      (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
-    );
-  layer.addTo(layerGroup);
-  // layerControl.addOverlay(layer, description);
-}
-
 async function render_target(classObject, map, layerGroup, layerControl,boundsString) {
   const targets = await load_target(classObject.urlComponent, boundsString);
   // Clears our layer group
   // console.log("render_target(). style = " + classObject.style);
   L.geoJSON(targets, { style: classObject.style })
     .bindPopup(
-      (layer) => classObject.description + ": <b>" + layer.feature.properties[classObject.popupField] + "</b>")
+      (layer) => classObject.description + ": <b>id = " + 
+        layer.feature.properties[classObject.clickedField] + ": "  + 
+        layer.feature.properties[classObject.popupField] + "</b>")
     .addTo(layerGroup);
 }
 
@@ -180,12 +178,10 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
       pointToLayer: function(feature, latLong) {
         var layer = new L.CircleMarker(latLong, classObject.myStyle);
         layer.on('click', function(e) {
-          console.log('circle clicked')
+          var id = layer.feature.properties[classObject.clickedField];
+          console.log('circle clicked, id = ' + id)
         });
         return layer;
-    /* this.on('click', function(e) {
-        alert('censusTractCircle(), censusTract = ' + censusTract)
-    } ) */
       },
       onEachFeature: classObject.onEachCircle,
       pane: 'circles',
@@ -194,10 +190,6 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
 
 export function cb_render_all(map, layerGroupAll, layerControl, zoom, boundsString) {
   layerGroupAll.clearLayers();
-  // var layerGroupPolys = L.layerGroup().addTo(layerGroupAll);
-  // var layerGroupCircles = L.layerGroup().addTo(layerGroupAll);
-    
-  // console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
     layerCountyCounts.renderClass(map, layerGroupAll, layerControl, boundsString);
@@ -210,19 +202,10 @@ export function cb_render_all(map, layerGroupAll, layerControl, zoom, boundsStri
     layerTracts.renderClass(map, layerGroupAll, layerControl, boundsString);
     layerTractCounts.renderClass(map, layerGroupAll, layerControl, boundsString);
   } 
-  // layerGroupPolys.setZIndex(400);
-  // layerGroupCircles.setZIndex(200);
-  debug_layers(layerGroupAll);
 }
 
-function debug_layers(lg) {
-  var layers = lg.getLayers();
-  var num_layers = layers.length;
-  console.log('d_l(), num_layers = ' + num_layers);
-  for (var i = 0; i < num_layers; i++) {
-    layer = layers[i];
-    style = layer.style;
-    console.log('d_l(), layer[' + i + '], style = ' + style);
-  }
-}
-
+    // Doesn't work: layer.on('click', function(e) {
+    /* this.on('click', function(e) {
+        alert('censusTractCircle(), censusTract = ' + censusTract)
+    } ) */
+    // layer.on('click', tract_count_clicked, censusTract)
