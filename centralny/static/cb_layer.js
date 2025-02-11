@@ -48,7 +48,8 @@ function handleCircleClick(context, e) {
   for (const [key, value] of Object.entries(form1)) {
     console.log(`${key}: ${value}`)
   }
-    
+  form1["id"] = context["id"]
+  form1.submit()
 }
 
 /*
