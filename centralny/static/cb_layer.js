@@ -183,41 +183,43 @@ async function render_circle(classObject, layerGroup, layerControl, boundsString
     }).addTo(layerGroup);
 }
 
-export function cb_render_all(layerGroup, layerControl, zoom, boundsString) {
-  layerGroup.clearLayers();
+export function cb_render_all(layerGroupPolys, layerGroupCircles, layerControl, zoom, boundsString) {
+  layerGroupPolys.clearLayers();
+  layerGroupCircles.clearLayers()
   // console.log("cb_render_all(), zoom level: " + zoom)
   if (zoom <= 10) {
     // Counties
-    layerCountyCounts.renderClass(layerGroup, layerControl, boundsString);
-    layerCounties.renderClass(layerGroup, layerControl, boundsString);
+    layerCountyCounts.renderClass(layerGroupCircles, layerControl, boundsString);
+    layerCounties.renderClass(layerGroupPolys, layerControl, boundsString);
   } else if (zoom >= 15) {
     // Actual IP ranges
-    layerIpRanges.renderClass(layerGroup, layerControl, boundsString);
+    layerIpRanges.renderClass(layerGroupCircles, layerControl, boundsString);
   } else {
     // Tracts + their counts
-    layerTracts.renderClass(layerGroup, layerControl, boundsString);
-    layerTractCounts.renderClass(layerGroup, layerControl, boundsString);
+    layerTracts.renderClass(layerGroupPolys, layerControl, boundsString);
+    layerTractCounts.renderClass(layerGroupCircles, layerControl, boundsString);
   } 
+  layerGroupPolys(200)
+  layerGroupCircles.setZIndex(400)
   debug_layers(layerGroup, layerControl);
 }
 
-function debug_layers(layerGroup, layerControl) {
+/* function debug_layers(layerGroup, layerControl) {
   console.log("Layer Group:");
   var i = 0;
   for (const layer in layerGroup) {
     name = layerGroup[i].name
     console.log("layer[" + i + "]: " + name);
     /* for (const key in layerGroup[i]) {
-    } */
+    } 
     i = i + 1;
   }
   // var keys = Object.keys(feature.properties);
   /* console.log("      style: ");
   for (const key in copiedStyle) {
     console.log("  " + key + ": " + copiedStyle[key]);
-  }  */
-
-}
+  }  
+} */
 /* .bindPopup(
       (layer) => description + ": <b>" + layer.feature.properties[popup_field] + "</b>"
     ); */

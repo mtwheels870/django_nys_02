@@ -13,7 +13,8 @@ const initial_zoom = 12.5
 map.setView(initial_position, initial_zoom)
 
 // Layer group
-const layerGroup = L.layerGroup().addTo(map);
+const layerGroupPolys = L.layerGroup().addTo(map);
+const layerGroupCircles = L.layerGroup().addTo(map);
 
 var baseMaps = {
     "OpenStreetMap": layerOsm
@@ -31,7 +32,7 @@ async function render_all() {
   var zoom = map.getZoom()
   var boundsString = map.getBounds().toBBoxString()
   // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
-  cb_render_all(layerGroup, layerControl, zoom, boundsString);
+  cb_render_all(layerGroupPolys, layerGroupCircles, layerControl, zoom, boundsString);
 }
 
 map.on("moveend", render_all)
