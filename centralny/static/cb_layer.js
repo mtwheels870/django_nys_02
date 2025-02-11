@@ -59,7 +59,7 @@ class LayerTractCounts extends LayerCircle {
 // Instantiate
 //   radius: 5, weight: 0.6,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
-  { color: "#2F118F", fillOpacity: 0.80, weight: 0, zIndex: 300, pane: 'marker'}
+  { color: "#2F118F", fillOpacity: 0.80, weight: 0, pane: 'labels'}
 );
 
 
@@ -181,7 +181,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
         return new L.CircleMarker(latLong, classObject.myStyle);
       },
       onEachFeature: classObject.onEachCircle,
-      pane: 'marker',
+      pane: 'labels',
     }).addTo(map);
 }
 
