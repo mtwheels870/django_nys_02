@@ -13,10 +13,9 @@ function debug_layers(lg) {
 }
 
 class CbLayer {
-  constructor(urlComponent, description, clickedField, popupField, myStyle) {
+  constructor(urlComponent, description, popupField, myStyle) {
     this.urlComponent = urlComponent;
     this.description = description;
-    this.clickedField = clickedField;
     this.popupField = popupField;
     this.style = myStyle;
   }
@@ -26,8 +25,8 @@ class CbLayer {
  * Circle (intermediate)
  */ 
 class LayerCircle extends CbLayer {
-  constructor(urlComponent, description, clickedField, popupField, myStyle) {
-    super(urlComponent, description, clickedField, popupField, myStyle);
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
   }
   // Wrap the render function
   renderClass = (map, layerGroup, layerControl, boundsString) => {
@@ -44,8 +43,8 @@ function tract_count_clicked(censusTract) {
  * TractCounts -> Circle -> Base
  */ 
 class LayerTractCounts extends LayerCircle {
-  constructor(urlComponent, description, clickedField, popupField, myStyle) {
-    super(urlComponent, description, clickedField, popupField, myStyle);
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
   }
 
   // Inside a class, format if methodName: function
@@ -63,13 +62,13 @@ class LayerTractCounts extends LayerCircle {
     var id = feature["id"]
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
-            rangeCount + "<br>ID: " + id + "</b>")
+            rangeCount + "<br>Database ID: " + id + "</b>")
   } 
 }
 
 // Instantiate
 //   radius: 5, weight: 0.6,
-const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "id", "range_count",
+const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
   { color: "#2F118F", fillOpacity: 0.80, weight: 0, pane: 'circles'}
 );
 
@@ -78,8 +77,8 @@ const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ran
  * CountyCounts -> Circle -> Base
  */ 
 class LayerCountyCounts extends LayerCircle {
-  constructor(urlComponent, description, clickedField, popupField, myStyle) {
-    super(urlComponent, description, clickedField, popupField, myStyle);
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
   }
 
   // Inside a class, format if methodName: function
@@ -98,13 +97,13 @@ class LayerCountyCounts extends LayerCircle {
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
     var countyCode = feature.properties["county_code"]
-    var id = feature.properties["id"]
+    var id = feature["id"]
     layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + rangeCount + "<br>ID: " + id + "</b>")
   } 
 }
 
 // Instantiate
-const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", "id", 
+const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", 
     "range_counts", { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
@@ -112,8 +111,8 @@ const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP 
  * IP Ranges -> Circle -> Base
  */ 
 class LayerIpRanges extends LayerCircle {
-  constructor(urlComponent, description, clickedField, popupField, myStyle) {
-    super(urlComponent, description, clickedField, popupField, myStyle);
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
   }
 
   // Inside a class, format if methodName: function
@@ -122,7 +121,7 @@ class LayerIpRanges extends LayerCircle {
     console.log("LIP.onEachCircle(), feature.props = " + keys);
     layer.setStyle(this.style);
     // console.log("LIP.onEachCircle(), feature.props = " + keys);
-    var ip = feature.properties["id"]
+    var ip = feature["id"]
     var ipRangeStart = feature.properties["ip_range_start"]
     var companyName = feature.properties["company_name"]
     layer.bindPopup("<b>First IP Range (@ this location):<br>IP Range Start:" + ipRangeStart + 
@@ -131,7 +130,7 @@ class LayerIpRanges extends LayerCircle {
 };
 
 // Instantiate
-const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "id", "ip_range_start",
+const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "ip_range_start",
   { radius: 7, fillColor: "#9A0669", color: "#000", weight: 0, fillOpacity: 0.8 }
 );
 
@@ -140,8 +139,8 @@ const layerIpRanges = new LayerIpRanges ("ip_ranges", "Actual IP Range", "id", "
  * Polygon 
  */ 
 class LayerPolygon extends CbLayer {
-  constructor(urlComponent, description, clickedField, popupField, myStyle) {
-    super(urlComponent, description, clickedField, popupField, myStyle);
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
   }
   // Wrap the render function
   renderClass = (map, layerGroup, layerControl, boundsString) => {
@@ -151,11 +150,11 @@ class LayerPolygon extends CbLayer {
 }
 
 // Instantiate Tractgs
-const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'id', 'short_name', 
+const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
 { color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 200 })
 
 // Instantiate Counties
-const layerCounties = new LayerPolygon('counties', 'County Name', 'id', 'county_name',
+const layerCounties = new LayerPolygon('counties', 'County Name', 'county_name',
 { color: "#20bb80", fillOpacity: 0.25, weight: 1, zIndex: 200 })
 
 async function load_target(url_field, boundsString) {
@@ -176,8 +175,7 @@ async function render_target(classObject, map, layerGroup, layerControl,boundsSt
   // console.log("render_target(). style = " + classObject.style);
   L.geoJSON(targets, { style: classObject.style })
     .bindPopup(
-      (layer) => classObject.description + ": <b>id = " + 
-        layer.feature.properties[classObject.clickedField] + ": "  + 
+      (layer) => classObject.description + ": <b>id = ??" + 
         layer.feature.properties[classObject.popupField] + "</b>")
     .addTo(layerGroup);
 }
