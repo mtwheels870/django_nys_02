@@ -40,7 +40,7 @@ function tract_count_clicked(censusTract) {
 };
 
 
-function handleMarkerClick(context, e) {
+function handleCircleClick(context, e) {
   console.log("Clicked marker with context:", context);
   console.log("Event: ", e);
   // Access context-specific data here
@@ -74,12 +74,12 @@ class LayerTractCounts extends LayerCircle {
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
             rangeCount + "<br>Database ID: " + id + "</b>")
-    const context = { name: feature.properties.name, id: feature.properties.id };
+    let context = { name: feature.properties.name, id: feature.properties.id };
     // layer.on('click', circle_clicked.bind(null, layer));
     // Example usage
-    let myOtherData = { id: 2, name: "Marker 2" };
+    // let myOtherData = { id: 2, name: "Marker 2" };
     // let otherMarker = L.marker([latitude, longitude]).addTo(map);
-    layer.on('click', handleMarkerClick.bind(null, myOtherData));
+    layer.on('click', handleCircleClick.bind(null, context));
 
     // layer.on('click', circle_clicked.bind(null, context));
   }
