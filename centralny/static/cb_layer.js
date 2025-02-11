@@ -46,11 +46,11 @@ class LayerTractCounts extends LayerCircle {
     copiedStyle["radius"] = radiusGraduated;
     layer.setStyle(copiedStyle)
     var censusTract = feature.properties["census_tract"]
-    layer.bindPopup("<b>Census Tract: " + censusTract + "<br>IP Range Count: " + rangeCount + "</b>")
+    // layer.bindPopup("<b>Census Tract: " + censusTract + "<br>IP Range Count: " + rangeCount + "</b>")
     // Doesn't work: layer.on('click', function(e) {
-    this.on('click', function(e) {
+    /* this.on('click', function(e) {
         alert('censusTractCircle(), censusTract = ' + censusTract)
-    } )
+    } ) */
     // layer.on('click', tract_count_clicked, censusTract)
   } 
 }
