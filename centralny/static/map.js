@@ -3,7 +3,7 @@ import { cb_render_all } from './cb_layer.js';
 // Create the map
 // export const map = L.map("map", { layers: [layerOsm] });
 
-export let map;
+export const map;
 export let layerGroupAll;
 export let layerControl; 
 
