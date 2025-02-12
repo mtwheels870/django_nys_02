@@ -31,7 +31,7 @@ class MapWrapper {
             var baseMaps = {
                 "OpenStreetMap": layerOsm
             };
-            var overlayMaps = { "Pinp01nt 360": layerGroupAll }
+            var overlayMaps = { "Pinp01nt 360": this.layerGroupAll }
 
             this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(global_map);
             console.log("after create, global_map = " + global_map);
