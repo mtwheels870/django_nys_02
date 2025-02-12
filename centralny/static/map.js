@@ -8,7 +8,7 @@ let global_map;
 
 class MapWrapper {
     constructor() {
-        if (len(window.maps.leafletList) > 0) {
+        if (window.maps.leafletList.length > 0) {
             leaflet_first = window.maps.leafletList[0]
             console.log("constructor(), leaflet_first = " + leaflet_first);
         } else {
