@@ -39,7 +39,7 @@ class MapWrapper {
     }
 }
 
-export const map_wrapper = MapWrapper()
+export const map_wrapper = new MapWrapper()
 
 
 // Start with no overlays
