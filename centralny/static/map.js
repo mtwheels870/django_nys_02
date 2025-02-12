@@ -18,7 +18,7 @@ if (typeof map == "undefined") {
     map = L.map("map", { layers: [layerOsm] });
     map.setView(initial_position, initial_zoom)
     // Layer group
-    const layerGroupAll = L.layerGroup().addTo(map);
+    export const layerGroupAll = L.layerGroup().addTo(map);
 
     // Create custom circle pane to get popups before we hit the polygons
     const pane = map.createPane('circles');
@@ -27,7 +27,7 @@ if (typeof map == "undefined") {
     };
     var overlayMaps = { "Pinp01nt 360": layerGroupAll }
 
-    const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    export const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 } else {
     console.log("map is already defined");
     // const urlParams = new URLSearchParams(import.meta.url);
