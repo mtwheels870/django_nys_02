@@ -124,13 +124,14 @@ class MapNavigationView(generic.edit.FormView):
         id.initial = 23
         agg_type = form.fields['agg_type']
         agg_type.initial = "Cherry"
-        map_bbox = form.fields['map_bbox']
-        print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
-        map_bbox.initial = "initial_value"
+        #map_bbox = form.fields['map_bbox']
+        #print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
+        #map_bbox.initial = "initial_value"
         return context_data
 
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
+        print(f"MNV.post(), checking form here")
         if form.is_valid():
             id = form.cleaned_data['id']
             agg_type = form.cleaned_data['agg_type']
