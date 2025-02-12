@@ -3,42 +3,43 @@ import { cb_render_all } from './cb_layer.js';
 // Create the map
 // export const map = L.map("map", { layers: [layerOsm] });
 
-// if (map == "undefined") {
-if (typeof map  === 'undefined') {
-    const osm = "https://www.openstreetmap.org/copyright";
-    const copy = `© <a href='${osm}'>OpenStreetMap</a>`;
-    const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+// Single global for the map
+let global_map;
 
-    /* Create the attribution layer, is this added to the layer group 
-       Ah, we use it below in the render_markers() */
-    const layerOsm = L.tileLayer(url, { attribution: copy });
-    const initial_position = [43.05, -76.1];
-    const initial_zoom = 12.5
-    let typeof_map = typeof map;
-    console.log("creating initial map, map = " + map + ", typeof = " + typeof_map);
-    const map = L.map("map", { layers: [layerOsm] });
-    map.setView(initial_position, initial_zoom)
-    // Layer group
-    layerGroupAll = L.layerGroup().addTo(map);
+class MapWrapper {
+    constructor() {
+        if typeof global_map === 'undefined') {
+            let osm = "https://www.openstreetmap.org/copyright";
+            let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
+            let url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
-    // Create custom circle pane to get popups before we hit the polygons
-    const pane = map.createPane('circles');
-    var baseMaps = {
-        "OpenStreetMap": layerOsm
-    };
-    var overlayMaps = { "Pinp01nt 360": layerGroupAll }
+            /* Create the attribution layer, is this added to the layer group 
+               Ah, we use it below in the render_markers() */
+            let layerOsm = L.tileLayer(url, { attribution: copy });
+            let initial_position = [43.05, -76.1];
+            let initial_zoom = 12.5
+            console.log("creating initial map, map = " + global_map);
+            global_map = L.map("map", { layers: [layerOsm] });
+            global_map.setView(initial_position, initial_zoom);
 
-    layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
-    typeof_map = typeof map;
-    console.log("after create, map = " + map + ", typeof = " + typeof_map);
-} else {
-    console.log("map is already defined");
-    // const urlParams = new URLSearchParams(import.meta.url);
-    let path_array = import.meta.url.split('map.js?')
+            // Layer group
+            this.layerGroupAll = L.layerGroup().addTo(map);
 
-    console.log('map init, path_array[0] = ' + path_array[0] + ', path_array[1] = ' + path_array[1]);
-    console.log('map init, should init bounds here')
+            // Create custom circle pane to get popups before we hit the polygons
+            let pane = map.createPane('circles');
+            var baseMaps = {
+                "OpenStreetMap": layerOsm
+            };
+            var overlayMaps = { "Pinp01nt 360": layerGroupAll }
+
+            this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+            console.log("after create, global_map = " + global_map);
+        }
+        this.map = global_map;
+    }
 }
+
+export const map_wrapper = MapWrapper()
 
 
 // Start with no overlays
@@ -48,7 +49,7 @@ async function render_all() {
   var zoom = map.getZoom()
   var boundsString = map.getBounds().toBBoxString()
   // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
-  cb_render_all(map, layerGroupAll, layerControl, zoom, boundsString);
+  cb_render_all(zoom, boundsString);
 }
 
 // Catch our map-events, fetch data
