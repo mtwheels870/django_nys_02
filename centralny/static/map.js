@@ -41,6 +41,7 @@ class MapWrapper {
 }
 
 export const map_wrapper = new MapWrapper()
+console.log("after MapWrapper(), global_map = " + global_map);
 
 
 // Start with no overlays
