@@ -4,6 +4,9 @@ import { cb_render_all } from './cb_layer.js';
 // export const map = L.map("map", { layers: [layerOsm] });
 
 export let map;
+export let layerGroupAll;
+export let layerControl; 
+
 if (typeof map == "undefined") {
     const osm = "https://www.openstreetmap.org/copyright";
     const copy = `© <a href='${osm}'>OpenStreetMap</a>`;
@@ -18,7 +21,7 @@ if (typeof map == "undefined") {
     map = L.map("map", { layers: [layerOsm] });
     map.setView(initial_position, initial_zoom)
     // Layer group
-    export const layerGroupAll = L.layerGroup().addTo(map);
+    layerGroupAll = L.layerGroup().addTo(map);
 
     // Create custom circle pane to get popups before we hit the polygons
     const pane = map.createPane('circles');
@@ -27,7 +30,7 @@ if (typeof map == "undefined") {
     };
     var overlayMaps = { "Pinp01nt 360": layerGroupAll }
 
-    export const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 } else {
     console.log("map is already defined");
     // const urlParams = new URLSearchParams(import.meta.url);
