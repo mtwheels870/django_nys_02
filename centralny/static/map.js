@@ -23,7 +23,7 @@ class MapWrapper {
             global_map.setView(initial_position, initial_zoom);
 
             // Layer group
-            this.layerGroupAll = L.layerGroup().addTo(map);
+            this.layerGroupAll = L.layerGroup().addTo(global_map);
 
             // Create custom circle pane to get popups before we hit the polygons
             let pane = map.createPane('circles');
@@ -32,7 +32,7 @@ class MapWrapper {
             };
             var overlayMaps = { "Pinp01nt 360": layerGroupAll }
 
-            this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+            this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(global_map);
             console.log("after create, global_map = " + global_map);
         }
         this.map = global_map;
