@@ -17,7 +17,7 @@ if (typeof map == "undefined") {
     const layerOsm = L.tileLayer(url, { attribution: copy });
     const initial_position = [43.05, -76.1];
     const initial_zoom = 12.5
-    console.log("creating initial map");
+    console.log("creating initial map, map = " + map);
     map = L.map("map", { layers: [layerOsm] });
     map.setView(initial_position, initial_zoom)
     // Layer group
