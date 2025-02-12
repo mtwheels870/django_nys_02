@@ -1,7 +1,7 @@
 /*
  * Base Class
  */ 
-// import { map } from "./map.js";
+import { map } from "./map.js";
 
 function debug_layers(lg) {
   var layers = lg.getLayers();
