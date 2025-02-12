@@ -10,8 +10,10 @@ const layerOsm = L.tileLayer(url, { attribution: copy });
 const map = L.map("map", { layers: [layerOsm] });
 const initial_position = [43.05, -76.1];
 const initial_zoom = 12.5
-const urlParams = new URLSearchParams(import.meta.url);
-console.log('map init, urlParams = ' + urlParams);
+// const urlParams = new URLSearchParams(import.meta.url);
+const path_array = import.meta.url.split('map.js?')
+
+console.log('map init, path_array[0] = ' + path_array[0] + ', path_array[1] = ' + path_array[1]);
 
 map.setView(initial_position, initial_zoom)
 
