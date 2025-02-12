@@ -126,7 +126,10 @@ class MapNavigationView(generic.edit.FormView):
         agg_type = form.fields['agg_type']
         agg_type.initial = "Cherry"
         map_bbox = form.fields['map_bbox']
-        print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
+        # print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
+        if "leaflet_map" in self.request.session:
+            leaflet_map_dict = self.request.session["leaflet_map"]
+            print(f"g_c_d(), Found: leaflet_map_dict = {leaflet_map_dict}")
         map_bbox_value = "a=b"
         map_bbox.initial = map_bbox_value 
         context_data['map_bbox'] = map_bbox_value 
@@ -144,5 +147,7 @@ class MapNavigationView(generic.edit.FormView):
             print(f"MNV.post(), form is INVALID")
         # print(f"Before render, path = {request.path}")
         # return HttpResponseRedirect(request.path)
+        # Save the map_bbox across the reverse
+        request.session["leaflet_map"] = {"map_bbox" : map_bbox }
         return HttpResponseRedirect(reverse("app_centralny:map_viewer",));
         # return render(request, "centralny/map_viewer.html", {'form': form})
