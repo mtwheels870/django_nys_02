@@ -45,7 +45,7 @@ function handleCircleClick(context, e) {
   } */
   form1["id"].value = context["id"]
   form1["agg_type"].value = context["agg_type"]
-  // form1["map_bbox"].value = "Bounding Box here"
+  form1["map_bbox"].value = "Bounding Box here"
   form1.submit()
 }
 

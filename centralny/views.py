@@ -124,9 +124,9 @@ class MapNavigationView(generic.edit.FormView):
         id.initial = 23
         agg_type = form.fields['agg_type']
         agg_type.initial = "Cherry"
-        #map_bbox = form.fields['map_bbox']
-        #print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
-        #map_bbox.initial = "initial_value"
+        map_bbox = form.fields['map_bbox']
+        print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
+        map_bbox.initial = "initial_value"
         return context_data
 
     def post(self, request, *args, **kwargs):
@@ -135,7 +135,8 @@ class MapNavigationView(generic.edit.FormView):
         if form.is_valid():
             id = form.cleaned_data['id']
             agg_type = form.cleaned_data['agg_type']
-            print(f"MNV.post(), id = {id}, agg_type = {agg_type}")
+            map_bbox = form.cleaned_data['map_bbox']
+            print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
         else:
             print(f"MNV.post(), form is INVALID")
         print(f"Before render, path = {request.path}")
