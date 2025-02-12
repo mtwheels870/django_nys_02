@@ -135,7 +135,7 @@ class MapNavigationView(generic.edit.FormView):
         map_bbox = form.fields[KEY_MAP_BBOX]
         # print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
         if KEY_LEAFLET_MAP  in self.request.session:
-            leaflet_map_dict = self.request.session[KEY_LEAFLET_MAP]
+            leaflet_map_dict = self.request.session.pop(KEY_LEAFLET_MAP, default=None)
             print(f"g_c_d(), Found: leaflet_map_dict = {leaflet_map_dict}")
             map_bbox_value = leaflet_map_dict[KEY_MAP_BBOX]
         else:
