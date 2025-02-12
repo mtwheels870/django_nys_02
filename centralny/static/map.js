@@ -22,6 +22,7 @@ class MapWrapper {
             global_map = L.map("map", { layers: [layerOsm] });
             global_map.setView(initial_position, initial_zoom);
 
+            console.log("after create, map = " + global_map);
             // Layer group
             this.layerGroupAll = L.layerGroup().addTo(global_map);
 
