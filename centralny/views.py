@@ -144,5 +144,5 @@ class MapNavigationView(generic.edit.FormView):
             print(f"MNV.post(), form is INVALID")
         # print(f"Before render, path = {request.path}")
         # return HttpResponseRedirect(request.path)
-        return HttpResponseRedirect(reverse("app_centralny:map_viewer", {'form': form});
+        return HttpResponseRedirect(reverse("app_centralny:map_viewer", {'form': form}));
         # return render(request, "centralny/map_viewer.html", {'form': form})
