@@ -1,6 +1,8 @@
 /*
  * Base Class
  */ 
+import { map } from "./map.js";
+
 function debug_layers(lg) {
   var layers = lg.getLayers();
   var num_layers = layers.length;
@@ -45,7 +47,8 @@ function handleCircleClick(context, e) {
   } */
   form1["id"].value = context["id"]
   form1["agg_type"].value = context["agg_type"]
-  form1["map_bbox"].value = "Bounding Box here"
+  var boundsString = map.getBounds().toBBoxString()
+  form1["map_bbox"].value = boundsString;
   form1.submit()
 }
 

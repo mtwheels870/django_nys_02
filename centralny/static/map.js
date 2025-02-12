@@ -7,7 +7,7 @@ const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const layerOsm = L.tileLayer(url, { attribution: copy });
 
 // Create the map
-const map = L.map("map", { layers: [layerOsm] });
+export const map = L.map("map", { layers: [layerOsm] });
 const initial_position = [43.05, -76.1];
 const initial_zoom = 12.5
 // const urlParams = new URLSearchParams(import.meta.url);
@@ -43,7 +43,6 @@ async function render_all() {
 }
 
 // Catch our map-events, fetch data
-map.on("load", render_all)
-
 map.on("moveend", render_all)
 
+// This doesn't do what we want, causes multiple fires: map.on("load", render_all)
