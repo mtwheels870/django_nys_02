@@ -120,6 +120,7 @@ class MapNavigationView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
+        print(f'MNV.g_c_d(), form = {form}')
         id = form.fields['id']
         id.initial = 23
         agg_type = form.fields['agg_type']
@@ -141,6 +142,7 @@ class MapNavigationView(generic.edit.FormView):
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
         else:
             print(f"MNV.post(), form is INVALID")
-        print(f"Before render, path = {request.path}")
+        # print(f"Before render, path = {request.path}")
         # return HttpResponseRedirect(request.path)
-        return render(request, "centralny/map_viewer.html", {'form': form})
+        return HttpResponseRedirect(reverse("app_centralny:map_viewer", {'form': form});
+        # return render(request, "centralny/map_viewer.html", {'form': form})
