@@ -27,7 +27,7 @@ class MapWrapper {
             this.layerGroupAll = L.layerGroup().addTo(global_map);
 
             // Create custom circle pane to get popups before we hit the polygons
-            let pane = map.createPane('circles');
+            let pane = global_map.createPane('circles');
             var baseMaps = {
                 "OpenStreetMap": layerOsm
             };
