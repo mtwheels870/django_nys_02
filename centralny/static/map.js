@@ -8,13 +8,7 @@ let global_map;
 
 class MapWrapper {
     constructor() {
-        if (window.maps.leafletList.length > 0) {
-            leaflet_first = window.maps.leafletList[0]
-            console.log("constructor(), leaflet_first = " + leaflet_first);
-        } else {
-            console.log("constructor(), no leaflet maps");
-        }
-        if (typeof global_map === 'undefined') {
+        if (typeof window.maps.leafletList === 'undefined') {
             let osm = "https://www.openstreetmap.org/copyright";
             let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
             let url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
