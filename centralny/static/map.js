@@ -8,8 +8,7 @@ export let layerGroupAll;
 export let layerControl; 
 
 // if (map == "undefined") {
-let typeof_map = typeof map;
-if (typeof_map  === 'undefined') {
+if (typeof map  === 'undefined') {
     const osm = "https://www.openstreetmap.org/copyright";
     const copy = `© <a href='${osm}'>OpenStreetMap</a>`;
     const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
