@@ -33,6 +33,8 @@ if (typeof map  === 'undefined') {
     var overlayMaps = { "Pinp01nt 360": layerGroupAll }
 
     layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    typeof_map = typeof map;
+    console.log("after create, map = " + map + ", typeof = " + typeof_map);
 } else {
     console.log("map is already defined");
     // const urlParams = new URLSearchParams(import.meta.url);
