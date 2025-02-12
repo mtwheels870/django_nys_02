@@ -47,13 +47,13 @@ export const map_wrapper = new MapWrapper()
 
 // This calls into the cb_layer stuff 
 async function render_all() {
-  var zoom = map.getZoom()
-  var boundsString = map.getBounds().toBBoxString()
+  var zoom = global_map.getZoom()
+  var boundsString = global_map.getBounds().toBBoxString()
   // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
   cb_render_all(zoom, boundsString);
 }
 
 // Catch our map-events, fetch data
-map.on("moveend", render_all)
+global_map.on("moveend", render_all)
 
 // This doesn't do what we want, causes multiple fires: map.on("load", render_all)
