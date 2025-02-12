@@ -129,6 +129,7 @@ class MapNavigationView(generic.edit.FormView):
         map_bbox_value = "initial_value"
         map_bbox.initial = map_bbox_value 
         context_data['map_bbox'] = map_bbox_value 
+        context_data['some_field'] = "Some field value"
         return context_data
 
     def post(self, request, *args, **kwargs):

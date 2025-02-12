@@ -34,7 +34,7 @@
         <div class="right-side">
             <h2>IP Range Details</h2>
             <div id="table-stuff"></div>
-            <p>Map BBox: {{ map_bbox }}</p>
+            <p>Map BBox: {{ some_field }}</p>
             <form id="selected_tract_form" method="post" enctype="multipart/form-data" >
                 {% csrf_token %}
                 {{ form.errors }}
