@@ -16,7 +16,7 @@ if (typeof map  === 'undefined') {
     const initial_zoom = 12.5
     let typeof_map = typeof map;
     console.log("creating initial map, map = " + map + ", typeof = " + typeof_map);
-    export const map = L.map("map", { layers: [layerOsm] });
+    const map = L.map("map", { layers: [layerOsm] });
     map.setView(initial_position, initial_zoom)
     // Layer group
     layerGroupAll = L.layerGroup().addTo(map);
@@ -31,6 +31,7 @@ if (typeof map  === 'undefined') {
     layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
     typeof_map = typeof map;
     console.log("after create, map = " + map + ", typeof = " + typeof_map);
+    export map;
 } else {
     console.log("map is already defined");
     // const urlParams = new URLSearchParams(import.meta.url);
