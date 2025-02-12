@@ -12,9 +12,9 @@ if (typeof map == "undefined") {
     /* Create the attribution layer, is this added to the layer group 
        Ah, we use it below in the render_markers() */
     const layerOsm = L.tileLayer(url, { attribution: copy });
-    console.log("map is already defined");
     const initial_position = [43.05, -76.1];
     const initial_zoom = 12.5
+    console.log("creating initial map");
     map = L.map("map", { layers: [layerOsm] });
     map.setView(initial_position, initial_zoom)
     // Layer group
@@ -29,6 +29,7 @@ if (typeof map == "undefined") {
 
     const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 } else {
+    console.log("map is already defined");
     // const urlParams = new URLSearchParams(import.meta.url);
     let path_array = import.meta.url.split('map.js?')
 
