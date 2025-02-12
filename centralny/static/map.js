@@ -3,10 +3,6 @@ import { cb_render_all } from './cb_layer.js';
 // Create the map
 // export const map = L.map("map", { layers: [layerOsm] });
 
-export const map;
-export let layerGroupAll;
-export let layerControl; 
-
 // if (map == "undefined") {
 if (typeof map  === 'undefined') {
     const osm = "https://www.openstreetmap.org/copyright";
@@ -20,7 +16,7 @@ if (typeof map  === 'undefined') {
     const initial_zoom = 12.5
     let typeof_map = typeof map;
     console.log("creating initial map, map = " + map + ", typeof = " + typeof_map);
-    map = L.map("map", { layers: [layerOsm] });
+    export const map = L.map("map", { layers: [layerOsm] });
     map.setView(initial_position, initial_zoom)
     // Layer group
     layerGroupAll = L.layerGroup().addTo(map);
