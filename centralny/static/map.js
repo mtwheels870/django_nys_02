@@ -42,5 +42,8 @@ async function render_all() {
   cb_render_all(map, layerGroupAll, layerControl, zoom, boundsString);
 }
 
+// Catch our map-events, fetch data
+map.on("load", render_all)
+
 map.on("moveend", render_all)
 

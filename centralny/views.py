@@ -34,6 +34,13 @@ from .forms import SelectedCensusTractForm
 
 # Import our neighbors
 
+KEY_ID = "id"
+KEY_AGG_TYPE = "agg_type"
+KEY_MAP_BBOX = "map_bbox"
+KEY_LEAFLET_MAP = "leaflet_map"
+
+MAP_BBOX_INITIAL_VALUE = "a=b"
+
 # /maps/api/markers (through DefaultRouter)
 class MarkerViewSet(
     viewsets.ReadOnlyModelViewSet):
@@ -121,16 +128,18 @@ class MapNavigationView(generic.edit.FormView):
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
         print(f'MNV.g_c_d(), form = {form}')
-        id = form.fields['id']
+        id = form.fields[KEY_ID]
         id.initial = 23
-        agg_type = form.fields['agg_type']
+        agg_type = form.fields[KEY_AGG_TYPE]
         agg_type.initial = "Cherry"
-        map_bbox = form.fields['map_bbox']
+        map_bbox = form.fields[KEY_MAP_BBOX]
         # print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
-        if "leaflet_map" in self.request.session:
-            leaflet_map_dict = self.request.session["leaflet_map"]
+        if KEY_LEAFLET_MAP  in self.request.session:
+            leaflet_map_dict = self.request.session[KEY_LEAFLET_MAP]
             print(f"g_c_d(), Found: leaflet_map_dict = {leaflet_map_dict}")
-        map_bbox_value = "a=b"
+            map_bbox_value = leaflet_map_dict[KEY_MAP_BBOX]
+        else:
+            map_bbox_value = MAP_BBOX_INITIAL_VALUE 
         map_bbox.initial = map_bbox_value 
         context_data['map_bbox'] = map_bbox_value 
         return context_data
@@ -139,15 +148,12 @@ class MapNavigationView(generic.edit.FormView):
         form = SelectedCensusTractForm(request.POST)
         print(f"MNV.post(), checking form here")
         if form.is_valid():
-            id = form.cleaned_data['id']
-            agg_type = form.cleaned_data['agg_type']
-            map_bbox = form.cleaned_data['map_bbox']
+            id = form.cleaned_data[KEY_ID]
+            agg_type = form.cleaned_data[KEY_AGG_TYPE]
+            map_bbox = form.cleaned_data[KEY_MAP_BBOX]
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
         else:
             print(f"MNV.post(), form is INVALID")
-        # print(f"Before render, path = {request.path}")
-        # return HttpResponseRedirect(request.path)
-        # Save the map_bbox across the reverse
-        request.session["leaflet_map"] = {"map_bbox" : map_bbox }
+        # Save the map_bbox across the reverse so we can zoom in our map appropriately
+        request.session[KEY_LEAFLET_MAP] = {KEY_MAP_BBOX : map_bbox }
         return HttpResponseRedirect(reverse("app_centralny:map_viewer",));
-        # return render(request, "centralny/map_viewer.html", {'form': form})
