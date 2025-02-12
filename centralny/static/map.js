@@ -7,7 +7,8 @@ export let map;
 export let layerGroupAll;
 export let layerControl; 
 
-if (typeof map === "undefined") {
+// if (map == "undefined") {
+if (map == null) {
     const osm = "https://www.openstreetmap.org/copyright";
     const copy = `© <a href='${osm}'>OpenStreetMap</a>`;
     const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
