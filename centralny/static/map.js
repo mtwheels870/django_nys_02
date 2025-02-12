@@ -31,7 +31,6 @@ if (typeof map  === 'undefined') {
     layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
     typeof_map = typeof map;
     console.log("after create, map = " + map + ", typeof = " + typeof_map);
-    export map;
 } else {
     console.log("map is already defined");
     // const urlParams = new URLSearchParams(import.meta.url);
