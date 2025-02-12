@@ -8,6 +8,7 @@ let global_map;
 
 class MapWrapper {
     constructor() {
+        console.log("constructor(), this.map = " + this.map);
         if (typeof global_map === 'undefined') {
             let osm = "https://www.openstreetmap.org/copyright";
             let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
