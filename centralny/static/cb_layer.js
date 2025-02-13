@@ -42,6 +42,7 @@ class LayerCircle extends CbLayer {
 function handleCircleClick(context, e) {
   console.log("Clicked marker with context:", context);
   console.log("Event: ", e);
+  console.log("_myMapReference: ", _myMapReference);
   const form1 = document.forms['selected_tract_form'];
   /* console.log('circle_clicked(), form1 = ' + form1);
   for (const [key, value] of Object.entries(form1)) {
@@ -212,6 +213,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
   _myMapReference = map_wrapper.map;
+  console.log("cb_render_all(), _myMapReference = " + _myMapReference);
   var layerGroupAll = map_wrapper.layerGroupAll 
   var layerControl = map_wrapper.layerControl
   layerGroupAll.clearLayers();
