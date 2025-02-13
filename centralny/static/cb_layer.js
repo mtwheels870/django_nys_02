@@ -37,7 +37,7 @@ function handleCircleClick(context, e) {
   form1["id"].value = context["id"]
   form1["agg_type"].value = context["agg_type"]
   var boundsString = map.getBounds().toBBoxString()
-  form1["map_bbox"].value = boundsString;
+  form1["map_bbox"].value = "in_bbox=" + boundsString;
   form1.submit()
 }
 
