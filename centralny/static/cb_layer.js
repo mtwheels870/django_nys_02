@@ -3,6 +3,8 @@
  */ 
 // Don't do this! import { map_wrapper } from "./map.js";
 
+let _myMapReference;
+
 function debug_layers(lg) {
   var layers = lg.getLayers();
   var num_layers = layers.length;
@@ -47,7 +49,7 @@ function handleCircleClick(context, e) {
   } */
   form1["id"].value = context["id"]
   form1["agg_type"].value = context["agg_type"]
-  var boundsString = map.getBounds().toBBoxString()
+  var boundsString = _myMapReference.getBounds().toBBoxString()
   form1["map_bbox"].value = boundsString;
   form1.submit()
 }
@@ -209,7 +211,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
 }
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
-  var map = map_wrapper.map
+  _myMapReference = map_wrapper.map;
   var layerGroupAll = map_wrapper.layerGroupAll 
   var layerControl = map_wrapper.layerControl
   layerGroupAll.clearLayers();
