@@ -73,6 +73,9 @@ class MapWrapper {
 
                 // Fit to those bounds
                 this.map.fitBounds(bounds);
+
+                // Explicitly call render_all()
+                render_all();
                 found_bbox = true;
             }
         }
