@@ -20,7 +20,7 @@ class MapWrapper {
                Ah, we use it below in the render_markers() */
             let layerOsm = L.tileLayer(url, { attribution: copy });
             this.map = L.map("map", { layers: [layerOsm] });
-            this.set_initial_position()
+            set_initial_position();
 
             // console.log("after create, map = " + global_map);
             // Layer group
