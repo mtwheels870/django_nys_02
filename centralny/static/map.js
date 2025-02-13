@@ -72,7 +72,7 @@ class MapWrapper {
                     console.log("       match[" + i + "]: " + matches[i]);
                 }
                 // matches[0] contains the entire matching string
-                var floats_array = matches.slice(1).map(number => parseFloat(number);
+                var floats_array = matches.slice(1).map(number => parseFloat(number));
                 console.log("MapWrapper.s_i_p(), floats_array : " + floats_array);
 
                 var bounds_array = [[floats_array[0], floats_array[1]],  
