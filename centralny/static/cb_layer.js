@@ -5,17 +5,6 @@
 
 let _myMapWrapper;
 
-function debug_layers(lg) {
-  var layers = lg.getLayers();
-  var num_layers = layers.length;
-  console.log('d_l(), num_layers = ' + num_layers);
-  for (var i = 0; i < num_layers; i++) {
-    layer = layers[i];
-    style = layer.style;
-    console.log('d_l(), layer[' + i + '], style = ' + style);
-  }
-}
-
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
     this.urlComponent = urlComponent;
@@ -42,13 +31,9 @@ class LayerCircle extends CbLayer {
 function handleCircleClick(context, e) {
   console.log("Clicked marker with context:", context);
   console.log("Event: ", e);
-  map = _myMapWrapper.map;
+  var map = _myMapWrapper.map;
   console.log("map : ", map);
   const form1 = document.forms['selected_tract_form'];
-  /* console.log('circle_clicked(), form1 = ' + form1);
-  for (const [key, value] of Object.entries(form1)) {
-    console.log(`${key}: ${value}`)
-  } */
   form1["id"].value = context["id"]
   form1["agg_type"].value = context["agg_type"]
   var boundsString = _myMapReference.getBounds().toBBoxString()
@@ -137,9 +122,7 @@ class LayerIpRanges extends LayerCircle {
   // Inside a class, format if methodName: function
   onEachCircle = (feature, layer) => {
     var keys = Object.keys(feature.properties);
-    // console.log("LIP.onEachCircle(), feature.props = " + keys);
     layer.setStyle(this.style);
-    // console.log("LIP.onEachCircle(), feature.props = " + keys);
     var id = feature["id"]
     var ipRangeStart = feature.properties["ip_range_start"]
     var companyName = feature.properties["company_name"]
@@ -189,13 +172,7 @@ async function load_target(url_field, boundsString) {
 
 async function render_target(classObject, boundsString) {
   var layerGroup = _myMapWrapper.layerGroupAll;
-  console.log('render_target(), layerGroup = ' + layerGroup + ', boundsString = ' + boundsString);
   const targets = await load_target(classObject.urlComponent, boundsString);
-  // var debug = JSON.stringify(layer.feature.properties);
-  // console.log('render_target(), debug = ' + debug);
-    // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
-  // Clears our layer group
-  // console.log("render_target(). style = " + classObject.style);
   L.geoJSON(targets, { style: classObject.style })
     .bindPopup(
       (layer) => classObject.description + ": <b>" + 
@@ -217,7 +194,7 @@ async function render_circle(classObject, boundsString) {
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
   _myMapWrapper = map_wrapper;
-  console.log("cb_render_all(), _myMapWrapper = " + _myMapWrapper );
+  // console.log("cb_render_all(), _myMapWrapper = " + _myMapWrapper );
   var layerGroupAll = map_wrapper.layerGroupAll 
   // var layerControl = map_wrapper.layerControl
   layerGroupAll.clearLayers();
@@ -242,3 +219,11 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
     // layer.on('click', tract_count_clicked, censusTract)
     /* var debug = JSON.stringify(layer.feature);
     console.log('LTC.oEC(), debug = ' + debug); */
+  // console.log('render_target(), layerGroup = ' + layerGroup + ', boundsString = ' + boundsString);
+  // var debug = JSON.stringify(layer.feature.properties);
+  // console.log('render_target(), debug = ' + debug);
+    // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
+  // Clears our layer group
+  // console.log("render_target(). style = " + classObject.style);
+    // console.log("LIP.onEachCircle(), feature.props = " + keys);
+    // console.log("LIP.onEachCircle(), feature.props = " + keys);
