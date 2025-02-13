@@ -9,7 +9,7 @@ let global_map;
 class MapWrapper {
     constructor() {
         // if (typeof window.maps === 'undefined') {
-        console.log("MapWrapper(), checking global_map = " + global_map);
+        // console.log("MapWrapper(), checking global_map = " + global_map);
         // const urlParams = new URLSearchParams(window.location.search);
         if (typeof global_map === 'undefined') {
             let osm = "https://www.openstreetmap.org/copyright";
@@ -48,21 +48,21 @@ class MapWrapper {
     set_initial_position() {
         // Why doesn't this work?
         var urlParams = new URLSearchParams(import.meta.url);
-        console.log("MapWrapper.s_i_p(), i.m.u = " + import.meta.url + ", urlParams = " + urlParams);
+        // console.log("MapWrapper.s_i_p(), i.m.u = " + import.meta.url + ", urlParams = " + urlParams);
 
         var found_bbox = false;
         // Split by hand
         var array = import.meta.url.split("map.js?");
         var length = array.length;
-        console.log("MapWrapper.s_i_p(), length = " + length);
+        // console.log("MapWrapper.s_i_p(), length = " + length);
         if (length > 1) {
             var search_params = array[1];
-            console.log("MapWrapper.s_i_p(), search_params = " + search_params );
-            var single_float = "([+-]?([0-9]*[.])?[0-9]+)"
+            // console.log("MapWrapper.s_i_p(), search_params = " + search_params );
+            var single_float = "([+-]?[0-9]*[.]?[0-9]+)"
             var regexp_array = [single_float, single_float, single_float, single_float]
             var float_portion = regexp_array.join(",")
             var complete_regexp = "in_bbox=" + float_portion;
-            console.log("MapWrapper.s_i_p(), complete_regexp = " + complete_regexp);
+            // console.log("MapWrapper.s_i_p(), complete_regexp = " + complete_regexp);
             var matches = search_params.match(complete_regexp);
             if (matches == null) {
                 console.log("MapWrapper.s_i_p(), no regexp match, search_params = '" + search_params + "', ignoring...");
@@ -83,7 +83,7 @@ class MapWrapper {
 }
 
 export const map_wrapper = new MapWrapper()
-console.log("after MapWrapper(), global_map = " + global_map + ", this.map = " + map_wrapper.map);
+// console.log("after MapWrapper(), global_map = " + global_map + ", this.map = " + map_wrapper.map);
 
 
 // Start with no overlays
