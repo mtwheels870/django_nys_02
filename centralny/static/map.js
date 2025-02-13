@@ -71,9 +71,11 @@ class MapWrapper {
                 for (let i = 0; i < matches.length; i++) {
                     console.log("       match[" + i + "]: " + matches[i]);
                 }
-                let initial_position = [43.05, -76.1];
-                let initial_zoom = 12.5
-                this.map.setView(initial_position, initial_zoom);
+                var bounds_array = [[parseFloat(matches[1]), parseFloat(matches[2])], 
+                    [parseFloat(matches[3], parseFloat(matches[4])]];
+                // let initial_position = [43.05, -76.1];
+                // let initial_zoom = 12.5
+                this.map.fitBounds(bounds_array);
                 found_bbox = true;
             }
         }
