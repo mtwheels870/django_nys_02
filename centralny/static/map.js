@@ -9,11 +9,6 @@ let global_map;
 class MapWrapper {
     constructor() {
         if (typeof window.maps === 'undefined') {
-            console.log('querying maps');
-            const maps = document.querySelectorAll("a.map");
-            maps.forEach(m => {
-                console.log('map = ${m}')
-            });
             let osm = "https://www.openstreetmap.org/copyright";
             let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
             let url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -23,7 +18,7 @@ class MapWrapper {
             let layerOsm = L.tileLayer(url, { attribution: copy });
             let initial_position = [43.05, -76.1];
             let initial_zoom = 12.5
-            console.log("creating initial map, map = " + global_map + ", thread ID: ${threadId}");
+            console.log("creating initial map, global_map = " + global_map + ", this.map = " + this.map);
             global_map = L.map("map", { layers: [layerOsm] });
             global_map.setView(initial_position, initial_zoom);
 
