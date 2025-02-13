@@ -57,7 +57,12 @@ class MapWrapper {
         if (length > 1) {
             var search_params = array[1];
             console.log("MapWrapper.s_i_p(), search_params = " + search_params );
-            var matches = search_params.match("in_bbox=([+-]?([0-9]*[.])?[0-9]+),([+-]?([0-9]*[.])?[0-9]+),([+-]?([0-9]*[.])?[0-9]+),([+-]?([0-9]*[.])?[0-9]+)"
+            single_float = "([+-]?([0-9]*[.])?[0-9]+)"
+            var regexp_array = [single_float, single_float, single_float, single_float]
+            var float_portion = regexp_array.join(",")
+            var complete_regexp = "in_bbox=" + float_portion;
+            console.log("MapWrapper.s_i_p(), complete_regexp = " + complete_regexp);
+            var matches = search_params.match(complete_regexp);
             console.log("MapWrapper.s_i_p(), matches = " + matches);
         }
         let initial_position = [43.05, -76.1];
