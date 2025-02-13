@@ -75,12 +75,16 @@ class MapWrapper {
                 var floats_array = matches.slice(1).map(number => parseFloat(number));
                 console.log("MapWrapper.s_i_p(), floats_array : " + floats_array);
 
-                var bounds_array = [[floats_array[0], floats_array[1]],  
-                    [floats_array[2], floats_array[3]]];
-                console.log("MapWrapper.s_i_p(), bounds_array: " + bounds_array );
+                /* var bounds_array = [[floats_array[0], floats_array[1]],  
+                    [floats_array[2], floats_array[3]]]; */
+                var corner1 = L.latLng(floats_array[0], floats_array[1]);
+                var corner2 = L.latLng(floats_array[2], floats_array[3]);
+                var bounds = L.latLngBounds(corner1, corner2)
+
+                // console.log("MapWrapper.s_i_p(), bounds_array: " + bounds_array );
                 // let initial_position = [43.05, -76.1];
                 // let initial_zoom = 12.5
-                this.map.fitBounds(bounds_array);
+                this.map.fitBounds(bounds);
                 found_bbox = true;
             }
         }
