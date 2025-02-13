@@ -103,6 +103,6 @@ async function render_all() {
 global_map.on("moveend", render_all)
 global_map.on("load", () => {
     console.log("Map load");
-}
+});
 
 // This doesn't do what we want, causes multiple fires: map.on("load", render_all)
