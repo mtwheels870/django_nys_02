@@ -135,6 +135,39 @@ class MapNavigationView(generic.edit.FormView):
             field_id = form.fields[KEY_ID]
             field_id.initial = kw_id
             
+        return context_data
+
+    def post(self, request, *args, **kwargs):
+        form = SelectedCensusTractForm(request.POST)
+        print(f"MNV.post(), checking form here")
+        if form.is_valid():
+            id = form.cleaned_data[KEY_ID]
+            agg_type = form.cleaned_data[KEY_AGG_TYPE]
+            map_bbox = form.cleaned_data[KEY_MAP_BBOX]
+            table = self.build_table(agg_type, id)
+            print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
+            # return HttpResponseRedirect(reverse("app_centralny:map_viewer",kwargs={'id': id, 'agg_type': agg_type}));
+            #initial_data = {'id': id, 'agg_type': agg_type};
+            #form = SelectedCensusTractForm(initial=initial_data);
+            # Pass the form bak in
+            return render(request, "centralny/map_viewer.html",
+                {'form': form, 'table': table});
+        else:
+            print(f"MNV.post(), form is INVALID")
+            return HttpResponseRedirect(reverse("app_centralny:map_viewer",), {'form': form});
+
+    # These labels are in static/cb_layer.js
+    def build_table(self, agg_type, id):
+        table = None
+        match agg_type:
+            case "CountRangeTract":
+        match _:
+            print(f"build_table(), unrecognized agg_type = {agg_type}")
+        return table
+
+
+        # Save the map_bbox across the reverse so we can zoom in our map appropriately
+        #request.session[KEY_LEAFLET_MAP] = {KEY_MAP_BBOX : map_bbox }
         #id = form.fields[KEY_ID]
         #id.initial = 23
         #agg_type = form.fields[KEY_AGG_TYPE]
@@ -149,23 +182,3 @@ class MapNavigationView(generic.edit.FormView):
 #            map_bbox_value = MAP_BBOX_INITIAL_VALUE 
 #        map_bbox.initial = map_bbox_value 
         # context_data['map_bbox'] = map_bbox_value 
-        return context_data
-
-    def post(self, request, *args, **kwargs):
-        form = SelectedCensusTractForm(request.POST)
-        print(f"MNV.post(), checking form here")
-        if form.is_valid():
-            id = form.cleaned_data[KEY_ID]
-            agg_type = form.cleaned_data[KEY_AGG_TYPE]
-            map_bbox = form.cleaned_data[KEY_MAP_BBOX]
-            print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
-            # return HttpResponseRedirect(reverse("app_centralny:map_viewer",kwargs={'id': id, 'agg_type': agg_type}));
-            #initial_data = {'id': id, 'agg_type': agg_type};
-            #form = SelectedCensusTractForm(initial=initial_data);
-            # Pass the form bak in
-            return render(request, "centralny/map_viewer.html", {'form': form});
-        else:
-            print(f"MNV.post(), form is INVALID")
-            return HttpResponseRedirect(reverse("app_centralny:map_viewer",), {'form': form});
-        # Save the map_bbox across the reverse so we can zoom in our map appropriately
-        #request.session[KEY_LEAFLET_MAP] = {KEY_MAP_BBOX : map_bbox }
