@@ -164,7 +164,7 @@ class LayerPolygon extends CbLayer {
     super(urlComponent, description, popupField, myStyle);
   }
   // Wrap the render function
-  renderClass = (map, boundsString) => {
+  renderClass = (boundsString) => {
     // Call render circle
     render_target(this, boundsString);
   }
