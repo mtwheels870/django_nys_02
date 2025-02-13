@@ -152,8 +152,9 @@ class MapNavigationView(generic.edit.FormView):
             agg_type = form.cleaned_data[KEY_AGG_TYPE]
             map_bbox = form.cleaned_data[KEY_MAP_BBOX]
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
+            return HttpResponseRedirect(reverse("app_centralny:map_viewer",), {'id': id, 'agg_type': agg_type});
         else:
             print(f"MNV.post(), form is INVALID")
+            return HttpResponseRedirect(reverse("app_centralny:map_viewer",), {'form': form});
         # Save the map_bbox across the reverse so we can zoom in our map appropriately
         #request.session[KEY_LEAFLET_MAP] = {KEY_MAP_BBOX : map_bbox }
-        return HttpResponseRedirect(reverse("app_centralny:map_viewer",));
