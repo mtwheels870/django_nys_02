@@ -1,7 +1,7 @@
 /*
  * Base Class
  */ 
-import { map_wrapper } from "./map.js";
+// Don't do this! import { map_wrapper } from "./map.js";
 
 function debug_layers(lg) {
   var layers = lg.getLayers();
@@ -208,7 +208,7 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
     }).addTo(map);
 }
 
-export function cb_render_all(zoom, boundsString) {
+export function cb_render_all(map_wrapper, zoom, boundsString) {
   var map = map_wrapper.map
   var layerGroupAll = map_wrapper.layerGroupAll 
   var layerControl = map_wrapper.layerControl

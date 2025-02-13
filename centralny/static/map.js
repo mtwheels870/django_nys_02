@@ -51,7 +51,7 @@ async function render_all() {
   var zoom = global_map.getZoom()
   var boundsString = global_map.getBounds().toBBoxString()
   // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
-  cb_render_all(zoom, boundsString);
+  cb_render_all(map_wrapper, zoom, boundsString);
 }
 
 // Catch our map-events, fetch data
