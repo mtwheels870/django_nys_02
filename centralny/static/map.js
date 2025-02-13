@@ -10,6 +10,8 @@ class MapWrapper {
     constructor() {
         // if (typeof window.maps === 'undefined') {
         console.log("MapWrapper(), checking global_map = " + global_map);
+        console.log("MapWrapper(), i.m.u = " + import.meta.url + ", w.l.s = " + window.location.search);
+        // const urlParams = new URLSearchParams(window.location.search);
         if (typeof global_map === 'undefined') {
             let osm = "https://www.openstreetmap.org/copyright";
             let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
