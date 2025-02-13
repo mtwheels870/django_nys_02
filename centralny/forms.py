@@ -12,4 +12,4 @@ class SelectedCensusTractForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['agg_type'].widget.attrs['readonly'] = True
         self.fields['id'].widget.attrs['readonly'] = True
-        self.fields['map_bbox'].widget.attrs['readonly'] = True
+        # self.fields['map_bbox'].widget.attrs['readonly'] = True
