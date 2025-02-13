@@ -106,7 +106,7 @@ export const map_wrapper = new MapWrapper()
 async function render_all() {
   var zoom = global_map.getZoom()
   var boundsString = global_map.getBounds().toBBoxString()
-  // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
+  console.log("render_all(), zoom level: " + zoom + ", boundsString = " + boundsString)
   cb_render_all(map_wrapper, zoom, boundsString);
 }
 
