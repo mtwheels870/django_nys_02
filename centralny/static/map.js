@@ -71,8 +71,12 @@ class MapWrapper {
                 for (let i = 0; i < matches.length; i++) {
                     console.log("       match[" + i + "]: " + matches[i]);
                 }
-                var bounds_array = [[parseFloat(matches[1]), parseFloat(matches[2])], 
-                    [parseFloat(matches[3], parseFloat(matches[4])]];
+                var floats_array = matches[1:].map(number => parseFloat(number);
+                console.log("MapWrapper.s_i_p(), floats_array : " + floats_array);
+
+                var bounds_array = [[floats_array[0], floats_array[1]],  
+                    [floats_array[2], floats_array[3]]  
+                console.log("MapWrapper.s_i_p(), bounds_array: " + bounds_array );
                 // let initial_position = [43.05, -76.1];
                 // let initial_zoom = 12.5
                 this.map.fitBounds(bounds_array);
