@@ -9,6 +9,7 @@ let global_map;
 class MapWrapper {
     constructor() {
         // if (typeof window.maps === 'undefined') {
+        console.log("MapWrapper(), checking global_map = " + global_map);
         if (typeof global_map === 'undefined') {
             let osm = "https://www.openstreetmap.org/copyright";
             let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
@@ -44,7 +45,7 @@ class MapWrapper {
 }
 
 export const map_wrapper = new MapWrapper()
-// console.log("after MapWrapper(), global_map = " + global_map + ", this.map = " + map_wrapper.map);
+console.log("after MapWrapper(), global_map = " + global_map + ", this.map = " + map_wrapper.map);
 
 
 // Start with no overlays
