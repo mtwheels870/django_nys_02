@@ -189,6 +189,7 @@ async function load_target(url_field, boundsString) {
 
 async function render_target(classObject, boundsString) {
   var layerGroup = _myMapWrapper.layerGroupAll;
+  console.log('render_target(), layerGroup = ' + layerGroup);
   const targets = await load_target(classObject.urlComponent, boundsString);
   // var debug = JSON.stringify(layer.feature.properties);
   // console.log('render_target(), debug = ' + debug);
