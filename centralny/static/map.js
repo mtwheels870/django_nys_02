@@ -1,5 +1,3 @@
-const { threadId, isMainThread } = require("worker_threads");
-
 import { cb_render_all } from './cb_layer.js';
 
 // Create the map
@@ -11,6 +9,11 @@ let global_map;
 class MapWrapper {
     constructor() {
         if (typeof window.maps === 'undefined') {
+            console.log('querying maps');
+            const maps = document.querySelectorAll("a.map");
+            maps.forEach(m => {
+                console.log('map = ${m}')
+            });
             let osm = "https://www.openstreetmap.org/copyright";
             let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
             let url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
