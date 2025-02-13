@@ -20,7 +20,7 @@ class MapWrapper {
                Ah, we use it below in the render_markers() */
             let layerOsm = L.tileLayer(url, { attribution: copy });
             this.map = L.map("map", { layers: [layerOsm] });
-            this.set_initial_position();
+            var call_render = this.set_initial_position();
 
             // console.log("after create, map = " + global_map);
             // Layer group
@@ -37,6 +37,11 @@ class MapWrapper {
 
             // Save a reference in case we re-enter
             global_map = this.map;
+
+            if (call_render) {
+                // Explicitly call render_all()
+                render_all();
+            }
             // console.log("after create, global_map = " + global_map);
         } else {
             console.log("map already exists = " + global_map + ", need to do more setup...");
@@ -74,8 +79,6 @@ class MapWrapper {
                 // Fit to those bounds
                 this.map.fitBounds(bounds);
 
-                // Explicitly call render_all()
-                render_all();
                 found_bbox = true;
             }
         }
@@ -86,6 +89,7 @@ class MapWrapper {
             this.map.setView(initial_position, initial_zoom);
         }
     }
+    return true;
 }
 
 export const map_wrapper = new MapWrapper()
