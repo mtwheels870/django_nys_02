@@ -10,7 +10,6 @@ class MapWrapper {
     constructor() {
         // if (typeof window.maps === 'undefined') {
         console.log("MapWrapper(), checking global_map = " + global_map);
-        console.log("MapWrapper(), i.m.u = " + import.meta.url + ", w.l.s = " + window.location.search);
         // const urlParams = new URLSearchParams(window.location.search);
         if (typeof global_map === 'undefined') {
             let osm = "https://www.openstreetmap.org/copyright";
@@ -20,15 +19,12 @@ class MapWrapper {
             /* Create the attribution layer, is this added to the layer group 
                Ah, we use it below in the render_markers() */
             let layerOsm = L.tileLayer(url, { attribution: copy });
-            let initial_position = [43.05, -76.1];
-            let initial_zoom = 12.5
-            // console.log("creating initial map, global_map = " + global_map + ", this.map = " + this.map);
-            global_map = L.map("map", { layers: [layerOsm] });
-            global_map.setView(initial_position, initial_zoom);
+            this.map = L.map("map", { layers: [layerOsm] });
+            this.set_initial_position()
 
             // console.log("after create, map = " + global_map);
             // Layer group
-            this.layerGroupAll = L.layerGroup().addTo(global_map);
+            this.layerGroupAll = L.layerGroup().addTo(this.map);
 
             // Create custom circle pane to get popups before we hit the polygons
             let pane = global_map.createPane('circles');
@@ -38,11 +34,20 @@ class MapWrapper {
             var overlayMaps = { "Pinp01nt 360": this.layerGroupAll }
 
             this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(global_map);
+            global_map = this.map;
             // console.log("after create, global_map = " + global_map);
         } else {
             console.log("map already exists = " + global_map);
+            this.map = global_map;
         }
-        this.map = global_map;
+    }
+
+    function set_initial_position() {
+        var urlParams = new URLSearchParams(import.meta.url);
+        console.log("MapWrapper.s_i_p(), i.m.u = " + import.meta.url + ", urlParams = " + urlParams);
+        let initial_position = [43.05, -76.1];
+        let initial_zoom = 12.5
+        this.map.setView(initial_position, initial_zoom);
     }
 }
 
