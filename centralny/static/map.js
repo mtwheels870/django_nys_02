@@ -38,10 +38,10 @@ class MapWrapper {
             // Save a reference in case we re-enter
             global_map = this.map;
 
-            if (call_render) {
+            /* if (call_render) {
                 // Explicitly call render_all()
                 render_all();
-            }
+            } */
             // console.log("after create, global_map = " + global_map);
         } else {
             console.log("map already exists = " + global_map + ", need to do more setup...");
@@ -88,11 +88,12 @@ class MapWrapper {
             let initial_zoom = 12.5
             this.map.setView(initial_position, initial_zoom);
         }
-        return true;
+        // return true;
     }
 }
 
 export const map_wrapper = new MapWrapper()
+render_all();
 // console.log("after MapWrapper(), global_map = " + global_map + ", this.map = " + map_wrapper.map);
 
 
