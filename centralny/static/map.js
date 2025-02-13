@@ -68,6 +68,9 @@ class MapWrapper {
                 console.log("MapWrapper.s_i_p(), no regexp match, search_params = '" + search_params + "', ignoring...");
             } else {
                 console.log("MapWrapper.s_i_p(), matches = " + matches + ", length = " + matches.length);
+                for (let i = 0; i < matches.length; i++) {
+                    console.log("       match[" + i + "]: " + matches[i]);
+                }
                 let initial_position = [43.05, -76.1];
                 let initial_zoom = 12.5
                 this.map.setView(initial_position, initial_zoom);
