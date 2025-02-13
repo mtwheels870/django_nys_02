@@ -127,7 +127,7 @@ class MapNavigationView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
-        print(f'MNV.g_c_d(), form = {form}')
+        # print(f'MNV.g_c_d(), form = {form}')
         #id = form.fields[KEY_ID]
         #id.initial = 23
         #agg_type = form.fields[KEY_AGG_TYPE]
