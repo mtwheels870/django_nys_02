@@ -3,7 +3,7 @@
  */ 
 // Don't do this! import { map_wrapper } from "./map.js";
 
-let _myMapReference;
+let _myMapWrapper;
 
 function debug_layers(lg) {
   var layers = lg.getLayers();
@@ -33,16 +33,17 @@ class LayerCircle extends CbLayer {
     super(urlComponent, description, popupField, myStyle);
   }
   // Wrap the render function
-  renderClass = (map, layerGroup, layerControl, boundsString) => {
+  renderClass = (boundsString) => {
     // Call render circle
-    render_circle(this, map, layerGroup, layerControl, boundsString);
+    render_circle(this, boundsString);
   }
 }
 
 function handleCircleClick(context, e) {
   console.log("Clicked marker with context:", context);
   console.log("Event: ", e);
-  console.log("_myMapReference: ", _myMapReference);
+  map = _myMapWrapper.map;
+  console.log("map : ", map);
   const form1 = document.forms['selected_tract_form'];
   /* console.log('circle_clicked(), form1 = ' + form1);
   for (const [key, value] of Object.entries(form1)) {
@@ -165,7 +166,7 @@ class LayerPolygon extends CbLayer {
   // Wrap the render function
   renderClass = (map, layerGroup, layerControl, boundsString) => {
     // Call render circle
-    render_target(this, map, layerGroup, layerControl, boundsString);
+    render_target(this, boundsString);
   }
 }
 
@@ -186,7 +187,8 @@ async function load_target(url_field, boundsString) {
   return geojson;
 }
 
-async function render_target(classObject, map, layerGroup, layerControl,boundsString) {
+async function render_target(classObject, boundsString) {
+  layerGroup = _myMapWrapper.layerGroupAll;
   const targets = await load_target(classObject.urlComponent, boundsString);
   // var debug = JSON.stringify(layer.feature.properties);
   // console.log('render_target(), debug = ' + debug);
@@ -200,7 +202,8 @@ async function render_target(classObject, map, layerGroup, layerControl,boundsSt
     .addTo(layerGroup);
 }
 
-async function render_circle(classObject, map, layerGroup, layerControl, boundsString) {
+async function render_circle(classObject, boundsString) {
+  map = _myMapWrapper.map;
   const targets = await load_target(classObject.urlComponent, boundsString);
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
@@ -212,22 +215,22 @@ async function render_circle(classObject, map, layerGroup, layerControl, boundsS
 }
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
-  _myMapReference = map_wrapper.map;
-  console.log("cb_render_all(), _myMapReference = " + _myMapReference);
+  _myMapWrapper = map_wrapper;
+  console.log("cb_render_all(), _myMapWrapper = " + _myMapWrapper );
   var layerGroupAll = map_wrapper.layerGroupAll 
-  var layerControl = map_wrapper.layerControl
+  // var layerControl = map_wrapper.layerControl
   layerGroupAll.clearLayers();
   if (zoom <= 10) {
     // Counties
-    layerCountyCounts.renderClass(map, layerGroupAll, layerControl, boundsString);
-    layerCounties.renderClass(map, layerGroupAll, layerControl, boundsString);
+    layerCountyCounts.renderClass(boundsString);
+    layerCounties.renderClass(boundsString);
   } else if (zoom >= 15) {
     // Actual IP ranges
-    layerIpRanges.renderClass(map, layerGroupAll, layerControl, boundsString);
+    layerIpRanges.renderClass(boundsString);
   } else {
     // Tracts + their counts
-    layerTracts.renderClass(map, layerGroupAll, layerControl, boundsString);
-    layerTractCounts.renderClass(map, layerGroupAll, layerControl, boundsString);
+    layerTracts.renderClass(boundsString);
+    layerTractCounts.renderClass(boundsString);
   } 
 }
 
