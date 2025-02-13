@@ -4,7 +4,7 @@ from .models import CountRangeTract
 
 # widget=forms.HiddenInput())
 class SelectedCensusTractForm(forms.Form):
-    agg_type = forms.CharField(initial="SomeType"))
+    agg_type = forms.CharField(initial="SomeType")
     id = forms.IntegerField(initial=23)
     map_bbox = forms.CharField(initial="a=b")
 
