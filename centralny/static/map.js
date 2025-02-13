@@ -77,8 +77,9 @@ class MapWrapper {
 
                 /* var bounds_array = [[floats_array[0], floats_array[1]],  
                     [floats_array[2], floats_array[3]]]; */
-                var corner1 = L.latLng(floats_array[0], floats_array[1]);
-                var corner2 = L.latLng(floats_array[2], floats_array[3]);
+                // Note swap positions
+                var corner1 = L.latLng(floats_array[1], floats_array[0]);
+                var corner2 = L.latLng(floats_array[3], floats_array[2]);
                 var bounds = L.latLngBounds(corner1, corner2)
 
                 // console.log("MapWrapper.s_i_p(), bounds_array: " + bounds_array );
