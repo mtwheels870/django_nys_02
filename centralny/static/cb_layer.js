@@ -188,7 +188,7 @@ async function load_target(url_field, boundsString) {
 }
 
 async function render_target(classObject, boundsString) {
-  layerGroup = _myMapWrapper.layerGroupAll;
+  var layerGroup = _myMapWrapper.layerGroupAll;
   const targets = await load_target(classObject.urlComponent, boundsString);
   // var debug = JSON.stringify(layer.feature.properties);
   // console.log('render_target(), debug = ' + debug);
@@ -203,7 +203,7 @@ async function render_target(classObject, boundsString) {
 }
 
 async function render_circle(classObject, boundsString) {
-  map = _myMapWrapper.map;
+  var map = _myMapWrapper.map;
   const targets = await load_target(classObject.urlComponent, boundsString);
     var layer = L.geoJSON(targets, {
       pointToLayer: function(feature, latLong) {
