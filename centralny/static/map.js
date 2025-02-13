@@ -65,7 +65,7 @@ class MapWrapper {
             console.log("MapWrapper.s_i_p(), complete_regexp = " + complete_regexp);
             var matches = search_params.match(complete_regexp);
             if (matches == null) {
-                console.log("MapWrapper.s_i_p(), no regexp match, search_params = " + search_params + ", ignoring...");
+                console.log("MapWrapper.s_i_p(), no regexp match, search_params = '" + search_params + "', ignoring...");
             } else {
                 console.log("MapWrapper.s_i_p(), matches = " + matches + ", length = " + matches.length);
                 let initial_position = [43.05, -76.1];
@@ -74,7 +74,7 @@ class MapWrapper {
                 found_bbox = true;
             }
         }
-        if (!found) {
+        if (!found_bbox) {
             let initial_position = [43.05, -76.1];
             let initial_zoom = 12.5
             this.map.setView(initial_position, initial_zoom);
