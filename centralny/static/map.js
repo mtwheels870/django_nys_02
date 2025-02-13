@@ -33,7 +33,7 @@ class MapWrapper {
             };
             var overlayMaps = { "Pinp01nt 360": this.layerGroupAll }
 
-            this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(global_map);
+            this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(this.map);
 
             // Save a reference in case we re-enter
             global_map = this.map;
@@ -46,8 +46,18 @@ class MapWrapper {
 
     // Method doesn't take function 
     set_initial_position() {
+        // Why doesn't this work?
         var urlParams = new URLSearchParams(import.meta.url);
         console.log("MapWrapper.s_i_p(), i.m.u = " + import.meta.url + ", urlParams = " + urlParams);
+
+        // Split by hand
+        var array = import.meta.url.split("map.js?");
+        var length = array.length;
+        console.log("MapWrapper.s_i_p(), length = " + length);
+        if (length > 1) {
+            var search_params = array[1];
+            console.log("MapWrapper.s_i_p(), search_params = " + search_params );
+        }
         let initial_position = [43.05, -76.1];
         let initial_zoom = 12.5
         this.map.setView(initial_position, initial_zoom);
