@@ -57,6 +57,8 @@ class MapWrapper {
         if (length > 1) {
             var search_params = array[1];
             console.log("MapWrapper.s_i_p(), search_params = " + search_params );
+            var matches = search_params.match("in_bbox=([+-]?([0-9]*[.])?[0-9]+),([+-]?([0-9]*[.])?[0-9]+),([+-]?([0-9]*[.])?[0-9]+),([+-]?([0-9]*[.])?[0-9]+)"
+            console.log("MapWrapper.s_i_p(), matches = " + matches);
         }
         let initial_position = [43.05, -76.1];
         let initial_zoom = 12.5
