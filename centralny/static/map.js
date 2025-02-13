@@ -42,7 +42,7 @@ class MapWrapper {
         }
     }
 
-    function set_initial_position() {
+    set_initial_position() {
         var urlParams = new URLSearchParams(import.meta.url);
         console.log("MapWrapper.s_i_p(), i.m.u = " + import.meta.url + ", urlParams = " + urlParams);
         let initial_position = [43.05, -76.1];
