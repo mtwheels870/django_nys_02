@@ -127,20 +127,20 @@ class MapNavigationView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
-        # print(f'MNV.g_c_d(), form = {form}')
+        print(f'MNV.g_c_d(), form = {form}')
         #id = form.fields[KEY_ID]
         #id.initial = 23
         #agg_type = form.fields[KEY_AGG_TYPE]
         #agg_type.initial = "Cherry"
-        map_bbox = form.fields[KEY_MAP_BBOX]
+#        map_bbox = form.fields[KEY_MAP_BBOX]
         # print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
-        if KEY_LEAFLET_MAP  in self.request.session:
-            leaflet_map_dict = self.request.session.pop(KEY_LEAFLET_MAP, default=None)
-            print(f"g_c_d(), Found: leaflet_map_dict = {leaflet_map_dict}")
-            map_bbox_value = leaflet_map_dict[KEY_MAP_BBOX]
-        else:
-            map_bbox_value = MAP_BBOX_INITIAL_VALUE 
-        map_bbox.initial = map_bbox_value 
+#        if KEY_LEAFLET_MAP  in self.request.session:
+#            leaflet_map_dict = self.request.session.pop(KEY_LEAFLET_MAP, default=None)
+#            print(f"g_c_d(), Found: leaflet_map_dict = {leaflet_map_dict}")
+#            map_bbox_value = leaflet_map_dict[KEY_MAP_BBOX]
+#        else:
+#            map_bbox_value = MAP_BBOX_INITIAL_VALUE 
+#        map_bbox.initial = map_bbox_value 
         # context_data['map_bbox'] = map_bbox_value 
         return context_data
 
@@ -155,5 +155,5 @@ class MapNavigationView(generic.edit.FormView):
         else:
             print(f"MNV.post(), form is INVALID")
         # Save the map_bbox across the reverse so we can zoom in our map appropriately
-        request.session[KEY_LEAFLET_MAP] = {KEY_MAP_BBOX : map_bbox }
+        #request.session[KEY_LEAFLET_MAP] = {KEY_MAP_BBOX : map_bbox }
         return HttpResponseRedirect(reverse("app_centralny:map_viewer",));
