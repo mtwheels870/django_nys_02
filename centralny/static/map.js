@@ -8,7 +8,8 @@ let global_map;
 
 class MapWrapper {
     constructor() {
-        if (typeof window.maps === 'undefined') {
+        // if (typeof window.maps === 'undefined') {
+        if (typeof global_map === 'undefined') {
             let osm = "https://www.openstreetmap.org/copyright";
             let copy = `© <a href='${osm}'>OpenStreetMap</a>`;
             let url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -35,6 +36,8 @@ class MapWrapper {
 
             this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(global_map);
             // console.log("after create, global_map = " + global_map);
+        } else {
+            console.log("map already exists = " + global_map);
         }
         this.map = global_map;
     }
