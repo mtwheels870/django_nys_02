@@ -160,7 +160,10 @@ class MapNavigationView(generic.edit.FormView):
             map_bbox = form.cleaned_data[KEY_MAP_BBOX]
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
             # return HttpResponseRedirect(reverse("app_centralny:map_viewer",kwargs={'id': id, 'agg_type': agg_type}));
-            return render(request, "centralny/map_viewer.html", {'id': id, 'agg_type': agg_type});
+            #initial_data = {'id': id, 'agg_type': agg_type};
+            #form = SelectedCensusTractForm(initial=initial_data);
+            # Pass the form bak in
+            return render(request, "centralny/map_viewer.html", {'form': form});
         else:
             print(f"MNV.post(), form is INVALID")
             return HttpResponseRedirect(reverse("app_centralny:map_viewer",), {'form': form});
