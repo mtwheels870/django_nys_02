@@ -47,49 +47,37 @@ class MapWrapper {
     // Method doesn't take function 
     set_initial_position() {
         // Why doesn't this work?
-        var urlParams = new URLSearchParams(import.meta.url);
-        // console.log("MapWrapper.s_i_p(), i.m.u = " + import.meta.url + ", urlParams = " + urlParams);
-
+        // var urlParams = new URLSearchParams(import.meta.url);
         var found_bbox = false;
         // Split by hand
         var array = import.meta.url.split("map.js?");
         var length = array.length;
-        // console.log("MapWrapper.s_i_p(), length = " + length);
         if (length > 1) {
             var search_params = array[1];
-            // console.log("MapWrapper.s_i_p(), search_params = " + search_params );
             var single_float = "([+-]?[0-9]*[.]?[0-9]+)"
             var regexp_array = [single_float, single_float, single_float, single_float]
             var float_portion = regexp_array.join(",")
             var complete_regexp = "in_bbox=" + float_portion;
-            // console.log("MapWrapper.s_i_p(), complete_regexp = " + complete_regexp);
             var matches = search_params.match(complete_regexp);
             if (matches == null) {
                 console.log("MapWrapper.s_i_p(), no regexp match, search_params = '" + search_params + "', ignoring...");
             } else {
-                console.log("MapWrapper.s_i_p(), matches = " + matches + ", length = " + matches.length);
-                for (let i = 0; i < matches.length; i++) {
-                    console.log("       match[" + i + "]: " + matches[i]);
-                }
                 // matches[0] contains the entire matching string
                 var floats_array = matches.slice(1).map(number => parseFloat(number));
                 console.log("MapWrapper.s_i_p(), floats_array : " + floats_array);
 
-                /* var bounds_array = [[floats_array[0], floats_array[1]],  
-                    [floats_array[2], floats_array[3]]]; */
-                // Note swap positions
+                // Note coordinate swap here
                 var corner1 = L.latLng(floats_array[1], floats_array[0]);
                 var corner2 = L.latLng(floats_array[3], floats_array[2]);
                 var bounds = L.latLngBounds(corner1, corner2)
 
-                // console.log("MapWrapper.s_i_p(), bounds_array: " + bounds_array );
-                // let initial_position = [43.05, -76.1];
-                // let initial_zoom = 12.5
+                // Fit to those bounds
                 this.map.fitBounds(bounds);
                 found_bbox = true;
             }
         }
         if (!found_bbox) {
+            // No vaild bounding box, set to our default
             let initial_position = [43.05, -76.1];
             let initial_zoom = 12.5
             this.map.setView(initial_position, initial_zoom);
@@ -113,5 +101,8 @@ async function render_all() {
 
 // Catch our map-events, fetch data
 global_map.on("moveend", render_all)
+global_map.on("load", () => {
+    console.log("Map load");
+}
 
 // This doesn't do what we want, causes multiple fires: map.on("load", render_all)
