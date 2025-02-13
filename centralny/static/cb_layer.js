@@ -36,7 +36,7 @@ function handleCircleClick(context, e) {
   const form1 = document.forms['selected_tract_form'];
   form1["id"].value = context["id"]
   form1["agg_type"].value = context["agg_type"]
-  var boundsString = _myMapReference.getBounds().toBBoxString()
+  var boundsString = map.getBounds().toBBoxString()
   form1["map_bbox"].value = boundsString;
   form1.submit()
 }

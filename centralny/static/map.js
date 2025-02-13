@@ -18,11 +18,11 @@ class MapWrapper {
             let layerOsm = L.tileLayer(url, { attribution: copy });
             let initial_position = [43.05, -76.1];
             let initial_zoom = 12.5
-            console.log("creating initial map, global_map = " + global_map + ", this.map = " + this.map);
+            // console.log("creating initial map, global_map = " + global_map + ", this.map = " + this.map);
             global_map = L.map("map", { layers: [layerOsm] });
             global_map.setView(initial_position, initial_zoom);
 
-            console.log("after create, map = " + global_map);
+            // console.log("after create, map = " + global_map);
             // Layer group
             this.layerGroupAll = L.layerGroup().addTo(global_map);
 
@@ -34,14 +34,14 @@ class MapWrapper {
             var overlayMaps = { "Pinp01nt 360": this.layerGroupAll }
 
             this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(global_map);
-            console.log("after create, global_map = " + global_map);
+            // console.log("after create, global_map = " + global_map);
         }
         this.map = global_map;
     }
 }
 
 export const map_wrapper = new MapWrapper()
-console.log("after MapWrapper(), global_map = " + global_map + ", this.map = " + map_wrapper.map);
+// console.log("after MapWrapper(), global_map = " + global_map + ", this.map = " + map_wrapper.map);
 
 
 // Start with no overlays
