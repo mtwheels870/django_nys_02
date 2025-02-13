@@ -1,3 +1,5 @@
+const { threadId, isMainThread } = require("worker_threads");
+
 import { cb_render_all } from './cb_layer.js';
 
 // Create the map
@@ -18,7 +20,7 @@ class MapWrapper {
             let layerOsm = L.tileLayer(url, { attribution: copy });
             let initial_position = [43.05, -76.1];
             let initial_zoom = 12.5
-            console.log("creating initial map, map = " + global_map);
+            console.log("creating initial map, map = " + global_map + ", thread ID: ${threadId}");
             global_map = L.map("map", { layers: [layerOsm] });
             global_map.setView(initial_position, initial_zoom);
 
