@@ -27,21 +27,24 @@ class MapWrapper {
             this.layerGroupAll = L.layerGroup().addTo(this.map);
 
             // Create custom circle pane to get popups before we hit the polygons
-            let pane = global_map.createPane('circles');
+            let pane = this.map.createPane('circles');
             var baseMaps = {
                 "OpenStreetMap": layerOsm
             };
             var overlayMaps = { "Pinp01nt 360": this.layerGroupAll }
 
             this.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(global_map);
+
+            // Save a reference in case we re-enter
             global_map = this.map;
             // console.log("after create, global_map = " + global_map);
         } else {
-            console.log("map already exists = " + global_map);
+            console.log("map already exists = " + global_map + ", need to do more setup...");
             this.map = global_map;
         }
     }
 
+    // Method doesn't take function 
     set_initial_position() {
         var urlParams = new URLSearchParams(import.meta.url);
         console.log("MapWrapper.s_i_p(), i.m.u = " + import.meta.url + ", urlParams = " + urlParams);
