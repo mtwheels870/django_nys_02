@@ -88,8 +88,8 @@ class MapWrapper {
             let initial_zoom = 12.5
             this.map.setView(initial_position, initial_zoom);
         }
+        return true;
     }
-    return true;
 }
 
 export const map_wrapper = new MapWrapper()
