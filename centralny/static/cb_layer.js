@@ -164,7 +164,7 @@ class LayerPolygon extends CbLayer {
     super(urlComponent, description, popupField, myStyle);
   }
   // Wrap the render function
-  renderClass = (map, layerGroup, layerControl, boundsString) => {
+  renderClass = (map, boundsString) => {
     // Call render circle
     render_target(this, boundsString);
   }
@@ -189,7 +189,7 @@ async function load_target(url_field, boundsString) {
 
 async function render_target(classObject, boundsString) {
   var layerGroup = _myMapWrapper.layerGroupAll;
-  console.log('render_target(), layerGroup = ' + layerGroup);
+  console.log('render_target(), layerGroup = ' + layerGroup + ', boundsString = ' + boundsString);
   const targets = await load_target(classObject.urlComponent, boundsString);
   // var debug = JSON.stringify(layer.feature.properties);
   // console.log('render_target(), debug = ' + debug);
