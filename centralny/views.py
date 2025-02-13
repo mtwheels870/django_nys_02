@@ -161,8 +161,9 @@ class MapNavigationView(generic.edit.FormView):
         table = None
         match agg_type:
             case "CountRangeTract":
-        match _:
-            print(f"build_table(), unrecognized agg_type = {agg_type}")
+                print(f"build_table(), agg_type = {agg_type}, id = {id}")
+            case _:
+                print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
 
 
