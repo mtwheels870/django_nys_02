@@ -124,13 +124,23 @@ class MapNavigationView(generic.edit.FormView):
     form_class = SelectedCensusTractForm
     table_class = DeIpRangeTable
     template_name = "centralny/map_viewer.html"
+    table_pagination = {
+        "per_page": 10
+    }
+
+    def create_table(self, queryset):
+        table = table_class(data=queryset)
+        RequestConfig(self.request, paginate=self.table_pagination).configure( table)
+        return table
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
         #print(f'MNV.g_c_d(), form = {form}')
-        table = DeIpRange.objects.none()
+        # table = DeIpRange.objects.none()
+        table = self.create_table(DeIpRange.objects.none())
+        print(f'MNV.g_c_d(), table = {table}')
         context_data['table'] = table
         print(f'MNV.g_c_d(), kwargs = {kwargs}, table = {table}')
         return context_data
@@ -142,7 +152,8 @@ class MapNavigationView(generic.edit.FormView):
             id = form.cleaned_data[KEY_ID]
             agg_type = form.cleaned_data[KEY_AGG_TYPE]
             map_bbox = form.cleaned_data[KEY_MAP_BBOX]
-            table = self.build_table(agg_type, id)
+            queryset = self.build_table(agg_type, id)
+            table = self.create_table(queryset)
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
             print(f"          table = {table}")
 
