@@ -226,12 +226,11 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
     layerTracts.renderClass(boundsString);
     layerTractCounts.renderClass(boundsString);
   } 
-  let layers = layerGroupAll.getLayers();
+}
+
+  /* let layers = layerGroupAll.getLayers();
   for (let i = 0; i < layers.length; i++) {
     let layer = layers[i];
     console.log('cb_render_all(), layer[' + i + '] (pane): ' + layer.pane);
 
-  }
-    
-}
-
+  } */
