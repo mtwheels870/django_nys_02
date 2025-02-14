@@ -34,11 +34,12 @@ function handleCircleClick(context, e) {
   var map = _myMapWrapper.map;
   console.log("map : ", map);
   const form1 = document.forms['selected_tract_form'];
-  form1["id"].value = context["id"]
-  form1["agg_type"].value = context["agg_type"]
-  var boundsString = map.getBounds().toBBoxString()
+  form1["id"].value = context["id"];
+  form1["agg_type"].value = context["agg_type"];
+  var boundsString = map.getBounds().toBBoxString();
   form1["map_bbox"].value = "in_bbox=" + boundsString;
-  form1.submit()
+  form1["range_count"].value = context["range_count"];
+  form1.submit();
 }
 
 /*
@@ -52,7 +53,7 @@ class LayerTractCounts extends LayerCircle {
   // Inside a class, format if methodName: function
   onEachCircle = (feature, layer) => {
     // Do the graduated circle
-    var rangeCount = feature.properties["range_count"]
+    var range_count = feature.properties["range_count"]
     // range 1... 100 ... 200 ... 400
     var radiusGraduated = Math.ceil(rangeCount / 120) * 3.5;
     var copiedStyle = {...this.style};
@@ -62,8 +63,8 @@ class LayerTractCounts extends LayerCircle {
     var id = feature["id"]
     var censusTract = feature.properties["census_tract"]
     layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
-            rangeCount + "<br>Database ID: " + id + "</b>")
-    let context = { agg_type: "CountRangeTract", id: id };
+            range_count + "<br>Database ID: " + id + "</b>")
+    let context = { agg_type: "CountRangeTract", id: id, range_count : range_count };
     layer.on('click', handleCircleClick.bind(null, context));
   }
 }

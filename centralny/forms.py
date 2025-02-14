@@ -10,9 +10,11 @@ class SelectedCensusTractForm(forms.Form):
     agg_type = forms.CharField()
     id = forms.IntegerField()
     map_bbox = forms.CharField()
+    range_count = forms.IntegerField("Range Count")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['agg_type'].widget.attrs['readonly'] = True
         self.fields['id'].widget.attrs['readonly'] = True
-        # self.fields['map_bbox'].widget.attrs['readonly'] = True
+        self.fields['range_count'].widget.attrs['readonly'] = True
+        self.fields['map_bbox'].widget.attrs['readonly'] = True
