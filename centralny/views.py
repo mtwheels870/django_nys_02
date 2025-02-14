@@ -164,7 +164,7 @@ class MapNavigationView(generic.edit.FormView):
                 count_range_tract = get_object_or_404(CountRangeTract, pk=id)
                 census_tract = count_range_tract.census_tract
                 print(f"build_table(), agg_type = {agg_type}, id = {id}, census_tract_id = {census_tract.id}")
-                queryset = DeIpRange.objects.filter(census_tract__eq=census_tract)
+                queryset = DeIpRange.objects.filter(census_tract_id__eq=census_tract.id)
                 index = 0
                 for ip_range in queryset:
                     print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name}")
