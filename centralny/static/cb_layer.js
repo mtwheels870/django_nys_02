@@ -215,20 +215,12 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
     layerTracts.renderClass(boundsString);
     layerTractCounts.renderClass(boundsString);
   } 
+  layers = layerGroupAll.getLayers();
+  for (let i = 0; i < layers.length; i++) {
+    let layer = layers[i];
+    console.log('cb_render_all(), layer[' + i + '] (pane): ' + layer.pane);
+
+  }
+    
 }
 
-    // Doesn't work: layer.on('click', function(e) {
-    /* this.on('click', function(e) {
-        alert('censusTractCircle(), censusTract = ' + censusTract)
-    } ) */
-    // layer.on('click', tract_count_clicked, censusTract)
-    /* var debug = JSON.stringify(layer.feature);
-    console.log('LTC.oEC(), debug = ' + debug); */
-  // console.log('render_target(), layerGroup = ' + layerGroup + ', boundsString = ' + boundsString);
-  // var debug = JSON.stringify(layer.feature.properties);
-  // console.log('render_target(), debug = ' + debug);
-    // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
-  // Clears our layer group
-  // console.log("render_target(). style = " + classObject.style);
-    // console.log("LIP.onEachCircle(), feature.props = " + keys);
-    // console.log("LIP.onEachCircle(), feature.props = " + keys);
