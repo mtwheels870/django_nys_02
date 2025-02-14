@@ -10,7 +10,7 @@ class SelectedCensusTractForm(forms.Form):
     agg_type = forms.CharField()
     id = forms.IntegerField()
     map_bbox = forms.CharField()
-    range_count = forms.IntegerField("Range Count")
+    range_count = forms.IntegerField(label="Range Count")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
