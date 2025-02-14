@@ -6,8 +6,7 @@
 // We use this global to save state (hack)
 let _myMapWrapper;
 
-const CIRCLE_PANE = 'circles';
-
+export const CIRCLE_PANE = 'circles';
 
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
