@@ -129,7 +129,8 @@ class LayerIpRanges extends LayerCircle {
     var companyName = feature.properties["company_name"]
     layer.bindPopup("<b>First IP Range (@ this location):<br>IP Range Start:" + ipRangeStart + 
         "<br>Company Name: " + companyName + "<br>ID: " + id + "</b>")
-    let context = { agg_type: "DeIpRange", id: id };
+    let range_count = 1;
+    let context = { agg_type: "DeIpRange", id: id, range_count : range_count };
     layer.on('click', handleCircleClick.bind(null, context));
   } 
 };
