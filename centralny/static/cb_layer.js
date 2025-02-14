@@ -209,10 +209,16 @@ function clear_existing_layers(map_wrapper) {
   if (_layersToDelete.length > 0) {
     console.log('clear_existing(), we have layers in our array! (shouldn.t)');
   }
+  var circle_pane = map_wrapper.map.getPane(CIRCLE_PANE);
+  console.log('clear_existing(), circle_pane = ' + circle_pane ); 
+
   map.eachLayer(function(layer) {
     var layer_pane = layer.getPane();
-    var pane_name = layer_pane.getAttribute('name');
-    console.log('clear_existing(), layer.pane = ' + pane_name);
+    if (layer_pane === circle_pane) {
+        console.log('clear_existing(), Found circle pane');
+    } else {
+        console.log('clear_existing(), no match, layer.pane = ' + layer_pane);
+    }
   });
   /* var pane = map_wrapper.map.getPane(CIRCLE_PANE);
   console.log('clear_existing(), pane = ' + pane); */
