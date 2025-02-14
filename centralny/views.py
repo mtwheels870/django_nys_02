@@ -188,6 +188,8 @@ class MapNavigationView(generic.edit.FormView):
                 print(f"build_table(), about to create table, queryset = {queryset}")
                 table = queryset
                 # table = DeIpRangeTable(data=queryset)
+            case "DeIpRange":
+                table = DeIpRange.objects.none()
             case _:
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
