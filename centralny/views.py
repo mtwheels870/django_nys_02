@@ -142,14 +142,14 @@ class MapNavigationView(generic.edit.FormView):
         #print(f'MNV.g_c_d(), form = {form}')
         # table = DeIpRange.objects.none()
         table = self.create_table(DeIpRange.objects.none())
-        print(f'MNV.g_c_d(), table = {table}')
+        # print(f'MNV.g_c_d(), table = {table}')
         context_data['table'] = table
-        print(f'MNV.g_c_d(), kwargs = {kwargs}, table = {table}')
+        # print(f'MNV.g_c_d(), kwargs = {kwargs}, table = {table}')
         return context_data
 
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
-        print(f"MNV.post(), checking form here")
+        print(f"MNV.post(), checking form here: {form}")
         if form.is_valid():
             id = form.cleaned_data[KEY_ID]
             agg_type = form.cleaned_data[KEY_AGG_TYPE]
