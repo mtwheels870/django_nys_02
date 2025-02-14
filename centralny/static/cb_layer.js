@@ -55,7 +55,7 @@ class LayerTractCounts extends LayerCircle {
     // Do the graduated circle
     var range_count = feature.properties["range_count"]
     // range 1... 100 ... 200 ... 400
-    var radiusGraduated = Math.ceil(rangeCount / 120) * 3.5;
+    var radiusGraduated = Math.ceil(range_count / 120) * 3.5;
     var copiedStyle = {...this.style};
     // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
     copiedStyle["radius"] = radiusGraduated;
@@ -87,11 +87,11 @@ class LayerCountyCounts extends LayerCircle {
   // Inside a class, format if methodName: function
   onEachCircle = (feature, layer) => {
     // Do the graduated circle
-    var rangeCount = feature.properties["range_count"]
+    var range_count = feature.properties["range_count"]
     var radiusGraduated;
-    if (rangeCount <= 500) {
+    if (range_count <= 500) {
       radiusGraduated = 5;
-    } else if (rangeCount <= 2000) {
+    } else if (range_count <= 2000) {
       radiusGraduated = 10;
     } else {
       radiusGraduated = 15;
@@ -101,8 +101,8 @@ class LayerCountyCounts extends LayerCircle {
     layer.setStyle(copiedStyle)
     var countyCode = feature.properties["county_code"]
     var id = feature["id"]
-    layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + rangeCount + "<br>ID: " + id + "</b>")
-    let context = { agg_type: "CountRangeCounty", id: id };
+    layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
+    let context = { agg_type: "CountRangeCounty", id: id, range_count: range_count };
     layer.on('click', handleCircleClick.bind(null, context));
   } 
 }
