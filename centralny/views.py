@@ -129,7 +129,7 @@ class MapNavigationView(generic.edit.FormView):
     }
 
     def create_table(self, queryset):
-        table = table_class(data=queryset)
+        table = self.table_class(data=queryset)
         RequestConfig(self.request, paginate=self.table_pagination).configure( table)
         return table
 
