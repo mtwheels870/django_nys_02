@@ -158,7 +158,6 @@ class MapNavigationView(generic.edit.FormView):
 
     # These labels are in static/cb_layer.js
     def build_table(self, agg_type, id):
-    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.SET_NULL)
         table = None
         match agg_type:
             case "CountRangeTract":
