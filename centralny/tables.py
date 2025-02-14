@@ -9,7 +9,7 @@ class DeIpRangeTable(tables.Table):
     class Meta:
         model = DeIpRange
         template_name = "django_tables2/bootstrap-responsive.html"
-        empty_text = "No IP ranges selected yet"
+        empty_text = "(No IP ranges selected yet)"
         # template_name = "django_tables2/bootstrap.html"
         fields = ["ip_range_start", "company_name", "naics_code", "organization"]
 
