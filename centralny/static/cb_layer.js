@@ -200,11 +200,11 @@ async function render_circle(classObject, boundsString) {
 }
 
 function clear_existing_layers(map_wrapper) {
+  // Clear the layerGroupAll, which are just polygons
   var layerGroupAll = map_wrapper.layerGroupAll 
   layerGroupAll.clearLayers();
 
-    // We also need to pull the circlePane and get everything off there
-    
+  // Circles are in their own pane
   var map = map_wrapper.map;
   if (_layersToDelete.length > 0) {
     console.log('clear_existing(), we have layers in our array! (shouldn.t)');
@@ -212,16 +212,18 @@ function clear_existing_layers(map_wrapper) {
   var circle_pane = map_wrapper.map.getPane(CIRCLE_PANE);
   console.log('clear_existing(), circle_pane = ' + circle_pane ); 
 
+  // Iterate through all layers in the map.  Any on the circle pane get put onto our delete list
   map.eachLayer(function(layer) {
     var layer_pane = layer.getPane();
     if (layer_pane === circle_pane) {
         _layersToDelete.push(layer);
     } 
   });
-  _layersToDelete.forEach(function(layer) {
+  while (_layersToDelete.length > 0) {
+    let layer = _layersToDelete.pop();
     console.log('clear_existing(), removing layer ' + layer);
     map.removeLayer(layer);
-  });
+  }
   /* var pane = map_wrapper.map.getPane(CIRCLE_PANE);
   console.log('clear_existing(), pane = ' + pane); */
 }
