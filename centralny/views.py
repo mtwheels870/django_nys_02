@@ -130,13 +130,9 @@ class MapNavigationView(generic.edit.FormView):
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
         #print(f'MNV.g_c_d(), form = {form}')
-        print(f'MNV.g_c_d(), kwargs = {kwargs}')
-        if 'id' in kwargs:
-            kw_id = kwargs['id']
-            print(f'MNV.g_c_d(), found kw_id = {kw_id}')
-            field_id = form.fields[KEY_ID]
-            field_id.initial = kw_id
-            
+        table = DeIpRange.objects.none()
+        context_data['table'] = table
+        print(f'MNV.g_c_d(), kwargs = {kwargs}, table = {table}')
         return context_data
 
     def post(self, request, *args, **kwargs):
