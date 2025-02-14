@@ -196,8 +196,9 @@ async function render_circle(classObject, boundsString) {
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
   _myMapWrapper = map_wrapper;
-  console.log("cb_render_all(), zoom = " + zoom + ", boundsString = " + boundsString);
   var layerGroupAll = map_wrapper.layerGroupAll 
+  console.log("cb_render_all(), zoom = " + zoom + ", boundsString = " + 
+        boundsString + ", layerGroup = " + layerGroupAll);
   // var layerControl = map_wrapper.layerControl
   layerGroupAll.clearLayers();
   if (zoom <= 10) {
