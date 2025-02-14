@@ -147,6 +147,8 @@ class MapNavigationView(generic.edit.FormView):
             map_bbox = form.cleaned_data[KEY_MAP_BBOX]
             table = self.build_table(agg_type, id)
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
+            print(f"          table = {table}")
+
             # return HttpResponseRedirect(reverse("app_centralny:map_viewer",kwargs={'id': id, 'agg_type': agg_type}));
             #initial_data = {'id': id, 'agg_type': agg_type};
             #form = SelectedCensusTractForm(initial=initial_data);
