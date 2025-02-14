@@ -31,6 +31,7 @@ from centralny.serializers import (
 )
 
 from .forms import SelectedCensusTractForm
+from .tables import DeIpRangeTable
 
 # Import our neighbors
 
@@ -167,10 +168,12 @@ class MapNavigationView(generic.edit.FormView):
                 queryset = DeIpRange.objects.filter(census_tract__id=census_tract.id)
                 index = 0
                 for ip_range in queryset:
-                    print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name}")
+                    print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name:.12}, " \
+                        "{ip_range.naics_code}, {ip_range.organization:.12}")
                     index = index + 1
                     if (index >= 10):
                         break
+                table = DeIpRangeTable(queryset)
             case _:
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
