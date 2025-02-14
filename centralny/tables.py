@@ -10,7 +10,7 @@ class DeIpRangeTable(tables.Table):
         model = DeIpRange
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
-        fields = [ip_range_start, company_name, naics_code, organization]
+        fields = ["ip_range_start", "company_name", "naics_code", "organization"]
 
     def render_company_name(self, value, record):
         abbreviated_string = value[:MAX_STRING_LENGTH]
