@@ -210,7 +210,7 @@ function clear_existing_layers(map_wrapper) {
     console.log('clear_existing(), we have layers in our array! (shouldn.t)');
   }
   map.eachLayer(function(layer) {
-    var layer_pane = layer.pane;
+    var layer_pane = layer.getPane();
     console.log('clear_existing(), layer.pane = ' + layer_pane);
   });
   /* var pane = map_wrapper.map.getPane(CIRCLE_PANE);
