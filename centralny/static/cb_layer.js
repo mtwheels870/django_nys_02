@@ -211,7 +211,8 @@ function clear_existing_layers(map_wrapper) {
   }
   map.eachLayer(function(layer) {
     var layer_pane = layer.getPane();
-    console.log('clear_existing(), layer.pane = ' + layer_pane);
+    var pane_name = layer_pane.getAttribute('name');
+    console.log('clear_existing(), layer.pane = ' + pane_name);
   });
   /* var pane = map_wrapper.map.getPane(CIRCLE_PANE);
   console.log('clear_existing(), pane = ' + pane); */
