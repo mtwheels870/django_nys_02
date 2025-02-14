@@ -202,10 +202,9 @@ function clear_existing_layers(map_wrapper) {
   var layerGroupAll = map_wrapper.layerGroupAll 
   layerGroupAll.clearLayers();
 
-  var map = map_wrapper.map;
-
     // We also need to pull the circlePane and get everything off there
-   var pane = map.getPane(
+   var pane = map_wrapper.map.getPane(CIRCLE_PANE);
+   console.log('clear_existing(), pane = ' + pane);
 }
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
