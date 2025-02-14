@@ -175,7 +175,7 @@ class MapNavigationView(generic.edit.FormView):
                     index = index + 1
                     if (index >= 10):
                         break
-                table = DeIpRangeTable(queryset)
+                table = DeIpRangeTable(data=queryset)
             case _:
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
