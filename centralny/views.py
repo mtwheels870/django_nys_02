@@ -168,7 +168,7 @@ class MapNavigationView(generic.edit.FormView):
                 queryset = DeIpRange.objects.filter(census_tract__id=census_tract.id)
                 index = 0
                 for ip_range in queryset:
-                    print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name},"
+                    print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name},")
                     print(f"            {ip_range.naics_code}, {ip_range.organization}")
                     index = index + 1
                     if (index >= 10):
