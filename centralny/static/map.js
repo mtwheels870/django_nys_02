@@ -1,4 +1,4 @@
-import { cb_render_all } from './cb_layer.js';
+import { cb_render_all, CIRCLE_PANE } from './cb_layer.js';
 
 // Create the map
 // export const map = L.map("map", { layers: [layerOsm] });
@@ -27,7 +27,7 @@ class MapWrapper {
             this.layerGroupAll = L.layerGroup().addTo(this.map);
 
             // Create custom circle pane to get popups before we hit the polygons
-            let pane = this.map.createPane('circles');
+            let pane = this.map.createPane(CIRCLE_PANE);
             var baseMaps = {
                 "OpenStreetMap": layerOsm
             };

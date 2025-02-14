@@ -3,7 +3,11 @@
  */ 
 // Don't do this! import { map_wrapper } from "./map.js";
 
+// We use this global to save state (hack)
 let _myMapWrapper;
+
+const CIRCLE_PANE = 'circles';
+
 
 class CbLayer {
   constructor(urlComponent, description, popupField, myStyle) {
@@ -72,7 +76,7 @@ class LayerTractCounts extends LayerCircle {
 // Instantiate
 //   radius: 5, weight: 0.6,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
-  { color: "#2F118F", fillOpacity: 0.80, weight: 0, pane: 'circles'}
+  { color: "#2F118F", fillOpacity: 0.80, weight: 0, pane: CIRCLE_PANE}
 );
 
 
@@ -190,19 +194,28 @@ async function render_circle(classObject, boundsString) {
         return new L.CircleMarker(latLong, classObject.myStyle);
       },
       onEachFeature: classObject.onEachCircle,
-      pane: 'circles',
+      pane: CIRCLE_PANE,
     }).addTo(map);
+}
+
+function clear_existing_layers(map_wrapper) {
+  var layerGroupAll = map_wrapper.layerGroupAll 
+  layerGroupAll.clearLayers();
+
+  var map = map_wrapper.map;
+
+    // We also need to pull the circlePane and get everything off there
+   var pane = map.getPane(
 }
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
   _myMapWrapper = map_wrapper;
-  var layerGroupAll = map_wrapper.layerGroupAll 
   var partialBoundsString = boundsString.substring(0, 12);
  
+  clear_existing_layers(map_wrapper);
   console.log("cb_render_all(), zoom = " + zoom + ", boundsString = " + 
-        partialBoundsString + ", layerGroup = " + layerGroupAll);
+        partialBoundsString);
   // var layerControl = map_wrapper.layerControl
-  layerGroupAll.clearLayers();
   if (zoom <= 10) {
     // Counties
     layerCountyCounts.renderClass(boundsString);
@@ -215,7 +228,7 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
     layerTracts.renderClass(boundsString);
     layerTractCounts.renderClass(boundsString);
   } 
-  layers = layerGroupAll.getLayers();
+  let layers = layerGroupAll.getLayers();
   for (let i = 0; i < layers.length; i++) {
     let layer = layers[i];
     console.log('cb_render_all(), layer[' + i + '] (pane): ' + layer.pane);
