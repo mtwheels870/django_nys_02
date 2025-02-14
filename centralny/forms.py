@@ -8,7 +8,7 @@ class SelectedCensusTractForm(forms.Form):
     #id = forms.IntegerField(initial=23)
     #map_bbox = forms.CharField(initial="a=b")
     agg_type = forms.CharField()
-    id = forms.IntegerField()
+    id = forms.IntegerField(label="Db ID")
     map_bbox = forms.CharField()
     range_count = forms.IntegerField(label="Range Count")
 
