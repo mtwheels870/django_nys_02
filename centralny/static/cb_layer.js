@@ -6,6 +6,8 @@
 // We use this global to save state (hack)
 let _myMapWrapper;
 
+let _layersToDelete = []
+
 export const CIRCLE_PANE = 'circles';
 
 class CbLayer {
@@ -202,8 +204,17 @@ function clear_existing_layers(map_wrapper) {
   layerGroupAll.clearLayers();
 
     // We also need to pull the circlePane and get everything off there
-   var pane = map_wrapper.map.getPane(CIRCLE_PANE);
-   console.log('clear_existing(), pane = ' + pane);
+    
+  var map = map_wrapper.map;
+  if (_layersToDelete.length > 0) {
+    console.log('clear_existing(), we have layers in our array! (shouldn.t)');
+  }
+  map.eachLayer(function(layer) {
+    var layer_pane = layer.pane;
+    console.log('clear_existing(), layer.pane = ' + layer_pane);
+  });
+  /* var pane = map_wrapper.map.getPane(CIRCLE_PANE);
+  console.log('clear_existing(), pane = ' + pane); */
 }
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
