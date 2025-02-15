@@ -139,17 +139,13 @@ class MapNavigationView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
-        #print(f'MNV.g_c_d(), form = {form}')
-        # table = DeIpRange.objects.none()
         table = self.create_table(DeIpRange.objects.none())
-        # print(f'MNV.g_c_d(), table = {table}')
         context_data['table'] = table
-        # print(f'MNV.g_c_d(), kwargs = {kwargs}, table = {table}')
         return context_data
 
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
-        print(f"MNV.post(), checking form here: {form}")
+        # print(f"MNV.post(), checking form here: {form}")
         if form.is_valid():
             id = form.cleaned_data[KEY_ID]
             agg_type = form.cleaned_data[KEY_AGG_TYPE]
@@ -159,10 +155,7 @@ class MapNavigationView(generic.edit.FormView):
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
             print(f"          table = {table}")
 
-            # return HttpResponseRedirect(reverse("app_centralny:map_viewer",kwargs={'id': id, 'agg_type': agg_type}));
-            #initial_data = {'id': id, 'agg_type': agg_type};
-            #form = SelectedCensusTractForm(initial=initial_data);
-            # Pass the form bak in
+            # Pass the form back in
             return render(request, "centralny/map_viewer.html",
                 {'form': form, 'table': table});
         else:
@@ -190,6 +183,12 @@ class MapNavigationView(generic.edit.FormView):
                 # table = DeIpRangeTable(data=queryset)
             case "DeIpRange":
                 table = DeIpRange.objects.none()
+            case "CountRangeCounty":
+                count_range_county = get_object_or_404(CountRangeCounty, pk=id)
+                county = count_range_county.county
+                print(f"Found county: {county}")
+                # tract_id_set = count_range_county count_range_county 
+                table = DeIpRange.objects.none()
             case _:
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
@@ -211,3 +210,10 @@ class MapNavigationView(generic.edit.FormView):
 #            map_bbox_value = MAP_BBOX_INITIAL_VALUE 
 #        map_bbox.initial = map_bbox_value 
         # context_data['map_bbox'] = map_bbox_value 
+        #print(f'MNV.g_c_d(), form = {form}')
+        # print(f'MNV.g_c_d(), table = {table}')
+        # table = DeIpRange.objects.none()
+        # print(f'MNV.g_c_d(), kwargs = {kwargs}, table = {table}')
+            # return HttpResponseRedirect(reverse("app_centralny:map_viewer",kwargs={'id': id, 'agg_type': agg_type}));
+            #initial_data = {'id': id, 'agg_type': agg_type};
+            #form = SelectedCensusTractForm(initial=initial_data);
