@@ -139,6 +139,9 @@ class MapNavigationView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
+        map_bbox = form.fields[KEY_MAP_BBOX]
+        # We need this, so it's in the Django templates (for the search parms)
+        context_data['map_bbox'] = map_bbox_value 
         table = self.create_table(DeIpRange.objects.none())
         context_data['table'] = table
         return context_data
@@ -150,6 +153,8 @@ class MapNavigationView(generic.edit.FormView):
             id = form.cleaned_data[KEY_ID]
             agg_type = form.cleaned_data[KEY_AGG_TYPE]
             map_bbox = form.cleaned_data[KEY_MAP_BBOX]
+
+        # print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
             queryset = self.build_table(agg_type, id)
             table = self.create_table(queryset)
             print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
