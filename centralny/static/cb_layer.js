@@ -179,7 +179,7 @@ async function load_target(url_field, boundsString) {
     }
     const geojson = await response.json();
     return geojson;
-  } catch (Error) {
+  } catch (error) {
     console.error("Fetch error: ", error);
     throw error;
   }
