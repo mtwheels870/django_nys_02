@@ -75,6 +75,7 @@ class MapWrapper {
                 var corner1 = L.latLng(floats_array[1], floats_array[0]);
                 var corner2 = L.latLng(floats_array[3], floats_array[2]);
                 var bounds = L.latLngBounds(corner1, corner2)
+                console.log("s_i_p(), corner1 = " + corner1 + ", corner2 = " + corner2);
 
                 // Fit to those bounds
                 this.map.fitBounds(bounds);
