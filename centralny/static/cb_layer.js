@@ -174,6 +174,7 @@ async function load_target(url_field, boundsString) {
     const response = await fetch(
       markers_url
     );
+    // If disconnected, the above actually throws a TypeError (doesn't get here)
     if (!response.ok) {
       throw new Error("HTTP error! status: ${response.status");
     }
