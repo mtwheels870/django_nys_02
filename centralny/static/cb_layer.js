@@ -169,12 +169,20 @@ const layerCounties = new LayerPolygon('counties', 'County Name', 'county_name',
 { color: "#20bb80", fillOpacity: 0.25, weight: 1, zIndex: 200 })
 
 async function load_target(url_field, boundsString) {
-  const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
-  const response = await fetch(
-    markers_url
-  );
-  const geojson = await response.json();
-  return geojson;
+  try {
+    const markers_url = `/centralny/api/` + url_field + `/?in_bbox=` + boundsString;
+    const response = await fetch(
+      markers_url
+    );
+    if (!response.ok) {
+      throw new Error("HTTP error! status: ${response.status");
+    }
+    const geojson = await response.json();
+    return geojson;
+  } catch (Error) {
+    console.error("Fetch error: ", error);
+    throw error;
+  }
 }
 
 async function render_target(classObject, boundsString) {
