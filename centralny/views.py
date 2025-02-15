@@ -185,7 +185,7 @@ class MapNavigationView(generic.edit.FormView):
                 table = DeIpRange.objects.none()
             case "CountRangeCounty":
                 count_range_county = get_object_or_404(CountRangeCounty, pk=id)
-                county = count_range_county.county
+                county = count_range_county.county_code 
                 print(f"Found county: {county}")
                 # tract_id_set = count_range_county count_range_county 
                 table = DeIpRange.objects.none()
