@@ -163,7 +163,7 @@ class MapNavigationView(generic.edit.FormView):
 
             # Pass the form back in
             return render(request, "centralny/map_viewer.html",
-                {'form': form, 'table': table});
+                {'form': form, 'table': table, 'map_bbox' : map_bbox});
         else:
             print(f"MNV.post(), form is INVALID")
             return HttpResponseRedirect(reverse("app_centralny:map_viewer",), {'form': form});
@@ -175,16 +175,16 @@ class MapNavigationView(generic.edit.FormView):
             case "CountRangeTract":
                 count_range_tract = get_object_or_404(CountRangeTract, pk=id)
                 census_tract = count_range_tract.census_tract
-                print(f"build_table(), agg_type = {agg_type}, id = {id}, census_tract_id = {census_tract.id}")
+                # print(f"build_table(), agg_type = {agg_type}, id = {id}, census_tract_id = {census_tract.id}")
                 queryset = DeIpRange.objects.filter(census_tract__id=census_tract.id)
-                index = 0
-                for ip_range in queryset:
-                    print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name},")
-                    print(f"            {ip_range.naics_code}, {ip_range.organization}")
-                    index = index + 1
-                    if (index >= 10):
+#                index = 0
+#                for ip_range in queryset:
+                    #print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name},")
+                    #print(f"            {ip_range.naics_code}, {ip_range.organization}")
+#                    index = index + 1
+#                    if (index >= 10):
                         break
-                print(f"build_table(), about to create table, queryset = {queryset}")
+#                print(f"build_table(), about to create table, queryset = {queryset}")
                 table = queryset
                 # table = DeIpRangeTable(data=queryset)
             case "DeIpRange":
