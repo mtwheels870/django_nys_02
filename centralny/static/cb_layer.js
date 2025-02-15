@@ -210,7 +210,6 @@ function clear_existing_layers(map_wrapper) {
     console.log('clear_existing(), we have layers in our array! (shouldn.t)');
   }
   var circle_pane = map_wrapper.map.getPane(CIRCLE_PANE);
-  console.log('clear_existing(), circle_pane = ' + circle_pane ); 
 
   // Iterate through all layers in the map.  Any on the circle pane get put onto our delete list
   map.eachLayer(function(layer) {
@@ -219,13 +218,12 @@ function clear_existing_layers(map_wrapper) {
         _layersToDelete.push(layer);
     } 
   });
+
+  // Delete each of the layers on 
   while (_layersToDelete.length > 0) {
     let layer = _layersToDelete.pop();
-    console.log('clear_existing(), removing layer ' + layer);
     map.removeLayer(layer);
   }
-  /* var pane = map_wrapper.map.getPane(CIRCLE_PANE);
-  console.log('clear_existing(), pane = ' + pane); */
 }
 
 export function cb_render_all(map_wrapper, zoom, boundsString) {
