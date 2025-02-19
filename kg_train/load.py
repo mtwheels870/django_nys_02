@@ -63,7 +63,7 @@ class Loader():
             ner_label.save()
 
     def create_labels_rel(self, verbose=True):
-        for _, (key, value) in enumerate(labels_scs_ner.items()):
+        for _, (key, value) in enumerate(labels_scs_rel.items()):
             print(f"create_labels_rel(), {key} = {value}")
             ner_label = NerLabel(short_name=key, description=value)
             ner_label.save()
