@@ -143,3 +143,36 @@ def prodigy_ner_manual(self, *args, **kwargs):
 
     return process.pid
 
+@shared_task(bind=True)
+def prodigy_rel_manual(self, *args, **kwargs):
+    print(f"prodigy_rel_manual(), self = {self}")
+    file_id = kwargs['file_id']
+
+    dir_path = make_temp_dir()
+    file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id)
+
+    recipe = "rel.manual"
+    ner_dataset = "south_china_sea_01"
+    language_model = "en_core_web_lg"
+
+    sys_path_string = ":".join(sys.path)
+    new_path = f"{VENV_PATH}/bin:" + sys_path_string
+    environment = {
+        "VIRTUAL_ENV" : VENV_PATH,
+        "PATH" : new_path, 
+        "PRODIGY_CONFIG" : config_file,
+        "PRODIGY_HOST" : "0.0.0.0" }
+
+    first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
+    second = f"--label {file_path_label}"
+    # second = f"--label {file_path_label}"
+    full_command = first + second
+
+    print(f"invoke_prodigy(), full_command:\n{full_command}")
+    print(f"                    output_file = {output_file}")
+    with open(output_file, "w") as logfile:
+        process = subprocess.Popen(full_command, shell=True, stdout=logfile, stderr=logfile,
+            env=environment)
+
+    return process.pid
+

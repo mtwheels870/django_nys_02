@@ -69,13 +69,13 @@ class MapWrapper {
             } else {
                 // matches[0] contains the entire matching string
                 var floats_array = matches.slice(1).map(number => parseFloat(number));
-                console.log("MapWrapper.s_i_p(), floats_array : " + floats_array);
+                // console.log("MapWrapper.s_i_p(), floats_array : " + floats_array);
 
                 // Note coordinate swap here
                 var corner1 = L.latLng(floats_array[1], floats_array[0]);
                 var corner2 = L.latLng(floats_array[3], floats_array[2]);
                 var bounds = L.latLngBounds(corner1, corner2)
-                console.log("s_i_p(), corner1 = " + corner1 + ", corner2 = " + corner2);
+                // console.log("s_i_p(), corner1 = " + corner1 + ", corner2 = " + corner2);
 
                 // Fit to those bounds
                 this.map.fitBounds(bounds);
@@ -105,7 +105,7 @@ async function render_all() {
   var zoom = global_map.getZoom()
   var boundsString = global_map.getBounds().toBBoxString()
   var partialBoundsString = boundsString.substring(0, 12);
-  console.log("render_all(), zoom level: " + zoom + ", boundsString = " + partialBoundsString);
+  // console.log("render_all(), zoom level: " + zoom + ", boundsString = " + partialBoundsString);
   cb_render_all(map_wrapper, zoom, boundsString);
 }
 

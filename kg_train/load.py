@@ -11,7 +11,15 @@ from .models import (
     TextFile,
     NerLabel)
 
-label_dictionary_scs = {
+labels_scs_rel = {
+    "FRC_MILITARY" : "Navy, Air Force, Coast Guard, etc.",
+    "FRC_MILITIA" : "Primarily, Maritime Militia",
+    "FRC_FISHING" : "Usually, fishing vessels",
+    "HYDRO_EXPLO" : "Hydrocarbon exploration",
+    "CABLE_CUT" : "Cable cutting operation",
+}
+
+labels_scs_ner = {
     "LOC" : "Named Location",
     "DATE" :"Absolute or relative dates or periods.", 
     "EVENT" : "Named political, military, social, or atmospheric event",
@@ -48,9 +56,15 @@ class Loader():
             ts = TextFileStatus(description=single_status)
             ts.save()
 
-    def create_labels_scs(self, verbose=True):
-        for _, (key, value) in enumerate(label_dictionary_scs.items()):
+    def create_labels_ner(self, verbose=True):
+        for _, (key, value) in enumerate(labels_scs_ner.items()):
             print(f"create_labels_scs(), {key} = {value}")
+            ner_label = NerLabel(short_name=key, description=value)
+            ner_label.save()
+
+    def create_labels_rel(self, verbose=True):
+        for _, (key, value) in enumerate(labels_scs_ner.items()):
+            print(f"create_labels_rel(), {key} = {value}")
             ner_label = NerLabel(short_name=key, description=value)
             ner_label.save()
 
