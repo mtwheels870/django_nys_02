@@ -26,7 +26,8 @@ VENV_PATH = "/home/bitnami/nlp/venv01"
 PRODIGY_PATH = "prodigy"
 
 FILE_TEXT = "text_file.txt"
-FILE_LABEL = "ner_labels"
+FILE_LABEL_NER = "ner_labels"
+FILE_LABEL_REL = "rel_labels"
 FILE_PRODIGY_CONFIG = "config.json"
 FILE_OUTPUT = "prodigy_output.txt"
 

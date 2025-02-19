@@ -121,10 +121,11 @@ class TextFolderDetailView(SingleTableView):
         # inspect = celery_app.control.inspect()
         print(f"label_page(), celery main = {main}")
         # Invoke celery task here
-        async_result = prodigy_ner_manual.apply_async(
+        # async_result = prodigy_ner_manual.apply_async(
+        async_result = prodigy_rel_manual.apply_async(
             kwargs={'file_id': file_id},
             queue=QUEUE_NAME,
-            routing_key='prodigy.tasks.ner_manual')
+            routing_key='prodigy.tasks.rel_manual')
 
         # Update the time (start labeling)
         text_file = TextFile.objects.filter(id=file_id)[0]
