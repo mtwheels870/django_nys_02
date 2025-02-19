@@ -20,7 +20,7 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
 from .tables import TextFileTable
-from .tasks import prodigy_ner_manual
+from .tasks import prodigy_ner_manual, prodigy_rel_manual
 
 class IndexView(generic.ListView):
     template_name = "kg_train/folder_index.html"
