@@ -89,7 +89,7 @@ def generate_prodigy_config(dir_path):
         file_writer.write(json_string)
     return config_file
 
-def generate_prodigy_files(dir_path, file_id):
+def generate_prodigy_files(dir_path, file_id, prodigy_recipe):
     text_file = TextFile.objects.filter(id=file_id)[0]
     file_path_text = os.path.join(dir_path, FILE_TEXT)
     with open(file_path_text, "w") as file_writer:
@@ -97,7 +97,14 @@ def generate_prodigy_files(dir_path, file_id):
         file_writer.write(file_content)
     # print(f"tasks.py:generate_prodigy_files(), file_path_text = {file_path_text}")
 
-    file_path_label = os.path.join(dir_path, FILE_LABEL)
+    match prodigy_recipe:
+        catch 'ner.manual':
+            file_path_label = os.path.join(dir_path, FILE_LABEL_NER)
+        catch 'rel.manual':
+            file_path_label = os.path.join(dir_path, FILE_LABEL_REL)
+        case _:
+            file_path_label = None
+
     all_labels = NerLabel.objects.all()
     with open(file_path_label, "w") as file_writer:
         for label in all_labels:
@@ -116,10 +123,10 @@ def prodigy_ner_manual(self, *args, **kwargs):
     print(f"prodigy_ner_manual(), self = {self}")
     file_id = kwargs['file_id']
 
-    dir_path = make_temp_dir()
-    file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id)
-
     recipe = "ner.manual"
+    dir_path = make_temp_dir()
+    file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id, recipe)
+
     ner_dataset = "south_china_sea_01"
     language_model = "en_core_web_sm"
 
@@ -149,10 +156,10 @@ def prodigy_rel_manual(self, *args, **kwargs):
     print(f"prodigy_rel_manual(), self = {self}")
     file_id = kwargs['file_id']
 
-    dir_path = make_temp_dir()
-    file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id)
-
     recipe = "rel.manual"
+    dir_path = make_temp_dir()
+    file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id, recipe)
+
     ner_dataset = "south_china_sea_01"
     language_model = "en_core_web_lg"
 
