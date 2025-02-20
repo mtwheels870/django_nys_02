@@ -24,6 +24,7 @@ SOURCE1 = "/usr/bin/bash"
 
 VENV_PATH = "/home/bitnami/nlp/venv01"
 PRODIGY_PATH = "prodigy"
+LANGUAGE_MODEL = "en_core_web_sm"
 
 FILE_TEXT = "text_file.txt"
 FILE_LABEL_NER = "ner_labels"
@@ -128,7 +129,6 @@ def prodigy_ner_manual(self, *args, **kwargs):
     file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id, recipe)
 
     ner_dataset = "south_china_sea_01"
-    language_model = "en_core_web_sm"
 
     sys_path_string = ":".join(sys.path)
     new_path = f"{VENV_PATH}/bin:" + sys_path_string
@@ -138,7 +138,7 @@ def prodigy_ner_manual(self, *args, **kwargs):
         "PRODIGY_CONFIG" : config_file,
         "PRODIGY_HOST" : "0.0.0.0" }
 
-    first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
+    first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {LANGUAGE_MODEL} {file_path_text} "
     second = f"--label {file_path_label}"
     # second = f"--label {file_path_label}"
     full_command = first + second
@@ -161,7 +161,6 @@ def prodigy_rel_manual(self, *args, **kwargs):
     file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id, recipe)
 
     ner_dataset = "south_china_sea_01"
-    language_model = "en_core_web_lg"
 
     sys_path_string = ":".join(sys.path)
     new_path = f"{VENV_PATH}/bin:" + sys_path_string
@@ -171,7 +170,7 @@ def prodigy_rel_manual(self, *args, **kwargs):
         "PRODIGY_CONFIG" : config_file,
         "PRODIGY_HOST" : "0.0.0.0" }
 
-    first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {language_model} {file_path_text} "
+    first = f"{PRODIGY_PATH} {recipe} {ner_dataset} {LANGUAGE_MODEL} {file_path_text} "
     second = f"--label {file_path_label}"
     # second = f"--label {file_path_label}"
     full_command = first + second
