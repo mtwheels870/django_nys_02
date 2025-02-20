@@ -98,9 +98,9 @@ def generate_prodigy_files(dir_path, file_id, prodigy_recipe):
     # print(f"tasks.py:generate_prodigy_files(), file_path_text = {file_path_text}")
 
     match prodigy_recipe:
-        catch 'ner.manual':
+        case 'ner.manual':
             file_path_label = os.path.join(dir_path, FILE_LABEL_NER)
-        catch 'rel.manual':
+        case 'rel.manual':
             file_path_label = os.path.join(dir_path, FILE_LABEL_REL)
         case _:
             file_path_label = None
