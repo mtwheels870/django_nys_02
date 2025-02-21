@@ -151,12 +151,9 @@ def prodigy_ner_manual(self, *args, **kwargs):
 
     return process.pid
 
-@shared_task(bind=True)
-def prodigy_rel_manual(self, *args, **kwargs):
-    print(f"prodigy_rel_manual(), self = {self}")
+def _prodigy_recipe(self, recipe, args, kwargs):
     file_id = kwargs['file_id']
 
-    recipe = "rel.manual"
     dir_path = make_temp_dir()
     file_path_text, file_path_label, config_file, output_file = generate_prodigy_files(dir_path, file_id, recipe)
 
@@ -180,6 +177,10 @@ def prodigy_rel_manual(self, *args, **kwargs):
     with open(output_file, "w") as logfile:
         process = subprocess.Popen(full_command, shell=True, stdout=logfile, stderr=logfile,
             env=environment)
-
     return process.pid
+
+@shared_task(bind=True)
+def prodigy_rel_manual(self, *args, **kwargs):
+    print(f"prodigy_rel_manual(), self = {self}")
+    return self._prodigy_recipe("rel.manual", args, kwargs):
 
