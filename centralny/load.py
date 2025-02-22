@@ -79,7 +79,7 @@ ny_config = {
     "IP_RANGE_PATH" : "/home/bitnami/Data/NY/IP/NA_All_DBs_01.shp"
 }
 
-CHUNK_SIZE = 500000
+CHUNK_SIZE = 200000
 
 class Loader():
     def __init__(self):
