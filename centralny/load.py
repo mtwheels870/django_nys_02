@@ -79,6 +79,8 @@ ny_config = {
     "IP_RANGE_PATH" : "/home/bitnami/Data/NY/IP/NA_All_DBs_01.shp"
 }
 
+CHUNK_SIZE = 500000
+
 class Loader():
     def __init__(self):
         self.counter = 0
@@ -129,14 +131,30 @@ class Loader():
 
     def aggregate_tracts(self, verbose=False):
         self.hash_tracts = {}
-        for range in DeIpRange.objects.all():
-            tract = range.census_tract
-            #print(f"Looking up tract: {tract}")
-            if tract.tract_id in self.hash_tracts:
-                tract_count = self.hash_tracts[tract.tract_id]
-            else:
-                tract_count = self._create_tract_count(tract)
-            tract_count.range_count = tract_count.range_count + 1 
+        index_chunk = 0
+        index_range = 0
+        num_objects = DeIpRange.objects.count()
+        print(f"aggregate_tracts(), num_objects = {num_objects}")
+        while True:
+            index_end = index_range + CHUNK_SIZE
+            print(f"aggregate_tracts(), querying [{index_range},{index_end}]")
+            ranges = DeIpRange.objects.all().order_by("id")[index_range:index_end]
+            for range in ranges:
+                tract = range.census_tract
+                print(f"aggregate_tracts(), querying [{index_range},{index_end}]")
+                #print(f"Looking up tract: {tract}")
+                if tract.tract_id in self.hash_tracts:
+                    tract_count = self.hash_tracts[tract.tract_id]
+                else:
+                    tract_count = self._create_tract_count(tract)
+                tract_count.range_count = tract_count.range_count + 1 
+            ranges_returned = ranges.count()
+            if ranges_returned < CHUNK_SIZE:
+                # We didn't get a full batch and we've iterated over it
+                break
+            index_range = index_range + CHUNK_SIZE
+            index_end = index_end + CHUNK_SIZE
+
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
             print(f"save[{tract_id}]: count = {tract_count.range_count}")
