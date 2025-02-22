@@ -48,21 +48,21 @@ tract_mapping = {
 }
 #TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
 
+#    "company_name" : "company_na",
+#    "naics_code" : "naics_code",
+#    "organization" : "organizati",
+#    "srs_company_name" : "srs_compan",
+#    "srs_issuer_id" : "srs_issuer",
+#    "srs_latitude" : "srs_latitu",
+#    "srs_longitude" : "srs_longit",
+#    "srs_strength" : "srs_streng",
 ip_range_mapping = {
-    "ip_range_start" : "ip_start",
-    "ip_range_end" : "ip_end_x",
+    "ip_range_start" : "start-ip",
+    "ip_range_end" : "end-ip",
     "pp_cxn_speed" : "pp_conn_sp",
     "pp_cxn_type" : "pp_conn_ty",
     "pp_latitude" : "pp_latitud",
     "pp_longitude" : "pp_longitu",
-    "company_name" : "company_na",
-    "naics_code" : "naics_code",
-    "organization" : "organizati",
-    "srs_company_name" : "srs_compan",
-    "srs_issuer_id" : "srs_issuer",
-    "srs_latitude" : "srs_latitu",
-    "srs_longitude" : "srs_longit",
-    "srs_strength" : "srs_streng",
     "mpoint" : "MULTIPOINT",
 }
 
