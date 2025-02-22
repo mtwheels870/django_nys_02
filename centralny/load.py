@@ -64,6 +64,10 @@ ip_range_mapping = {
     "pp_latitude" : "pp-latitud",
     "pp_longitude" : "pp-longitu",
     "mpoint" : "MULTIPOINT",
+    "census_tract" : {
+        "transform" : lookup_function
+    },
+    mpoint = models.MultiPointField(null=True)
 }
 
 loc_config = {
@@ -100,6 +104,11 @@ class Loader():
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
 
+    def lookup_function(value):
+        printf(f"lookup_function")
+        
+    # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
+    # lookup on the LayerMapping()
     def run_ip_ranges(self, verbose=False, progress=1000):
         ip_range_shp = Path(loc_config["IP_RANGE_PATH"])
         self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, ip_range_mapping, transform=False)
