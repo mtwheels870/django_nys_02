@@ -26,12 +26,13 @@ from .models import (
     # STATE_1
 # Regular county: "county_name": "COUNTY", "county_code": "COUNTY_1",
 #    "pop2000": "POP2000",
+# These align with the GU CountyOrEquivalent (USGS, National Map)
 county_mapping = {
-    "county_name": "ParishName",
-    "state_name": "STATE",
-    "county_code": "ParishFIPS",
-    "state_code": "STATE_1",
-    "pop2000": "OBJECTID",
+    "county_name": "county_nam",
+    "state_name": "state_name",
+    "county_code": "county_fip",
+    "state_code": "state_fips",
+    "pop2000": "population",
     "mpoly": "MULTIPOLYGON",
 }
 
@@ -66,7 +67,7 @@ ip_range_mapping = {
 }
 
 loc_config = {
-    "COUNTY_PATH" : "/home/bitnami/Data/LA/Boundary/Parishes.shp",
+    "COUNTY_PATH" : "/home/bitnami/Data/LA/Boundary/GU_CountyOrEquivalent.shp",
     "TRACT_PATH" : "/home/bitnami/Data/LA/Boundary/tl_2020_22_tract.shp",
     "IP_RANGE_PATH" : "/home/bitnami/Data/LA/IP/LA_IP-Ranges_01.shp",
 }
