@@ -18,6 +18,44 @@ def remove_tokens(answers):
                 del span["token_end"]
     return answers
 
+def print_results(ctrl):
+    """Print the results of the evaluation to stdout."""
+    # Set the mapping from stream identifiers used in the tasks to meanigful stream names
+    # to be used in the report.
+    streamnames = {"A": "Before", "B": "After"}
+    examples = ctrl.db.get_dataset(ctrl.dataset)
+    counts = Counter()
+    answers = {}
+    for eg in examples:
+        if "answer" not in eg:
+            continue
+        if "options" in eg:  # task created with choice UI
+            selected = eg.get("accept", [])
+            if not selected or len(selected) != 1 or eg["answer"] != "accept":
+                continue
+            answers[eg["id"]] = (eg["answer"], selected[0])
+    for answer, selected in answers.values():
+        if answer == "ignore":
+            counts["ignore"] += 1
+        else:
+            counts[selected] += 1
+    if not counts:
+        raise ValueError("No answers found!")
+
+    msg.divider("Evaluation results")
+    pref, _ = counts.most_common(1)[0]
+    if counts["A"] == counts["B"]:
+        msg.info("You had no preference")
+        pref = None
+    else:
+        msg.good(f"You preferred {pref} ({streamnames.get(pref)})")
+    rows = [
+        ("A", counts["A"], streamnames.get("A")),
+        ("B", counts["B"], streamnames.get("B")),
+        ("Ignored", counts["ignore"], ""),
+        ("Total", sum(counts.values()), ""),
+    ]
+    msg.table(rows, aligns=("l", "r", "l"))
 
 # Recipe decorator with argument annotations: (description, argument type,
 # shortcut, type / converter function called on value before it's passed to
@@ -75,6 +113,7 @@ def mtw_ner_manual(
         "view_id": "ner_manual",  # Annotation interface to use
         "dataset": dataset,  # Name of dataset to save annotations
         "stream": stream,  # Incoming stream of examples
+        "on_exit": print_results,
         "exclude": exclude,  # List of dataset names to exclude
         "before_db": remove_tokens if highlight_chars else None,
         # Remove token information to permit highlighting individual characters

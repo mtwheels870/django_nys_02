@@ -12,12 +12,12 @@ from .models import (
     CountRangeTract, CountRangeCounty, 
     IpRangeSurvey, IpRangePing)
 
-MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
-marker_mapping = {
-    "id", "id",
-    "name", "Name",
-    "location", "MULTIPOINT",
-}
+#MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
+#marker_mapping = {
+#    "id", "id",
+#    "name", "Name",
+#    "location", "MULTIPOINT",
+#}
 
 # Field from models.py, mapped to field names from the shape file
     # COUNTY
@@ -32,7 +32,6 @@ county_mapping = {
     "pop2000": "POP2000",
     "mpoly": "MULTIPOLYGON",
 }
-COUNTY_PATH = "/home/bitnami/Data/County/NY_Counties_04.shp"
 
 tract_mapping = {
     "county_code": {"county_code": "COUNTYFP"},     # Foreign key field
@@ -44,7 +43,7 @@ tract_mapping = {
     "interp_long": "INTPTLON",
     "mpoly": "MULTIPOLYGON",
 }
-TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
+#TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
 
 ip_range_mapping = {
     "ip_range_start" : "ip_start",
@@ -64,30 +63,34 @@ ip_range_mapping = {
     "mpoint" : "MULTIPOINT",
 }
 
+loc_config = {
+    "COUNTY_PATH" : "/home/bitnami/Data/NY/County/NY_Counties_04.shp",
+    "TRACT_PATH" : "/home/bitnami/Data/NY/County/CensusTracts_03.shp",
 # IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
-IP_RANGE_PATH = "/home/bitnami/Data/IP/NA_All_DBs_01.shp"
+    "IP_RANGE_PATH" : "/home/bitnami/Data/NY/IP/NA_All_DBs_01.shp"
+}
 
 class Loader():
     def __init__(self):
         self.counter = 0
 
-    def run_markers(self, verbose=True):
-        marker_shp = Path(MARKER_PATH)
-        self.lm_markers = LayerMapping(Marker, marker_shp, marker_mapping, transform=False)
-        self.lm_markers.save(strict=True, verbose=verbose)
+#    def run_markers(self, verbose=True):
+#        marker_shp = Path(MARKER_PATH)
+#        self.lm_markers = LayerMapping(Marker, marker_shp, marker_mapping, transform=False)
+#        self.lm_markers.save(strict=True, verbose=verbose)
 
     def run_county(self, verbose=True):
-        county_shp = Path(COUNTY_PATH)
+        county_shp = Path(loc_config["COUNTY_PATH"])
         self.lm_county = LayerMapping(County, county_shp, county_mapping, transform=False)
         self.lm_county.save(strict=True, verbose=verbose)
 
     def run_tracts(self, verbose=False, progress=500):
-        tract_shp = Path(TRACT_PATH)
+        tract_shp = Path(loc_config["TRACT_PATH"])
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
 
     def run_ip_ranges(self, verbose=False, progress=1000):
-        ip_range_shp = Path(IP_RANGE_PATH)
+        ip_range_shp = Path(loc_config["IP_RANGE_PATH"])
         self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, ip_range_mapping, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
