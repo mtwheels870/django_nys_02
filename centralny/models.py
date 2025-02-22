@@ -68,7 +68,7 @@ class DeIpRange(models.Model):
     srs_latitude = models.CharField(max_length=20, null=True)
     srs_longitude = models.CharField(max_length=20, null=True)
     srs_strength = models.CharField(max_length=3, null=True)
-    census_tract = models.ForeignKey(CensusTract)
+    census_tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
     mpoint = models.MultiPointField(null=True)
 
     def __str__(self):
