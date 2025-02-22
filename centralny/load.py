@@ -63,6 +63,12 @@ ip_range_mapping = {
     "mpoint" : "MULTIPOINT",
 }
 
+ny_config = {
+    "COUNTY_PATH" : "/home/bitnami/Data/LA/Boundary/Parishes.shp",
+    "TRACT_PATH" : "/home/bitnami/Data/LA/Boundary/tl_2020_22_tract.shp",
+    "IP_RANGE_PATH" : "/home/bitnami/Data/LA/IP/LA_IP-Ranges_01.shp",
+}
+
 loc_config = {
     "COUNTY_PATH" : "/home/bitnami/Data/NY/County/NY_Counties_04.shp",
     "TRACT_PATH" : "/home/bitnami/Data/NY/County/CensusTracts_03.shp",
