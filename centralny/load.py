@@ -56,6 +56,7 @@ tract_mapping = {
 #    "srs_latitude" : "srs_latitu",
 #    "srs_longitude" : "srs_longit",
 #    "srs_strength" : "srs_streng",
+# Check use of transform, lookup_function (for census_tract), make non-null
 ip_range_mapping = {
     "ip_range_start" : "start-ip",
     "ip_range_end" : "end-ip",
@@ -64,10 +65,6 @@ ip_range_mapping = {
     "pp_latitude" : "pp-latitud",
     "pp_longitude" : "pp-longitu",
     "mpoint" : "MULTIPOINT",
-    "census_tract" : {
-        "transform" : lookup_function
-    },
-    mpoint = models.MultiPointField(null=True)
 }
 
 loc_config = {
@@ -128,7 +125,8 @@ class Loader():
                     ip_range.save()
                     break
                 else:
-                    print(f"could not find census_tract for point[{index}]: {point}!")
+                    print(f"could not find census_tract for point[{index}]: {point}!, deleting")
+                    ip_range.delete()
             index = index + 1
 
     def _create_tract_count(self, census_tract):
