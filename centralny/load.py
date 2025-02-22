@@ -59,10 +59,10 @@ tract_mapping = {
 ip_range_mapping = {
     "ip_range_start" : "start-ip",
     "ip_range_end" : "end-ip",
-    "pp_cxn_speed" : "pp_conn_sp",
-    "pp_cxn_type" : "pp_conn_ty",
-    "pp_latitude" : "pp_latitud",
-    "pp_longitude" : "pp_longitu",
+    "pp_cxn_speed" : "pp-conn-sp",
+    "pp_cxn_type" : "pp-conn-ty",
+    "pp_latitude" : "pp-latitud",
+    "pp_longitude" : "pp-longitu",
     "mpoint" : "MULTIPOINT",
 }
 
