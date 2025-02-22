@@ -118,6 +118,8 @@ class Loader():
                     ip_range.census_tract = tract
                     ip_range.save()
                     break
+                else:
+                    print(f"could not find census_tract for point[{index}]: {point}!")
             index = index + 1
 
     def _create_tract_count(self, census_tract):
