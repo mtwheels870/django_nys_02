@@ -8,7 +8,7 @@ from django.contrib.gis.db.models.functions import Centroid
 
 from .models import (
     County, CensusTract,
-    DeIpRange, Marker,
+    DeIpRange, 
     CountRangeTract, CountRangeCounty, 
     IpRangeSurvey, IpRangePing)
 

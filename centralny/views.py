@@ -23,7 +23,6 @@ from centralny.models import (
 )
 
 from centralny.serializers import (
-    MarkerSerializer,
     CensusTractSerializer,
     CountySerializer,
     DeIpRangeSerializer,
@@ -44,13 +43,13 @@ KEY_LEAFLET_MAP = "leaflet_map"
 MAP_BBOX_INITIAL_VALUE = "a=b"
 
 # /maps/api/markers (through DefaultRouter)
-class MarkerViewSet(
-    viewsets.ReadOnlyModelViewSet):
+#class MarkerViewSet(
+#    viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
-    bbox_filter_field = "location"
-    filter_backends = [filters.InBBoxFilter]
-    queryset = Marker.objects.all()
-    serializer_class = MarkerSerializer
+#    bbox_filter_field = "location"
+#    filter_backends = [filters.InBBoxFilter]
+#    queryset = Marker.objects.all()
+#    serializer_class = MarkerSerializer
 
 class CensusTractViewSet(
     viewsets.ReadOnlyModelViewSet):
