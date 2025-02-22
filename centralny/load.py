@@ -24,12 +24,14 @@ from .models import (
     # STATE
     # COUNTY_1
     # STATE_1
+# Regular county: "county_name": "COUNTY", "county_code": "COUNTY_1",
+#    "pop2000": "POP2000",
 county_mapping = {
-    "county_name": "COUNTY",
+    "county_name": "ParishName",
     "state_name": "STATE",
-    "county_code": "COUNTY_1",
+    "county_code": "ParishFIPS",
     "state_code": "STATE_1",
-    "pop2000": "POP2000",
+    "pop2000": "OBJECTID",
     "mpoly": "MULTIPOLYGON",
 }
 
