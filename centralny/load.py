@@ -133,23 +133,22 @@ class Loader():
     def map_single_range(self, range, index_range):
         point = Point(float(range.pp_longitude), float(range.pp_latitude))
         index_tract = 0
-        found = False
+        found_in_tract = False
         for tract in self.tracts:
-            print(f"map_single_range(), checking tract: {tract}")
-            found = tract.mpoly.contains(point)
-            if (found) :
+            # print(f"map_single_range(), checking tract: {tract}")
+            found_this_tract= tract.mpoly.contains(point)
+            if (found_this_tract) :
                 if index_range % 1000 == 0:
                     print(f"point[{index_range}]: {point}, in tract: {tract.short_name}")
                 range.census_tract = tract
                 range.save()
+                found_in_tract = True
                 break
             index_tract = index_tract + 1
-        if not found:
+        if not found_in_tract:
             print(f"map_single_range() index = {index_range}, could not map point {point} to a census tract!")
             self.error_count = self.error_count + 1
-
-
-
+        return found_in_tract
 
     def map_ranges_census(self, verbose=False, progress=1000):
         self.tracts = CensusTract.objects.all()
