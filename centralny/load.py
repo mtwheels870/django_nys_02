@@ -144,7 +144,7 @@ class Loader():
                 range.save()
                 break
             index_tract = index_tract + 1
-        if !found:
+        if not found:
             print(f"map_single_range() index = {index_range}, could not map point {point} to a census tract!")
             self.error_count = self.error_count + 1
 
