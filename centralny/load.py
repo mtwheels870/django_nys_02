@@ -134,6 +134,7 @@ class Loader():
         point = Point(float(range.pp_longitude), float(range.pp_latitude))
         for tract in self.tracts:
             found = tract.mpoly.contains(point)
+            print(f"map_ranges_census(), querying [{index_range},{index_end},{ranges_returned}]")
             if (found) :
                 if index_range % 1000 == 0:
                     print(f"point[{index_range}]: {point}, in tract: {tract.short_name}")
@@ -142,10 +143,12 @@ class Loader():
                 break
             else:
                 print(f"map_single_range() index = {index_range}, could not map point {point} to census tract!")
+                self.error_count = self.error_count + 1
 
 
     def map_ranges_census(self, verbose=False, progress=1000):
         self.tracts = CensusTract.objects.all()
+        self.error_count = 0
         print(f"map_ranges_census(), read {self.tracts.count()} census tracts")
         index_chunk = 0
         range_start = 0
@@ -159,12 +162,13 @@ class Loader():
             for range in ranges:
                 self.map_single_range(range, index_range)
                 #print(f"Looking up tract: {tract}")
-            if ranges_returned < CHUNK_SIZE:
+            if ranges_returned < CHUNK_SIZE or self.error_count > 3:
                 # We didn't get a full batch and we've iterated over it
                 break
             range_start = range_start + CHUNK_SIZE
             range_end = range_end + CHUNK_SIZE
             index_range = index_range + 1
+            print(f"map_ranges_census(), after index increment, index_range = {index_range}")
 
     def _create_tract_count(self, census_tract):
         print(f"create_tract_count(), creating new, {census_tract}")
