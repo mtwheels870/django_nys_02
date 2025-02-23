@@ -181,12 +181,10 @@ class Loader():
     def aggregate_tracts(self, verbose=False):
         self.hash_tracts = {}
         self.error_count = 0
-        print(f"aggregate_tracts(), read {self.tracts.count()} census tracts")
         index_chunk = 0
         range_start = 0
         range_end = range_start + CHUNK_SIZE
         index_range = 0
-        num_objects = DeIpRange.objects.count()
         self.error_count = 0
         while True:
             # Find ranges w/ no census tract ID (mapped)
