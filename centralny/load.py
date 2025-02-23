@@ -70,7 +70,7 @@ ip_range_mapping = {
 loc_config = {
     "COUNTY_PATH" : "/home/bitnami/Data/LA/Boundary/GU_CountyOrEquivalent.shp",
     "TRACT_PATH" : "/home/bitnami/Data/LA/Boundary/tl_2020_22_tract.shp",
-    "IP_RANGE_PATH" : "/home/bitnami/Data/LA/IP/LA_IP-Ranges_01.shp",
+    "IP_RANGE_PATH" : "/home/bitnami/Data/LA/IP/LA_IP-Ranges_02.shp",
 }
 
 ny_config = {
@@ -168,11 +168,11 @@ class Loader():
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < CHUNK_SIZE or self.error_count > 3:
+                print(f"map_ranges_census(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
                 # We didn't get a full batch and we've iterated over it
                 break
             range_start = range_start + CHUNK_SIZE
             range_end = range_end + CHUNK_SIZE
-            print(f"map_ranges_census(), after index increment, index_range = {index_range}")
 
     def _create_tract_count(self, census_tract):
         print(f"create_tract_count(), creating new, {census_tract}")
