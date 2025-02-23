@@ -85,8 +85,11 @@ class MapWrapper {
         }
         if (!found_bbox) {
             // No vaild bounding box, set to our default
-            let initial_position = [43.05, -76.1];
-            let initial_zoom = 12.5
+            // Central NY
+            /* let initial_position = [43.05, -76.1];
+            let initial_zoom = 12.5 */
+            let initial_position = [30.9, -92.1];
+            let initial_zoom = 8
             this.map.setView(initial_position, initial_zoom);
         }
         // return true;

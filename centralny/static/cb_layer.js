@@ -60,7 +60,8 @@ class LayerTractCounts extends LayerCircle {
     // Do the graduated circle
     var range_count = feature.properties["range_count"]
     // range 1... 100 ... 200 ... 400
-    var radiusGraduated = Math.ceil(range_count / 120) * 3.5;
+    // Central_NY: var radiusGraduated = Math.ceil(range_count / 120) * 3.5;
+    var radiusGraduated = Math.ceil(range_count / 4000) * 3.5;
     var copiedStyle = {...this.style};
     // console.log('ltc.oEC(), copiedStyle = ' + JSON.stringify(copiedStyle));
     copiedStyle["radius"] = radiusGraduated;
@@ -94,9 +95,16 @@ class LayerCountyCounts extends LayerCircle {
     // Do the graduated circle
     var range_count = feature.properties["range_count"]
     var radiusGraduated;
-    if (range_count <= 500) {
+    /* Central NY: if (range_count <= 500) {
       radiusGraduated = 5;
     } else if (range_count <= 2000) {
+      radiusGraduated = 10;
+    } else {
+      radiusGraduated = 15;
+    } */
+    if (range_count <= 20000) {
+      radiusGraduated = 5;
+    } else if (range_count <= 60000) {
       radiusGraduated = 10;
     } else {
       radiusGraduated = 15;
