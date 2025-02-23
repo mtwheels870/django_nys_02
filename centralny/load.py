@@ -112,25 +112,9 @@ class Loader():
         self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, ip_range_mapping, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
-        index = 0
-        for ip_range in DeIpRange.objects.all():
-            point = Point(float(ip_range.pp_longitude), float(ip_range.pp_latitude))
-            #print(f"\nlooking up point = {point}") 
-            for tract in CensusTract.objects.all():
-                # print(f"checking tract: = {tract.short_name}") 
-                found = tract.mpoly.contains(point)
-                if (found) :
-                    print(f"point[{index}]: {point}, in tract: {tract.short_name}")
-                    # ip_range.mpoint = point
-                    ip_range.census_tract = tract
-                    ip_range.save()
-                    break
-                else:
-                    print(f"could not find census_tract for point[{index}]: {point}!, deleting")
-                    ip_range.delete()
-            index = index + 1
+        print(f"ranges saved, now run: map_ranges_census()")
 
-    def map_single_range(self, range, index_range):
+    def _map_single_range(self, range, index_range):
         point = Point(float(range.pp_longitude), float(range.pp_latitude))
         index_tract = 0
         found_in_tract = False
@@ -164,7 +148,7 @@ class Loader():
             ranges_returned = ranges.count()
             print(f"map_ranges_census(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
-                self.map_single_range(range, index_range)
+                self._map_single_range(range, index_range)
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < CHUNK_SIZE or self.error_count > 3:
