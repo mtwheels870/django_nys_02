@@ -131,7 +131,7 @@ class Loader():
             index = index + 1
 
     def map_single_range(self, range, index_range):
-        point = range.mpoint
+        point = Point(float(range.pp_longitude), float(range.pp_latitude))
         for tract in self.tracts:
             found = tract.mpoly.contains(point)
             if (found) :
@@ -162,6 +162,7 @@ class Loader():
                 break
             index_range = index_range + CHUNK_SIZE
             index_end = index_end + CHUNK_SIZE
+            index_range = index_range + 1
 
     def _create_tract_count(self, census_tract):
         print(f"create_tract_count(), creating new, {census_tract}")
