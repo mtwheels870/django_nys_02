@@ -81,6 +81,7 @@ ny_config = {
 }
 
 CHUNK_SIZE = 200000
+SMALL_CHUNK_SIZE = 10000
 
 class Loader():
     def __init__(self):
@@ -182,7 +183,7 @@ class Loader():
         self.error_count = 0
         index_chunk = 0
         range_start = 0
-        range_end = range_start + CHUNK_SIZE
+        range_end = range_start + SMALL_CHUNK_SIZE
         index_range = 0
         self.error_count = 0
         while True:
@@ -200,8 +201,8 @@ class Loader():
                 print(f"aggregate_tracts(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
                 # We didn't get a full batch and we've iterated over it
                 break
-            range_start = range_start + CHUNK_SIZE
-            range_end = range_end + CHUNK_SIZE
+            range_start = range_start + SMALL_CHUNK_SIZE
+            range_end = range_end + SMALL_CHUNK_SIZE
 
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
