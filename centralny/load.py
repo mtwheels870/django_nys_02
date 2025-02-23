@@ -146,22 +146,24 @@ class Loader():
 
     def map_ranges_census(self, verbose=False, progress=1000):
         self.tracts = CensusTract.objects.all()
+        print(f"map_ranges_census(), read {self.tracts.count()} census tracts")
         index_chunk = 0
+        range_start = 0
+        range_end = range_start + CHUNK_SIZE
         index_range = 0
-        index_end = index_range + CHUNK_SIZE
         num_objects = DeIpRange.objects.count()
         while True:
-            ranges = DeIpRange.objects.all().order_by("id")[index_range:index_end]
+            ranges = DeIpRange.objects.all().order_by("id")[range_start:range_end]
             ranges_returned = ranges.count()
-            print(f"map_ranges_census(), querying [{index_range},{index_end},{ranges_returned}]")
+            print(f"map_ranges_census(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
                 self.map_single_range(range, index_range)
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < CHUNK_SIZE:
                 # We didn't get a full batch and we've iterated over it
                 break
-            index_range = index_range + CHUNK_SIZE
-            index_end = index_end + CHUNK_SIZE
+            range_start = range_start + CHUNK_SIZE
+            range_end = range_end + CHUNK_SIZE
             index_range = index_range + 1
 
     def _create_tract_count(self, census_tract):
