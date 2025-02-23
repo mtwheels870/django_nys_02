@@ -144,7 +144,8 @@ class Loader():
         index_range = 0
         num_objects = DeIpRange.objects.count()
         while True:
-            ranges = DeIpRange.objects.all().order_by("id")[range_start:range_end]
+            # Find ranges w/ no census tract ID (mapped)
+            ranges = DeIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")[range_start:range_end]
             ranges_returned = ranges.count()
             print(f"map_ranges_census(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
