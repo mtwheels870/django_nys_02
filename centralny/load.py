@@ -191,6 +191,8 @@ class Loader():
             ranges_returned = ranges.count()
             print(f"aggregate_tracts(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
+                if index_range % 1000 == 0:
+                    print(f"a_t(), aggregating range = {index_range}")
                 self._aggregate_range(range)
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
