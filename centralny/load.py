@@ -168,36 +168,45 @@ class Loader():
         self.hash_tracts[census_tract.tract_id] = tract_count
         return tract_count
 
+    def _aggregate_range(self, range):
+        tract = range.census_tract
+        print(f"aggregate_tracts(), querying [{index_range},{index_end}]")
+        #print(f"Looking up tract: {tract}")
+        if tract.tract_id in self.hash_tracts:
+            tract_count = self.hash_tracts[tract.tract_id]
+        else:
+            tract_count = self._create_tract_count(tract)
+        tract_count.range_count = tract_count.range_count + 1 
+
     def aggregate_tracts(self, verbose=False):
         self.hash_tracts = {}
+        self.error_count = 0
+        print(f"aggregate_tracts(), read {self.tracts.count()} census tracts")
         index_chunk = 0
+        range_start = 0
+        range_end = range_start + CHUNK_SIZE
         index_range = 0
-        print(f"aggregate_tracts(), num_objects = {num_objects}")
+        num_objects = DeIpRange.objects.count()
+        self.error_count = 0
         while True:
-            index_end = index_range + CHUNK_SIZE
-            ranges = DeIpRange.objects.all().order_by("id")[index_range:index_end]
-            ranges_this_query = ranges.count()
-            print(f"aggregate_tracts(), querying [{index_range},{index_end},{num_objects},{ranges_this_query}]")
-            for range in ranges:
-                tract = range.census_tract
-                print(f"aggregate_tracts(), querying [{index_range},{index_end}]")
-                #print(f"Looking up tract: {tract}")
-                if tract.tract_id in self.hash_tracts:
-                    tract_count = self.hash_tracts[tract.tract_id]
-                else:
-                    tract_count = self._create_tract_count(tract)
-                tract_count.range_count = tract_count.range_count + 1 
+            # Find ranges w/ no census tract ID (mapped)
+            ranges = DeIpRange.objects.all().order_by("id")[range_start:range_end]
             ranges_returned = ranges.count()
-            if ranges_returned < CHUNK_SIZE:
+            print(f"aggregate_tracts(), querying [{range_start},{range_end},{ranges_returned}]")
+            for range in ranges:
+                self._aggregate_range(range)
+                index_range = index_range + 1
+                #print(f"Looking up tract: {tract}")
+            if ranges_returned < CHUNK_SIZE or self.error_count > 3:
+                print(f"aggregate_tracts(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
                 # We didn't get a full batch and we've iterated over it
                 break
-            index_range = index_range + CHUNK_SIZE
-            index_end = index_end + CHUNK_SIZE
-            num_objects = num_objects = CHUNK_SIZE
+            range_start = range_start + CHUNK_SIZE
+            range_end = range_end + CHUNK_SIZE
 
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
-            print(f"save[{tract_id}]: count = {tract_count.range_count}")
+            print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}")
             tract_count.save()
 
     def _create_county_counter(self, county):
