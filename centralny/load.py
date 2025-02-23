@@ -170,7 +170,6 @@ class Loader():
 
     def _aggregate_range(self, range):
         tract = range.census_tract
-        print(f"aggregate_tracts(), querying [{index_range},{index_end}]")
         #print(f"Looking up tract: {tract}")
         if tract.tract_id in self.hash_tracts:
             tract_count = self.hash_tracts[tract.tract_id]
