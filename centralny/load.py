@@ -85,6 +85,7 @@ CHUNK_SIZE = 200000
 class Loader():
     def __init__(self):
         self.counter = 0
+        self.tracts = None
 
 #    def run_markers(self, verbose=True):
 #        marker_shp = Path(MARKER_PATH)
@@ -129,6 +130,39 @@ class Loader():
                     ip_range.delete()
             index = index + 1
 
+    def map_single_range(self, range, index_range):
+        point = range.mpoint
+        for tract in self.tracts:
+            found = tract.mpoly.contains(point)
+            if (found) :
+                if index_range % 1000 == 0:
+                    print(f"point[{index_range}]: {point}, in tract: {tract.short_name}")
+                range.census_tract = tract
+                range.save()
+                break
+            else:
+                print(f"map_single_range() index = {index_range}, could not map point {point} to census tract!")
+
+
+    def map_ranges_census(self, verbose=False, progress=1000):
+        self.tracts = CensusTract.objects.all()
+        index_chunk = 0
+        index_range = 0
+        index_end = index_range + CHUNK_SIZE
+        num_objects = DeIpRange.objects.count()
+        while True:
+            ranges = DeIpRange.objects.all().order_by("id")[index_range:index_end]
+            ranges_returned = ranges.count()
+            print(f"map_ranges_census(), querying [{index_range},{index_end},{ranges_returned}]")
+            for range in ranges:
+                self.map_single_range(range, index_range)
+                #print(f"Looking up tract: {tract}")
+            if ranges_returned < CHUNK_SIZE:
+                # We didn't get a full batch and we've iterated over it
+                break
+            index_range = index_range + CHUNK_SIZE
+            index_end = index_end + CHUNK_SIZE
+
     def _create_tract_count(self, census_tract):
         print(f"create_tract_count(), creating new, {census_tract}")
         tract_count = CountRangeTract()
@@ -142,12 +176,12 @@ class Loader():
         self.hash_tracts = {}
         index_chunk = 0
         index_range = 0
-        num_objects = DeIpRange.objects.count()
         print(f"aggregate_tracts(), num_objects = {num_objects}")
         while True:
             index_end = index_range + CHUNK_SIZE
-            print(f"aggregate_tracts(), querying [{index_range},{index_end}]")
             ranges = DeIpRange.objects.all().order_by("id")[index_range:index_end]
+            ranges_this_query = ranges.count()
+            print(f"aggregate_tracts(), querying [{index_range},{index_end},{num_objects},{ranges_this_query}]")
             for range in ranges:
                 tract = range.census_tract
                 print(f"aggregate_tracts(), querying [{index_range},{index_end}]")
@@ -163,6 +197,7 @@ class Loader():
                 break
             index_range = index_range + CHUNK_SIZE
             index_end = index_end + CHUNK_SIZE
+            num_objects = num_objects = CHUNK_SIZE
 
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
