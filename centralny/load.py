@@ -197,7 +197,7 @@ class Loader():
                 self._aggregate_range(range)
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
-            if ranges_returned < CHUNK_SIZE or self.error_count > 3:
+            if ranges_returned < SMALL_CHUNK_SIZE or self.error_count > 3:
                 print(f"aggregate_tracts(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
                 # We didn't get a full batch and we've iterated over it
                 break
