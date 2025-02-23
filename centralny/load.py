@@ -165,13 +165,13 @@ class Loader():
             print(f"map_ranges_census(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
                 self.map_single_range(range, index_range)
+                index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < CHUNK_SIZE or self.error_count > 3:
                 # We didn't get a full batch and we've iterated over it
                 break
             range_start = range_start + CHUNK_SIZE
             range_end = range_end + CHUNK_SIZE
-            index_range = index_range + 1
             print(f"map_ranges_census(), after index increment, index_range = {index_range}")
 
     def _create_tract_count(self, census_tract):
