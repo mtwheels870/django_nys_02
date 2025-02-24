@@ -18,7 +18,7 @@ from django_celery_results.models import TaskResult
 from django.core.management import call_command
 from django.utils import timezone
 
-from .models import IpRangeSurvey, CountRangeTract, IpRangePing
+from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange
 
 @shared_task(bind=True)
 def start_range_survey(self, *args, **kwargs):
