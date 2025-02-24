@@ -30,7 +30,7 @@ from centralny.serializers import (
     CountRangeCountySerializer
 )
 
-from .forms import SelectedCensusTractForm
+from .forms import SelectedCensusTractForm, PingStrategyForm
 from .tables import DeIpRangeTable
 
 # Import our neighbors
