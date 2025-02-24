@@ -45,7 +45,7 @@ def start_range_survey(self, *args, **kwargs):
             if index_range > 10000:
                 outer_loop = False
                 break
-       if not outer_loop:
+        if not outer_loop:
             break 
 
     survey.time_started = timezone.now()
