@@ -27,7 +27,6 @@ TOTAL_OBJECTS = 2000
 
 #@shared_task(bind=True)
 #def start_range_survey(self, *args, **kwargs):
-@shared_task
 class RangeSurvey:
     def _get_all_ranges(self, survey, tract, index_range):
         outer_loop = True
@@ -56,6 +55,7 @@ class RangeSurvey:
                 break
         return outer_loop, index_range 
 
+    @shared_task(bind=True)
     def run(self, *args, **kwargs):
         print(f"start_range_survey(), self = {self}, kwargs = {kwargs}, creating survey")
 
