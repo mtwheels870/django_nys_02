@@ -20,7 +20,7 @@ from django.utils import timezone
 
 from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange
 
-def get_all_ranges(self, survey, tract, index_range):
+def get_all_ranges(survey, tract, index_range):
     outer_loop = True
     get_range_chunks = True
     while get_range_chunks:
@@ -53,7 +53,7 @@ def start_range_survey(self, *args, **kwargs):
     for tract_count in count_range_tracts:
         tract = tract_count.census_tract
         try:
-            outer_loop, index_range = self.get_all_ranges(survey, tract, index_range)
+            outer_loop, index_range = get_all_ranges(survey, tract, index_range)
         # Get all of the ranges from this census tract
         except (KeyError, DeIpRange.DoesNotExist):
             print(f"start_range_survey(), Exception, no ranges for tract = {tract.id}")
