@@ -230,5 +230,5 @@ class ConfigurePingView(generic.edit.FormView):
         # Else, we stay here
         # This doesn't work. form.fields["my_field"] = my_field
         # return redirect(request.path, {'form' : form, fields=(my_field))
-        return redirect(request.path, {'form' : form}, kwargs={"a": 12})
+        return redirect(request.path, {'form' : form, "a" : 12})
 
