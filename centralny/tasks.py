@@ -20,6 +20,24 @@ from django.utils import timezone
 
 from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange
 
+def get_all_ranges(self, survey, tract, index_range):
+    outer_loop = True
+    get_range_chunks = True
+    while get_range_chunks:
+        print(f"get_all_ranges(), getting 1000 ranges")
+        ip_ranges = tract.deiprange_set.iterator(chunk_size=1000)
+        for range in ip_ranges:
+            if index_range < 10:
+                print(f"start_range_survey(), creating range[{index_range:05}], {range.ip_range_start}")
+            range_ping = IpRangePing(ip_survey=survey,ip_range=range)
+            range_ping.save()
+            index_range = index_range + 1
+            if index_range > 10000:
+                outer_loop = False
+                get_range_chunks = False
+                break
+    return outer_loop, index_range 
+
 @shared_task(bind=True)
 def start_range_survey(self, *args, **kwargs):
     print(f"start_range_survey(), self = {self}, kwargs = {kwargs}, creating survey")
@@ -35,20 +53,10 @@ def start_range_survey(self, *args, **kwargs):
     for tract_count in count_range_tracts:
         tract = tract_count.census_tract
         try:
+            outer_loop, index_range = self.get_all_ranges(survey, tract, index_range)
         # Get all of the ranges from this census tract
-            ip_ranges = tract.deiprange_set.iterator(chunk_size=1000)
         except (KeyError, DeIpRange.DoesNotExist):
             print(f"start_range_survey(), Exception, no ranges for tract = {tract.id}")
-        else:
-            for range in ip_ranges:
-                if index_range < 10:
-                    print(f"start_range_survey(), creating range[{index_range:05}], {range.ip_range.ip_range_start}")
-                range_ping = IpRangePing(ip_survey=survey,ip_range=range)
-                range_ping.save()
-                index_range = index_range + 1
-                if index_range > 10000:
-                    outer_loop = False
-                    break
         if not outer_loop:
             break 
 
