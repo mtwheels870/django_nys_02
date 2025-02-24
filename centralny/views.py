@@ -12,6 +12,8 @@ from  django_tables2.config import RequestConfig
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
+from django_nys_02.celery import app as celery_app, QUEUE_NAME
+
 from centralny.models import (
     CensusTract,
     County,
@@ -41,6 +43,8 @@ KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
 MAP_BBOX_INITIAL_VALUE = "a=b"
+
+FIELD_CELERY_DETAILS = "celery_stuff"
 
 # /maps/api/markers (through DefaultRouter)
 #class MarkerViewSet(
@@ -194,21 +198,14 @@ class ConfigurePingView(generic.edit.FormView):
     form_class = PingStrategyForm
     template_name = "centralny/ps_detail.html"
 
+    def _get_celery_details(self):
+        return f"Main: {celery_app.main}, queue = {QUEUE_NAME}")
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        # After this, the form is created
-
-        form = context_data['form']
-        fields = form.fields
-        if "my_field" in context_data:
-            my_field = context_data['my_field']
-        else:
-            my_field = None
-        print(f"CPV.g_c_d(), context_data = {context_data}")
-        print(f"CPV.g_c_d(), kwargs = {kwargs}, fields = {fields}")
-# Put some celery stuff here
+        # There's an unbound, empty form in context_data...
         # File stuff
-        context_data['celery_stuff'] = "Celery Stuff Here"
+        context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
 
         return context_data
 
@@ -226,5 +223,5 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-        context = {"form" : form, "celery_stuff" : "More celery stuff..."}
+        context = {"form" : form, FIELD_CELERY_DETAILS : self._get_celery_details()}
         return render(request, self.template_name, context)
