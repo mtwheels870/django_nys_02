@@ -21,7 +21,7 @@ from django.utils import timezone
 from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange
 
 SMALL_CHUNK_SIZE = 10000
-TOTAL_OBJECTS = 2000
+TOTAL_OBJECTS = 12000
 
 #@shared_task(bind=True)
 # Nested method
@@ -47,6 +47,7 @@ def _get_all_ranges(survey, tract, index_range):
                 outer_loop = False
                 get_range_chunks = False
                 break
+        batches.append((range_start, range_start + ranges_returned))
         range_start = range_end
         range_end = range_end + SMALL_CHUNK_SIZE
         if ranges_returned < SMALL_CHUNK_SIZE:
@@ -83,4 +84,8 @@ def start_range_survey(self, *args, **kwargs):
     survey.num_total_objects = TOTAL_OBJECTS 
     survey.save()
     print(f"start_range_survey(), created {survey.num_total_objects} ip ranges to ping")
+    print(f"start_range_survey(), batches: ")
+    for index, batch in enumerate(batches):
+        print(f"s_r_s(), batch[{index}] : {batch}")
+    return TOTAL_OBJECTS
 
