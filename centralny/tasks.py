@@ -88,7 +88,7 @@ def start_range_survey(self, *args, **kwargs):
 
 @shared_task(bind=True)
 def ping_tracts(survey, list_count_range_tracts):
-    f = lamba crt : crt.census_tract
+    f = lambda crt: crt.census_tract
     list_tracts = [f(x) for x in list_count_range_tracts]
     print(f"ping_tracts(), tracts(id)s: {list_tracts}")
 
