@@ -213,7 +213,7 @@ class ConfigurePingView(generic.edit.FormView):
         return context_data
 
     def post(self, request, *args, **kwargs):
-        # print(f"TFEV.post(), kwargs = {kwargs}")
+        print(f"CPV.post(), kwargs = {kwargs}")
         form = PingStrategyForm(request.POST)
         if form.is_valid():
             my_field = form.cleaned_data['my_field']
@@ -226,12 +226,5 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-        context = {"form" : form, "message" : "Success!"}
+        context = {"form" : form, "other_field" : "Message here"}
         return render(request, self.template_name, context)
-        # form.fields["my_field"] = my_field
-        # Else, we stay here
-        # This doesn't work. form.fields["my_field"] = my_field
-        # return redirect(request.path, {'form' : form, fields=(my_field))
-        # return redirect(request.path, {'form' : form, "a" : 12})
-        # return redirect(request.path, kwargs={"a" : 12})
-
