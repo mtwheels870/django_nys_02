@@ -70,7 +70,7 @@ def start_range_survey(self, *args, **kwargs):
         try:
             index_range, batches = _get_all_ranges(survey, tract, index_range)
             all_batches.append(batches)
-            if index_range < TOTAL_OBJECTS:
+            if index_range > TOTAL_OBJECTS:
                 break
         # Get all of the ranges from this census tract
         except (KeyError, DeIpRange.DoesNotExist):
