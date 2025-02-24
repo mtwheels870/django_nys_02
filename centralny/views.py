@@ -226,10 +226,12 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-        form.fields["my_field"] = my_field
+        context = {"form" : form, "message" : "Success!"}
+        return render(request, self.template_name, context)
+        # form.fields["my_field"] = my_field
         # Else, we stay here
         # This doesn't work. form.fields["my_field"] = my_field
         # return redirect(request.path, {'form' : form, fields=(my_field))
         # return redirect(request.path, {'form' : form, "a" : 12})
-        return redirect(request.path, kwargs={"a" : 12})
+        # return redirect(request.path, kwargs={"a" : 12})
 
