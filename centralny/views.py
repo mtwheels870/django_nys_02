@@ -219,8 +219,6 @@ class ConfigurePingView(generic.edit.FormView):
     def post(self, request, *args, **kwargs):
         # print(f"TFEV.post(), kwargs = {kwargs}")
         form = PingStrategyForm(request.POST)
-        <button type="submit" name="start_ping">Approve</button>
-        <button type="submit" name="return_to_map">Return to Map</button>
         if form.is_valid():
             my_field = form.cleaned_data['my_field']
             print(f"CPV.post(), my_field = {my_field}")
