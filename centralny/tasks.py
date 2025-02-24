@@ -113,8 +113,8 @@ def start_tracts(self, *args, **kwargs):
     batch_three = count_range_tracts[21:30]
     ending_task = finish_survey.s(survey)
 
-    grouped_tasks = group(ping_tracts.s(survey, batch_one), ping_tracks.s(survey, batch_two), 
-        ping_tracks.s(survey, batch_three)) 
+    grouped_tasks = group(ping_tracts.s(survey, batch_one), ping_tracts.s(survey, batch_two), 
+        ping_tracts.s(survey, batch_three)) 
     chained_task = chain(grouped_task, ending_task)
 
     # Break into batches of 10 tracts, right now
