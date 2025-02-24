@@ -86,3 +86,36 @@ def start_range_survey(self, *args, **kwargs):
         print(f"s_r_s(), batch[{index}] : {batch}")
     return TOTAL_OBJECTS
 
+@shared_task(bind=True)
+def ping_tracts(survey, list_count_range_tracts):
+    f = lamba crt : crt.census_tract
+    list_tracts = [f(x) for x in list_count_range_tracts]
+    print(f"ping_tracts(), tracts(id)s: {list_tracts}")
+
+@shared_task(bind=True)
+def finish_survey(survey):
+    survey.time_stopped = timezone.now()
+    survey.save()
+
+@shared_task(bind=True)
+def start_tracts(self, *args, **kwargs):
+
+    # Main method
+    print(f"start_range_survey(), self = {self}, kwargs = {kwargs}, creating survey")
+
+    survey = IpRangeSurvey()
+    survey.time_started = timezone.now()
+    survey.save()
+    # Use the minus to be descending
+    count_range_tracts = CountRangeTract.objects.order_by("-range_count")
+    batch_one = count_range_tracts[:10]
+    batch_two = count_range_tracts[11:20]
+    batch_three = count_range_tracts[21:30]
+    ending_task = finish_survey.s(survey)
+
+    grouped_tasks = group(ping_tracts.s(survey, batch_one), ping_tracks.s(survey, batch_two), 
+        ping_tracks.s(survey, batch_three)) 
+    chained_task = chain(grouped_task, ending_task)
+
+    # Break into batches of 10 tracts, right now
+    
