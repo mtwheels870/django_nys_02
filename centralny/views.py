@@ -200,8 +200,6 @@ class ConfigurePingView(generic.edit.FormView):
 
         form = context_data['form']
         print(f"CPV.g_c_d(), kwargs = {kwargs}, form = {form}")
-        text_editor = form.fields['text_editor']
-        text_editor.initial = text_file.prose_editor
 # Put some celery stuff here
         # File stuff
         context_data['celery_stuff'] = "Celery Stuff Here"
