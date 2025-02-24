@@ -199,7 +199,7 @@ class ConfigurePingView(generic.edit.FormView):
     template_name = "centralny/ps_detail.html"
 
     def _get_celery_details(self):
-        return f"Main: {celery_app.main}, queue = {QUEUE_NAME}")
+        return f"Main: {celery_app.main}, queue = {QUEUE_NAME}"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
