@@ -101,7 +101,7 @@ def finish_survey(survey):
 def start_tracts(self, *args, **kwargs):
 
     # Main method
-    print(f"start_range_survey(), self = {self}, kwargs = {kwargs}, creating survey")
+    print(f"start_tracts(), self = {self}, kwargs = {kwargs}, creating survey")
 
     survey = IpRangeSurvey()
     survey.time_started = timezone.now()
@@ -115,7 +115,10 @@ def start_tracts(self, *args, **kwargs):
 
     grouped_tasks = group(ping_tracts.s(survey, batch_one), ping_tracts.s(survey, batch_two), 
         ping_tracts.s(survey, batch_three)) 
+    print(f"start_tracts(), grouped_tasks = {grouped_tasks}")
     chained_task = chain(grouped_tasks, ending_task)
+    result = chained_task.apply_async()
+    return result
 
     # Break into batches of 10 tracts, right now
     
