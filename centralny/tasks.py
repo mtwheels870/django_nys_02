@@ -87,13 +87,14 @@ def start_range_survey(self, *args, **kwargs):
     return TOTAL_OBJECTS
 
 @shared_task(bind=True)
-def ping_tracts(self, survey, list_count_range_tracts):
+def ping_tracts(self, survey_id, list_count_range_tracts):
     f = lambda crt: crt.census_tract
     list_tracts = [f(x) for x in list_count_range_tracts]
-    print(f"ping_tracts(), tracts(id)s: {list_tracts}")
+    print(f"ping_tracts(), survey_id = {survey_id}, tracts(id)s: {list_tracts}")
 
 @shared_task(bind=True)
-def finish_survey(self, survey):
+def finish_survey(self, survey_id):
+    survey = IpRangeSurvey.objects.get(pk=survey_id)
     survey.time_stopped = timezone.now()
     survey.save()
 
@@ -113,8 +114,8 @@ def start_tracts(self, *args, **kwargs):
     batch_three = count_range_tracts[21:30]
     ending_task = finish_survey.s(survey)
 
-    grouped_tasks = group(ping_tracts.s(survey, batch_one), ping_tracts.s(survey, batch_two), 
-        ping_tracts.s(survey, batch_three)) 
+    grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
+        ping_tracts.s(survey.id, batch_three)) 
     print(f"start_tracts(), grouped_tasks = {grouped_tasks}")
     chained_task = chain(grouped_tasks, ending_task)
     result = chained_task.apply_async()
