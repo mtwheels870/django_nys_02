@@ -79,6 +79,9 @@ class CountRangeTract(models.Model):
     range_count = models.IntegerField(default=0)
     mpoint = models.MultiPointField(null=True)
 
+    class Meta:
+        ordering = ["-range_count"]
+
     def __str__(self):
         return f"{census_tract}: {range_count:,}"
 
@@ -87,6 +90,9 @@ class CountRangeCounty(models.Model):
     county_code = models.ForeignKey(County, on_delete=models.CASCADE)
     range_count = models.IntegerField(default=0)
     centroid = models.PointField(null=True)
+
+    class Meta:
+        ordering = ["-range_count"]
 
     def __str__(self):
         return f"County: {county_code}"
