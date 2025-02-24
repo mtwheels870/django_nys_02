@@ -36,7 +36,7 @@ def start_range_survey(self, *args, **kwargs):
         tract = tract_count.census_tract
         try:
         # Get all of the ranges from this census tract
-            ip_ranges = tract.deiprange_set(pk=tract.id)
+            ip_ranges = tract.deiprange_set.get()
         except (KeyError, DeIpRange.DoesNotExist):
             print(f"start_range_survey(), Exception, no ranges for tract = {tract.id}")
         else:
