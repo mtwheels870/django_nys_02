@@ -200,20 +200,8 @@ class ConfigurePingView(generic.edit.FormView):
 
 # Put some celery stuff here
         # File stuff
-        file_id = self.kwargs.get('file_id')
-        context_data['file_id'] = file_id
-        text_file = get_object_or_404(TextFile, pk=file_id)
-        context_data['page_number'] = text_file.page_number 
+        context_data['celery_stuff'] = "Celery Stuff Here"
 
-        # Folder stuff
-        folder_id = self.kwargs.get('folder_id')
-        context_data['folder_id'] = folder_id
-        text_folder = get_object_or_404(TextFolder, pk=folder_id)
-        context_data['folder_name'] = text_folder.folder_name 
-
-        form = context_data['form']
-        text_editor = form.fields['text_editor']
-        text_editor.initial = text_file.prose_editor
         return context_data
 
     def post(self, request, *args, **kwargs):
