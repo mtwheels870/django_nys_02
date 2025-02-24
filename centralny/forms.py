@@ -29,3 +29,7 @@ class PingStrategyForm(forms.Form):
     ]
     my_field = forms.ChoiceField(choices=CHOICES)
 
+class IpRangePingForm(ModelForm):
+    class Meta:
+        model = IpRangePing
+        fields = ["time_pinged"]

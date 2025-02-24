@@ -14,6 +14,8 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
+from .tasks import prodigy_ner_manual, prodigy_rel_manual
+
 from centralny.models import (
     CensusTract,
     County,
@@ -199,7 +201,7 @@ class ConfigurePingView(generic.edit.FormView):
     template_name = "centralny/ps_detail.html"
 
     def _get_celery_details(self):
-        return f"Main: {celery_app.main}, queue = {QUEUE_NAME}"
+        return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -223,5 +225,9 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-        context = {"form" : form, FIELD_CELERY_DETAILS : self._get_celery_details()}
+            start_range_survey()
+            async_result = start_range_survey.apply_async(
+                kwargs={'arg1': 23},
+                queue=QUEUE_NAME,
+                routing_key='ping.tasks.start_survey')
         return render(request, self.template_name, context)
