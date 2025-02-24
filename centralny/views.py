@@ -225,9 +225,10 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-            start_range_survey()
             async_result = start_range_survey.apply_async(
                 kwargs={'arg1': 23},
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.start_survey')
+        celery_details = self._get_celery_details()
+        context = {"form" : form, FIELD_CELERY_DETAILS : celery_details}
         return render(request, self.template_name, context)

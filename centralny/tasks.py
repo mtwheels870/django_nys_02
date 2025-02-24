@@ -26,6 +26,9 @@ def get_all_ranges(survey, tract, index_range):
     while get_range_chunks:
         print(f"get_all_ranges(), getting 1000 ranges")
         ip_ranges = tract.deiprange_set.iterator(chunk_size=1000)
+        if ip_ranges.count() == 0:
+            get_range_chunks = False
+            break
         for range in ip_ranges:
             if index_range < 10:
                 print(f"start_range_survey(), creating range[{index_range:05}], {range.ip_range_start}")
@@ -33,6 +36,7 @@ def get_all_ranges(survey, tract, index_range):
             range_ping.save()
             index_range = index_range + 1
             if index_range > 10000:
+                print(f"start_range_survey(), index_range > 10000, breaking")
                 outer_loop = False
                 get_range_chunks = False
                 break
