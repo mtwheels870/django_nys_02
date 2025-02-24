@@ -225,7 +225,7 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-            async_result = RangeSurvey.apply_async(
+            async_result = RangeSurvey().apply_async(
                 kwargs={'arg1': 23},
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.start_survey')
