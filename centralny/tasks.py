@@ -87,9 +87,9 @@ def start_range_survey(self, *args, **kwargs):
     return TOTAL_OBJECTS
 
 @shared_task(bind=True)
-def ping_tracts(self, survey_id, list_count_range_tracts):
-    f = lambda crt: crt.census_tract
-    list_tracts = [f(x) for x in list_count_range_tracts]
+def ping_tracts(self, survey_id, list_tracts):
+    # f = lambda crt: crt.census_tract
+    # list_tracts = [f(x) for x in list_count_range_tracts]
     print(f"ping_tracts(), survey_id = {survey_id}, tracts(id)s: {list_tracts}")
 
 @shared_task(bind=True)
@@ -113,7 +113,7 @@ def start_tracts(self, *args, **kwargs):
     batch_one = [f(x) for x in count_range_tracts[:10]]
     batch_two = [f(x) for x in count_range_tracts[11:20]]
     batch_three = [f(x) for x in count_range_tracts[21:30]]
-    ending_task = finish_survey.s(survey)
+    ending_task = finish_survey.s(survey.id)
 
     grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
         ping_tracts.s(survey.id, batch_three)) 
