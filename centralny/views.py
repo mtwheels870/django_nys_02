@@ -203,6 +203,7 @@ class ConfigurePingView(generic.edit.FormView):
             my_field = context_data['my_field']
         else:
             my_field = None
+        print(f"CPV.g_c_d(), context_data = {context_data}")
         print(f"CPV.g_c_d(), kwargs = {kwargs}, form = {form}, my_field = {my_field}")
 # Put some celery stuff here
         # File stuff
