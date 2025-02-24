@@ -30,7 +30,7 @@ def get_all_ranges(survey, tract, index_range):
     while get_range_chunks:
         print(f"get_all_ranges(), getting 1000 ranges, getting[{range_start},{range_end}]")
         ip_ranges = tract.deiprange_set.all().order_by("id")[range_start:range_end]
-        ranges_returned = ranges.count()
+        ranges_returned = ip_ranges.count()
         for range in ip_ranges:
             if index_range % 200 == 0:
                 print(f"start_range_survey(), creating range[{index_range:05}], {range.ip_range_start}")
