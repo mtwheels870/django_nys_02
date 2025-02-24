@@ -31,7 +31,8 @@ def _get_all_ranges(survey, tract, index_range):
     get_range_chunks = True
     range_start = 0
     range_end = range_start + SMALL_CHUNK_SIZE
-    print(f"get_all_ranges(), tract_id = {tract.id}")
+    total_ranges = tract.deiprange_set.all().count()
+    print(f"get_all_ranges(), tract_id = {tract.id}, total_ranges = {total_ranges}")
     while get_range_chunks:
         print(f"get_all_ranges(), getting {SMALL_CHUNK_SIZE} ranges, getting[{range_start},{range_end}]")
         ip_ranges = tract.deiprange_set.all().order_by("id")[range_start:range_end]
