@@ -14,7 +14,7 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import prodigy_ner_manual, prodigy_rel_manual
+from .tasks import start_range_survey
 
 from centralny.models import (
     CensusTract,
