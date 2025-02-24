@@ -221,5 +221,6 @@ class ConfigurePingView(generic.edit.FormView):
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
         # Else, we stay here
+        form.my_field = my_field
         return redirect(request.path, {'form' : form})
 
