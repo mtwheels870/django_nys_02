@@ -199,7 +199,7 @@ class ConfigurePingView(generic.edit.FormView):
         # After this, the form is created
 
         form = context_data['form']
-        fields = context_data.fields
+        fields = form.fields
         if "my_field" in context_data:
             my_field = context_data['my_field']
         else:
@@ -226,6 +226,7 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
+        form.fields["my_field"] = my_field
         # Else, we stay here
         # This doesn't work. form.fields["my_field"] = my_field
         # return redirect(request.path, {'form' : form, fields=(my_field))
