@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 import django.dispatch
 
 from  django_tables2.config import RequestConfig
