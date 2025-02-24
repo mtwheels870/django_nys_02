@@ -95,6 +95,7 @@ class IpRangeSurvey(models.Model):
     time_initialized = models.DateTimeField(auto_now_add=True)
     time_started = models.DateTimeField(null=True)
     time_stopped = models.DateTimeField(null=True)
+    num_total_objects = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Survey[{self.id}]"

@@ -14,7 +14,7 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import start_range_survey
+from .tasks import start_range_survey, RangeSurvey
 
 from centralny.models import (
     CensusTract,
@@ -225,7 +225,7 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-            async_result = start_range_survey.apply_async(
+            async_result = RangeSurvey.apply_async(
                 kwargs={'arg1': 23},
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.start_survey')
