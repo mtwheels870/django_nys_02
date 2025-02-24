@@ -226,5 +226,5 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-        context = {"form" : form, "other_field" : "Message here"}
+        context = {"form" : form, "celery_stuff" : "More celery stuff..."}
         return render(request, self.template_name, context)
