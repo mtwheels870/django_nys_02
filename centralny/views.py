@@ -198,6 +198,10 @@ class ConfigurePingView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         # After this, the form is created
 
+        print(f"CPV.g_c_d(), kwargs = {kwargs}")
+        form = context_data['form']
+        text_editor = form.fields['text_editor']
+        text_editor.initial = text_file.prose_editor
 # Put some celery stuff here
         # File stuff
         context_data['celery_stuff'] = "Celery Stuff Here"
@@ -219,5 +223,5 @@ class ConfigurePingView(generic.edit.FormView):
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
         # Else, we stay here
-        return redirect(request.path)
+        return redirect(request.path, kwargs={"my_field" : my_field})
 
