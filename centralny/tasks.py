@@ -9,7 +9,7 @@ import subprocess
 import shutil
 
 import celery
-from celery import shared_task, Task
+from celery import shared_task, Task, group, chain
 from celery import signals, states
 from celery.app import control 
 
