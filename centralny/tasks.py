@@ -21,7 +21,7 @@ from django.utils import timezone
 from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange
 
 SMALL_CHUNK_SIZE = 10000
-TOTAL_OBJECTS = 12000
+TOTAL_OBJECTS = 22000
 
 #@shared_task(bind=True)
 # Nested method
@@ -46,8 +46,6 @@ def _get_all_ranges(survey, tract, index_range):
             if index_range > TOTAL_OBJECTS:
                 print(f"start_range_survey(), index_range > 10000, breaking")
                 outer_loop = False
-                get_range_chunks = False
-                break
         batches.append((range_start, range_start + ranges_returned))
         range_start = range_end
         range_end = range_end + SMALL_CHUNK_SIZE
