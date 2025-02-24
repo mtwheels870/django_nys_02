@@ -199,7 +199,7 @@ class ConfigurePingView(generic.edit.FormView):
         # After this, the form is created
 
         form = context_data['form']
-        print(f"CPV.g_c_d(), kwargs = {kwargs}, form = {form}")
+        print(f"CPV.g_c_d(), kwargs = {kwargs}, form = {form}, my_field = {my_field}")
 # Put some celery stuff here
         # File stuff
         context_data['celery_stuff'] = "Celery Stuff Here"
@@ -222,5 +222,5 @@ class ConfigurePingView(generic.edit.FormView):
             print(f"CPV.post(), start_ping")
         # Else, we stay here
         form.my_field = my_field
-        return redirect(request.path, {'form' : form})
+        return redirect(request.path, {'form' : form, "my_field" : my_field})
 
