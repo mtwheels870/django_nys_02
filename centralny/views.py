@@ -189,35 +189,49 @@ class MapNavigationView(generic.edit.FormView):
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
 
+class ConfigurePingView(generic.edit.FormView):
+    # model = TextFile
+    form_class = PingStrategyForm
+    template_name = "centralny/ps_detail.html"
 
-        # Save the map_bbox across the reverse so we can zoom in our map appropriately
-        #request.session[KEY_LEAFLET_MAP] = {KEY_MAP_BBOX : map_bbox }
-        #id = form.fields[KEY_ID]
-        #id.initial = 23
-        #agg_type = form.fields[KEY_AGG_TYPE]
-        #agg_type.initial = "Cherry"
-#        map_bbox = form.fields[KEY_MAP_BBOX]
-        # print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
-#        if KEY_LEAFLET_MAP  in self.request.session:
-#            leaflet_map_dict = self.request.session.pop(KEY_LEAFLET_MAP, default=None)
-#            print(f"g_c_d(), Found: leaflet_map_dict = {leaflet_map_dict}")
-#            map_bbox_value = leaflet_map_dict[KEY_MAP_BBOX]
-#        else:
-#            map_bbox_value = MAP_BBOX_INITIAL_VALUE 
-#        map_bbox.initial = map_bbox_value 
-        # context_data['map_bbox'] = map_bbox_value 
-        #print(f'MNV.g_c_d(), form = {form}')
-        # print(f'MNV.g_c_d(), table = {table}')
-        # table = DeIpRange.objects.none()
-        # print(f'MNV.g_c_d(), kwargs = {kwargs}, table = {table}')
-            # return HttpResponseRedirect(reverse("app_centralny:map_viewer",kwargs={'id': id, 'agg_type': agg_type}));
-            #initial_data = {'id': id, 'agg_type': agg_type};
-            #form = SelectedCensusTractForm(initial=initial_data);
-#                index = 0
-#                for ip_range in queryset:
-                    #print(f"     range[{index}]: {ip_range.ip_range_start}, {ip_range.company_name},")
-                    #print(f"            {ip_range.naics_code}, {ip_range.organization}")
-#                    index = index + 1
-#                    if (index >= 10):
-#                        break
-#                print(f"build_table(), about to create table, queryset = {queryset}")
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        # After this, the form is created
+
+# Put some celery stuff here
+        # File stuff
+        file_id = self.kwargs.get('file_id')
+        context_data['file_id'] = file_id
+        text_file = get_object_or_404(TextFile, pk=file_id)
+        context_data['page_number'] = text_file.page_number 
+
+        # Folder stuff
+        folder_id = self.kwargs.get('folder_id')
+        context_data['folder_id'] = folder_id
+        text_folder = get_object_or_404(TextFolder, pk=folder_id)
+        context_data['folder_name'] = text_folder.folder_name 
+
+        form = context_data['form']
+        text_editor = form.fields['text_editor']
+        text_editor.initial = text_file.prose_editor
+        return context_data
+
+    def post(self, request, *args, **kwargs):
+        # print(f"TFEV.post(), kwargs = {kwargs}")
+        form = PingStrategyForm(request.POST)
+        <button type="submit" name="start_ping">Approve</button>
+        <button type="submit" name="return_to_map">Return to Map</button>
+        if form.is_valid():
+            my_field = form.cleaned_data['my_field']
+            print(f"CPV.post(), my_field = {my_field}")
+        else:
+            print(f"CPV.post(), form is INVALID")
+
+        if 'return_to_map' in request.POST:
+            return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
+
+        if 'start_ping' in request.POST:
+            print(f"CPV.post(), start_ping")
+        # Else, we stay here
+        return redirect(request.path)
+

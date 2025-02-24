@@ -20,3 +20,12 @@ class SelectedCensusTractForm(forms.Form):
         self.fields['id'].widget.attrs['readonly'] = True
         self.fields['range_count'].widget.attrs['readonly'] = True
         self.fields['map_bbox'].widget.attrs['readonly'] = True
+
+class PingStrategyForm(forms.Form):
+    CHOICES = [
+        ["value1", "Label 1"],
+        ["value2", "Label 2"],
+        ["value3", "Label 3"],
+    ]
+    my_field = forms.ChoiceField(choices=CHOICES)
+
