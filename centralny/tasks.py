@@ -27,33 +27,6 @@ TOTAL_OBJECTS = 2000
 #def start_range_survey(self, *args, **kwargs):
 @shared_task(bind=True)
 def start_range_survey(self, *args, **kwargs):
-    self._batches = []
-    print(f"start_range_survey(), self = {self}, kwargs = {kwargs}, creating survey")
-
-    survey = IpRangeSurvey()
-    survey.save()
-    # Use the minus to be descending
-    count_range_tracts = CountRangeTract.objects.order_by("-range_count")
-    
-    # Iterate through each of those counties and walk through all of the ranges
-    outer_loop = True
-    index_range = 0
-    for tract_count in count_range_tracts:
-        tract = tract_count.census_tract
-        try:
-            outer_loop, index_range = self._get_all_ranges(survey, tract, index_range)
-        # Get all of the ranges from this census tract
-        except (KeyError, DeIpRange.DoesNotExist):
-            print(f"start_range_survey(), Exception, no ranges for tract = {tract.id}")
-        if not outer_loop:
-            break 
-
-    survey.time_started = timezone.now()
-    # Hack, should actually take the size from count_range_tracts
-    survey.num_total_objects = TOTAL_OBJECTS 
-    survey.save()
-    print(f"start_range_survey(), created {survey.num_total_objects} ip ranges to ping")
-
     # Nested method
     def _get_all_ranges(self, survey, tract, index_range):
         outer_loop = True
@@ -81,3 +54,32 @@ def start_range_survey(self, *args, **kwargs):
             if ranges_returned < SMALL_CHUNK_SIZE:
                 break
         return outer_loop, index_range 
+
+    # Main method
+    self._batches = []
+    print(f"start_range_survey(), self = {self}, kwargs = {kwargs}, creating survey")
+
+    survey = IpRangeSurvey()
+    survey.save()
+    # Use the minus to be descending
+    count_range_tracts = CountRangeTract.objects.order_by("-range_count")
+    
+    # Iterate through each of those counties and walk through all of the ranges
+    outer_loop = True
+    index_range = 0
+    for tract_count in count_range_tracts:
+        tract = tract_count.census_tract
+        try:
+            outer_loop, index_range = self._get_all_ranges(survey, tract, index_range)
+        # Get all of the ranges from this census tract
+        except (KeyError, DeIpRange.DoesNotExist):
+            print(f"start_range_survey(), Exception, no ranges for tract = {tract.id}")
+        if not outer_loop:
+            break 
+
+    survey.time_started = timezone.now()
+    # Hack, should actually take the size from count_range_tracts
+    survey.num_total_objects = TOTAL_OBJECTS 
+    survey.save()
+    print(f"start_range_survey(), created {survey.num_total_objects} ip ranges to ping")
+
