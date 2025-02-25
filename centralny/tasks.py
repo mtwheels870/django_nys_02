@@ -164,15 +164,15 @@ def _prep_file_range(ip_range, dir_path):
     file_path_text = os.path.join(dir_path, output_file_name)
     cidrs = netaddr.iprange_to_cidrs(ip_start, ip_end)
     print(f"prep_file_range(), ip_start = {ip_start}, ip_end = {ip_end}, cidrs = {cidrs}")
-    network = ipaddress.ip_network(str(cidrs), strict=False)
-    num_potential = network.num_addresses
-    return file_path_text, cidrs, num_potential 
+    #network = ipaddress.ip_network(str(cidrs), strict=False)
+    #num_potential = cidrs.size
+    return file_path_text, cidrs
 
 def _count_output_lines(file_path):
     return sum(1 for _ in open(file_path))
 
 def _ping_single_range(survey, tract, ip_range, dir_path, debug):
-    file_path, cidrs, num_potential = _prep_file_range(ip_range, dir_path)
+    file_path, cidrs = _prep_file_range(ip_range, dir_path)
     file_path_string = str(file_path)
     if debug:
         print(f"_ping_single_range(), ip_start = {ip_start}, file_path = {file_path_string}, cidrs = {cidrs}")
@@ -188,7 +188,7 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         print(f"_ping_single_range(), stderr: {stderr}")
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
-        num_ranges_pinged=num_potential,
+        num_ranges_pinged=cidrs.size,
         num_ranges_responded=num_responses,
         time_pinged=timezone.now())
     range_ping.save()
