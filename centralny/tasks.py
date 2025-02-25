@@ -7,6 +7,8 @@ import datetime
 import json
 import subprocess
 import shutil
+import ipaddress
+import netaddr
 
 import celery
 from celery import shared_task, Task, group, chain
@@ -18,10 +20,14 @@ from django_celery_results.models import TaskResult
 from django.core.management import call_command
 from django.utils import timezone
 
+from django_nys_02.celery import app as celery_app, QUEUE_NAME
+
 from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange
 
 SMALL_CHUNK_SIZE = 10000
 TOTAL_OBJECTS = 22000
+
+TEMP_DIRECTORY = "/tmp/exec_zmap/"
 
 #@shared_task(bind=True)
 # Nested method
@@ -88,6 +94,7 @@ def start_range_survey(self, *args, **kwargs):
 
 @shared_task(bind=True)
 def ping_tracts(self, survey_id, list_tracts):
+    print(f"ping_tracts(), self = {self}")
     # f = lambda crt: crt.census_tract
     # list_tracts = [f(x) for x in list_count_range_tracts]
     print(f"ping_tracts(), survey_id = {survey_id}, tracts(id)s: {list_tracts}")
@@ -129,9 +136,104 @@ def start_tracts(self, *args, **kwargs):
     # chained_task = chain(grouped_tasks, ending_task)
     chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
     print(f"start_tracts(), chained_task = {chained_task}")
-    result = chained_task.apply_async()
+    result = chained_task.apply_async(
+                queue=QUEUE_NAME,
+                routing_key='ping.tasks.start_tracts')
     print(f"start_tracts(), after apply_async(), result = {result}")
     return result
+
+    # Break into batches of 10 tracts, right now
+    
+def make_temp_dir(tract_id):
+    now = datetime.datetime.now()
+    temp_directory_port = TEMP_DIRECTORY + str(PRODIGY_PORT)
+    if not os.path.exists(TEMP_DIRECTORY):
+        os.makedirs(temp_directory_port)
+    cleanup_temp_dir(temp_directory_port)
+    folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
+    full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot, str(tract_id))
+    print(f"make_temp_dir(), full_path = {full_path}")
+    if not os.path.exists(full_path):
+        os.makedirs(full_path)
+    # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
+    return full_path
+
+def file_path, cidrs, num_potential_ips = _prep_file_range(ip_range, dir_path):
+    # Create the CSV file
+    ip_start = ip_range.ip_range_start
+    ip_end = ip_range.ip_range_end
+    ip_start_underscores = ip_start.replace('.', '_')
+    output_file_name = f"{ip_start_underscores}.csv"
+    file_path_text = os.path.join(dir_path, output_file_name)
+    cidrs = netaddr.iprange_to_cidrs(startip, endip)
+    network = ipaddress.ip_network(cidr, strict=False)
+    num_potential = network.num_addresses
+    return file_path_text, cidrs, num_potential 
+
+def _count_output_lines(file_path):
+    return sum(1 for _ in open(file_path))
+
+def _ping_single_range(survey, tract, ip_range, dir_path, debug):
+    file_path, cidrs, num_potential = _prep_file_range(ip_range, dir_path)
+    file_path_string = str(file_path)
+    if debug:
+        print(f"_ping_single_range(), ip_start = {ip_start}, file_path = {file_path_string}, cidrs = {cidrs}")
+    # This seems wrong for a ICMP
+    port = 80
+    full_command = "zmap -p {port} -r {cidrs} -o {file_path_string}"
+    if debug:
+        print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
+    process = subprocess.Popen(full_command, shell=True, stdout=PIPE, stderr=PIPE)
+    stdout, stderr = process.communicate(timeout=20)
+    if debug:
+        print(f"_ping_single_range(), stdout: {stdout}")
+        print(f"_ping_single_range(), stderr: {stderr}")
+    num_responses = _count_output_lines(file_path)
+    range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
+        num_ranges_pinged=num_potential,
+        num_ranges_responded=num_responses,
+        time_pinged=timezone.now())
+    range_ping.save()
+
+def _ping_all_ranges(survey, tract, debug):
+    print(f"_ping_all_ranges(), tract = {tract}, debug = {debug}")
+    ip_ranges = tract.deiprange_set.all()
+    total_ranges = ip_ranges.count()
+    if debug:
+        print(f"_ping_all_ranges(), tract_id = {tract.id}, total_ranges = {total_ranges}")
+    dir_path = make_temp_dir(tract.id)
+
+    for index, ip_range in enumerate(ip_ranges):
+        _ping_single_range(survey, tract, ip_range, dir_path, debug)
+    return total_ranges
+
+@shared_task(bind=True)
+def zmap_all(self, *args, **kwargs):
+
+    # Main method
+    print(f"zmap_all(), self = {self}, kwargs = {kwargs}, creating survey")
+
+    survey = IpRangeSurvey()
+    survey.time_started = timezone.now()
+    survey.save()
+    # Use the minus to be descending
+    count_range_tracts = CountRangeTract.objects.order_by("-range_count")
+    print(f"zmap_all(), num_tracts = {count_range_tracts.count()}")
+    ranges_pinged = 0
+    for index_tract, count_tract in enumerate(count_range_tracts):
+        tract = count_tract.census_tract
+        debug = (index_tract == 0)
+        ranges_this_tract = _ping_all_ranges(survey, tract, debug)
+        ranges_pinged = ranges_pinged + ranges_this_tract 
+        if index_tract >= 1:
+            break
+
+    # Save the completion time
+    survey.time_stopped = timezone.now()
+    survey.num_total_objects = ranges_pinged
+    survey.save()
+
+    return ranges_pinged 
 
     # Break into batches of 10 tracts, right now
     
