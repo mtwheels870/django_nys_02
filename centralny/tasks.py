@@ -189,11 +189,11 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     if debug:
         print(f"_ping_single_range(), stdout: {stdout}")
         print(f"_ping_single_range(), stderr: {stderr}")
-        num_possible = cidrs.size()
+        num_possible = cidrs[0].size()
         print(f"_ping_single_range(), num_possible: {num_possible}")
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
-        num_ranges_pinged=cidrs.size(),
+        num_ranges_pinged=cidrs[0].size(),
         num_ranges_responded=num_responses,
         time_pinged=timezone.now())
     range_ping.save()
