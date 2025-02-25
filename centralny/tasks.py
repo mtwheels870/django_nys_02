@@ -174,11 +174,12 @@ def _count_output_lines(file_path):
 def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     file_path, cidrs = _prep_file_range(ip_range, dir_path)
     file_path_string = str(file_path)
+    cidrs_string = str(cidrs)
     if debug:
-        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, file_path = {file_path_string}, cidrs = {cidrs}")
+        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, file_path = {file_path_string}, cidrs = {cidrs_string}")
     # This seems wrong for a ICMP
     port = 80
-    full_command = f"zmap -p {port} -r {cidrs} -o {file_path_string}"
+    full_command = f"zmap -p {port} -r {cidrs_string} -o {file_path_string}"
     if debug:
         print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True,
