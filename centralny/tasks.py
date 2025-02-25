@@ -163,24 +163,25 @@ def _prep_file_range(ip_range, dir_path):
     output_file_name = f"{ip_start_underscores}.csv"
     file_path_text = os.path.join(dir_path, output_file_name)
     cidrs = netaddr.iprange_to_cidrs(ip_start, ip_end)
-    print(f"prep_file_range(), ip_start = {ip_start}, ip_end = {ip_end}, cidrs = {cidrs}")
+    ip_network = cidrs[0]
+    print(f"prep_file_range(), ip_start = {ip_start}, ip_end = {ip_end}, ip_network = {ip_network}")
     #network = ipaddress.ip_network(str(cidrs), strict=False)
     #num_potential = cidrs.size
-    return file_path_text, cidrs
+    return file_path_text, ip_network 
 
 def _count_output_lines(file_path):
     return sum(1 for _ in open(file_path))
 
 def _ping_single_range(survey, tract, ip_range, dir_path, debug):
-    file_path, cidrs = _prep_file_range(ip_range, dir_path)
+    file_path, ip_network = _prep_file_range(ip_range, dir_path)
     file_path_string = str(file_path)
-    cidrs_string = str(cidrs[0])
+    ip_net_string = str(ip_network)
     if debug:
-        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, file_path = {file_path_string}, cidrs = {cidrs_string}")
+        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, file_path = {file_path_string}, ip_net_string = {ip_net_string}")
     # This seems wrong for a ICMP
     port = 80
     rate_packets_second = 1024
-    full_command = f"zmap -p {port} -r {rate_packets_second} {cidrs_string} -o {file_path_string}"
+    full_command = f"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
     if debug:
         print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True,
@@ -189,11 +190,11 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     if debug:
         print(f"_ping_single_range(), stdout: {stdout}")
         print(f"_ping_single_range(), stderr: {stderr}")
-        num_possible = cidrs[0].size()
+        num_possible = ip_network.size
         print(f"_ping_single_range(), num_possible: {num_possible}")
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
-        num_ranges_pinged=cidrs[0].size(),
+        num_ranges_pinged=ip_network.size,
         num_ranges_responded=num_responses,
         time_pinged=timezone.now())
     range_ping.save()
