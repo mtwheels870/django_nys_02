@@ -94,7 +94,7 @@ def ping_tracts(self, survey_id, list_tracts):
 
 @shared_task(bind=True)
 def finish_survey(self, survey_id, args):
-    print(f"finish_survey(), survey_id = {survey_id}, tracts(id)s: {list_tracts}")
+    print(f"finish_survey(), survey_id = {survey_id}")
     survey = IpRangeSurvey.objects.get(pk=survey_id)
     survey.time_stopped = timezone.now()
     survey.save()
