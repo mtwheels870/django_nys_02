@@ -179,12 +179,13 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, file_path = {file_path_string}, cidrs = {cidrs_string}")
     # This seems wrong for a ICMP
     port = 80
-    full_command = f"zmap -p {port} -r {cidrs_string} -o {file_path_string}"
+    rate_packets_second = 1024
+    full_command = f"zmap -p {port} -r {rate_packets_second} {cidrs_string} -o {file_path_string}"
     if debug:
         print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate(timeout=20)
+    stdout, stderr = process.communicate(timeout=3)
     if debug:
         print(f"_ping_single_range(), stdout: {stdout}")
         print(f"_ping_single_range(), stderr: {stderr}")
