@@ -158,7 +158,7 @@ def make_temp_dir(tract_id):
     # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
     return full_path
 
-def file_path, cidrs, num_potential_ips = _prep_file_range(ip_range, dir_path):
+def _prep_file_range(ip_range, dir_path):
     # Create the CSV file
     ip_start = ip_range.ip_range_start
     ip_end = ip_range.ip_range_end
