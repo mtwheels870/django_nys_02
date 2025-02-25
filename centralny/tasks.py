@@ -177,11 +177,16 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     file_path_string = str(file_path)
     ip_net_string = str(ip_network)
     if debug:
-        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, file_path = {file_path_string}, ip_net_string = {ip_net_string}")
+        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, "
+        print(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
     # This seems wrong for a ICMP
-    port = 80
+    # port = 80
     rate_packets_second = 1024
-    full_command = f"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
+    list_command = ["zmap",
+        "--quiet", f"-r {rate_packets_second}",
+        "--probe-module=icmp_echoscan", f"{ip_net_string}", f"-o {file_path_string}"]
+    full_command = " ".join(list_command)
+    #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
     if debug:
         print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True,
