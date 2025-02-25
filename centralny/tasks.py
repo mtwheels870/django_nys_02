@@ -118,9 +118,9 @@ def start_tracts(self, *args, **kwargs):
 
 #    grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
 #        ping_tracts.s(survey.id, batch_three)) 
-    print(f"start_tracts(), grouped_tasks = {grouped_tasks}")
     # chained_task = chain(grouped_tasks, ending_task)
     chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
+    print(f"start_tracts(), chained_task = {chained_task}")
     result = chained_task.apply_async()
     return result
 
