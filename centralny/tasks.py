@@ -163,6 +163,7 @@ def _prep_file_range(ip_range, dir_path):
     output_file_name = f"{ip_start_underscores}.csv"
     file_path_text = os.path.join(dir_path, output_file_name)
     cidrs = netaddr.iprange_to_cidrs(ip_start, ip_end)
+    print(f"prep_file_range(), cidrs = {cidrs}")
     network = ipaddress.ip_network(cidrs, strict=False)
     num_potential = network.num_addresses
     return file_path_text, cidrs, num_potential 
@@ -208,11 +209,11 @@ def _ping_all_ranges(survey, tract, debug):
 def zmap_all(self, *args, **kwargs):
 
     # Main method
-    print(f"zmap_all(), self = {self}, kwargs = {kwargs}, creating survey")
 
     survey = IpRangeSurvey()
     survey.time_started = timezone.now()
     survey.save()
+    print(f"zmap_all(), self = {self}, kwargs = {kwargs}, created survey = {survey.id}")
     # Use the minus to be descending
     count_range_tracts = CountRangeTract.objects.order_by("-range_count")
     print(f"zmap_all(), num_tracts = {count_range_tracts.count()}")
