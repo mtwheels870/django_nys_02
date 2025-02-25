@@ -225,7 +225,8 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
-            async_result = start_tracts.apply_async(
+            #async_result = start_tracts.apply_async(
+            async_result = start_tracts.zmap_all(
                 kwargs={},
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.start_survey')
