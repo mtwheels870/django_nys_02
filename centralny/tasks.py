@@ -112,14 +112,15 @@ def start_tracts(self, *args, **kwargs):
     count_range_tracts = CountRangeTract.objects.order_by("-range_count")
     f = lambda crt: crt.census_tract.id
     batch_one = [f(x) for x in count_range_tracts[:10]]
-    batch_two = [f(x) for x in count_range_tracts[11:20]]
-    batch_three = [f(x) for x in count_range_tracts[21:30]]
+    #batch_two = [f(x) for x in count_range_tracts[11:20]]
+    #batch_three = [f(x) for x in count_range_tracts[21:30]]
     ending_task = finish_survey.s(survey.id)
 
-    grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
-        ping_tracts.s(survey.id, batch_three)) 
+#    grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
+#        ping_tracts.s(survey.id, batch_three)) 
     print(f"start_tracts(), grouped_tasks = {grouped_tasks}")
-    chained_task = chain(grouped_tasks, ending_task)
+    # chained_task = chain(grouped_tasks, ending_task)
+    chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
     result = chained_task.apply_async()
     return result
 
