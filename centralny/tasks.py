@@ -146,10 +146,7 @@ def start_tracts(self, *args, **kwargs):
     
 def make_temp_dir(tract_id):
     now = datetime.datetime.now()
-    temp_directory_port = TEMP_DIRECTORY + str(PRODIGY_PORT)
-    if not os.path.exists(TEMP_DIRECTORY):
-        os.makedirs(temp_directory_port)
-    cleanup_temp_dir(temp_directory_port)
+    #cleanup_temp_dir(temp_directory_port)
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
     full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot, str(tract_id))
     print(f"make_temp_dir(), full_path = {full_path}")
