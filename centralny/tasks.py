@@ -100,8 +100,10 @@ def finish_survey(self, results, survey_id):
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_stopped = timezone.now()
         survey.save()
+        print(f"finish_survey(), after save...")
     except (KeyError, DeIpRange.DoesNotExist):
         raise Exception(f"finish_survey(), Exception, could not find survey {survey_id}")
+    print(f"finish_survey(), returning")
     return 37
 
 @shared_task(bind=True)
@@ -127,6 +129,7 @@ def start_tracts(self, *args, **kwargs):
     chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
     print(f"start_tracts(), chained_task = {chained_task}")
     result = chained_task.apply_async()
+    print(f"start_tracts(), after apply_async(), result = {result}")
     return result
 
     # Break into batches of 10 tracts, right now
