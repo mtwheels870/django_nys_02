@@ -189,8 +189,8 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
     if debug:
         print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
-    process = subprocess.Popen(full_command, shell=True,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process = subprocess.Popen(full_command) 
     stdout, stderr = process.communicate(timeout=10)
     if debug:
         print(f"_ping_single_range(), stdout: {stdout}")
