@@ -174,7 +174,7 @@ def _count_output_lines(file_path):
 def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     file_path, cidrs = _prep_file_range(ip_range, dir_path)
     file_path_string = str(file_path)
-    cidrs_string = "{0}/{1}".format(cidrs[2], cidrs.prefixlen)
+    cidrs_string = str(cidrs[0])
     if debug:
         print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, file_path = {file_path_string}, cidrs = {cidrs_string}")
     # This seems wrong for a ICMP
