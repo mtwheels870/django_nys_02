@@ -91,11 +91,12 @@ def ping_tracts(self, survey_id, list_tracts):
     # f = lambda crt: crt.census_tract
     # list_tracts = [f(x) for x in list_count_range_tracts]
     print(f"ping_tracts(), survey_id = {survey_id}, tracts(id)s: {list_tracts}")
+    return 23
 
 @shared_task(bind=True)
 def finish_survey(self, survey_id, args):
     try:
-        print(f"finish_survey(), survey_id = {survey_id}")
+        print(f"finish_survey(), survey_id = {survey_id}, args = {args}")
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_stopped = timezone.now()
         survey.save()
