@@ -94,14 +94,15 @@ def ping_tracts(self, survey_id, list_tracts):
     return 23
 
 @shared_task(bind=True)
-def finish_survey(self, survey_id, args):
+def finish_survey(self, results, survey_id):
     try:
-        print(f"finish_survey(), survey_id = {survey_id}, args = {args}")
+        print(f"finish_survey(), survey_id = {survey_id}, results = {results}")
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_stopped = timezone.now()
         survey.save()
     except (KeyError, DeIpRange.DoesNotExist):
         raise Exception(f"finish_survey(), Exception, could not find survey {survey_id}")
+    return 37
 
 @shared_task(bind=True)
 def start_tracts(self, *args, **kwargs):
