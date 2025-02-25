@@ -185,7 +185,7 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
     process = subprocess.Popen(full_command, shell=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate(timeout=3)
+    stdout, stderr = process.communicate(timeout=10)
     if debug:
         print(f"_ping_single_range(), stdout: {stdout}")
         print(f"_ping_single_range(), stderr: {stderr}")
