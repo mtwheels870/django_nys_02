@@ -164,7 +164,7 @@ def _prep_file_range(ip_range, dir_path):
     file_path_text = os.path.join(dir_path, output_file_name)
     cidrs = netaddr.iprange_to_cidrs(ip_start, ip_end)
     print(f"prep_file_range(), ip_start = {ip_start}, ip_end = {ip_end}, cidrs = {cidrs}")
-    network = ipaddress.ip_network(cidrs, strict=False)
+    network = ipaddress.ip_network(str(cidrs), strict=False)
     num_potential = network.num_addresses
     return file_path_text, cidrs, num_potential 
 
