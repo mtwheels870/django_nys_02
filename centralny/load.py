@@ -57,13 +57,23 @@ tract_mapping = {
 #    "srs_longitude" : "srs_longit",
 #    "srs_strength" : "srs_streng",
 # Check use of transform, lookup_function (for census_tract), make non-null
-ip_range_mapping = {
+digel_ip_range_mapping = {
     "ip_range_start" : "start-ip",
     "ip_range_end" : "end-ip",
     "pp_cxn_speed" : "pp-conn-sp",
     "pp_cxn_type" : "pp-conn-ty",
     "pp_latitude" : "pp-latitud",
     "pp_longitude" : "pp-longitu",
+    "mpoint" : "MULTIPOINT",
+}
+
+maxm_ip_range_mapping = {
+    "ip_network " : "network",
+    "geoname_id" : "geoname_id",
+    "zip_code" : "postal_cod",
+    "mm_latitude" : "latitude",
+    "mm_longitude" : "longitude",
+    "accuracy" : "accuracy_r",
     "mpoint" : "MULTIPOINT",
 }
 
@@ -78,6 +88,10 @@ ny_config = {
     "TRACT_PATH" : "/home/bitnami/Data/NY/County/CensusTracts_03.shp",
 # IP_RANGE_PATH = "/home/bitnami/Data/IP/FiveCounties_Minimal.shp"
     "IP_RANGE_PATH" : "/home/bitnami/Data/NY/IP/NA_All_DBs_01.shp"
+}
+
+maxm_config = {
+    "IP_RANGE_PATH" : "/home/bitnami/Data/LA/IP/CityBlocks_LA_01.shp",
 }
 
 CHUNK_SIZE = 200000
@@ -108,14 +122,14 @@ class Loader():
         
     # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
     # lookup on the LayerMapping()
-    def run_ip_ranges(self, verbose=False, progress=1000):
+    def run_ip_ranges_digel(self, verbose=False, progress=1000):
         ip_range_shp = Path(loc_config["IP_RANGE_PATH"])
-        self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, ip_range_mapping, transform=False)
+        self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, digel_ip_range_mapping, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census()")
 
-    def _map_single_range(self, range, index_range):
+    def _map_single_range_digel(self, range, index_range):
         point = Point(float(range.pp_longitude), float(range.pp_latitude))
         index_tract = 0
         found_in_tract = False
@@ -131,14 +145,14 @@ class Loader():
                 break
             index_tract = index_tract + 1
         if not found_in_tract:
-            print(f"map_single_range() index = {index_range}, could not map point {point} to a census tract!")
+            print(f"_map_single_range_digel() index = {index_range}, could not map point {point} to a census tract!")
             self.error_count = self.error_count + 1
         return found_in_tract
 
-    def map_ranges_census(self, verbose=False, progress=1000):
+    def map_ranges_census_digel(self, verbose=False, progress=1000):
         self.tracts = CensusTract.objects.all()
         self.error_count = 0
-        print(f"map_ranges_census(), read {self.tracts.count()} census tracts")
+        print(f"map_ranges_census_digel(), read {self.tracts.count()} census tracts")
         index_chunk = 0
         range_start = 0
         range_end = range_start + CHUNK_SIZE
@@ -148,13 +162,13 @@ class Loader():
             # Find ranges w/ no census tract ID (mapped)
             ranges = DeIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")[range_start:range_end]
             ranges_returned = ranges.count()
-            print(f"map_ranges_census(), querying [{range_start},{range_end},{ranges_returned}]")
+            print(f"map_ranges_census_digel(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
-                self._map_single_range(range, index_range)
+                self.__map_single_range_digel(range, index_range)
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < CHUNK_SIZE or self.error_count > 3:
-                print(f"map_ranges_census(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
+                print(f"map_ranges_census_digel(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
                 # We didn't get a full batch and we've iterated over it
                 break
             range_start = range_start + CHUNK_SIZE
@@ -258,3 +272,12 @@ class Loader():
                 new_range = IpRangePing(ip_survey=survey, ip_range=range_object)
                 print(f"         [{index_range}]: range {range_object}")
                 new_range.save()
+
+    # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
+    # lookup on the LayerMapping()
+    def run_ip_ranges_maxm(self, verbose=False, progress=1000):
+        ip_range_shp = Path(maxm_config["IP_RANGE_PATH"])
+        self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, maxm_ip_range_mapping, transform=False)
+        # Throws exception, should wrap in a try{}
+        self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
+        print(f"ranges saved, now run: map_ranges_census_maxm()")

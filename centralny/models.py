@@ -131,7 +131,7 @@ class MmIpRange(models.Model):
     zip_code = models.CharField("Zip_Code", max_length=10)
     mm_latitude = models.CharField(max_length=20)
     mm_longitude = models.CharField(max_length=20)
-    accuracy = models.IntegerField(max_length=20)
+    accuracy = models.IntegerField()
     census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
     mpoint = models.MultiPointField(null=True)
 
