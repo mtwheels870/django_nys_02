@@ -185,7 +185,7 @@ def _execute_subprocess(ip_net_string, file_path_string, debug):
         if debug:
             print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        process = subprocess.Popen(full_command, shell=True) 
+        process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
         # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
         stdout, stderr = process.communicate(timeout=10)
