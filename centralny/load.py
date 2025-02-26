@@ -69,7 +69,7 @@ digel_ip_range_mapping = {
 }
 
 maxm_ip_range_mapping = {
-    "ip_network " : "network",
+    "ip_network" : "network",
     "geoname_id" : "geoname_id",
     "zip_code" : "postal_cod",
     "mm_latitude" : "latitude",
