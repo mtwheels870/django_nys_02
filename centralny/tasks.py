@@ -209,7 +209,7 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
         num_ranges_pinged=ip_network.size,
-        num_ranges_responded=num_responses 
+        num_ranges_responded=num_responses,
         time_pinged=timezone.now())
     range_ping.save()
 
