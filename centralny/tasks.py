@@ -184,11 +184,13 @@ def _execute_subprocess(ip_net_string, file_path_string, debug):
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
         if debug:
             print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
-    # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True) 
+
+        # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
+        stdout, stderr = process.communicate(timeout=10)
         ret_val = process.returncode
         if ret_val:
-            stdout, stderr = process.communicate(timeout=10)
             print(f"_ping_single_range(), subprocess.Popen(), bad return code = {ret_val}, stdout:")
             print(f"{stdout}\nstderr:\n{stderr}")
     except Exception as e:
