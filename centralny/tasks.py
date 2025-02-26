@@ -185,7 +185,7 @@ def _execute_subprocess(ip_net_string, file_path_string, debug):
         if debug:
             print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
     # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        process = subprocess.Popen(full_command) 
+        process = subprocess.Popen(full_command, shell=True) 
         ret_val = process.returncode
         if ret_val:
             stdout, stderr = process.communicate(timeout=10)
