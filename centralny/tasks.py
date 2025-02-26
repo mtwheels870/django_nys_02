@@ -204,7 +204,7 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         print(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
 
     # Start the subprocess
-    _execute_subprocess(ip_net_string, file_path_string)
+    _execute_subprocess(ip_net_string, file_path_string, debug)
 
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
