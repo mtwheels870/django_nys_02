@@ -99,9 +99,16 @@ class CountRangeCounty(models.Model):
 
 class IpRangeSurvey(models.Model):
     time_initialized = models.DateTimeField(auto_now_add=True)
+
+    # Created is done by the django_thread
+    time_created = models.DateTimeField(null=True)
+
+    # First celery worker sets this (effectively the lock)
     time_started = models.DateTimeField(null=True)
+
+    # After a successful ping campaign, celery worker will set time stopped and num objects
     time_stopped = models.DateTimeField(null=True)
-    num_total_objects = models.IntegerField(default=0)
+    num_total_ranges = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Survey[{self.id}]"

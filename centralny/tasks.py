@@ -172,16 +172,11 @@ def _prep_file_range(ip_range, dir_path):
 def _count_output_lines(file_path):
     return sum(1 for _ in open(file_path))
 
-def _ping_single_range(survey, tract, ip_range, dir_path, debug):
-    file_path, ip_network = _prep_file_range(ip_range, dir_path)
-    file_path_string = str(file_path)
-    ip_net_string = str(ip_network)
-    if debug:
-        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, ")
-        print(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
+def _execute_subprocess(ip_net_string, file_path_string):
+    try:
     # This seems wrong for a ICMP
     # port = 80
-    rate_packets_second = 1024
+    rate_packets_second = 10000
     list_command = ["zmap",
         "--quiet", f"-r {rate_packets_second}",
         "--probe-module=icmp_echoscan", f"{ip_net_string}", f"-o {file_path_string}"]
@@ -190,17 +185,38 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
     if debug:
         print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
     # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    process = subprocess.Popen(full_command) 
+        process = subprocess.Popen(full_command) 
+        ret_val = process.returncode
+        if ret_val:
+            if debug:
+                print(f"_ping_single_range(), stdout: {stdout}")
+                print(f"_ping_single_range(), stderr: {stderr}")
+                print(f"_ping_single_range(), num_possible: {num_possible}")
+
+    except (KeyError, DeIpRange.DoesNotExist):
     stdout, stderr = process.communicate(timeout=10)
     if debug:
         print(f"_ping_single_range(), stdout: {stdout}")
         print(f"_ping_single_range(), stderr: {stderr}")
         num_possible = ip_network.size
         print(f"_ping_single_range(), num_possible: {num_possible}")
+    return ret_val
+
+def _ping_single_range(survey, tract, ip_range, dir_path, debug):
+    file_path, ip_network = _prep_file_range(ip_range, dir_path)
+    file_path_string = str(file_path)
+    ip_net_string = str(ip_network)
+    if debug:
+        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, ")
+        print(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
+
+    # Start the subprocess
+    _execute_subprocess(ip_net_string, file_path_string)
+
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
         num_ranges_pinged=ip_network.size,
-        num_ranges_responded=num_responses,
+        num_ranges_responded=num_responses 
         time_pinged=timezone.now())
     range_ping.save()
 
