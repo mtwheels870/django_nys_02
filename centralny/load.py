@@ -243,7 +243,7 @@ class Loader():
 
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
-            print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}, ip_range_source = {tract_count.ip_source.id")
+            print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}, ip_range_source = {tract_count.ip_source.id}")
             tract_count.save()
 
     def _create_county_counter(self, county):
