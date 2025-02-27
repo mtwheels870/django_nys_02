@@ -246,9 +246,10 @@ class Loader():
             print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}, ip_range_source = {tract_count.ip_source.id}")
             tract_count.save()
 
-    def _create_county_counter(self, county):
+    def _create_county_counter(self, county, ip_range_source):
         county_counter = CountRangeCounty()
         county_counter.county_code = county
+        county_counter.ip_source = ip_range_source
         num_polys = len(county.mpoly)
         print(f"_create_county_count(), creating new, {county}, num_polys: {num_polys}")
         if (num_polys >= 1):
@@ -259,9 +260,11 @@ class Loader():
         self.hash_counties[county.county_code] = county_counter
         return county_counter
 
-    def aggregate_counties(self, verbose=False, ip_range_source=1):
+    def aggregate_counties(self, verbose=False, source_id=1):
+        print(f"aggregate_counties(), source_id = {source_id}")
+        ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_counties = {}
-        for tract_range in CountRangeTract.objects.all():
+        for tract_range in CountRangeTract.objects.filter(ip_source__id=source_id):
             county = tract_range.census_tract.county_code
             code = county.county_code
             print(f"tract: {tract_range.census_tract.tract_id}, Looking up county: {code}")
