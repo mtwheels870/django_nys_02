@@ -30,6 +30,7 @@ from centralny.serializers import (
     CensusTractSerializer,
     CountySerializer,
     DeIpRangeSerializer,
+    MmIpRangeSerializer,
     CountRangeTractSerializer,
     CountRangeCountySerializer
 )
@@ -47,6 +48,9 @@ KEY_LEAFLET_MAP = "leaflet_map"
 MAP_BBOX_INITIAL_VALUE = "a=b"
 
 FIELD_CELERY_DETAILS = "celery_stuff"
+
+# Use Maxmind
+IP_RANGE_SOURCE = 2
 
 # /maps/api/markers (through DefaultRouter)
 #class MarkerViewSet(
@@ -79,19 +83,28 @@ class DeIpRangeViewSet(
     filter_backends = [filters.InBBoxFilter]
     queryset = DeIpRange.objects.all()
     serializer_class = DeIpRangeSerializer
+
+class MmIpRangeViewSet(
+    viewsets.ReadOnlyModelViewSet):
+    bbox_filter_field = "mpoint"
+    filter_backends = [filters.InBBoxFilter]
+    queryset = DeIpRange.objects.all()
+    serializer_class = MmIpRangeSerializer
     
 class CountTractViewSet(
     viewsets.ReadOnlyModelViewSet):
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
-    queryset = CountRangeTract.objects.all()
+    # queryset = CountRangeTract.objects.all()
+    queryset = CountRangeTract.objects.filter(ip_source__id=IP_RANGE_SOURCE)
     serializer_class = CountRangeTractSerializer
     
 class CountCountyViewSet(
     viewsets.ReadOnlyModelViewSet):
     bbox_filter_field = "centroid"
     filter_backends = [filters.InBBoxFilter]
-    queryset = CountRangeCounty.objects.all()
+    # queryset = CountRangeCounty.objects.all()
+    queryset = CountRangeCounty.objects.filter(ip_source__id=IP_RANGE_SOURCE)
     serializer_class = CountRangeCountySerializer
 
 class PingStrategyIndexView(generic.ListView):

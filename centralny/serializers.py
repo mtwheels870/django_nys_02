@@ -1,6 +1,6 @@
 from rest_framework_gis import serializers
 
-from centralny.models import CensusTract, County, DeIpRange, CountRangeTract, CountRangeCounty
+from centralny.models import CensusTract, County, DeIpRange, MmIpRange, CountRangeTract, CountRangeCounty
 
 #class MarkerSerializer(
 #    serializers.GeoFeatureModelSerializer):
@@ -29,6 +29,13 @@ class DeIpRangeSerializer(
         fields = ("id", "ip_range_start", "company_name")
         geo_field = "mpoint"
         model = DeIpRange
+
+class MmIpRangeSerializer(
+    serializers.GeoFeatureModelSerializer):
+    class Meta:
+        fields = ("id", "ip_network", "geoname_id ")
+        geo_field = "mpoint"
+        model = MmIpRange
 
 class CountRangeTractSerializer(
     serializers.GeoFeatureModelSerializer):
