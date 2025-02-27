@@ -305,5 +305,4 @@ class Loader():
         index_range = 0
         for range in ranges:
             self.__map_single_range_digel(range, index_range, 2)
-                index_range = index_range + 1
-                #print(f"Looking up tract: {tract}")
+            index_range = index_range + 1
