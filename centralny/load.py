@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.db.models.functions import Centroid
 
 from .models import (
+    IpRangeSource,
     County, CensusTract,
     DeIpRange, 
     CountRangeTract, CountRangeCounty, 
