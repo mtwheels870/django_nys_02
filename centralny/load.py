@@ -182,25 +182,26 @@ class Loader():
             range_start = range_start + CHUNK_SIZE
             range_end = range_end + CHUNK_SIZE
 
-    def _create_tract_count(self, census_tract):
+    def _create_tract_count(self, census_tract, ip_range_source):
         print(f"create_tract_count(), creating new, {census_tract}")
         tract_count = CountRangeTract()
         tract_count.census_tract = census_tract
         tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
             float(census_tract.interp_lat)))
+        tract_count.ip_source = ip_range_source
         self.hash_tracts[census_tract.tract_id] = tract_count
         return tract_count
 
-    def _aggregate_range(self, range):
+    def _aggregate_range(self, range, ip_range_source):
         tract = range.census_tract
         #print(f"Looking up tract: {tract}")
         if tract.tract_id in self.hash_tracts:
             tract_count = self.hash_tracts[tract.tract_id]
         else:
-            tract_count = self._create_tract_count(tract)
+            tract_count = self._create_tract_count(tract, ip_range_source)
         tract_count.range_count = tract_count.range_count + 1 
 
-    def aggregate_tracts(self, verbose=False):
+    def aggregate_tracts_digel(self, verbose=False):
         self.hash_tracts = {}
         self.error_count = 0
         index_chunk = 0
@@ -212,15 +213,15 @@ class Loader():
             # Find ranges w/ no census tract ID (mapped)
             ranges = DeIpRange.objects.all().order_by("id")[range_start:range_end]
             ranges_returned = ranges.count()
-            print(f"aggregate_tracts(), querying [{range_start},{range_end},{ranges_returned}]")
+            print(f"aggregate_tracts_digel(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
                 if index_range % 1000 == 0:
-                    print(f"a_t(), aggregating range = {index_range}")
+                    print(f"a_t_d(), aggregating range = {index_range}")
                 self._aggregate_range(range)
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < SMALL_CHUNK_SIZE or self.error_count > 3:
-                print(f"aggregate_tracts(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
+                print(f"aggregate_tracts_digel(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
                 # We didn't get a full batch and we've iterated over it
                 break
             range_start = range_start + SMALL_CHUNK_SIZE
@@ -229,6 +230,20 @@ class Loader():
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
             print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}")
+            tract_count.save()
+
+    def aggregate_tracts_maxm(self, verbose=False):
+        self.hash_tracts = {}
+
+        # Max mind -> id = 2
+        ip_range_source = IpRangeSource.objects.get(pk=2)
+        index_range = 0
+        for range in MmIpRange.objects.all().order_by("id"):
+            self._aggregate_range(range, ip_range_source)
+
+        # Should save here
+        for tract_id, tract_count in self.hash_tracts.items():
+            print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}, ip_range_source = {tract_count.ip_source.id")
             tract_count.save()
 
     def _create_county_counter(self, county):
@@ -244,7 +259,7 @@ class Loader():
         self.hash_counties[county.county_code] = county_counter
         return county_counter
 
-    def aggregate_counties(self, verbose=False):
+    def aggregate_counties(self, verbose=False, ip_range_source=1):
         self.hash_counties = {}
         for tract_range in CountRangeTract.objects.all():
             county = tract_range.census_tract.county_code
@@ -253,12 +268,12 @@ class Loader():
             if code in self.hash_counties:
                 county_counter = self.hash_counties[code]
             else:
-                county_counter = self._create_county_counter(county)
+                county_counter = self._create_county_counter(county, ip_range_source)
             # +1 here counts the number of tracts, we want the number of IP ranges
             county_counter.range_count = county_counter.range_count + tract_range.range_count
         # Should save here
         for county_code, county_counter in self.hash_counties.items():
-            print(f"save[{county_code}]: count = {county_counter.range_count}")
+            print(f"save[{county_code}]: source = {ip_range_source}, count = {county_counter.range_count}")
             county_counter.save()
 
     def bootstrap_range_pings(self, verbose=True):
