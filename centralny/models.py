@@ -11,6 +11,9 @@ from django.contrib.gis.db import models
 #    def __str__(self):
 #        return self.name
 
+class IpRangeSource(models.Model):
+    description = models.CharField(max_length=12)
+    
 class County(models.Model):
     # COUNTY_1
     county_code = models.CharField(max_length=3, db_index=True)
@@ -76,6 +79,7 @@ class DeIpRange(models.Model):
 
 class CountRangeTract(models.Model):
     census_tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
+    ip_source = models.ForeignKey(IpRangeSource, on_delete=models.CASCADE, default=1)
     range_count = models.IntegerField(default=0)
     mpoint = models.MultiPointField(null=True)
 
@@ -88,6 +92,7 @@ class CountRangeTract(models.Model):
 class CountRangeCounty(models.Model):
     # Should be county_ref or something (it's not an actual code)
     county_code = models.ForeignKey(County, on_delete=models.CASCADE)
+    ip_source = models.ForeignKey(IpRangeSource, on_delete=models.CASCADE, default=1)
     range_count = models.IntegerField(default=0)
     centroid = models.PointField(null=True)
 
@@ -128,7 +133,7 @@ class IpRangePing(models.Model):
 class MmIpRange(models.Model):
     ip_network = models.CharField("IP Network", max_length=20)
     geoname_id = models.CharField("GeoNameId", max_length=10)
-    zip_code = models.CharField("Zip_Code", max_length=10)
+    zip_code = models.CharField("Zip_Code", null=True, max_length=10)
     mm_latitude = models.CharField(max_length=20)
     mm_longitude = models.CharField(max_length=20)
     accuracy = models.IntegerField()
@@ -137,3 +142,4 @@ class MmIpRange(models.Model):
 
     def __str__(self):
         return f"{self.geoname_id}: {self.ip_network}"
+
