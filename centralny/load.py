@@ -131,8 +131,14 @@ class Loader():
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census()")
 
-    def _map_single_range_digel(self, range, index_range):
-        point = Point(float(range.pp_longitude), float(range.pp_latitude))
+    def _map_single_range_digel(self, range, index_range, ip_range_source):
+        if ip_range_source == 1:
+            point = Point(float(range.pp_longitude), float(range.pp_latitude))
+        elif ip_range_source == 2:
+            point = Point(float(range.mm_longitude), float(range.mm_latitude))
+        else:
+            raise Exception(f"_map_single_range_digel(), invalid ip_range_source = {ip_range_source}")
+
         index_tract = 0
         found_in_tract = False
         for tract in self.tracts:
@@ -290,3 +296,14 @@ class Loader():
         for index, name in enumerate(sources):
             range_source = IpRangeSource(description=name)
             range_source.save()
+
+    def map_ranges_census_maxm(self, verbose=False, progress=1000):
+        self.tracts = CensusTract.objects.all()
+        self.error_count = 0
+        print(f"map_ranges_census_maxm(), read {self.tracts.count()} census tracts")
+        ranges = MmIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")
+        index_range = 0
+        for range in ranges:
+            self.__map_single_range_digel(range, index_range, 2)
+                index_range = index_range + 1
+                #print(f"Looking up tract: {tract}")
