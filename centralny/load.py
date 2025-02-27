@@ -282,3 +282,10 @@ class Loader():
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census_maxm()")
+
+    def load_ip_source(self, verbose=True):
+        # Census tract 222, \n 217
+        sources = ["Dig El", "Max Mind"]
+        for index, name in enumerate(sources):
+            range_source = IpRangeSource(description=name)
+            range_source.save()
