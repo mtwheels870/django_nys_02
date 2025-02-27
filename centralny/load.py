@@ -172,7 +172,7 @@ class Loader():
             ranges_returned = ranges.count()
             print(f"map_ranges_census_digel(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
-                self.__map_single_range_digel(range, index_range)
+                self.__map_single_range_digel(range, index_range, 1)
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < CHUNK_SIZE or self.error_count > 3:
@@ -304,5 +304,5 @@ class Loader():
         ranges = MmIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")
         index_range = 0
         for range in ranges:
-            self.__map_single_range_digel(range, index_range, 2)
+            self._map_single_range_digel(range, index_range, 2)
             index_range = index_range + 1
