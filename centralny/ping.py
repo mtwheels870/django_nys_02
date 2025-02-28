@@ -39,7 +39,7 @@ class PingSurveyManager:
             self.writer_range_ip = open(self.path_range_ip, "w+")
             self.writer_whitelist = open(self.path_whitelist, "w+")
 
-    def _load_latest():
+    def _load_latest(self):
         most_recent_dir = None
         with os.scandir(TEMP_DIRECTORY) as entries:
             for entry in entries:
