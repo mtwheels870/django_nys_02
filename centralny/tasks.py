@@ -285,7 +285,7 @@ def build_whitelist(self, *args, **kwargs):
         num_ranges = whitelist_maxm(survey_manager)
     elif ip_source_id == 1:
         print(f"build_whitelist(), currently don't support ip_source_id = {ip_source_id}")
-    else
+    else:
         raise Exception(f"build_whitelist(), unrecognized source_id: {ip_source_id}")
 
     print(f"build_whitelist(), cleaning up survey manager, lock")
