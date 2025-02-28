@@ -23,7 +23,8 @@ from centralny.models import (
     CountRangeTract,
     CountRangeCounty,
     IpRangePing,
-    IpRangeSurvey
+    IpRangeSurvey,
+    WorkerLock
 )
 
 from centralny.serializers import (
@@ -238,11 +239,18 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'start_ping' in request.POST:
             print(f"CPV.post(), start_ping")
+            lock = WorkerLock()
+            lock.save()
+            worker_lock_id = lock.id
             #async_result = start_tracts.apply_async(
-            async_result = zmap_all.apply_async(
-                kwargs={},
+            #async_result = zmap_all.apply_async(
+            # MaxM ranges
+            ip_source_id = 2
+            async_result = build_whitelist.apply_async(
+                kwargs={"worker_lock_id" : worker_lock_id,
+                    "ip_source_id": ip_source_id},
                 queue=QUEUE_NAME,
-                routing_key='ping.tasks.start_survey')
+                routing_key='ping.tasks.build_whitelist')
         celery_details = self._get_celery_details()
         context = {"form" : form, FIELD_CELERY_DETAILS : celery_details}
         return render(request, self.template_name, context)
