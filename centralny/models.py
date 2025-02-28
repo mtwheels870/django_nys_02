@@ -108,10 +108,7 @@ class CountRangeCounty(models.Model):
         return f"County: {county_code}"
 
 class IpRangeSurvey(models.Model):
-    time_initialized = models.DateTimeField(auto_now_add=True)
-
-    # Created is done by the django_thread
-    time_created = models.DateTimeField(null=True)
+    time_created = models.DateTimeField(auto_now_add=True)
 
     # First celery worker sets this (effectively the lock)
     time_started = models.DateTimeField(null=True)

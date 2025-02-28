@@ -14,7 +14,7 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import build_whitelist
+from .tasks import build_whitelist, zmap_from_file
 
 from centralny.models import (
     CensusTract,
@@ -238,23 +238,29 @@ class ConfigurePingView(generic.edit.FormView):
             return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
 
         if 'start_ping' in request.POST:
-            print(f"CPV.post(), start_ping not implemented yet!")
+            print(f"CPV.post(), start_ping...")
+            survey = IpRangeSurvey()
+            survey.save()
+            async_result = zmap_from_file.apply_async(
+                kwargs={"survey_id" : survey.id,
+                    "ip_source_id": IP_RANGE_SOURCE },
+                queue=QUEUE_NAME,
+                routing_key='ping.tasks.zmap_from_file')
+            survey_id = survey.id
             return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
 
         if 'build_whitelist' in request.POST:
             print(f"CPV.post(), build_whitelist")
             lock = WorkerLock()
             lock.save()
-            worker_lock_id = lock.id
-            #async_result = start_tracts.apply_async(
-            #async_result = zmap_all.apply_async(
             # MaxM ranges
-            ip_source_id = 2
             async_result = build_whitelist.apply_async(
-                kwargs={"worker_lock_id" : worker_lock_id,
-                    "ip_source_id": ip_source_id},
+                kwargs={"worker_lock_id" : lock.id,
+                    "ip_source_id": IP_RANGE_SOURCE },
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.build_whitelist')
+
+        # Load up the celery details for the next form
         celery_details = self._get_celery_details()
         context = {"form" : form, FIELD_CELERY_DETAILS : celery_details}
         return render(request, self.template_name, context)

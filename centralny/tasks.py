@@ -61,7 +61,6 @@ def _get_all_ranges(survey, tract, index_range):
     return index_range, batches
 
 #def start_range_survey(self, *args, **kwargs):
-@shared_task(bind=True)
 def start_range_survey(self, *args, **kwargs):
 
     # Main method
@@ -96,7 +95,6 @@ def start_range_survey(self, *args, **kwargs):
         print(f"s_r_s(), batch[{index}] : {batch}")
     return TOTAL_OBJECTS
 
-@shared_task(bind=True)
 def ping_tracts(self, survey_id, list_tracts):
     print(f"ping_tracts(), self = {self}")
     # f = lambda crt: crt.census_tract
@@ -104,7 +102,6 @@ def ping_tracts(self, survey_id, list_tracts):
     print(f"ping_tracts(), survey_id = {survey_id}, tracts(id)s: {list_tracts}")
     return 23
 
-@shared_task(bind=True)
 def finish_survey(self, results, survey_id):
     try:
         print(f"finish_survey(), self = {self}")
@@ -118,7 +115,6 @@ def finish_survey(self, results, survey_id):
     print(f"finish_survey(), returning")
     return 37
 
-@shared_task(bind=True)
 def start_tracts(self, *args, **kwargs):
 
     # Main method
@@ -176,7 +172,7 @@ def _prep_file_range(ip_range, dir_path):
 def _count_output_lines(file_path):
     return sum(1 for _ in open(file_path))
 
-def _execute_subprocess(ip_net_string, file_path_string, debug):
+def _execute_subprocess2(ip_net_string, file_path_string, debug):
     try:
         # This seems wrong for a ICMP
         # port = 80
@@ -198,7 +194,7 @@ def _execute_subprocess(ip_net_string, file_path_string, debug):
             print(f"_ping_single_range(), subprocess.Popen(), bad return code = {ret_val}, stdout:")
             print(f"{stdout}\nstderr:\n{stderr}")
     except Exception as e:
-        raise Exception(f"_execute_subprocess(), Exception {e}, Popen command: {full_command}")
+        raise Exception(f"_execute_subprocess2(), Exception {e}, Popen command: {full_command}")
     return ret_val
 
 def _ping_single_range(survey, tract, ip_range, dir_path, debug):
@@ -210,7 +206,7 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         print(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
 
     # Start the subprocess
-    _execute_subprocess(ip_net_string, file_path_string, debug)
+    _execute_subprocess2(ip_net_string, file_path_string, debug)
 
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
@@ -231,7 +227,6 @@ def _ping_all_ranges(survey, tract, debug):
         _ping_single_range(survey, tract, ip_range, dir_path, debug)
     return total_ranges
 
-@shared_task(bind=True)
 def zmap_all(self, *args, **kwargs):
 
     # Main method
@@ -299,3 +294,57 @@ def build_whitelist(self, *args, **kwargs):
     survey_manager.close()
     worker_lock.delete()
     return num_ranges
+
+def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
+    try:
+        # This seems wrong for a ICMP
+        # port = 80
+        rate_packets_second = 10000
+        list_command = ["zmap",
+            "--quiet", f"-r {rate_packets_second}",
+            "--whitelist-file=${whitelist_file}",
+            "--output-file=${output_file}",
+            "--output-module=csv",
+            "--output-fields=saddr,timestamp-ts",
+            "--metadata-file=${metadataFile}",
+            "--sender-threads=1",
+            "--log-file=${log_file}",
+            "--probe-module=icmp_echoscan"]
+        full_command = " ".join(list_command)
+        #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
+        if debug:
+            print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
+        # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
+
+        # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
+        #stdout, stderr = process.communicate(timeout=10)
+        ret_val = process.returncode
+        if ret_val:
+            print(f"_ping_single_range(), subprocess.Popen(), bad return code = {ret_val}, stdout:")
+            stdout, stderr = process.communicate(timeout=10)
+            print(f"{stdout}\nstderr:\n{stderr}")
+    except Exception as e:
+        raise Exception(f"_execute_subprocess(), Exception {e}, Popen command: {full_command}")
+    return ret_val
+
+@shared_task(bind=True)
+def zmap_from_file(self, *args, **kwargs):
+    # Ensure another worker hasn't grabbed the survey, yet
+    print(f"zmap_from_file(), self = {self}, kwargs = {kwargs}")
+    survey_id = kwargs["survey_id"]
+    ip_source_id = kwargs["ip_source_id"]
+    survey = IpRangeSurvey.objects.get(pk=survey_id)
+    if survey.time_started:
+        print(f"zmap_from_file(), survey.time_started: {survey.time_started}, another worker grabbed it, exiting")
+        return 0
+    # Save that we started the process, that's our (worker) lock
+    survey.time_started = timezone.now()
+    survey.save()
+
+    print(f"build_whitelist(), source_id = {ip_source_id}")
+    survey_manager = PingSurveyManager(create_new=False)
+    whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
+
+    # Run Zmap command here. We'll process the output file when the zmap is done running
+    return _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)0
