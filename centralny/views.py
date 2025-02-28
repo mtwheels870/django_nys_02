@@ -14,7 +14,7 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import start_range_survey, start_tracts, zmap_all
+from .tasks import build_whitelist
 
 from centralny.models import (
     CensusTract,
@@ -238,7 +238,11 @@ class ConfigurePingView(generic.edit.FormView):
             return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
 
         if 'start_ping' in request.POST:
-            print(f"CPV.post(), start_ping")
+            print(f"CPV.post(), start_ping not implemented yet!")
+            return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
+
+        if 'build_whitelist' in request.POST:
+            print(f"CPV.post(), build_whitelist")
             lock = WorkerLock()
             lock.save()
             worker_lock_id = lock.id
