@@ -237,18 +237,6 @@ class ConfigurePingView(generic.edit.FormView):
         if 'return_to_map' in request.POST:
             return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
 
-        if 'start_ping' in request.POST:
-            print(f"CPV.post(), start_ping...")
-            survey = IpRangeSurvey()
-            survey.save()
-            async_result = zmap_from_file.apply_async(
-                kwargs={"survey_id" : survey.id,
-                    "ip_source_id": IP_RANGE_SOURCE },
-                queue=QUEUE_NAME,
-                routing_key='ping.tasks.zmap_from_file')
-            survey_id = survey.id
-            return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
-
         if 'build_whitelist' in request.POST:
             print(f"CPV.post(), build_whitelist")
             lock = WorkerLock()
@@ -259,6 +247,19 @@ class ConfigurePingView(generic.edit.FormView):
                     "ip_source_id": IP_RANGE_SOURCE },
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.build_whitelist')
+            # Fall through
+
+        if 'start_ping' in request.POST:
+            print(f"CPV.post(), start_ping...")
+            survey = IpRangeSurvey()
+            survey.save()
+            async_result = zmap_from_file.apply_async(
+                kwargs={"survey_id" : survey.id,
+                    "ip_source_id": IP_RANGE_SOURCE },
+                queue=QUEUE_NAME,
+                routing_key='ping.tasks.zmap_from_file')
+            print(f"CPV.post(), async_result = {async_result}")
+            # Fall through
 
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()

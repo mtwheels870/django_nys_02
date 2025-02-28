@@ -317,6 +317,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
+        print(f"\n_ping_single_range(), should track metadata file: {metadata_file}")
         # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
         #stdout, stderr = process.communicate(timeout=10)
         ret_val = process.returncode
@@ -347,4 +348,6 @@ def zmap_from_file(self, *args, **kwargs):
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
     # Run Zmap command here. We'll process the output file when the zmap is done running
-    return _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)
+    ret_val = _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)
+    return metadata_file
+
