@@ -36,8 +36,8 @@ class PingSurveyManager:
         self.path_metadata = os.path.join(self.directory, FILE_METADATA)
         self.path_log = os.path.join(self.directory, FILE_LOG)
         if write_mode:
-            self.writer_range_ip = open(path_range_ip, "w+")
-            self.writer_whitelist = open(path_whitelist, "w+")
+            self.writer_range_ip = open(self.path_range_ip, "w+")
+            self.writer_whitelist = open(self.path_whitelist, "w+")
 
     def _load_latest():
         most_recent_dir = None
