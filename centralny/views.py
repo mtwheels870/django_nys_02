@@ -258,7 +258,8 @@ class ConfigurePingView(generic.edit.FormView):
                     "ip_source_id": IP_RANGE_SOURCE },
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.zmap_from_file')
-            print(f"CPV.post(), async_result = {async_result}")
+            metadata_file = async_result.get()
+            print(f"CPV.post(), async_result = {async_result}, metadata_file = {metadata_file}")
             # Fall through
 
         # Load up the celery details for the next form
