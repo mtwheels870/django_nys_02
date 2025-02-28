@@ -49,7 +49,7 @@ class PingSurveyManager:
                     most_recent_dir = entry
                 elif entry.name > most_recent_dir.name:
                     most_recent_dir = entry
-        if not most_recent_dir
+        if not most_recent_dir:
             raise Exception(f"_load_latest(), could not find a data directory in: {TEMP_DIRECTORY}")
         print(f"_load_latest(), using most_recent_dir {most_recent_dir.name}")
         self.directory = most_recent_dir.path
