@@ -22,7 +22,7 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange
+from .models import IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange, WorkerLock
 from .ping import PingSurveyManager
 
 SMALL_CHUNK_SIZE = 10000
