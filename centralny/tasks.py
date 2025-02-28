@@ -306,7 +306,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
             f"--output-file=${output_file}",
             "--output-module=csv",
             "--output-fields=saddr,timestamp-ts",
-            f"--metadata-file=${metadataFile}",
+            f"--metadata-file=${metadata_file}",
             "--sender-threads=1",
             f"--log-file=${log_file}",
             "--probe-module=icmp_echoscan"]
