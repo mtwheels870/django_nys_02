@@ -35,6 +35,6 @@ class PingSurveyManager:
         self.writer_range_ip.write(string1)
         self.writer_whitelist.write("ip_network")
 
-    def close():
+    def close(self):
         self.writer_range_ip.close()
         self.writer_whitelist.close()
