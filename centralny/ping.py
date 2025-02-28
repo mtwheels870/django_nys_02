@@ -38,6 +38,7 @@ class PingSurveyManager:
         if write_mode:
             self.writer_range_ip = open(self.path_range_ip, "w+")
             self.writer_whitelist = open(self.path_whitelist, "w+")
+            self.writer_log = open(self.path_log, "w+")
 
     def _load_latest(self):
         most_recent_dir = None
@@ -67,3 +68,4 @@ class PingSurveyManager:
     def close(self):
         self.writer_range_ip.close()
         self.writer_whitelist.close()
+        self.writer_log.close()
