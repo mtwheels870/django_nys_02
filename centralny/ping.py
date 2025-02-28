@@ -16,6 +16,7 @@ class PingSurveyManager:
         now = datetime.datetime.now()
         folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
+        print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
             os.makedirs(full_path)
         self.directory = full_path
@@ -31,9 +32,9 @@ class PingSurveyManager:
     def add(self, index, range_id, ip_network):
         if index == 0:
             self.writer_range_ip.write(HEADER)
-        string1 = f"{range_id}, {ip_network}"
+        string1 = f"{range_id}, {ip_network}\n"
         self.writer_range_ip.write(string1)
-        self.writer_whitelist.write("ip_network")
+        self.writer_whitelist.write(f"{ip_network}\n")
 
     def close(self):
         self.writer_range_ip.close()
