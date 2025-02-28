@@ -264,6 +264,8 @@ class ConfigurePingView(generic.edit.FormView):
             metadata_file = async_result.get()
             print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
+            now = timezone.now()
+            print(f"CPV.post(), calling tally_results (delayed), now = {now}, seconds = {PING_RESULTS_DELAY}")
             # Fire off the counting task
             async_result2 = tally_results.apply_async(
                 countdown=PING_RESULTS_DELAY,

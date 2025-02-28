@@ -360,7 +360,7 @@ def _process_zmap_results(survey_id, survey_manager, metadata_file_job):
     # See whether the metadata file has values
     size = os.path.getsize(metadata_file_job)
     if size == 0:
-        printf("_process_zmap_results(), empty metadata file: {metadata_file_job}")
+        printf(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
         return 0
 
 @shared_task(bind=True)
