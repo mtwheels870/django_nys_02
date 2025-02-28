@@ -370,9 +370,6 @@ def tally_results(self, *args, **kwargs):
     survey_id = kwargs["survey_id"]
     ip_source_id = kwargs["ip_source_id"]
     metadata_file = kwargs["metadata_file"]
-                kwargs={"survey_id": survey.id,
-                    "ip_source_id": IP_RANGE_SOURCE,
-                    "": metadata_file} )
     survey = IpRangeSurvey.objects.get(pk=survey_id)
     if not survey.time_started:
         print(f"tally_results(), survey.time_started is null! (never started)")
