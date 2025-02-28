@@ -257,3 +257,38 @@ def zmap_all(self, *args, **kwargs):
 
     # Break into batches of 10 tracts, right now
     
+def whitelist_maxm(survey_manager):
+    ranges = MmIpRange.objects.all()
+    for index, range in enumerate(ranges):
+        if index % 1000 == 0:
+            print(f"whitelist_maxm(), range[{index}]: {range.ip_network}")
+        survey_manager.add(index, range.id, range.ip_network)
+    return index
+
+@shared_task(bind=True)
+def build_whitelist(self, *args, **kwargs):
+    # Ensure another worker hasn't grabbed the survey, yet
+    print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
+    worker_lock_id = kwargs["worker_lock_id"]
+    ip_source_id = kwargs["ip_source_id"]
+    worker_lock = WorkerLock.objects.get(pk=worker_lock_id)
+    if worker_lock.time_started:
+        print(f"build_whitelist(), worker_lock.time_started: {worker_lock.time_started}, another worker grabbed it, exiting")
+        return 0
+    # Save that we started the process, that's our (worker) lock
+    worker_lock.time_started = timezone.now()
+    worker_lock.save()
+
+    print(f"build_whitelist(), source_id = {ip_source_id}")
+    survey_manager = PingSurveyManager()
+    if ip_source_id == 2:
+        num_ranges = whitelist_maxm(survey_manager)
+    elif ip_source_id == 1:
+        print(f"build_whitelist(), currently don't support ip_source_id = {ip_source_id}")
+    else
+        raise Exception(f"build_whitelist(), unrecognized source_id: {ip_source_id}")
+
+    print(f"build_whitelist(), cleaning up survey manager, lock")
+    survey_manager.close()
+    worker_lock.delete()
+    return num_ranges

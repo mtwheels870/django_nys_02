@@ -13,6 +13,11 @@ from django.contrib.gis.db import models
 
 class IpRangeSource(models.Model):
     description = models.CharField(max_length=12)
+
+class WorkerLock(models.Model):
+    purpose = models.CharField(max_length=12)
+    time_created = models.DateTimeField(auto_now_add=True)
+    time_started = models.DateTimeField(null=True)
     
 class County(models.Model):
     # COUNTY_1
