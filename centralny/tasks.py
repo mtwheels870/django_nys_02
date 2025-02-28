@@ -347,4 +347,4 @@ def zmap_from_file(self, *args, **kwargs):
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
     # Run Zmap command here. We'll process the output file when the zmap is done running
-    return _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)0
+    return _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)
