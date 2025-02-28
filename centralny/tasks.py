@@ -308,7 +308,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
             "--output-module=csv",
             "--output-fields=saddr,timestamp-ts",
             f"--metadata-file={metadata_file}",
-            f"--log-file={log_file}", NoVa
+            f"--log-file={log_file}", 
             "--sender-threads=1",
             "--probe-module=icmp_echoscan"]
         full_command = " ".join(list_command)
