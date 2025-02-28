@@ -302,18 +302,17 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         rate_packets_second = 10000
         list_command = ["zmap",
             "--quiet", f"-r {rate_packets_second}",
-            "--whitelist-file=${whitelist_file}",
-            "--output-file=${output_file}",
+            f"--whitelist-file=${whitelist_file}",
+            f"--output-file=${output_file}",
             "--output-module=csv",
             "--output-fields=saddr,timestamp-ts",
-            "--metadata-file=${metadataFile}",
+            f"--metadata-file=${metadataFile}",
             "--sender-threads=1",
-            "--log-file=${log_file}",
+            f"--log-file=${log_file}",
             "--probe-module=icmp_echoscan"]
         full_command = " ".join(list_command)
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
-        if debug:
-            print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
+        print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
