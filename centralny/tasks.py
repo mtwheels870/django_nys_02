@@ -365,7 +365,6 @@ def _process_zmap_results(survey_id, survey_manager, metadata_file_job):
 
 @shared_task(bind=True)
 def tally_results(self, *args, **kwargs):
-            async_result2 = .apply_async(
     # Ensure another worker hasn't grabbed the survey, yet
     print(f"tally_results(), self = {self}, kwargs = {kwargs}")
     survey_id = kwargs["survey_id"]
