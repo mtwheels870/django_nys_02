@@ -303,11 +303,12 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         # f"--log-file=${log_file}", NoVa
         list_command = ["zmap",
             "--quiet", f"-r {rate_packets_second}",
-            f"--whitelist-file=${whitelist_file}",
-            f"--output-file=${output_file}",
+            f"--whitelist-file={whitelist_file}",
+            f"--output-file={output_file}",
             "--output-module=csv",
             "--output-fields=saddr,timestamp-ts",
-            f"--metadata-file=${metadata_file}",
+            f"--metadata-file={metadata_file}",
+            f"--log-file={log_file}", NoVa
             "--sender-threads=1",
             "--probe-module=icmp_echoscan"]
         full_command = " ".join(list_command)
