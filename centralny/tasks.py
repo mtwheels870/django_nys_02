@@ -332,7 +332,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 @shared_task(bind=True)
 def zmap_from_file(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
-    print(f"zmap_from_file(), self = {self}, kwargs = {kwargs}")
+    # print(f"zmap_from_file(), self = {self}, kwargs = {kwargs}")
     survey_id = kwargs["survey_id"]
     ip_source_id = kwargs["ip_source_id"]
     survey = IpRangeSurvey.objects.get(pk=survey_id)
@@ -343,7 +343,7 @@ def zmap_from_file(self, *args, **kwargs):
     survey.time_started = timezone.now()
     survey.save()
 
-    print(f"build_whitelist(), source_id = {ip_source_id}")
+    #print(f"build_whitelist(), source_id = {ip_source_id}")
     survey_manager = PingSurveyManager(create_new=False)
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
@@ -351,3 +351,34 @@ def zmap_from_file(self, *args, **kwargs):
     ret_val = _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)
     return metadata_file
 
+def _process_zmap_results(survey_id, survey_manager, metadata_file_job):
+    whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
+    if metadata_file_job != metadata_file_survey:
+        printf("_process_zmap_results(), metadata1 = {metadata_file_job}, metadata2 = {metadata_file_survey}")
+        return 0
+
+    # See whether the metadata file has values
+    size = os.path.getsize(metadata_file_job)
+    if size == 0:
+        printf("_process_zmap_results(), empty metadata file: {metadata_file_job}")
+        return 0
+
+@shared_task(bind=True)
+def tally_results(self, *args, **kwargs):
+            async_result2 = .apply_async(
+    # Ensure another worker hasn't grabbed the survey, yet
+    print(f"tally_results(), self = {self}, kwargs = {kwargs}")
+    survey_id = kwargs["survey_id"]
+    ip_source_id = kwargs["ip_source_id"]
+    metadata_file = kwargs["metadata_file"]
+                kwargs={"survey_id": survey.id,
+                    "ip_source_id": IP_RANGE_SOURCE,
+                    "": metadata_file} )
+    survey = IpRangeSurvey.objects.get(pk=survey_id)
+    if not survey.time_started:
+        print(f"tally_results(), survey.time_started is null! (never started)")
+        return 0
+    survey_manager = PingSurveyManager(create_new=False)
+    ret_val = _process_zmap_results(survey_id, survey_manager, metadata_file)
+    print(f"tally_results(), ret_val = {ret_val}")
+    return ret_val

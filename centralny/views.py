@@ -14,7 +14,7 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import build_whitelist, zmap_from_file
+from .tasks import build_whitelist, zmap_from_file, tally_results
 
 from centralny.models import (
     CensusTract,
@@ -52,6 +52,9 @@ FIELD_CELERY_DETAILS = "celery_stuff"
 
 # Use Maxmind
 IP_RANGE_SOURCE = 2
+
+# For our test case, we just use 1m
+PING_RESULTS_DELAY = 60
 
 # /maps/api/markers (through DefaultRouter)
 #class MarkerViewSet(
@@ -226,11 +229,11 @@ class ConfigurePingView(generic.edit.FormView):
         return context_data
 
     def post(self, request, *args, **kwargs):
-        print(f"CPV.post(), kwargs = {kwargs}")
+        #print(f"CPV.post(), kwargs = {kwargs}")
         form = PingStrategyForm(request.POST)
         if form.is_valid():
             my_field = form.cleaned_data['my_field']
-            print(f"CPV.post(), my_field = {my_field}")
+            #print(f"CPV.post(), my_field = {my_field}")
         else:
             print(f"CPV.post(), form is INVALID")
 
@@ -250,7 +253,7 @@ class ConfigurePingView(generic.edit.FormView):
             # Fall through
 
         if 'start_ping' in request.POST:
-            print(f"CPV.post(), start_ping...")
+            #print(f"CPV.post(), start_ping...")
             survey = IpRangeSurvey()
             survey.save()
             async_result = zmap_from_file.apply_async(
@@ -259,7 +262,14 @@ class ConfigurePingView(generic.edit.FormView):
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.zmap_from_file')
             metadata_file = async_result.get()
-            print(f"CPV.post(), async_result = {async_result}, metadata_file = {metadata_file}")
+            print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
+
+            # Fire off the counting task
+            async_result2 = tally_results.apply_async(
+                countdown=PING_RESULTS_DELAY,
+                kwargs={"survey_id": survey.id,
+                    "ip_source_id": IP_RANGE_SOURCE,
+                    "metadata_file": metadata_file} )
             # Fall through
 
         # Load up the celery details for the next form
