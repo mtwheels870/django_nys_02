@@ -1,10 +1,6 @@
 import os
 import datetime
 
-from centralny.models import (
-    MmIpRange,
-)
-
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
 FILE_RANGE_IP = "RangeIp.csv"
 FILE_WHITELIST = "Whitelist.csv"
