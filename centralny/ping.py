@@ -12,7 +12,7 @@ FILE_OUTPUT = "ZmapOutput.csv"
 FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
 
-HEADER = "range_id, ip_network\n"
+HEADER = "range_id,ip_network\n"
 
 class RangeIp:
     def __init__(self):
