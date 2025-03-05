@@ -3,7 +3,7 @@ import datetime
 
 import pandas as pd
 
-from cidr_trie import PatiricaTrie
+from cidr_trie import PatriciaTrie
 
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
 FILE_RANGE_IP = "RangeIp.csv"
