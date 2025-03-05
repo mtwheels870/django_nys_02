@@ -66,7 +66,7 @@ class PingSurveyManager:
     def add(self, index, range_id, ip_network):
         if index == 0:
             self.writer_range_ip.write(HEADER)
-        string1 = f"{range_id}, {ip_network}\n"
+        string1 = f"{range_id},{ip_network}\n"
         self.writer_range_ip.write(string1)
         self.writer_whitelist.write(f"{ip_network}\n")
 
