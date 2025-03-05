@@ -53,8 +53,8 @@ FIELD_CELERY_DETAILS = "celery_stuff"
 # Use Maxmind
 IP_RANGE_SOURCE = 2
 
-# For our test case, we just use 1m
-PING_RESULTS_DELAY = 60
+# For our test case, we just use 15s
+PING_RESULTS_DELAY = 15
 
 # /maps/api/markers (through DefaultRouter)
 #class MarkerViewSet(

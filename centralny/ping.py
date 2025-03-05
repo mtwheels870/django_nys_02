@@ -87,10 +87,11 @@ class PingSurveyManager:
 
     def _match_zmap_replies(self):
         df = pd.read_csv(self.path_output)
-        print(f"_match_zmap_replies(), num_rows = {df.shape[0]}")
+        column_names = df.columns.tolist()
+        print(f"_match_zmap_replies(), num_rows = {df.shape[0]}, column_names = {column_names}")
         for index, row in df.iterrows():
             saddr = row['saddr']
-            timestemp = row['timestamp-ts']
+            timestamp = row['timestamp-ts']
             print(f"saddr = {saddr}, timestamp = {timestamp}")
 
     def process_results(self):
