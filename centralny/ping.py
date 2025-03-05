@@ -77,7 +77,8 @@ class PingSurveyManager:
     def _build_radix_tree(self):
         self.trie = PatriciaTrie()
         df = pd.read_csv(self.path_range_ip)
-        print(f"_build_radix_tree(), num_rows = {df.shape[0]}")
+        column_names = df.columns.tolist()
+        print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
         for index, row in df.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
