@@ -15,10 +15,10 @@ FILE_LOG = "Log.txt"
 HEADER = "range_id,ip_network\n"
 
 class RangeIp:
-    def __init__(self):
-        self.id = None
+    def __init__(self, arg1, arg2):
+        self.id = arg1
+        self.ip_network = arg2
         self.count = 0
-        self.ip_network = None
 
     def str(self):
         return f"range[{self.id}] = {self.ip_network}, count = {self.count}"
@@ -91,7 +91,7 @@ class PingSurveyManager:
             if index < 5:
                 print(f"range[{range_id}] = {ip_network}")
             # Hang a counter on the tree
-            range_ip = RangeIp(id=range_id, ip_network=ip_network)
+            range_ip = RangeIp(range_id, ip_network)
             self.trie.insert(ip_network, range_ip)
 
     def _match_zmap_replies(self):
