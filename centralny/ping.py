@@ -84,7 +84,7 @@ class PingSurveyManager:
             print(f"range[{range_id}] = {ip_network}")
             self.trie.insert(ip_network, range_id)
 
-    def _match_zmap_replies(self)
+    def _match_zmap_replies(self):
         df = pd.read_csv(self.path_output)
         print(f"_match_zmap_replies(), num_rows = {df.shape[0]}")
         for index, row in df.iterrows():
