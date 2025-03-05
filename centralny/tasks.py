@@ -363,6 +363,8 @@ def _process_zmap_results(survey_id, survey_manager, metadata_file_job):
         printf(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
         return 0
 
+    survey_manager.process_results()
+
 @shared_task(bind=True)
 def tally_results(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet

@@ -1,6 +1,10 @@
 import os
 import datetime
 
+import pandas as pd
+
+from cidr_trie import PatiricaTrie
+
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
 FILE_RANGE_IP = "RangeIp.csv"
 FILE_WHITELIST = "Whitelist.csv"
@@ -10,6 +14,10 @@ FILE_LOG = "Log.txt"
 
 HEADER = "range_id, ip_network\n"
 
+class RangeIp:
+    def __init__(self):
+        self.id = None
+    
 class PingSurveyManager:
     def __init__(self, create_new=True):
         if create_new:
@@ -65,6 +73,30 @@ class PingSurveyManager:
     def get_zmap_files(self):
         return self.path_whitelist, self.path_output, self.path_metadata, self.path_log 
 
+    # Build a radix tree of the ip address
+    def _build_radix_tree(self):
+        self.trie = PatriciaTrie()
+        df = pd.read_csv(self.path_range_ip)
+        print(f"_build_radix_tree(), num_rows = {df.shape[0]}")
+        for index, row in df.iterrows()
+            range_id = row['range_id']
+            ip_network = row['ip_network']
+            print(f"range[{range_id}] = {ip_network}")
+            self.trie.insert(ip_network, range_id)
+
+    def _match_zmap_replies(self)
+        df = pd.read_csv(self.path_output)
+        print(f"_match_zmap_replies(), num_rows = {df.shape[0]}")
+        for index, row in df.iterrows()
+            saddr = row['saddr']
+            timestemp = row['timestamp-ts']
+            print(f"saddr = {saddr}, timestamp = {timestamp}")
+
+    def process_results(self):
+        self._unmatched_list = []
+        self._build_radix_tree()
+        self._match_zmap_replies()
+        
     def close(self):
         self.writer_range_ip.close()
         self.writer_whitelist.close()
