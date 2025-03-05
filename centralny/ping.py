@@ -17,6 +17,12 @@ HEADER = "range_id,ip_network\n"
 class RangeIp:
     def __init__(self):
         self.id = None
+        self.count = 0
+        self.ip_network = None
+
+    def str(self):
+        return f"range[{self.id}] = {self.ip_network}, count = {self.count}"
+
     
 class PingSurveyManager:
     def __init__(self, create_new=True):
@@ -82,8 +88,11 @@ class PingSurveyManager:
         for index, row in df.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
-            print(f"range[{range_id}] = {ip_network}")
-            self.trie.insert(ip_network, range_id)
+            if index < 5:
+                print(f"range[{range_id}] = {ip_network}")
+            # Hang a counter on the tree
+            range_ip = RangeIp(id=range_id, ip_network=ip_network)
+            self.trie.insert(ip_network, range_ip)
 
     def _match_zmap_replies(self):
         df = pd.read_csv(self.path_output)
@@ -92,7 +101,9 @@ class PingSurveyManager:
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
-            print(f"saddr = {saddr}, timestamp = {timestamp}")
+            results = self.trie.find_all(saddr)
+            if index < 5:
+                print(f"saddr = {saddr}, timestamp = {timestamp}, results = {results}")
 
     def process_results(self):
         self._unmatched_list = []
