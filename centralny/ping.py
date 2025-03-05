@@ -78,7 +78,7 @@ class PingSurveyManager:
         self.trie = PatriciaTrie()
         df = pd.read_csv(self.path_range_ip)
         print(f"_build_radix_tree(), num_rows = {df.shape[0]}")
-        for index, row in df.iterrows()
+        for index, row in df.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
             print(f"range[{range_id}] = {ip_network}")
@@ -87,7 +87,7 @@ class PingSurveyManager:
     def _match_zmap_replies(self)
         df = pd.read_csv(self.path_output)
         print(f"_match_zmap_replies(), num_rows = {df.shape[0]}")
-        for index, row in df.iterrows()
+        for index, row in df.iterrows():
             saddr = row['saddr']
             timestemp = row['timestamp-ts']
             print(f"saddr = {saddr}, timestamp = {timestamp}")
