@@ -135,8 +135,8 @@ class PingSurveyManager:
                 # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
                 ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
                 print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
-                ip_range = node.masks
-                print(f"           count = {ip_range.count}")
+                #ip_range = node.masks
+                #print(f"           count = {ip_range.count}")
                 index = index + 1
 
     def process_results(self):
