@@ -121,7 +121,7 @@ class PingSurveyManager:
         # Iterate the entire tree
         index = 0
         for node in self.trie.traverse("0.0.0.0"):
-            print(f"_save_to_db(), traverse[{index}] = {node}")
+            print(f"_save_to_db(), traverse[{index}] = {node},{node.ip}")
             index = index + 1
         print(f"_save_to_db(), last_index = {index}")
 
