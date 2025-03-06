@@ -83,7 +83,7 @@ class PingSurveyManager:
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
         self.trie = PatriciaTrie()
-        df = pd.read_csv(self.path_range_ip)
+        df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
         print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
         for index, row in df.iterrows():
@@ -118,18 +118,26 @@ class PingSurveyManager:
                     print(f"    found ONE, address = {address}, counter = {counter}")
                 counter.count = counter.count + 1
 
-    def _save_to_db(self):
+    def _save_to_db(self, df_ranges):
         print(f"_save_to_db(), size (of tree): {self.trie.size}")
         # Iterate the entire tree
         index = 0
-        for node in self.trie.traverse("0.0.0.0"):
-            # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
-            ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
-            child_values = node.get_child_values(prefix)
-            print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
-            print(f"           left = {node.left}, right = {node.right}")
-            index = index + 1
-        print(f"_save_to_db(), last_index = {index}")
+
+        # Walk through our dataframe again
+        for index, row in self.df_ranges.iterrows():
+            range_id = row['range_id']
+            ip_network = row['ip_network']
+            
+            print(f"_save_to_db(), looking up ip_network {ip_network}")
+            # Now, look up each networking in our trie
+            index = 0
+            for node in self.trie.traverse(ip_network):
+                # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
+                ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
+                print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
+                ip_range = node.masks
+                print(f"           count = {ip_range.count}")
+                index = index + 1
 
     def process_results(self):
         self._unmatched_list = []
