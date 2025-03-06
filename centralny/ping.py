@@ -119,9 +119,11 @@ class PingSurveyManager:
 
     def _save_to_db(self):
         # Iterate the entire tree
-        results = self.trie.traverse("0.0.0.0/32")
-        num_results = len(results)
-        print(f"_save_to_db(), num_results = {num_results}")
+        index = 0
+        for node in self.trie.traverse("0.0.0.0/32")
+            print(f"_save_to_db(), traverse[{index}] = {node}")
+            index = index + 1
+        print(f"_save_to_db(), last_index = {index}")
 
     def process_results(self):
         self._unmatched_list = []
