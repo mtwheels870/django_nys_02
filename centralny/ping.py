@@ -102,14 +102,32 @@ class PingSurveyManager:
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
             results = self.trie.find_all(saddr)
+            num_results = len(results)
             if index < 20:
-                print(f"saddr = {saddr}, timestamp = {timestamp}, results = {results}")
+                print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
                 print(f"        results = {results}")
+            if num_results == 0:
+                print(f"_match_zmap_replies(), no Trie results for {saddr}!")
+            elif num_results > 1:
+                print(f"_match_zmap_replies(), multiple Trie results for {saddr}!")
+            else:
+                address = results[0][0]
+                counter = results[0][1]
+                if index < 20:
+                    print(f"    found ONE, address = {address}, counter = {counter}")
+                counter.count = counter.count + 1
+
+    def _save_to_db(self):
+        # Iterate the entire tree
+        results = self.trie.find_all("0.0.0.0/32")
+        num_results = len(results)
+        print(f"_save_to_db(), num_results = {num_results}")
 
     def process_results(self):
         self._unmatched_list = []
         self._build_radix_tree()
         self._match_zmap_replies()
+        self._save_to_db()
         
     def close(self):
         self.writer_range_ip.close()
