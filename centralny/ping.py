@@ -118,7 +118,7 @@ class PingSurveyManager:
                     print(f"    found ONE, address = {address}, counter = {counter}")
                 counter.count = counter.count + 1
 
-    def _save_to_db(self, df_ranges):
+    def _save_to_db(self):
         print(f"_save_to_db(), size (of tree): {self.trie.size}")
         # Iterate the entire tree
         index = 0
