@@ -89,8 +89,7 @@ class PingSurveyManager:
         for index, row in df.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
-            if index < 20:
-                print(f"range[{range_id}] = {ip_network}")
+            print(f"RangeIp({range_id},{ip_network})")
             # Hang a counter on the tree
             range_ip = RangeIpCount(range_id, ip_network)
             self.trie.insert(ip_network, range_ip)
