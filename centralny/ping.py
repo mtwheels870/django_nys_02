@@ -128,13 +128,17 @@ class PingSurveyManager:
             range_id = row['range_id']
             ip_network = row['ip_network']
             
-            print(f"_save_to_db(), looking up ip_network {ip_network}")
+            print(f"_save_to_db(), looking up [{range_id}], ip_network {ip_network}")
             # Now, look up each networking in our trie
             index = 0
             for node in self.trie.traverse(ip_network):
                 # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
                 ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
                 print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
+                if range_id = node.masks:
+                    ip_range = node.masks[range_id]
+                    count = ip_range.count
+                    print(f"  [{range_id}].count = {count}")
                 #ip_range = node.masks
                 #print(f"           count = {ip_range.count}")
                 index = index + 1
