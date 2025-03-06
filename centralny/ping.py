@@ -123,7 +123,7 @@ class PingSurveyManager:
         index = 0
         for node in self.trie.traverse("0.0.0.0"):
             # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
-            ip_string = cidr_util.ip_itoa(node.ip)
+            ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
             print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
             print(f"           left = {node.left}, right = {node.right}")
             index = index + 1
