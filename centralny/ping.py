@@ -119,7 +119,7 @@ class PingSurveyManager:
 
     def _save_to_db(self):
         # Iterate the entire tree
-        results = self.trie.find_all("0.0.0.0/32")
+        results = self.trie.traverse("0.0.0.0/32")
         num_results = len(results)
         print(f"_save_to_db(), num_results = {num_results}")
 
