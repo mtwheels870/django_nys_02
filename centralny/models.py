@@ -107,6 +107,19 @@ class CountRangeCounty(models.Model):
     def __str__(self):
         return f"County: {county_code}"
 
+class MmIpRange(models.Model):
+    ip_network = models.CharField("IP Network", max_length=20)
+    geoname_id = models.CharField("GeoNameId", max_length=10)
+    zip_code = models.CharField("Zip_Code", null=True, max_length=10)
+    mm_latitude = models.CharField(max_length=20)
+    mm_longitude = models.CharField(max_length=20)
+    accuracy = models.IntegerField()
+    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
+    mpoint = models.MultiPointField(null=True)
+
+    def __str__(self):
+        return f"{self.geoname_id}: {self.ip_network}"
+
 class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
@@ -131,17 +144,4 @@ class IpRangePing(models.Model):
 
     def __str__(self):
         return f"Range[{self.id}]: [{self.ip_range.ip_range_start},{self.ip_range.ip_range_end}], time_pinged = {self.time_pinged}"
-
-class MmIpRange(models.Model):
-    ip_network = models.CharField("IP Network", max_length=20)
-    geoname_id = models.CharField("GeoNameId", max_length=10)
-    zip_code = models.CharField("Zip_Code", null=True, max_length=10)
-    mm_latitude = models.CharField(max_length=20)
-    mm_longitude = models.CharField(max_length=20)
-    accuracy = models.IntegerField()
-    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
-    mpoint = models.MultiPointField(null=True)
-
-    def __str__(self):
-        return f"{self.geoname_id}: {self.ip_network}"
 
