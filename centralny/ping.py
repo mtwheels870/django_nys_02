@@ -98,11 +98,11 @@ class PingSurveyManager:
         self.trie = PatriciaTrie()
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
-        print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
+        #print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
         for index, row in df.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
-            print(f"RangeIp({range_id},{ip_network})")
+            #print(f"RangeIp({range_id},{ip_network})")
             possible_hosts = self._calculate_possible(ip_network)
             # Hang a counter on the tree
             range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
@@ -111,7 +111,7 @@ class PingSurveyManager:
     def _match_zmap_replies(self):
         df = pd.read_csv(self.path_output)
         column_names = df.columns.tolist()
-        print(f"_match_zmap_replies(), num_rows = {df.shape[0]}, column_names = {column_names}")
+        #print(f"_match_zmap_replies(), num_rows = {df.shape[0]}, column_names = {column_names}")
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
@@ -127,12 +127,12 @@ class PingSurveyManager:
             else:
                 address = results[0][0]
                 counter = results[0][1]
-                if index < 20:
-                    print(f"    found ONE, address = {address}, counter = {counter}")
+                #if index < 20:
+                #    print(f"    found ONE, address = {address}, counter = {counter}")
                 counter.count = counter.count + 1
 
     def _save_to_db(self, survey):
-        print(f"_save_to_db(), size (of tree): {self.trie.size}")
+        # print(f"_save_to_db(), size (of tree): {self.trie.size}")
         # Iterate the entire tree
         index = 0
 
@@ -142,7 +142,7 @@ class PingSurveyManager:
             range_id = row['range_id']
             ip_network = row['ip_network']
             
-            print(f"_save_to_db(), looking up [{range_id}], ip_network {ip_network}")
+            #print(f"_save_to_db(), looking up [{range_id}], ip_network {ip_network}")
             network_parts = cidr_trie.cidr_util.cidr_atoi(ip_network) 
             target_mask = network_parts[1]
             # Now, look up each network in our trie
@@ -150,7 +150,7 @@ class PingSurveyManager:
             for node in self.trie.traverse(ip_network):
                 # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
                 ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
-                print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
+                #print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
                 if target_mask in node.masks:
                     ip_range_counter = node.masks[target_mask]
                     count = ip_range_counter.count
