@@ -154,7 +154,7 @@ class PingSurveyManager:
                 if target_mask in node.masks:
                     ip_range_counter = node.masks[target_mask]
                     count = ip_range_counter.count
-                    if count != 0:
+                    if count > 0:
                         ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
                         possible_hosts = ip_range_counter.possible_hosts
                         range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
@@ -170,11 +170,12 @@ class PingSurveyManager:
         print(f"_save_to_db(), saved {saved_to_db} objects to database")
         return saved_to_db
 
+    # Returns the number of pings saved to the database (count > 0)
     def process_results(self, survey):
         self._unmatched_list = []
         self._build_radix_tree()
         self._match_zmap_replies()
-        self._save_to_db(survey)
+        return self._save_to_db(survey)
         
     def close(self):
         self.writer_range_ip.close()
