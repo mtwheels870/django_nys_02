@@ -91,7 +91,7 @@ class PingSurveyManager:
 
     def _calculate_possible(self, cidr):
         ip_network = ipaddress.ip_network(cidr)
-        return 1 << (ip_network.max_prefixlen - prefixlen)
+        return 1 << (ip_network.max_prefixlen - ip_network.prefixlen)
 
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
