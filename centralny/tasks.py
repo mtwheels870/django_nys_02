@@ -351,7 +351,7 @@ def zmap_from_file(self, *args, **kwargs):
     ret_val = _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)
     return metadata_file
 
-def _process_zmap_results(survey_id, survey_manager, metadata_file_job):
+def _process_zmap_results(survey, survey_manager, metadata_file_job):
     whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
     if metadata_file_job != metadata_file_survey:
         print(f"_process_zmap_results(), metadata1 = {metadata_file_job}, metadata2 = {metadata_file_survey}")
@@ -377,7 +377,7 @@ def tally_results(self, *args, **kwargs):
         print(f"tally_results(), survey.time_started is null! (never started)")
         return 0
     survey_manager = PingSurveyManager(create_new=False)
-    ret_val = _process_zmap_results(survey_id, survey_manager, metadata_file)
+    ret_val = _process_zmap_results(survey, survey_manager, metadata_file)
     survey.time_stopped = timezone.now()
     survey.save()
     print(f"tally_results(), ret_val = {ret_val}, saved survey: {survey_id}")
