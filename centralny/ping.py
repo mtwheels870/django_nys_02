@@ -117,9 +117,9 @@ class PingSurveyManager:
             timestamp = row['timestamp-ts']
             results = self.trie.find_all(saddr)
             num_results = len(results)
-            if index < 20:
-                print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
-                print(f"        results = {results}")
+            #if index < 20:
+            #    print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
+            #    print(f"        results = {results}")
             if num_results == 0:
                 print(f"_match_zmap_replies(), no Trie results for {saddr}!")
             elif num_results > 1:
