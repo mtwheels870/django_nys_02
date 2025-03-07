@@ -54,7 +54,8 @@ FIELD_CELERY_DETAILS = "celery_stuff"
 IP_RANGE_SOURCE = 2
 
 # For our test case, we just use 15s
-PING_RESULTS_DELAY = 15
+# PING_RESULTS_DELAY = 15
+PING_RESULTS_DELAY = 5 * 60
 
 # /maps/api/markers (through DefaultRouter)
 #class MarkerViewSet(
