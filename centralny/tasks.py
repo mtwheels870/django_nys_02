@@ -263,8 +263,8 @@ def whitelist_maxm(survey_manager):
             print(f"whitelist_maxm(), range[{index}]: {range.ip_network}")
         survey_manager.add(index, range.id, range.ip_network)
         # DEBUG
-        if index >= 100:
-            break
+#        if index >= 100:
+#            break
     return index
 
 @shared_task(bind=True)
