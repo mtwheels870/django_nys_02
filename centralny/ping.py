@@ -155,7 +155,7 @@ class PingSurveyManager:
                     ip_range_counter = node.masks[target_mask]
                     count = ip_range_counter.count
                     if count != 0:
-                        ip_range = MmIpRange.objects.get(pk=ip_range_counter.range_id)
+                        ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
                         possible_hosts = ip_range_counter.possible_hosts
                         range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
                             num_ranges_pinged=possible_hosts,
