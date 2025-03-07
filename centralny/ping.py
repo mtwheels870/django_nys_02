@@ -2,7 +2,7 @@ import os
 import datetime
 
 import pandas as pd
-import ip_network
+import ipaddress
 import netaddr
 
 from cidr_trie import PatriciaTrie
