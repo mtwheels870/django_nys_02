@@ -363,7 +363,7 @@ def _process_zmap_results(survey_id, survey_manager, metadata_file_job):
         printf(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
         return 0
 
-    survey_manager.process_results()
+    survey_manager.process_results(survey)
 
 @shared_task(bind=True)
 def tally_results(self, *args, **kwargs):
@@ -378,5 +378,7 @@ def tally_results(self, *args, **kwargs):
         return 0
     survey_manager = PingSurveyManager(create_new=False)
     ret_val = _process_zmap_results(survey_id, survey_manager, metadata_file)
-    print(f"tally_results(), ret_val = {ret_val}")
+    survey.time_stopped = timezone.now()
+    survey.save()
+    print(f"tally_results(), ret_val = {ret_val}, saved survey: {survey_id}")
     return ret_val

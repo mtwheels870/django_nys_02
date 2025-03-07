@@ -2,9 +2,17 @@ import os
 import datetime
 
 import pandas as pd
+import ip_network
+import netaddr
 
 from cidr_trie import PatriciaTrie
 import cidr_trie.cidr_util
+
+from django.utils import timezone
+
+from .models import (
+    IpRangeSurvey, CountRangeTract, IpRangePing, DeIpRange, WorkerLock,
+    MmIpRange)
 
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
 FILE_RANGE_IP = "RangeIp.csv"
@@ -16,9 +24,10 @@ FILE_LOG = "Log.txt"
 HEADER = "range_id,ip_network\n"
 
 class RangeIpCount:
-    def __init__(self, db_range_id, ip_network):
+    def __init__(self, db_range_id, ip_network, possible_hosts):
         self.id = db_range_id
         self.ip_network = ip_network
+        self.possible_hosts = possible_hosts
         self.count = 0
 
     def str(self):
@@ -80,6 +89,10 @@ class PingSurveyManager:
     def get_zmap_files(self):
         return self.path_whitelist, self.path_output, self.path_metadata, self.path_log 
 
+    def _calculate_possible(self, cidr):
+        ip_network = ipaddress.ip_network(cidr)
+        return 1 << (ip_network.max_prefixlen - prefixlen)
+
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
         self.trie = PatriciaTrie()
@@ -90,8 +103,9 @@ class PingSurveyManager:
             range_id = row['range_id']
             ip_network = row['ip_network']
             print(f"RangeIp({range_id},{ip_network})")
+            possible_hosts = self._calculate_possible(ip_network)
             # Hang a counter on the tree
-            range_ip = RangeIpCount(range_id, ip_network)
+            range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
             self.trie.insert(ip_network, range_ip)
 
     def _match_zmap_replies(self):
@@ -117,7 +131,7 @@ class PingSurveyManager:
                     print(f"    found ONE, address = {address}, counter = {counter}")
                 counter.count = counter.count + 1
 
-    def _save_to_db(self):
+    def _save_to_db(self, survey):
         print(f"_save_to_db(), size (of tree): {self.trie.size}")
         # Iterate the entire tree
         index = 0
@@ -130,26 +144,36 @@ class PingSurveyManager:
             print(f"_save_to_db(), looking up [{range_id}], ip_network {ip_network}")
             network_parts = cidr_trie.cidr_util.cidr_atoi(ip_network) 
             target_mask = network_parts[1]
-            # Now, look up each networking in our trie
+            # Now, look up each network in our trie
             index = 0
+            saved_to_db = 0
             for node in self.trie.traverse(ip_network):
                 # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
                 ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
                 print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
                 if target_mask in node.masks:
-                    ip_range = node.masks[target_mask]
-                    count = ip_range.count
-                    print(f"  mask = {target_mask}, [{range_id}].count = {count}")
+                    ip_range_counter = node.masks[target_mask]
+                    count = ip_range_counter.count
+                    if count != 0:
+                        ip_range = MmIpRange.objects.get(pk=ip_range_counter.range_id)
+                        possible_hosts = ip_range_counter.possible_hosts
+                        range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
+                            num_ranges_pinged=possible_hosts
+                            num_ranges_responded=count,
+                            time_pinged=timezone.now())
+                        range_ping.save()
+                        saved_to_db = saved_to_db + 1
                     break
                 #ip_range = node.masks
                 #print(f"           count = {ip_range.count}")
                 index = index + 1
+            print(f"_save_to_db(), saved {saved_to_db} objects to database")
 
-    def process_results(self):
+    def process_results(self, survey):
         self._unmatched_list = []
         self._build_radix_tree()
         self._match_zmap_replies()
-        self._save_to_db()
+        self._save_to_db(survey)
         
     def close(self):
         self.writer_range_ip.close()

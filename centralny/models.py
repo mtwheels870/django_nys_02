@@ -124,7 +124,7 @@ class IpRangePing(models.Model):
     # One survey can have multiple pings
     ip_survey = models.ForeignKey(IpRangeSurvey, null=True, on_delete=models.CASCADE)
     # THis is a 1-1 relationship: one range = one ping
-    ip_range = models.ForeignKey(DeIpRange, on_delete=models.CASCADE)
+    ip_range = models.ForeignKey(MmIpRange, on_delete=models.CASCADE)
     time_pinged = models.DateTimeField(null=True)
     num_ranges_pinged = models.IntegerField(default=0)
     num_ranges_responded = models.IntegerField(default=0)
