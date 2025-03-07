@@ -136,6 +136,7 @@ class PingSurveyManager:
         # Iterate the entire tree
         index = 0
 
+        saved_to_db = 0
         # Walk through our dataframe again
         for index, row in self.df_ranges.iterrows():
             range_id = row['range_id']
@@ -146,7 +147,6 @@ class PingSurveyManager:
             target_mask = network_parts[1]
             # Now, look up each network in our trie
             index = 0
-            saved_to_db = 0
             for node in self.trie.traverse(ip_network):
                 # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
                 ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
@@ -167,7 +167,8 @@ class PingSurveyManager:
                 #ip_range = node.masks
                 #print(f"           count = {ip_range.count}")
                 index = index + 1
-            print(f"_save_to_db(), saved {saved_to_db} objects to database")
+        print(f"_save_to_db(), saved {saved_to_db} objects to database")
+        return saved_to_db
 
     def process_results(self, survey):
         self._unmatched_list = []
