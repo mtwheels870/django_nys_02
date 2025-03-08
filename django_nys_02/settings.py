@@ -40,7 +40,7 @@ ALLOWED_HOSTS = [
 #    'mycalendar.apps.MyCalendarConfig',
 #    'file_picker',
 INSTALLED_APPS = [
-    'powerscan.apps.CybSenConfig',
+    'powerscan.apps.PowerScanConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

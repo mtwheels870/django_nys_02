@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Details Ping Strategy Page</title>
+  </head>
+  <body>
+    <h2>Celery Config: </h2>
+    <h3>{{ celery_stuff }} </h3>
+
+    <!-- use of app_name = nys below, csrf = cross site request forgeries -->
+    <!-- form action=" stuff here url 'app_centralny:approve_ping' object.id  method="post" -->
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {{ form.errors }}
+        {{ form.media }}
+        {{ form.as_div }}
+        <button type="submit" name="build_whitelist">Build Whitelist</button>
+        <button type="submit" name="start_ping">Start Ping</button>
+        <button type="submit" name="return_to_map">Return to Map</button>
+        {% csrf_token %}
+        <!-- fieldset>
+            <legend><h1>{{  object.ip_range.ip_range_start }}</h1></legend>
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% for choice in question.choice_set.all %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+            {% endfor %}
+        </fieldset -->
+        <!-- input type="submit" value="Approve / Schedule" -->
+    </form>
+  </body>
+</html>
+

@@ -1,0 +1,26 @@
+/*  height: 500px; /* Adjust as needed */
+h2 {
+    text-align: center;
+}
+.split-container {
+    width: 100%;
+    height: 100%;
+    display: flex; /* Use flexbox for easy layout */
+}
+
+.left-side {
+    width: 65%;
+    height: 100%;
+}
+.right-side {
+    width: 34%;
+    height: 100%;
+}
+
+.left-side {
+    background-color: #f0f0f0; /* Optional background color */
+}
+
+.right-side {
+     background-color: #e0e0e0; /* Optional background color */
+}
