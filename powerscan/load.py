@@ -117,6 +117,7 @@ class Loader():
 #        self.lm_markers.save(strict=True, verbose=verbose)
     def run_state(self, verbose=True):
         state_shp = Path(loc_config["PATH_STATE"])
+        print(f"run_state(), state_shp = {state_shp}, mapping = {mapping_state}")
         self.lm_state = LayerMapping(UsState, state_shp, mapping_state, transform=False)
         self.lm_state.save(strict=True, verbose=verbose)
 
