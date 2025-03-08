@@ -4,31 +4,36 @@ from django.utils import timezone
 from django.contrib import admin
 from django.contrib.gis.db import models
 
-#class Marker(models.Model):
-#    name = models.CharField(max_length=255)
-#    location = models.PointField()
+
 #
-#    def __str__(self):
-#        return self.name
-
-class IpRangeSource(models.Model):
-    description = models.CharField(max_length=12)
-
-class WorkerLock(models.Model):
-    purpose = models.CharField(max_length=12)
-    time_created = models.DateTimeField(auto_now_add=True)
-    time_started = models.DateTimeField(null=True)
+# Straight Geo, right from US Census
+#
+# https://www.census.gov/cgi-bin/geo/shapefiles/index.php
     
+class UsState(models.Model):
+    # COUNTY_1
+    state_fp = models.CharField(max_length=2, db_index=True)
+    name = models.CharField(max_length=100)
+    interp_lat = name = models.CharField(max_length=11)
+    interp_long = name = models.CharField(max_length=12)
+
+    # GeoDjango-specific: a geometry field (MultiPolygonField)
+    mpoly = models.MultiPolygonField()
+
+    # Returns the string representation of the model.
+    def __str__(self):
+        return self.name
+
 class County(models.Model):
     # COUNTY_1
-    county_code = models.CharField(max_length=3, db_index=True)
+    county_fp = models.CharField(max_length=3, db_index=True)
     # COUNTY
-    county_name = models.CharField(max_length=66)
-    # STATE
-    state_name = models.CharField(max_length=66)
+    name = models.CharField(max_length=100)
     # STATE_1
-    state_code = models.CharField(max_length=2)
-    pop2000 = models.IntegerField("Population 2000")
+    us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
+
+    interp_lat =  name = models.CharField(max_length=11)
+    interp_long =  name = models.CharField(max_length=12)
 
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
@@ -43,9 +48,7 @@ class County(models.Model):
         return self.county_name
 
 class CensusTract(models.Model):
-    # Should be county_ref or something (it's not an actual code)
-    county_code = models.ForeignKey(County, on_delete=models.CASCADE)
-    state_code = models.CharField(max_length=2)
+    county = models.ForeignKey(County, on_delete=models.CASCADE)
     tract_id = models.CharField(max_length=6)
     short_name = models.CharField(max_length=7)
     long_name = models.CharField(max_length=20)
@@ -59,30 +62,37 @@ class CensusTract(models.Model):
     def __str__(self):
         return self.short_name
 
-# pp = pulse_plus (in the original Digital Element Net Acuity DB 30
-class DeIpRange(models.Model):
-    # Note, this is just for IPv4.  We might have to change for IPv6
-    ip_range_start = models.CharField("IP Start", max_length=20)
-    ip_range_end = models.CharField("IP End", max_length=20)
-    pp_cxn_speed = models.CharField(max_length=20)
-    pp_cxn_type = models.CharField(max_length=10)
-    pp_latitude = models.CharField(max_length=20)
-    pp_longitude = models.CharField(max_length=20)
-    company_name = models.CharField(max_length=60, null=True)
-    naics_code = models.CharField(max_length=8, null=True)
-    organization = models.CharField(max_length=80, null=True)
-    srs_company_name = models.CharField(max_length=60, null=True)
-    srs_issuer_id = models.CharField(max_length=10, null=True)
-    srs_latitude = models.CharField(max_length=20, null=True)
-    srs_longitude = models.CharField(max_length=20, null=True)
-    srs_strength = models.CharField(max_length=3, null=True)
-    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
-    mpoint = models.MultiPointField(null=True)
+#
+# Power Scan, IP ranges (and aggregations)
+#
+class CountState(models.Model):
+    us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
+    range_count = models.IntegerField(default=0)
+    centroid = models.PointField(null=True)
+
+    class Meta:
+        ordering = ["-range_count"]
 
     def __str__(self):
-        return self.ip_range_start
+        return f"County: {self.county.county_fp}"
+#
+# Power Scan, IP ranges (and aggregations)
+#
+class CountCounty(models.Model):
+    # Should be county_ref or something (it's not an actual code)
+    county = models.ForeignKey(County, on_delete=models.CASCADE)
+    range_count = models.IntegerField(default=0)
+    centroid = models.PointField(null=True)
 
-class CountRangeTract(models.Model):
+    class Meta:
+        ordering = ["-range_count"]
+
+    def __str__(self):
+        return f"County: {self.county.county_fp}"
+
+# pp = pulse_plus (in the original Digital Element Net Acuity DB 30
+
+class CountTract(models.Model):
     census_tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
     ip_source = models.ForeignKey(IpRangeSource, on_delete=models.CASCADE, default=1)
     range_count = models.IntegerField(default=0)
@@ -94,18 +104,6 @@ class CountRangeTract(models.Model):
     def __str__(self):
         return f"{census_tract}: {range_count:,}"
 
-class CountRangeCounty(models.Model):
-    # Should be county_ref or something (it's not an actual code)
-    county_code = models.ForeignKey(County, on_delete=models.CASCADE)
-    ip_source = models.ForeignKey(IpRangeSource, on_delete=models.CASCADE, default=1)
-    range_count = models.IntegerField(default=0)
-    centroid = models.PointField(null=True)
-
-    class Meta:
-        ordering = ["-range_count"]
-
-    def __str__(self):
-        return f"County: {county_code}"
 
 class MmIpRange(models.Model):
     ip_network = models.CharField("IP Network", max_length=20)
@@ -119,6 +117,14 @@ class MmIpRange(models.Model):
 
     def __str__(self):
         return f"{self.geoname_id}: {self.ip_network}"
+
+#
+# Classes to work with celery workers and do a scan
+#
+class WorkerLock(models.Model):
+    purpose = models.CharField(max_length=12)
+    time_created = models.DateTimeField(auto_now_add=True)
+    time_started = models.DateTimeField(null=True)
 
 class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
@@ -145,3 +151,27 @@ class IpRangePing(models.Model):
     def __str__(self):
         return f"Range[{self.id}]: [{self.ip_range.ip_range_start},{self.ip_range.ip_range_end}], time_pinged = {self.time_pinged}"
 
+#
+# Unused
+#
+class DeIpRange(models.Model):
+    # Note, this is just for IPv4.  We might have to change for IPv6
+    ip_range_start = models.CharField("IP Start", max_length=20)
+    ip_range_end = models.CharField("IP End", max_length=20)
+    pp_cxn_speed = models.CharField(max_length=20)
+    pp_cxn_type = models.CharField(max_length=10)
+    pp_latitude = models.CharField(max_length=20)
+    pp_longitude = models.CharField(max_length=20)
+    company_name = models.CharField(max_length=60, null=True)
+    naics_code = models.CharField(max_length=8, null=True)
+    organization = models.CharField(max_length=80, null=True)
+    srs_company_name = models.CharField(max_length=60, null=True)
+    srs_issuer_id = models.CharField(max_length=10, null=True)
+    srs_latitude = models.CharField(max_length=20, null=True)
+    srs_longitude = models.CharField(max_length=20, null=True)
+    srs_strength = models.CharField(max_length=3, null=True)
+    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
+    mpoint = models.MultiPointField(null=True)
+
+    def __str__(self):
+        return self.ip_range_start
