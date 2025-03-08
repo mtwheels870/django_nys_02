@@ -7,7 +7,7 @@ from . import views, api
 # path("ping/", TemplateView.as_view(template_name="centralny/ping_strategy.html")),
 
 # We can use this app_name inside the HTML
-app_name = "app_centralny"
+app_name = "app_cybsen"
 
 urlpatterns = [
     path("map/", views.MapNavigationView.as_view(), name="map_viewer"),

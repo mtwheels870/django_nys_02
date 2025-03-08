@@ -188,7 +188,7 @@ class MapNavigationView(generic.edit.FormView):
                 {'form': form, 'table': table, 'map_bbox' : map_bbox});
         else:
             print(f"MNV.post(), form is INVALID")
-            return HttpResponseRedirect(reverse("app_centralny:map_viewer",), {'form': form});
+            return HttpResponseRedirect(reverse("app_cybsen:map_viewer",), {'form': form});
 
     # These labels are in static/cb_layer.js
     def build_table(self, agg_type, id):
@@ -239,7 +239,7 @@ class ConfigurePingView(generic.edit.FormView):
             print(f"CPV.post(), form is INVALID")
 
         if 'return_to_map' in request.POST:
-            return HttpResponseRedirect(reverse("app_centralny:map_viewer"))
+            return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
 
         if 'build_whitelist' in request.POST:
             print(f"CPV.post(), build_whitelist")
