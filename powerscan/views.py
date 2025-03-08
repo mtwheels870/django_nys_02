@@ -100,7 +100,8 @@ class CountTractViewSet(
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
     # queryset = CountRangeTract.objects.all()
-    queryset = CountTract.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    #queryset = CountTract.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    queryset = CountTract.objects.all()
     serializer_class = CountTractSerializer
     
 class CountCountyViewSet(
@@ -108,7 +109,8 @@ class CountCountyViewSet(
     bbox_filter_field = "centroid"
     filter_backends = [filters.InBBoxFilter]
     # queryset = CountRangeCounty.objects.all()
-    queryset = CountCounty.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    #queryset = CountCounty.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    queryset = CountCounty.objects.all()
     serializer_class = CountCountySerializer
 
 class PingStrategyIndexView(generic.ListView):
@@ -246,8 +248,8 @@ class ConfigurePingView(generic.edit.FormView):
             lock.save()
             # MaxM ranges
             async_result = build_whitelist.apply_async(
-                kwargs={"worker_lock_id" : lock.id,
-                    "ip_source_id": IP_RANGE_SOURCE },
+                kwargs={"worker_lock_id" : lock.id},
+                    #"ip_source_id": IP_RANGE_SOURCE },
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.build_whitelist')
             # Fall through
@@ -257,8 +259,8 @@ class ConfigurePingView(generic.edit.FormView):
             survey = IpRangeSurvey()
             survey.save()
             async_result = zmap_from_file.apply_async(
-                kwargs={"survey_id" : survey.id,
-                    "ip_source_id": IP_RANGE_SOURCE },
+                kwargs={"survey_id" : survey.id},
+                    #"ip_source_id": IP_RANGE_SOURCE },
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.zmap_from_file')
             metadata_file = async_result.get()
@@ -269,8 +271,8 @@ class ConfigurePingView(generic.edit.FormView):
             # Fire off the counting task
             async_result2 = tally_results.apply_async(
                 countdown=PING_RESULTS_DELAY,
+                #"ip_source_id": IP_RANGE_SOURCE,
                 kwargs={"survey_id": survey.id,
-                    "ip_source_id": IP_RANGE_SOURCE,
                     "metadata_file": metadata_file} )
             # Fall through
 
