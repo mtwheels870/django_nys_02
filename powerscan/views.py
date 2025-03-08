@@ -20,6 +20,7 @@ from .models import (
     CensusTract,
     County,
     CountTract,
+    MmIpRange,
     CountCounty,
     IpRangePing,
     IpRangeSurvey,
