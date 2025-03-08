@@ -88,8 +88,10 @@ class MapWrapper {
             // Central NY
             /* let initial_position = [43.05, -76.1];
             let initial_zoom = 12.5 */
+            /* let initial_position = [34.0, -85.1];
+            let initial_zoom = 8 */
             let initial_position = [30.9, -92.1];
-            let initial_zoom = 8
+            let initial_zoom = 5
             this.map.setView(initial_position, initial_zoom);
         }
         // return true;
