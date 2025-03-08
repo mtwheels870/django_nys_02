@@ -27,7 +27,7 @@ from .models import (
 )
 
 from .serializers import (
-    CensusTractSerializer,
+    TractSerializer,
     CountySerializer,
     MmIpRangeSerializer,
     CountTractSerializer,
