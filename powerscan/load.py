@@ -28,8 +28,8 @@ from .models import (
 #    "pop2000": "POP2000",
 # These align with the GU CountyOrEquivalent (USGS, National Map)
 mapping_state = {
-    "state_fp": "statefp",
-    "state_name": "name",
+    "state_fp": "STATEFP",
+    "state_name": "NAME",
     "interp_lat": "INTPTLAT",
     "interp_long": "INTPTlON",
     "mpoly": "MULTIPOLYGON",
