@@ -1,9 +1,9 @@
 from rest_framework import routers
 
+    #DeIpRangeViewSet,
 from .views import (
     CensusTractViewSet,
     CountyViewSet,
-    DeIpRangeViewSet,
     CountTractViewSet,
     CountCountyViewSet,
     MmIpRangeViewSet
