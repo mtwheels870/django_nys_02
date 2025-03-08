@@ -13,7 +13,7 @@ from django.contrib.gis.db import models
 class UsState(models.Model):
     # COUNTY_1
     state_fp = models.CharField(max_length=2, db_index=True)
-    name = models.CharField(max_length=100)
+    state_name = models.CharField(max_length=100)
     interp_lat = name = models.CharField(max_length=11)
     interp_long = name = models.CharField(max_length=12)
 
@@ -22,13 +22,13 @@ class UsState(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
-        return self.name
+        return self.state_name
 
 class County(models.Model):
     # COUNTY_1
     county_fp = models.CharField(max_length=3, db_index=True)
     # COUNTY
-    name = models.CharField(max_length=100)
+    county_name = models.CharField(max_length=100)
     # STATE_1
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
 
@@ -38,10 +38,10 @@ class County(models.Model):
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
 
-    @property
-    @admin.display(description="Population 2000", ordering="pop2000")
-    def pop2000_formatted(self):
-        return f"{self.pop2000:,}"
+    #@property
+    #@admin.display(description="Population 2000", ordering="pop2000")
+    #def pop2000_formatted(self):
+    #    return f"{self.pop2000:,}"
 
     # Returns the string representation of the model.
     def __str__(self):
