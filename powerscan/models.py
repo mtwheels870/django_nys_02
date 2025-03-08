@@ -14,8 +14,8 @@ class UsState(models.Model):
     # COUNTY_1
     state_fp = models.CharField(max_length=2, db_index=True)
     state_name = models.CharField(max_length=100)
-    interp_lat = name = models.CharField(max_length=11)
-    interp_long = name = models.CharField(max_length=12)
+    interp_lat = models.CharField(max_length=11)
+    interp_long = models.CharField(max_length=12)
 
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
@@ -32,8 +32,8 @@ class County(models.Model):
     # STATE_1
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
 
-    interp_lat =  name = models.CharField(max_length=11)
-    interp_long =  name = models.CharField(max_length=12)
+    interp_lat = models.CharField(max_length=11)
+    interp_long = models.CharField(max_length=12)
 
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
