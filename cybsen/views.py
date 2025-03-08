@@ -16,7 +16,7 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .tasks import build_whitelist, zmap_from_file, tally_results
 
-from centralny.models import (
+from cybsen.models import (
     CensusTract,
     County,
     DeIpRange,
@@ -27,7 +27,7 @@ from centralny.models import (
     WorkerLock
 )
 
-from centralny.serializers import (
+from cybsen.serializers import (
     CensusTractSerializer,
     CountySerializer,
     DeIpRangeSerializer,
@@ -113,7 +113,7 @@ class CountCountyViewSet(
     serializer_class = CountRangeCountySerializer
 
 class PingStrategyIndexView(generic.ListView):
-    template_name = "centralny/ps_index.html"
+    template_name = "cybsen/ps_index.html"
     context_object_name = "latest_strategy_list"
 
     def get_queryset(self):
@@ -122,7 +122,7 @@ class PingStrategyIndexView(generic.ListView):
 
 class PingStrategyDetailView(generic.DetailView):
     model = IpRangeSurvey
-    template_name = "centralny/ps_detail.html"
+    template_name = "cybsen/ps_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -133,7 +133,7 @@ class PingStrategyDetailView(generic.DetailView):
 
 class PingStrategyResultsView(generic.DetailView):
     model = IpRangeSurvey
-    template_name = "centralny/ps_results.html"
+    template_name = "cybsen/ps_results.html"
 
 # Reverse mapping from clicking on a index, detail
 def approve_ping(request, id):
@@ -147,7 +147,7 @@ class MapNavigationView(generic.edit.FormView):
     # model = TextFile
     form_class = SelectedCensusTractForm
     table_class = DeIpRangeTable
-    template_name = "centralny/map_viewer.html"
+    template_name = "cybsen/map_viewer.html"
     table_pagination = {
         "per_page": 10
     }
@@ -184,7 +184,7 @@ class MapNavigationView(generic.edit.FormView):
             print(f"          table = {table}")
 
             # Pass the form back in
-            return render(request, "centralny/map_viewer.html",
+            return render(request, "cybsen/map_viewer.html",
                 {'form': form, 'table': table, 'map_bbox' : map_bbox});
         else:
             print(f"MNV.post(), form is INVALID")
@@ -216,7 +216,7 @@ class MapNavigationView(generic.edit.FormView):
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
-    template_name = "centralny/ps_detail.html"
+    template_name = "cybsen/ps_detail.html"
 
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"

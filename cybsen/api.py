@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from centralny.views import (
+from cybsen.views import (
     CensusTractViewSet,
     CountyViewSet,
     DeIpRangeViewSet,

@@ -1,7 +1,7 @@
 # from django.contrib import admin
 from django.contrib.gis import admin
 
-from centralny.models import County, CensusTract, DeIpRange
+from cybsen.models import County, CensusTract, DeIpRange
 
 # @admin.register(Marker)
 #class MarkerAdmin(admin.GISModelAdmin):

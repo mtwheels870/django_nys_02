@@ -1,6 +1,6 @@
 from rest_framework_gis import serializers
 
-from centralny.models import CensusTract, County, DeIpRange, MmIpRange, CountRangeTract, CountRangeCounty
+from cybsen.models import CensusTract, County, DeIpRange, MmIpRange, CountRangeTract, CountRangeCounty
 
 #class MarkerSerializer(
 #    serializers.GeoFeatureModelSerializer):
