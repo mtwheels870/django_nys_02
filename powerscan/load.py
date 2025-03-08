@@ -28,13 +28,13 @@ from .models import (
 #    "pop2000": "POP2000",
 # These align with the GU CountyOrEquivalent (USGS, National Map)
 mapping_state = {
-    "county_name": "county_nam",
-    "state_name": "state_name",
-    "county_code": "county_fip",
-    "state_code": "state_fips",
-    "pop2000": "population",
+    "state_fp": "statefp",
+    "state_name": "name",
+    "interp_lat": "INTPTLAT",
+    "interp_long": "INTPTlON",
     "mpoly": "MULTIPOLYGON",
 }
+
 mapping_county = {
     "county_name": "county_nam",
     "state_name": "state_name",
