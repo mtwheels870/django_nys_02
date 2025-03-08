@@ -94,7 +94,6 @@ class CountCounty(models.Model):
 
 class CountTract(models.Model):
     census_tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
-    ip_source = models.ForeignKey(IpRangeSource, on_delete=models.CASCADE, default=1)
     range_count = models.IntegerField(default=0)
     mpoint = models.MultiPointField(null=True)
 
