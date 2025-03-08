@@ -31,7 +31,7 @@ mapping_state = {
     "state_fp": "STATEFP",
     "state_name": "NAME",
     "interp_lat": "INTPTLAT",
-    "interp_long": "INTPTlON",
+    "interp_long": "INTPTLON",
     "mpoly": "MULTIPOLYGON",
 }
 
