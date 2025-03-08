@@ -10,7 +10,7 @@ from .models import (
     IpRangeSource,
     County, CensusTract,
     DeIpRange, 
-    CountTract, CountRangeCounty, 
+    CountTract, CountCounty, 
     IpRangeSurvey, IpRangePing,
     MmIpRange)
 
@@ -247,7 +247,7 @@ class Loader():
             tract_count.save()
 
     def _create_county_counter(self, county, ip_range_source):
-        county_counter = CountRangeCounty()
+        county_counter = CountCounty()
         county_counter.county_code = county
         county_counter.ip_source = ip_range_source
         num_polys = len(county.mpoly)

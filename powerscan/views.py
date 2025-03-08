@@ -70,7 +70,7 @@ class CensusTractViewSet(
     bbox_filter_field = "mpoly"
     filter_backends = [filters.InBBoxFilter]
     queryset = CensusTract.objects.all()
-    serializer_class = CensusTractSerializer
+    serializer_class = TractSerializer
 
 class CountyViewSet(
     viewsets.ReadOnlyModelViewSet):
@@ -80,18 +80,18 @@ class CountyViewSet(
     queryset = County.objects.all()
     serializer_class = CountySerializer
 
-class DeIpRangeViewSet(
-    viewsets.ReadOnlyModelViewSet):
-    bbox_filter_field = "mpoint"
-    filter_backends = [filters.InBBoxFilter]
-    queryset = DeIpRange.objects.all()
-    serializer_class = DeIpRangeSerializer
+#class DeIpRangeViewSet(
+#    viewsets.ReadOnlyModelViewSet):
+#    bbox_filter_field = "mpoint"
+#    filter_backends = [filters.InBBoxFilter]
+#    queryset = DeIpRange.objects.all()
+#    serializer_class = DeIpRangeSerializer
 
 class MmIpRangeViewSet(
     viewsets.ReadOnlyModelViewSet):
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
-    queryset = DeIpRange.objects.all()
+    queryset = MmIpRange.objects.all()
     serializer_class = MmIpRangeSerializer
     
 class CountTractViewSet(
@@ -107,8 +107,8 @@ class CountCountyViewSet(
     bbox_filter_field = "centroid"
     filter_backends = [filters.InBBoxFilter]
     # queryset = CountRangeCounty.objects.all()
-    queryset = CountRangeCounty.objects.filter(ip_source__id=IP_RANGE_SOURCE)
-    serializer_class = CountRangeCountySerializer
+    queryset = CountCounty.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    serializer_class = CountCountySerializer
 
 class PingStrategyIndexView(generic.ListView):
     template_name = "powerscan/ps_index.html"
@@ -201,8 +201,8 @@ class MapNavigationView(generic.edit.FormView):
                 # table = DeIpRangeTable(data=queryset)
             case "DeIpRange":
                 table = DeIpRange.objects.none()
-            case "CountRangeCounty":
-                count_range_county = get_object_or_404(CountRangeCounty, pk=id)
+            case "CountCounty":
+                count_range_county = get_object_or_404(CountCounty, pk=id)
                 county = count_range_county.county_code 
                 print(f"Found county: {county}")
                 # tract_id_set = count_range_county count_range_county 
