@@ -20,9 +20,8 @@ from django.urls import path, include
 # I don't understand why: path("map/api/", can't me moved to the markers/ level, but include("api") won't work
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("centralny/", include("centralny.urls")),
-    path("centralny/api/", include("centralny.api")),
-    path("tutorial/", include("tutorial.urls")),
+    path("cybsen/", include("cybsen.urls")),
+    path("cybsen/api/", include("cybsen.api")),
     path("kg_admin/", include("kg_admin.urls")),
     path("kg_train/", include("kg_train.urls")),
     path("kg_viz/", include("kg_viz.urls")),
