@@ -10,7 +10,7 @@ from .models import (
     IpRangeSource,
     County, CensusTract,
     DeIpRange, 
-    CountRangeTract, CountRangeCounty, 
+    CountTract, CountRangeCounty, 
     IpRangeSurvey, IpRangePing,
     MmIpRange)
 
@@ -184,7 +184,7 @@ class Loader():
 
     def _create_tract_count(self, census_tract, ip_range_source):
         print(f"create_tract_count(), creating new, {census_tract}")
-        tract_count = CountRangeTract()
+        tract_count = CountTract()
         tract_count.census_tract = census_tract
         tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
             float(census_tract.interp_lat)))
@@ -264,7 +264,7 @@ class Loader():
         print(f"aggregate_counties(), source_id = {source_id}")
         ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_counties = {}
-        for tract_range in CountRangeTract.objects.filter(ip_source__id=source_id):
+        for tract_range in CountTract.objects.filter(ip_source__id=source_id):
             county = tract_range.census_tract.county_code
             code = county.county_code
             print(f"tract: {tract_range.census_tract.tract_id}, Looking up county: {code}")

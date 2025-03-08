@@ -69,7 +69,7 @@ def start_range_survey(self, *args, **kwargs):
     survey = IpRangeSurvey()
     survey.save()
     # Use the minus to be descending
-    count_range_tracts = CountRangeTract.objects.order_by("-range_count")
+    count_range_tracts = CountTract.objects.order_by("-range_count")
     
     # Iterate through each of those counties and walk through all of the ranges
     all_batches = []
@@ -124,7 +124,7 @@ def start_tracts(self, *args, **kwargs):
     survey.time_started = timezone.now()
     survey.save()
     # Use the minus to be descending
-    count_range_tracts = CountRangeTract.objects.order_by("-range_count")
+    count_range_tracts = CountTract.objects.order_by("-range_count")
     f = lambda crt: crt.census_tract.id
     batch_one = [f(x) for x in count_range_tracts[:10]]
     #batch_two = [f(x) for x in count_range_tracts[11:20]]
@@ -236,7 +236,7 @@ def zmap_all(self, *args, **kwargs):
     survey.save()
     print(f"zmap_all(), self = {self}, kwargs = {kwargs}, created survey = {survey.id}")
     # Use the minus to be descending
-    count_range_tracts = CountRangeTract.objects.order_by("-range_count")
+    count_range_tracts = CountTract.objects.order_by("-range_count")
     print(f"zmap_all(), num_tracts = {count_range_tracts.count()}")
     ranges_pinged = 0
     for index_tract, count_tract in enumerate(count_range_tracts):

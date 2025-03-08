@@ -19,9 +19,8 @@ from .tasks import build_whitelist, zmap_from_file, tally_results
 from .models import (
     CensusTract,
     County,
-    DeIpRange,
-    CountRangeTract,
-    CountRangeCounty,
+    CountTract,
+    CountCounty,
     IpRangePing,
     IpRangeSurvey,
     WorkerLock
@@ -30,10 +29,9 @@ from .models import (
 from .serializers import (
     CensusTractSerializer,
     CountySerializer,
-    DeIpRangeSerializer,
     MmIpRangeSerializer,
-    CountRangeTractSerializer,
-    CountRangeCountySerializer
+    CountTractSerializer,
+    CountCountySerializer
 )
 
 from .forms import SelectedCensusTractForm, PingStrategyForm
@@ -101,8 +99,8 @@ class CountTractViewSet(
     bbox_filter_field = "mpoint"
     filter_backends = [filters.InBBoxFilter]
     # queryset = CountRangeTract.objects.all()
-    queryset = CountRangeTract.objects.filter(ip_source__id=IP_RANGE_SOURCE)
-    serializer_class = CountRangeTractSerializer
+    queryset = CountTract.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    serializer_class = CountTractSerializer
     
 class CountCountyViewSet(
     viewsets.ReadOnlyModelViewSet):
