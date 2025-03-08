@@ -29,7 +29,15 @@ from .models import (
 # Regular county: "county_name": "COUNTY", "county_code": "COUNTY_1",
 #    "pop2000": "POP2000",
 # These align with the GU CountyOrEquivalent (USGS, National Map)
-county_mapping = {
+mapping_state = {
+    "county_name": "county_nam",
+    "state_name": "state_name",
+    "county_code": "county_fip",
+    "state_code": "state_fips",
+    "pop2000": "population",
+    "mpoly": "MULTIPOLYGON",
+}
+mapping_county = {
     "county_name": "county_nam",
     "state_name": "state_name",
     "county_code": "county_fip",
@@ -38,7 +46,7 @@ county_mapping = {
     "mpoly": "MULTIPOLYGON",
 }
 
-tract_mapping = {
+mapping_tract = {
     "county_code": {"county_code": "COUNTYFP"},     # Foreign key field
     "state_code": "STATEFP",
     "tract_id": "TRACTCE",
@@ -59,17 +67,17 @@ tract_mapping = {
 #    "srs_longitude" : "srs_longit",
 #    "srs_strength" : "srs_streng",
 # Check use of transform, lookup_function (for census_tract), make non-null
-digel_ip_range_mapping = {
-    "ip_range_start" : "start-ip",
-    "ip_range_end" : "end-ip",
-    "pp_cxn_speed" : "pp-conn-sp",
-    "pp_cxn_type" : "pp-conn-ty",
-    "pp_latitude" : "pp-latitud",
-    "pp_longitude" : "pp-longitu",
-    "mpoint" : "MULTIPOINT",
-}
+#digel_ip_range_mapping = {
+#    "ip_range_start" : "start-ip",
+#    "ip_range_end" : "end-ip",
+#    "pp_cxn_speed" : "pp-conn-sp",
+#    "pp_cxn_type" : "pp-conn-ty",
+#    "pp_latitude" : "pp-latitud",
+#    "pp_longitude" : "pp-longitu",
+#    "mpoint" : "MULTIPOINT",
+#}
 
-maxm_ip_range_mapping = {
+mapping_maxm_range = {
     "ip_network" : "network",
     "geoname_id" : "geoname_id",
     "zip_code" : "postal_cod",
@@ -80,9 +88,10 @@ maxm_ip_range_mapping = {
 }
 
 loc_config = {
-    "COUNTY_PATH" : "/home/bitnami/Data/LA/Boundary/GU_CountyOrEquivalent.shp",
-    "TRACT_PATH" : "/home/bitnami/Data/LA/Boundary/tl_2020_22_tract.shp",
-    "IP_RANGE_PATH" : "/home/bitnami/Data/LA/IP/LA_IP-Ranges_02.shp",
+    "PATH_STATE" : "/home/bitnami/Data/PowerScan/Geo/tl_2024_us_state.shp",
+    "PATH_COUNTY" : "/home/bitnami/Data/PowerScan/Geo/Counties_Clipped_02.shp",
+    "PATH_TRACTS" : "/home/bitnami/Data/PowerScan/Geo/Tracts_All_02.shp",
+    "PATH_IP_RANGES" : "/home/bitnami/Data/PowerScan/IP/MM_Southeast_05.shp"
 }
 
 ny_config = {
@@ -108,15 +117,19 @@ class Loader():
 #        marker_shp = Path(MARKER_PATH)
 #        self.lm_markers = LayerMapping(Marker, marker_shp, marker_mapping, transform=False)
 #        self.lm_markers.save(strict=True, verbose=verbose)
+    def run_state(self, verbose=True):
+        state_shp = Path(loc_config["PATH_STATE"])
+        self.lm_state = LayerMapping(UsState, state_shp, mapping_state, transform=False)
+        self.lm_state.save(strict=True, verbose=verbose)
 
     def run_county(self, verbose=True):
-        county_shp = Path(loc_config["COUNTY_PATH"])
-        self.lm_county = LayerMapping(County, county_shp, county_mapping, transform=False)
+        county_shp = Path(loc_config["PATH_COUNTY"])
+        self.lm_county = LayerMapping(County, county_shp, mapping_county, transform=False)
         self.lm_county.save(strict=True, verbose=verbose)
 
     def run_tracts(self, verbose=False, progress=500):
-        tract_shp = Path(loc_config["TRACT_PATH"])
-        self.lm_tracts = LayerMapping(CensusTract, tract_shp, tract_mapping, transform=False)
+        tract_shp = Path(loc_config["PATH_TRACT"])
+        self.lm_tracts = LayerMapping(CensusTract, tract_shp, mapping_tract, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
 
     def lookup_function(value):
