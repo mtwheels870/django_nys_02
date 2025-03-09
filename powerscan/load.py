@@ -80,7 +80,7 @@ mapping_maxm_range = {
     "zip_code" : "postal_cod",
     "mm_latitude" : "latitude",
     "mm_longitude" : "longitude",
-    geoid = = models.CharField(max_length=11)
+    "geoid" : { "geoid": "GEOID" },
     "county": {"county_fp": "COUNTYFP"},     # Foreign key field
     "accuracy" : "accuracy_r",
     "mpoint" : "MULTIPOINT",
