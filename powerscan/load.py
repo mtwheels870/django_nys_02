@@ -39,13 +39,15 @@ mapping_county = {
     "county_fp": "COUNTYFP",
     "county_name": "NAME",
     "us_state" :  {"state_fp": "STATEFP"},
+    "state_fp" :  "STATEFP",
     "interp_lat": "INTPTLAT",
     "interp_long": "INTPTLON",
     "mpoly": "MULTIPOLYGON",
 }
 
+#    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
 mapping_tract = {
-    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
+    "county": process_shape_feature,     # Foreign key field
     "tract_id": "TRACTCE",
     "name": "NAME",
     "interp_lat": "INTPTLAT",
@@ -106,6 +108,13 @@ maxm_config = {
 
 CHUNK_SIZE = 200000
 SMALL_CHUNK_SIZE = 10000
+
+def process_shape_feature(feature):
+    geoid = feature.get("GEOID")
+    state_fp = geoid[0:1]
+    county_fp = geoid[2:4]
+    county = County.objects.filter(county_fp=county_fp).filter(state_fp=state_fp)
+    return { "county" : county }
 
 class Loader():
     def __init__(self):

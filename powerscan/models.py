@@ -32,6 +32,8 @@ class County(models.Model):
     # STATE_1
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
 
+    state_fp = models.CharField(max_length=2, db_index=True)
+
     interp_lat = models.CharField(max_length=11)
     interp_long = models.CharField(max_length=12)
 
