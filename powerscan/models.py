@@ -53,7 +53,7 @@ class CensusTract(models.Model):
     name = models.CharField(max_length=7)
     interp_lat = models.CharField(max_length=11)
     interp_long = models.CharField(max_length=12)
-    geoid = = models.CharField(max_length=11, db_index=True)
+    geoid = models.CharField(max_length=11, db_index=True)
 
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
