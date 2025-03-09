@@ -1,6 +1,6 @@
 from rest_framework_gis import serializers
 
-from .models import CensusTract, County, MmIpRange, CountTract, CountCounty, CountState
+from .models import CensusTract, County, MmIpRange, CountTract, CountCounty, CountState, UsState
 
 class UsStateSerializer(
     serializers.GeoFeatureModelSerializer):
