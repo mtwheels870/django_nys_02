@@ -24,15 +24,15 @@ class UsState(models.Model):
     def __str__(self):
         return self.state_name
 
+#state_fp = models.CharField(max_length=2, db_index=True)
 class County(models.Model):
+    geoid = models.CharField(max_length=5, db_index=True)
     # COUNTY_1
-    county_fp = models.CharField(max_length=3, db_index=True)
+    county_fp = models.CharField(max_length=3)
     # COUNTY
     county_name = models.CharField(max_length=100)
     # STATE_1
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
-
-    state_fp = models.CharField(max_length=2, db_index=True)
 
     interp_lat = models.CharField(max_length=11)
     interp_long = models.CharField(max_length=12)
