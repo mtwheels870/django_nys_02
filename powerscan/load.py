@@ -45,6 +45,13 @@ mapping_county = {
     "mpoly": "MULTIPOLYGON",
 }
 
+def process_shape_feature(feature):
+    geoid = feature.get("GEOID")
+    state_fp = geoid[0:1]
+    county_fp = geoid[2:4]
+    county = County.objects.filter(county_fp=county_fp).filter(state_fp=state_fp)
+    return { "county" : county }
+
 #    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
 mapping_tract = {
     "county": process_shape_feature,     # Foreign key field
@@ -108,13 +115,6 @@ maxm_config = {
 
 CHUNK_SIZE = 200000
 SMALL_CHUNK_SIZE = 10000
-
-def process_shape_feature(feature):
-    geoid = feature.get("GEOID")
-    state_fp = geoid[0:1]
-    county_fp = geoid[2:4]
-    county = County.objects.filter(county_fp=county_fp).filter(state_fp=state_fp)
-    return { "county" : county }
 
 class Loader():
     def __init__(self):
