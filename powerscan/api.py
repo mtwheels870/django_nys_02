@@ -13,8 +13,9 @@ from .views import (
 router = routers.DefaultRouter()
 # /maps/api/markers/
 #router.register(r"markers", MarkerViewSet)
-router.register(r"tracts", CensusTractViewSet)
+router.register(r"states", UsStateViewSet)
 router.register(r"counties", CountyViewSet)
+router.register(r"tracts", CensusTractViewSet)
 # router.register(r"ip_ranges", DeIpRangeViewSet)
 router.register(r"ip_ranges", MmIpRangeViewSet)
 router.register(r"tract_counts", CountTractViewSet)

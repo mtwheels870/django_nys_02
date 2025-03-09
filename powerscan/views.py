@@ -45,33 +45,20 @@ KEY_AGG_TYPE = "agg_type"
 KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
-MAP_BBOX_INITIAL_VALUE = "a=b"
-
 FIELD_CELERY_DETAILS = "celery_stuff"
-
-# Use Maxmind
-IP_RANGE_SOURCE = 2
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
 PING_RESULTS_DELAY = 15 * 60
 
-# /maps/api/markers (through DefaultRouter)
-#class MarkerViewSet(
-#    viewsets.ReadOnlyModelViewSet):
-    # print("MTW, views.MarkerViewSet()")
-#    bbox_filter_field = "location"
-#    filter_backends = [filters.InBBoxFilter]
-#    queryset = Marker.objects.all()
-#    serializer_class = MarkerSerializer
-
-class CensusTractViewSet(
+class StateViewSet(
     viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
     bbox_filter_field = "mpoly"
     filter_backends = [filters.InBBoxFilter]
-    queryset = CensusTract.objects.all()
-    serializer_class = TractSerializer
+    queryset = UsState.objects.all()
+    # AQUI
+    serializer_class = CountySerializer
 
 class CountyViewSet(
     viewsets.ReadOnlyModelViewSet):
@@ -81,12 +68,13 @@ class CountyViewSet(
     queryset = County.objects.all()
     serializer_class = CountySerializer
 
-#class DeIpRangeViewSet(
-#    viewsets.ReadOnlyModelViewSet):
-#    bbox_filter_field = "mpoint"
-#    filter_backends = [filters.InBBoxFilter]
-#    queryset = DeIpRange.objects.all()
-#    serializer_class = DeIpRangeSerializer
+class CensusTractViewSet(
+    viewsets.ReadOnlyModelViewSet):
+    # print("MTW, views.MarkerViewSet()")
+    bbox_filter_field = "mpoly"
+    filter_backends = [filters.InBBoxFilter]
+    queryset = CensusTract.objects.all()
+    serializer_class = TractSerializer
 
 class MmIpRangeViewSet(
     viewsets.ReadOnlyModelViewSet):
@@ -280,3 +268,26 @@ class ConfigurePingView(generic.edit.FormView):
         celery_details = self._get_celery_details()
         context = {"form" : form, FIELD_CELERY_DETAILS : celery_details}
         return render(request, self.template_name, context)
+
+#
+# CRUFT
+#
+# /maps/api/markers (through DefaultRouter)
+#class MarkerViewSet(
+#    viewsets.ReadOnlyModelViewSet):
+    # print("MTW, views.MarkerViewSet()")
+#    bbox_filter_field = "location"
+#    filter_backends = [filters.InBBoxFilter]
+#    queryset = Marker.objects.all()
+#    serializer_class = MarkerSerializer
+
+#class DeIpRangeViewSet(
+#    viewsets.ReadOnlyModelViewSet):
+#    bbox_filter_field = "mpoint"
+#    filter_backends = [filters.InBBoxFilter]
+#    queryset = DeIpRange.objects.all()
+#    serializer_class = DeIpRangeSerializer
+#MAP_BBOX_INITIAL_VALUE = "a=b"
+
+# Use Maxmind
+#IP_RANGE_SOURCE = 2
