@@ -50,16 +50,6 @@ mapping_tract = {
     "mpoly": "MULTIPOLYGON",
 }
 
-class MmIpRange(models.Model):
-    ip_network = models.CharField("IP Network", max_length=20)
-    geoname_id = models.CharField("GeoNameId", max_length=10)
-    zip_code = models.CharField("Zip_Code", null=True, max_length=10)
-    mm_latitude = models.CharField(max_length=20)
-    mm_longitude = models.CharField(max_length=20)
-    accuracy = models.IntegerField()
-    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
-    mpoint = models.MultiPointField(null=True)
-
 mapping_maxm_range = {
     "ip_network" : "network",
     "geoname_id" : "geoname_id",
