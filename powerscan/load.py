@@ -111,7 +111,7 @@ class Loader():
     # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
     # lookup on the LayerMapping()
     def run_ip_ranges_maxm(self, verbose=False, progress=1000):
-        ip_range_shp = Path(maxm_config["IP_RANGE_PATH"])
+        ip_range_shp = Path(loc_config["PATH_IP_RANGES"])
         self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, mapping_maxm_range, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
