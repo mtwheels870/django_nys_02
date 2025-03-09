@@ -6,7 +6,9 @@ from .views import (
     CountyViewSet,
     CountTractViewSet,
     CountCountyViewSet,
-    MmIpRangeViewSet
+    CountStateViewSet,
+    MmIpRangeViewSet,
+    UsStateViewSet
 )
 
 # MTW: This is in global space (no class)
@@ -17,9 +19,10 @@ router.register(r"states", UsStateViewSet)
 router.register(r"counties", CountyViewSet)
 router.register(r"tracts", CensusTractViewSet)
 # router.register(r"ip_ranges", DeIpRangeViewSet)
-router.register(r"ip_ranges", MmIpRangeViewSet)
-router.register(r"tract_counts", CountTractViewSet)
+router.register(r"state_counts", CountStateViewSet)
 router.register(r"county_counts", CountCountyViewSet)
+router.register(r"tract_counts", CountTractViewSet)
+router.register(r"ip_ranges", MmIpRangeViewSet)
 
 urlpatterns = router.urls
 # print(f"api.py: urlpatterns = {urlpatterns}")

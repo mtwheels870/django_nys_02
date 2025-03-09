@@ -54,14 +54,14 @@ FIELD_CELERY_DETAILS = "celery_stuff"
 # PING_RESULTS_DELAY = 15
 PING_RESULTS_DELAY = 15 * 60
 
-class StateViewSet(
+class UsStateViewSet(
     viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
     bbox_filter_field = "mpoly"
     filter_backends = [filters.InBBoxFilter]
     queryset = UsState.objects.all()
     # AQUI
-    serializer_class = CountySerializer
+    serializer_class = UsStateSerializer
 
 class CountyViewSet(
     viewsets.ReadOnlyModelViewSet):
@@ -86,15 +86,15 @@ class MmIpRangeViewSet(
     queryset = MmIpRange.objects.all()
     serializer_class = MmIpRangeSerializer
     
-class CountTractViewSet(
+class CountStateViewSet(
     viewsets.ReadOnlyModelViewSet):
-    bbox_filter_field = "mpoint"
+    bbox_filter_field = "centroid"
     filter_backends = [filters.InBBoxFilter]
-    # queryset = CountRangeTract.objects.all()
-    #queryset = CountTract.objects.filter(ip_source__id=IP_RANGE_SOURCE)
-    queryset = CountTract.objects.all()
-    serializer_class = CountTractSerializer
-    
+    # queryset = CountRangeCounty.objects.all()
+    #queryset = CountCounty.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    queryset = CountState.objects.all()
+    serializer_class = CountStateSerializer
+
 class CountCountyViewSet(
     viewsets.ReadOnlyModelViewSet):
     bbox_filter_field = "centroid"
@@ -104,6 +104,15 @@ class CountCountyViewSet(
     queryset = CountCounty.objects.all()
     serializer_class = CountCountySerializer
 
+class CountTractViewSet(
+    viewsets.ReadOnlyModelViewSet):
+    bbox_filter_field = "mpoint"
+    filter_backends = [filters.InBBoxFilter]
+    # queryset = CountRangeTract.objects.all()
+    #queryset = CountTract.objects.filter(ip_source__id=IP_RANGE_SOURCE)
+    queryset = CountTract.objects.all()
+    serializer_class = CountTractSerializer
+    
 class PingStrategyIndexView(generic.ListView):
     template_name = "powerscan/ps_index.html"
     context_object_name = "latest_strategy_list"
