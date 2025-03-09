@@ -128,7 +128,7 @@ class Loader():
         self.lm_county.save(strict=True, verbose=verbose)
 
     def run_tracts(self, verbose=False, progress=500):
-        tract_shp = Path(loc_config["PATH_TRACT"])
+        tract_shp = Path(loc_config["PATH_TRACTS"])
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, mapping_tract, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
 
