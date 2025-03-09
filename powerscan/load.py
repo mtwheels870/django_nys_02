@@ -55,7 +55,8 @@ def process_shape_feature(feature):
 #    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
 #    "county": process_shape_feature,     # Foreign key field
 mapping_tract = {
-    "county" : {"GEOID" : "cty_geoid"},
+    # { FIELD_IN_COUNT : OUR_FIELD_FROM_SHAPE }
+    "county" : {"geoid" : "cty_geoid"},
     "tract_id": "TRACTCE",
     "name": "NAME",
     "interp_lat": "INTPTLAT",
