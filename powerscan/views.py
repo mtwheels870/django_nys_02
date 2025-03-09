@@ -24,7 +24,8 @@ from .models import (
     CountCounty,
     IpRangePing,
     IpRangeSurvey,
-    WorkerLock
+    WorkerLock,
+    UsState
 )
 
 from .serializers import (
@@ -32,7 +33,9 @@ from .serializers import (
     CountySerializer,
     MmIpRangeSerializer,
     CountTractSerializer,
-    CountCountySerializer
+    CountCountySerializer,
+    UsStateSerializer,
+    CountStateSerializer,
 )
 
 from .forms import SelectedCensusTractForm, PingStrategyForm
