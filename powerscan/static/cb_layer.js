@@ -189,6 +189,7 @@ const layerCounties = new LayerPolygon('counties', 'County Name', 'county_name',
 async function load_target(url_field, boundsString) {
   try {
     const markers_url = `/powerscan/api/` + url_field + `/?in_bbox=` + boundsString;
+    console.log("load_target(), url = " + markers_url);
     const response = await fetch(
       markers_url
     );
