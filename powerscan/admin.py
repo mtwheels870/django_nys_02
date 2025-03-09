@@ -1,7 +1,7 @@
 # from django.contrib import admin
 from django.contrib.gis import admin
 
-from .models import County, CensusTract, DeIpRange
+from .models import County, CensusTract, MmIpRange
 
 # @admin.register(Marker)
 #class MarkerAdmin(admin.GISModelAdmin):
@@ -29,8 +29,8 @@ class CensusTractAdmin(admin.GISModelAdmin):
             "classes": ["collapse"]}),
     ]
 
-@admin.register(DeIpRange)
-class DeIpRangeAdmin(admin.GISModelAdmin):
+@admin.register(MmIpRange)
+class MmIpRangeAdmin(admin.GISModelAdmin):
     #list_display = ("ip_range_start", "ip_range_end", "mpoint")
     fieldsets = [
         (None, {"fields": ["ip_range_start", "ip_range_end", "de_company_name"]}),

@@ -82,7 +82,7 @@ def start_range_survey(self, *args, **kwargs):
             if index_range > TOTAL_OBJECTS:
                 break
         # Get all of the ranges from this census tract
-        except (KeyError, DeIpRange.DoesNotExist):
+        except (KeyError, MmIpRange.DoesNotExist):
             print(f"start_range_survey(), Exception, no ranges for tract = {tract.id}")
 
     survey.time_started = timezone.now()
@@ -110,7 +110,7 @@ def finish_survey(self, results, survey_id):
         survey.time_stopped = timezone.now()
         survey.save()
         print(f"finish_survey(), after save...")
-    except (KeyError, DeIpRange.DoesNotExist):
+    except (KeyError, MmIpRange.DoesNotExist):
         raise Exception(f"finish_survey(), Exception, could not find survey {survey_id}")
     print(f"finish_survey(), returning")
     return 37

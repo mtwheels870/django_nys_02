@@ -2,12 +2,12 @@ from django.utils.html import format_html
 
 import django_tables2 as tables
 
-from .models import DeIpRange
+from .models import MmIpRange
 
 MAX_STRING_LENGTH = 15
-class DeIpRangeTable(tables.Table):
+class MmIpRangeTable(tables.Table):
     class Meta:
-        model = DeIpRange
+        model = MmIpRange
         template_name = "django_tables2/bootstrap-responsive.html"
         empty_text = "(No IP ranges selected yet)"
         # template_name = "django_tables2/bootstrap.html"

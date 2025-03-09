@@ -211,26 +211,6 @@ class Loader():
 #
 # CUT
 # 
-    def bootstrap_range_pings(self, verbose=True):
-        # Census tract 222, \n 217
-        surveys = ["First", "Second"]
-        ip_range_ids = [[8066, 7212, 7666, 8111, 8452, 8533],
-            [8201, 8407, 9028, 10073]]
-        time_now = timezone.now()
-        for index_survey, name in enumerate(surveys):
-            survey = IpRangeSurvey(time_created=time_now, survey_name=name)
-            print(f"b_r_p(), [{index_survey}]: created survey {name}")
-            ranges = ip_range_ids[index_survey]
-            num_ranges = survey.num_ranges = len(ranges)
-            survey.save()
-            for index_range, range_id in enumerate(ranges):
-                print(f"         [{index_range}]: looking up range={range_id}")
-                # This retunrs a QuerySet, we just need the first
-                range_object = DeIpRange.objects.filter(pk=range_id)[0]
-                new_range = IpRangePing(ip_survey=survey, ip_range=range_object)
-                print(f"         [{index_range}]: range {range_object}")
-                new_range.save()
-
     def aggregate_tracts_digel(self, verbose=False):
         self.hash_tracts = {}
         self.error_count = 0

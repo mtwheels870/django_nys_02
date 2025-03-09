@@ -40,7 +40,7 @@ from .serializers import (
 )
 
 from .forms import SelectedCensusTractForm, PingStrategyForm
-from .tables import DeIpRangeTable
+from .tables import MmIpRangeTable
 
 # Import our neighbors
 
@@ -148,7 +148,7 @@ def approve_ping(request, id):
 class MapNavigationView(generic.edit.FormView):
     # model = TextFile
     form_class = SelectedCensusTractForm
-    table_class = DeIpRangeTable
+    table_class = MmIpRangeTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
         "per_page": 10
@@ -200,17 +200,17 @@ class MapNavigationView(generic.edit.FormView):
                 count_range_tract = get_object_or_404(CountRangeTract, pk=id)
                 census_tract = count_range_tract.census_tract
                 # print(f"build_table(), agg_type = {agg_type}, id = {id}, census_tract_id = {census_tract.id}")
-                queryset = DeIpRange.objects.filter(census_tract__id=census_tract.id)
+                queryset = MmIpRange.objects.filter(census_tract__id=census_tract.id)
                 table = queryset
                 # table = DeIpRangeTable(data=queryset)
-            case "DeIpRange":
-                table = DeIpRange.objects.none()
+            case "MmIpRange":
+                table = MmIpRange.objects.none()
             case "CountCounty":
                 count_range_county = get_object_or_404(CountCounty, pk=id)
                 county = count_range_county.county_code 
                 print(f"Found county: {county}")
                 # tract_id_set = count_range_county count_range_county 
-                table = DeIpRange.objects.none()
+                table = MmIpRange.objects.none()
             case _:
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
