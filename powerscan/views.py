@@ -167,7 +167,7 @@ class MapNavigationView(generic.edit.FormView):
         print(f"g_c_d(), map_bbox = {map_bbox}")
         # We need this, so it's in the Django templates (for the search parms)
         context_data['map_bbox'] = map_bbox
-        table = self.create_table(DeIpRange.objects.none())
+        table = self.create_table(MmIpRange.objects.none())
         context_data['table'] = table
         return context_data
 
