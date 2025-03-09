@@ -112,7 +112,7 @@ class Loader():
     # lookup on the LayerMapping()
     def run_ip_ranges_maxm(self, verbose=False, progress=1000):
         ip_range_shp = Path(maxm_config["IP_RANGE_PATH"])
-        self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, maxm_ip_range_mapping, transform=False)
+        self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, mapping_maxm_range, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census_maxm()")
