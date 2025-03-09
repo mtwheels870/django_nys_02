@@ -45,13 +45,12 @@ mapping_county = {
 }
 
 mapping_tract = {
-    "county_code": {"county_code": "COUNTYFP"},     # Foreign key field
-    "state_code": "STATEFP",
+    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
     "tract_id": "TRACTCE",
-    "short_name": "NAME",
-    "long_name": "NAMELSAD",
+    "name": "NAME",
     "interp_lat": "INTPTLAT",
     "interp_long": "INTPTLON",
+    "geoid": "GEOID",
     "mpoly": "MULTIPOLYGON",
 }
 #TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
@@ -81,6 +80,8 @@ mapping_maxm_range = {
     "zip_code" : "postal_cod",
     "mm_latitude" : "latitude",
     "mm_longitude" : "longitude",
+    geoid = = models.CharField(max_length=11)
+    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
     "accuracy" : "accuracy_r",
     "mpoint" : "MULTIPOINT",
 }
