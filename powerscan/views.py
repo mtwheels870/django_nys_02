@@ -17,7 +17,7 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 from .tasks import build_whitelist, zmap_from_file, tally_results
 
 from .models import (
-    UsState
+    UsState,
     County,
     CensusTract,
     CountState,
