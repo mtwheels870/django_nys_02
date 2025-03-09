@@ -12,21 +12,6 @@ from .models import (
     IpRangeSurvey, IpRangePing,
     MmIpRange)
 
-#MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
-#marker_mapping = {
-#    "id", "id",
-#    "name", "Name",
-#    "location", "MULTIPOINT",
-#}
-
-# Field from models.py, mapped to field names from the shape file
-    # COUNTY
-    # STATE
-    # COUNTY_1
-    # STATE_1
-# Regular county: "county_name": "COUNTY", "county_code": "COUNTY_1",
-#    "pop2000": "POP2000",
-# These align with the GU CountyOrEquivalent (USGS, National Map)
 mapping_state = {
     "state_fp": "STATEFP",
     "state_name": "NAME",
@@ -55,7 +40,7 @@ def process_shape_feature(feature):
 #    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
 #    "county": process_shape_feature,     # Foreign key field
 mapping_tract = {
-    # { FIELD_IN_COUNT : OUR_FIELD_FROM_SHAPE }
+    # "THIS_FIELD" : { FIELD_IN_COUNTY (model) : OUR_FIELD_FROM_SHAPE }
     "county" : {"geoid" : "cty_geoid"},
     "tract_id": "TRACTCE",
     "name": "NAME",
@@ -64,26 +49,16 @@ mapping_tract = {
     "geoid": "GEOID",
     "mpoly": "MULTIPOLYGON",
 }
-#TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
 
-#    "company_name" : "company_na",
-#    "naics_code" : "naics_code",
-#    "organization" : "organizati",
-#    "srs_company_name" : "srs_compan",
-#    "srs_issuer_id" : "srs_issuer",
-#    "srs_latitude" : "srs_latitu",
-#    "srs_longitude" : "srs_longit",
-#    "srs_strength" : "srs_streng",
-# Check use of transform, lookup_function (for census_tract), make non-null
-#digel_ip_range_mapping = {
-#    "ip_range_start" : "start-ip",
-#    "ip_range_end" : "end-ip",
-#    "pp_cxn_speed" : "pp-conn-sp",
-#    "pp_cxn_type" : "pp-conn-ty",
-#    "pp_latitude" : "pp-latitud",
-#    "pp_longitude" : "pp-longitu",
-#    "mpoint" : "MULTIPOINT",
-#}
+class MmIpRange(models.Model):
+    ip_network = models.CharField("IP Network", max_length=20)
+    geoname_id = models.CharField("GeoNameId", max_length=10)
+    zip_code = models.CharField("Zip_Code", null=True, max_length=10)
+    mm_latitude = models.CharField(max_length=20)
+    mm_longitude = models.CharField(max_length=20)
+    accuracy = models.IntegerField()
+    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
+    mpoint = models.MultiPointField(null=True)
 
 mapping_maxm_range = {
     "ip_network" : "network",
@@ -91,8 +66,8 @@ mapping_maxm_range = {
     "zip_code" : "postal_cod",
     "mm_latitude" : "latitude",
     "mm_longitude" : "longitude",
-    "geoid" : { "geoid": "GEOID" },
-    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
+    # "FIELD_THIS_MODEL" : { FIELD_IN_TRACT (model) : OUR_FIELD_FROM_SHAPE }
+    "census_tract": {"geoid": "GEOID"},     # Foreign key field
     "accuracy" : "accuracy_r",
     "mpoint" : "MULTIPOINT",
 }
@@ -143,68 +118,14 @@ class Loader():
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, mapping_tract, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
 
-    def lookup_function(value):
-        printf(f"lookup_function")
-        
     # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
     # lookup on the LayerMapping()
-    def run_ip_ranges_digel(self, verbose=False, progress=1000):
-        ip_range_shp = Path(loc_config["IP_RANGE_PATH"])
-        self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, digel_ip_range_mapping, transform=False)
+    def run_ip_ranges_maxm(self, verbose=False, progress=1000):
+        ip_range_shp = Path(maxm_config["IP_RANGE_PATH"])
+        self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, maxm_ip_range_mapping, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
-        print(f"ranges saved, now run: map_ranges_census()")
-
-    def _map_single_range_digel(self, range, index_range, ip_range_source):
-        if ip_range_source == 1:
-            point = Point(float(range.pp_longitude), float(range.pp_latitude))
-        elif ip_range_source == 2:
-            point = Point(float(range.mm_longitude), float(range.mm_latitude))
-        else:
-            raise Exception(f"_map_single_range_digel(), invalid ip_range_source = {ip_range_source}")
-
-        index_tract = 0
-        found_in_tract = False
-        for tract in self.tracts:
-            # print(f"map_single_range(), checking tract: {tract}")
-            found_this_tract= tract.mpoly.contains(point)
-            if (found_this_tract) :
-                if index_range % 1000 == 0:
-                    print(f"point[{index_range}]: {point}, in tract: {tract.short_name}")
-                range.census_tract = tract
-                range.save()
-                found_in_tract = True
-                break
-            index_tract = index_tract + 1
-        if not found_in_tract:
-            print(f"_map_single_range_digel() index = {index_range}, could not map point {point} to a census tract!")
-            self.error_count = self.error_count + 1
-        return found_in_tract
-
-    def map_ranges_census_digel(self, verbose=False, progress=1000):
-        self.tracts = CensusTract.objects.all()
-        self.error_count = 0
-        print(f"map_ranges_census_digel(), read {self.tracts.count()} census tracts")
-        index_chunk = 0
-        range_start = 0
-        range_end = range_start + CHUNK_SIZE
-        index_range = 0
-        num_objects = DeIpRange.objects.count()
-        while True:
-            # Find ranges w/ no census tract ID (mapped)
-            ranges = DeIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")[range_start:range_end]
-            ranges_returned = ranges.count()
-            print(f"map_ranges_census_digel(), querying [{range_start},{range_end},{ranges_returned}]")
-            for range in ranges:
-                self.__map_single_range_digel(range, index_range, 1)
-                index_range = index_range + 1
-                #print(f"Looking up tract: {tract}")
-            if ranges_returned < CHUNK_SIZE or self.error_count > 3:
-                print(f"map_ranges_census_digel(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
-                # We didn't get a full batch and we've iterated over it
-                break
-            range_start = range_start + CHUNK_SIZE
-            range_end = range_end + CHUNK_SIZE
+        print(f"ranges saved, now run: map_ranges_census_maxm()")
 
     def _create_tract_count(self, census_tract, ip_range_source):
         print(f"create_tract_count(), creating new, {census_tract}")
@@ -225,31 +146,6 @@ class Loader():
             tract_count = self._create_tract_count(tract, ip_range_source)
         tract_count.range_count = tract_count.range_count + 1 
 
-    def aggregate_tracts_digel(self, verbose=False):
-        self.hash_tracts = {}
-        self.error_count = 0
-        index_chunk = 0
-        range_start = 0
-        range_end = range_start + SMALL_CHUNK_SIZE
-        index_range = 0
-        self.error_count = 0
-        while True:
-            # Find ranges w/ no census tract ID (mapped)
-            ranges = DeIpRange.objects.all().order_by("id")[range_start:range_end]
-            ranges_returned = ranges.count()
-            print(f"aggregate_tracts_digel(), querying [{range_start},{range_end},{ranges_returned}]")
-            for range in ranges:
-                if index_range % 1000 == 0:
-                    print(f"a_t_d(), aggregating range = {index_range}")
-                self._aggregate_range(range)
-                index_range = index_range + 1
-                #print(f"Looking up tract: {tract}")
-            if ranges_returned < SMALL_CHUNK_SIZE or self.error_count > 3:
-                print(f"aggregate_tracts_digel(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
-                # We didn't get a full batch and we've iterated over it
-                break
-            range_start = range_start + SMALL_CHUNK_SIZE
-            range_end = range_end + SMALL_CHUNK_SIZE
 
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
@@ -304,6 +200,27 @@ class Loader():
             print(f"save[{county_code}]: source = {ip_range_source}, count = {county_counter.range_count}")
             county_counter.save()
 
+
+#    def load_ip_source(self, verbose=True):
+#        # Census tract 222, \n 217
+#        sources = ["Dig El", "Max Mind"]
+#        for index, name in enumerate(sources):
+#            range_source = IpRangeSource(description=name)
+#            range_source.save()
+
+    def map_ranges_census_maxm(self, verbose=False, progress=1000):
+        self.tracts = CensusTract.objects.all()
+        self.error_count = 0
+        print(f"map_ranges_census_maxm(), read {self.tracts.count()} census tracts")
+        ranges = MmIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")
+        index_range = 0
+        for range in ranges:
+            self._map_single_range_digel(range, index_range, 2)
+            index_range = index_range + 1
+
+#
+# CUT
+# 
     def bootstrap_range_pings(self, verbose=True):
         # Census tract 222, \n 217
         surveys = ["First", "Second"]
@@ -324,28 +241,123 @@ class Loader():
                 print(f"         [{index_range}]: range {range_object}")
                 new_range.save()
 
-    # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
-    # lookup on the LayerMapping()
-    def run_ip_ranges_maxm(self, verbose=False, progress=1000):
-        ip_range_shp = Path(maxm_config["IP_RANGE_PATH"])
-        self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, maxm_ip_range_mapping, transform=False)
-        # Throws exception, should wrap in a try{}
-        self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
-        print(f"ranges saved, now run: map_ranges_census_maxm()")
+    def aggregate_tracts_digel(self, verbose=False):
+        self.hash_tracts = {}
+        self.error_count = 0
+        index_chunk = 0
+        range_start = 0
+        range_end = range_start + SMALL_CHUNK_SIZE
+        index_range = 0
+        self.error_count = 0
+        while True:
+            # Find ranges w/ no census tract ID (mapped)
+            ranges = DeIpRange.objects.all().order_by("id")[range_start:range_end]
+            ranges_returned = ranges.count()
+            print(f"aggregate_tracts_digel(), querying [{range_start},{range_end},{ranges_returned}]")
+            for range in ranges:
+                if index_range % 1000 == 0:
+                    print(f"a_t_d(), aggregating range = {index_range}")
+                self._aggregate_range(range)
+                index_range = index_range + 1
+                #print(f"Looking up tract: {tract}")
+            if ranges_returned < SMALL_CHUNK_SIZE or self.error_count > 3:
+                print(f"aggregate_tracts_digel(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
+                # We didn't get a full batch and we've iterated over it
+                break
+            range_start = range_start + SMALL_CHUNK_SIZE
+            range_end = range_end + SMALL_CHUNK_SIZE
 
-#    def load_ip_source(self, verbose=True):
-#        # Census tract 222, \n 217
-#        sources = ["Dig El", "Max Mind"]
-#        for index, name in enumerate(sources):
-#            range_source = IpRangeSource(description=name)
-#            range_source.save()
-
-    def map_ranges_census_maxm(self, verbose=False, progress=1000):
+    def map_ranges_census_digel(self, verbose=False, progress=1000):
         self.tracts = CensusTract.objects.all()
         self.error_count = 0
-        print(f"map_ranges_census_maxm(), read {self.tracts.count()} census tracts")
-        ranges = MmIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")
+        print(f"map_ranges_census_digel(), read {self.tracts.count()} census tracts")
+        index_chunk = 0
+        range_start = 0
+        range_end = range_start + CHUNK_SIZE
         index_range = 0
-        for range in ranges:
-            self._map_single_range_digel(range, index_range, 2)
-            index_range = index_range + 1
+        num_objects = DeIpRange.objects.count()
+        while True:
+            # Find ranges w/ no census tract ID (mapped)
+            ranges = DeIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")[range_start:range_end]
+            ranges_returned = ranges.count()
+            print(f"map_ranges_census_digel(), querying [{range_start},{range_end},{ranges_returned}]")
+            for range in ranges:
+                self.__map_single_range_digel(range, index_range, 1)
+                index_range = index_range + 1
+                #print(f"Looking up tract: {tract}")
+            if ranges_returned < CHUNK_SIZE or self.error_count > 3:
+                print(f"map_ranges_census_digel(), ranges_returned = {ranges_returned}, error_count = {self.error_count}, breaking")
+                # We didn't get a full batch and we've iterated over it
+                break
+            range_start = range_start + CHUNK_SIZE
+            range_end = range_end + CHUNK_SIZE
+
+    # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
+    # lookup on the LayerMapping()
+    def run_ip_ranges_digel(self, verbose=False, progress=1000):
+        ip_range_shp = Path(loc_config["IP_RANGE_PATH"])
+        self.lm_ranges = LayerMapping(DeIpRange, ip_range_shp, digel_ip_range_mapping, transform=False)
+        # Throws exception, should wrap in a try{}
+        self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
+        print(f"ranges saved, now run: map_ranges_census()")
+
+    def _map_single_range_digel(self, range, index_range, ip_range_source):
+        if ip_range_source == 1:
+            point = Point(float(range.pp_longitude), float(range.pp_latitude))
+        elif ip_range_source == 2:
+            point = Point(float(range.mm_longitude), float(range.mm_latitude))
+        else:
+            raise Exception(f"_map_single_range_digel(), invalid ip_range_source = {ip_range_source}")
+
+        index_tract = 0
+        found_in_tract = False
+        for tract in self.tracts:
+            # print(f"map_single_range(), checking tract: {tract}")
+            found_this_tract= tract.mpoly.contains(point)
+            if (found_this_tract) :
+                if index_range % 1000 == 0:
+                    print(f"point[{index_range}]: {point}, in tract: {tract.short_name}")
+                range.census_tract = tract
+                range.save()
+                found_in_tract = True
+                break
+            index_tract = index_tract + 1
+        if not found_in_tract:
+            print(f"_map_single_range_digel() index = {index_range}, could not map point {point} to a census tract!")
+            self.error_count = self.error_count + 1
+        return found_in_tract
+#TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
+
+#    "company_name" : "company_na",
+#    "naics_code" : "naics_code",
+#    "organization" : "organizati",
+#    "srs_company_name" : "srs_compan",
+#    "srs_issuer_id" : "srs_issuer",
+#    "srs_latitude" : "srs_latitu",
+#    "srs_longitude" : "srs_longit",
+#    "srs_strength" : "srs_streng",
+# Check use of transform, lookup_function (for census_tract), make non-null
+#digel_ip_range_mapping = {
+#    "ip_range_start" : "start-ip",
+#    "ip_range_end" : "end-ip",
+#    "pp_cxn_speed" : "pp-conn-sp",
+#    "pp_cxn_type" : "pp-conn-ty",
+#    "pp_latitude" : "pp-latitud",
+#    "pp_longitude" : "pp-longitu",
+#    "mpoint" : "MULTIPOINT",
+#}
+#MARKER_PATH = "/home/bitnami/Data/IP/Markers_02.shp"
+#marker_mapping = {
+#    "id", "id",
+#    "name", "Name",
+#    "location", "MULTIPOINT",
+#}
+
+# Field from models.py, mapped to field names from the shape file
+    # COUNTY
+    # STATE
+    # COUNTY_1
+    # STATE_1
+# Regular county: "county_name": "COUNTY", "county_code": "COUNTY_1",
+#    "pop2000": "POP2000",
+# These align with the GU CountyOrEquivalent (USGS, National Map)
