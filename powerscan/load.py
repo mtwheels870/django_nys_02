@@ -36,10 +36,10 @@ mapping_state = {
 }
 
 mapping_county = {
-    "county_fp": "COUNTYFP",
+    "county_fp" : "COUNTYFP",
     "county_name": "NAME",
     "us_state" :  {"state_fp": "STATEFP"},
-    "state_fp" :  "STATEFP",
+    "geoid": "GEOID",
     "interp_lat": "INTPTLAT",
     "interp_long": "INTPTLON",
     "mpoly": "MULTIPOLYGON",
