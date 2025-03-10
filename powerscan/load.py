@@ -110,6 +110,32 @@ class RangeChunker:
             self._range_end = self._range_start + SMALL_CHUNK_SIZE
         return ranges
 
+MTW_CHUNK_SIZE = 3
+class MtwChunker:
+    def __init__(self):
+        self._range_start = 0
+        self._range_end = self._range_start + MTW_CHUNK_SIZE
+        self._last_chunk = False
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._last_chunk:
+            return StopIteration
+
+        print(f"MtwChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
+        states = UsState.objects.all().order_by("id")[self._range_start:self._range_end]
+        num_returned = states.count()
+        print(f"MtwChunker.__next__(), returned {num_returned} rows")
+        if num_returned < MTW_CHUNK_SIZE:
+            print(f"MtwChunker.__next__(), setting last chunk = True")
+            self._last_chunk = True
+        else:
+            self._range_start = self._range_end
+            self._range_end = self._range_start + MTW_CHUNK_SIZE
+        return states
+
 class Loader():
     def __init__(self):
         self.counter = 0
@@ -119,6 +145,16 @@ class Loader():
 #        marker_shp = Path(MARKER_PATH)
 #        self.lm_markers = LayerMapping(Marker, marker_shp, marker_mapping, transform=False)
 #        self.lm_markers.save(strict=True, verbose=verbose)
+    def chunk_states(self, verbose=True):
+        index = 0
+        chunk_count = 0
+        for chunk in MtwChunker():
+            print(f"chunk_state(), getting chunk: {chunk_count}")
+            for us_state in chunk:
+                print(f"chunk_state(), [{index}]: {us_state}")
+                index = index + 1
+            chunk_count = chunk_count + 1
+
     def run_state(self, verbose=True):
         state_shp = Path(loc_config["PATH_STATE"])
         print(f"run_state(), state_shp = {state_shp}, mapping = {mapping_state}")
