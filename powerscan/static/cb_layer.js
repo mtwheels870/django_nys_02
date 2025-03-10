@@ -179,12 +179,16 @@ class LayerPolygon extends CbLayer {
 }
 
 // Instantiate Tractgs
-const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'short_name', 
-{ color: "#2F118F", fillOpacity: 0.25, weight: 0.5, zIndex: 200 })
+// urlComponent (see powerscan/apis.py), description, popupField
+const layerTracts = new LayerPolygon('tracts', 'Tract Id: ', 'name', 
+{ color: "#246bb3", fillOpacity: 0.25, weight: 0.5, zIndex: 200 })
 
 // Instantiate Counties
 const layerCounties = new LayerPolygon('counties', 'County Name', 'county_name',
-{ color: "#20bb80", fillOpacity: 0.25, weight: 1, zIndex: 200 })
+{ color: "#24b3b3", fillOpacity: 0.25, weight: 1, zIndex: 200 })
+
+const layerStates = new LayerPolygon('states', 'State Name', 'state_name',
+{ color: "#24b324", fillOpacity: 0.25, weight: 1, zIndex: 200 })
 
 async function load_target(url_field, boundsString) {
   try {
@@ -262,9 +266,11 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
   console.log("cb_render_all(), zoom = " + zoom + ", boundsString = " + 
         partialBoundsString);
   // var layerControl = map_wrapper.layerControl
-  if (zoom <= 10) {
+  if (zoom <= 7) {
+    layerStates.renderClass(boundsString); 
+  } else if (zoom <= 10) {
     // Counties
-    layerCountyCounts.renderClass(boundsString);
+    // layerCountyCounts.renderClass(boundsString);
     layerCounties.renderClass(boundsString);
   } else if (zoom >= 15) {
     // Actual IP ranges
@@ -272,7 +278,7 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
   } else {
     // Tracts + their counts
     layerTracts.renderClass(boundsString);
-    layerTractCounts.renderClass(boundsString);
+    // layerTractCounts.renderClass(boundsString);
   } 
 }
 
