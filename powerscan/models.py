@@ -103,7 +103,7 @@ class CountTract(models.Model):
         ordering = ["-range_count"]
 
     def __str__(self):
-        return f"{self.census_tract}: {range_count:,}"
+        return f"{self.census_tract}: {self.range_count:,}"
 
 
 class MmIpRange(models.Model):
