@@ -150,7 +150,9 @@ class Loader():
         # Max mind -> id = 2
         #ip_range_source = IpRangeSource.objects.get(pk=2)
         index_range = 0
-        for range in MmIpRange.objects.all().order_by("id"):
+        all_ranges = MmIpRange.objects.all().order_by("id")
+        print(f"aggregate_tracts(), read {all_ranges.count()} ranges")
+        for range in all_ranges:
             self._aggregate_range(range)
 
         # Should save here
