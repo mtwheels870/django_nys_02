@@ -201,12 +201,11 @@ class Loader():
         self._create_hash_tract_counts()
         index = 0
         print(f"aggregate_tracts_maxm(), starting iteration...")
-
         for chunk in RangeChunker():
             for range in chunk:
                 count = self.hash_tracts[range.census_tract.id]
-                #if index % 1000 == 0:
-                print(f"range[{index}] = {range}, count = {count}")
+                if index % 1000 == 0:
+                    print(f"range[{index}] = ip: {range}, tract(counter): {count}")
                 if not count:
                     raise Exception(f"aggregate_tracts_maxm(), could not find census_tract.id = {range.census_tract.id}")
                 count.range_count = count.range_count + 1
