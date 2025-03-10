@@ -153,7 +153,7 @@ class Loader():
             mpoint = MultiPoint(Point(float(tract.interp_long), 
                 float(tract.interp_lat)))
             new_count = CountTract(census_tract=tract, mpoint=mpoint)
-            self.has_tracts[tract.id] = new_count
+            self.hash_tracts[tract.id] = new_count
 
     def _save_hash_tract_counts(self):
         for index, count in enumerate(self.hash_tracts):
