@@ -150,11 +150,12 @@ class Loader():
         index = 0
         chunk_count = 0
         for chunk in MtwChunker():
-            print(f"chunk_state(), getting chunk: {chunk_count}")
-            for us_state in chunk:
-                print(f"chunk_state(), [{index}]: {us_state}")
-                index = index + 1
-            chunk_count = chunk_count + 1
+            if chunk:
+                print(f"chunk_state(), getting chunk: {chunk_count}")
+                for us_state in chunk:
+                    print(f"chunk_state(), [{index}]: {us_state}")
+                    index = index + 1
+                chunk_count = chunk_count + 1
 
     def run_state(self, verbose=True):
         state_shp = Path(loc_config["PATH_STATE"])
