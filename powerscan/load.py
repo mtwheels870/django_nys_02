@@ -87,9 +87,6 @@ SMALL_CHUNK_SIZE = 10000
 
 class RangeChunker:
     def __init__(self):
-        self._ranges = MmIpRange.objects.all().order_by("id"):
-        self._error_count = 0
-        index_chunk = 0
         self._range_start = 0
         self._range_end = self._range_start + SMALL_CHUNK_SIZE
         self._last_chunk = False
