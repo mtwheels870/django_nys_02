@@ -119,7 +119,7 @@ class Loader():
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census_maxm()")
 
-    def _create_tract_count(self, census_tract, ip_range_source):
+    def _create_tract_count(self, census_tract):
         print(f"create_tract_count(), creating new, {census_tract}")
         tract_count = CountTract()
         tract_count.census_tract = census_tract
@@ -129,13 +129,13 @@ class Loader():
         self.hash_tracts[census_tract.tract_id] = tract_count
         return tract_count
 
-    def _aggregate_range(self, range, ip_range_source):
+    def _aggregate_range(self, range):
         tract = range.census_tract
         #print(f"Looking up tract: {tract}")
         if tract.tract_id in self.hash_tracts:
             tract_count = self.hash_tracts[tract.tract_id]
         else:
-            tract_count = self._create_tract_count(tract, ip_range_source)
+            tract_count = self._create_tract_count(tract)
         tract_count.range_count = tract_count.range_count + 1 
 
 
@@ -148,10 +148,10 @@ class Loader():
         self.hash_tracts = {}
 
         # Max mind -> id = 2
-        ip_range_source = IpRangeSource.objects.get(pk=2)
+        #ip_range_source = IpRangeSource.objects.get(pk=2)
         index_range = 0
         for range in MmIpRange.objects.all().order_by("id"):
-            self._aggregate_range(range, ip_range_source)
+            self._aggregate_range(range)
 
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
