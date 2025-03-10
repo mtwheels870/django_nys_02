@@ -149,6 +149,7 @@ class Loader():
         print(f"_create_hash_tract_counts(), creating hash of empty counts")
         self.hash_tracts = {}
         #point = Point(float(range.mm_longitude), float(range.mm_latitude))
+        index = 0
         for tract in CensusTract.objects.all().order_by("id"):
             long = tract.interp_long
             if not long:
@@ -159,8 +160,11 @@ class Loader():
                 print(f"_create_hash_tract_counts(), tract = {tract.id}, lat = {lat}")
                 break
             mpoint = MultiPoint(Point(float(long), float(lat)))
+            if index % 1000 == 0:
+                print(f"_create_hash_tract_counts(), [{index}], creating count from {tract}")
             new_count = CountTract(census_tract=tract, mpoint=mpoint)
             self.hash_tracts[tract.id] = new_count
+            index = index + 1
 
     def _save_hash_tract_counts(self):
         for index, count in enumerate(self.hash_tracts):
@@ -171,10 +175,11 @@ class Loader():
         # Create empty counts
         self._create_hash_tract_counts()
         index = 0
+        print(f"aggregate_tracts_maxm(), starting iteration...")
         for range in MmIpRange.objects.all().order_by("id"):
             count = self.hash_tracts[range.census_tract.id]
-            if index % 1000 == 0:
-                print(f"range[{index}] = {range}, count = {count}")
+            #if index % 1000 == 0:
+            print(f"range[{index}] = {range}, count = {count}")
             if not count:
                 raise Exception(f"aggregate_tracts_maxm(), could not find census_tract.id = {range.census_tract.id}")
             count.range_count = count.range_count + 1
