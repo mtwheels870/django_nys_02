@@ -150,8 +150,15 @@ class Loader():
         self.hash_tracts = {}
         #point = Point(float(range.mm_longitude), float(range.mm_latitude))
         for tract in CensusTract.objects.all().order_by("id"):
-            mpoint = MultiPoint(Point(float(tract.interp_long), 
-                float(tract.interp_lat)))
+            long = tract.interp_long
+            if not long:
+                print(f"_create_hash_tract_counts(), tract = {tract.id}, long = {long}")
+                break
+            lat = tract.interp_lat
+            if not lat:
+                print(f"_create_hash_tract_counts(), tract = {tract.id}, lat = {lat}")
+                break
+            mpoint = MultiPoint(Point(float(long), float(lat)))
             new_count = CountTract(census_tract=tract, mpoint=mpoint)
             self.hash_tracts[tract.id] = new_count
 
