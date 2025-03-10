@@ -205,7 +205,7 @@ class Loader():
             for range in chunk:
                 if not range.census_tract.id in self.hash_tracts:
                     first = "aggregate_tracts_maxm(), could not find census_tract.id = "
-                    second = f"{range.census_tract.id} in hash table (ignoring!)")
+                    second = f"{range.census_tract.id} in hash table (ignoring!)"
                     print(first + second)
                     continue
                 count = self.hash_tracts[range.census_tract.id]
