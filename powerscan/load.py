@@ -96,7 +96,7 @@ class RangeChunker:
 
     def __next__(self):
         if self._last_chunk:
-            return StopIteration
+            raise StopIteration
 
         print(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
         ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
@@ -142,10 +142,6 @@ class Loader():
         self.counter = 0
         self.tracts = None
 
-#    def run_markers(self, verbose=True):
-#        marker_shp = Path(MARKER_PATH)
-#        self.lm_markers = LayerMapping(Marker, marker_shp, marker_mapping, transform=False)
-#        self.lm_markers.save(strict=True, verbose=verbose)
     def chunk_states(self, verbose=True):
         index = 0
         chunk_count = 0
