@@ -122,9 +122,8 @@ class MtwChunker:
 
     def __next__(self):
         if self._last_chunk:
-            print(f"MtwChunker.__next__(), found last chunk, returning None")
-            return None
-            # return StopIteration
+            print(f"MtwChunker.__next__(), found last chunk, returning StopIteration")
+            raise StopIteration
 
         print(f"MtwChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
         states = UsState.objects.all().order_by("id")[self._range_start:self._range_end]
