@@ -85,6 +85,34 @@ maxm_config = {
 CHUNK_SIZE = 200000
 SMALL_CHUNK_SIZE = 10000
 
+class RangeChunker:
+    def __init__(self):
+        self._ranges = MmIpRange.objects.all().order_by("id"):
+        self._error_count = 0
+        index_chunk = 0
+        self._range_start = 0
+        self._range_end = self._range_start + SMALL_CHUNK_SIZE
+        self._last_chunk = False
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._last_chunk:
+            return StopIteration
+
+        print(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
+        ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
+        num_returned = ranges.count()
+        print(f"RangeChunker.__next__(), returned {num_returned} rows")
+        if num_returned < SMALL_CHUNK_SIZE:
+            print(f"RangeChunker.__next__(), setting last chunk = True")
+            self._last_chunk = True
+        else:
+            self._range_start = self._range_end
+            self._range_end = self._range_start + SMALL_CHUNK_SIZE
+        return ranges
+
 class Loader():
     def __init__(self):
         self.counter = 0
@@ -176,14 +204,16 @@ class Loader():
         self._create_hash_tract_counts()
         index = 0
         print(f"aggregate_tracts_maxm(), starting iteration...")
-        for range in MmIpRange.objects.all().order_by("id"):
-            count = self.hash_tracts[range.census_tract.id]
-            #if index % 1000 == 0:
-            print(f"range[{index}] = {range}, count = {count}")
-            if not count:
-                raise Exception(f"aggregate_tracts_maxm(), could not find census_tract.id = {range.census_tract.id}")
-            count.range_count = count.range_count + 1
-            index = index + 1
+
+        for chunk in self.RangeChunker():
+            for range in chunk:
+                count = self.hash_tracts[range.census_tract.id]
+                #if index % 1000 == 0:
+                print(f"range[{index}] = {range}, count = {count}")
+                if not count:
+                    raise Exception(f"aggregate_tracts_maxm(), could not find census_tract.id = {range.census_tract.id}")
+                count.range_count = count.range_count + 1
+                index = index + 1
 
         # Save non-zero counts
         self._save_hash_tract_counts()
@@ -206,6 +236,8 @@ class Loader():
         print(f"aggregate_counties()")
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_counties = {}
+        chunker = RangeChunker()
+        
         # for tract_range in CountTract.objects.filter(ip_source__id=source_id):
         for tract_range in CountTract.objects.all():
             county = tract_range.census_tract.county_code
