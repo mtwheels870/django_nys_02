@@ -202,7 +202,7 @@ class Loader():
         index = 0
         print(f"aggregate_tracts_maxm(), starting iteration...")
 
-        for chunk in self.RangeChunker():
+        for chunk in RangeChunker():
             for range in chunk:
                 count = self.hash_tracts[range.census_tract.id]
                 #if index % 1000 == 0:
