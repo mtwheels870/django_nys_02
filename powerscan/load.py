@@ -144,21 +144,36 @@ class Loader():
             print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}")
             tract_count.save()
 
-    def aggregate_tracts_maxm(self, verbose=False):
+    # Build a big hash of census tract(id) to an empty count
+    def _create_hash_tract_counts(self):
+        print(f"_create_hash_tract_counts(), creating hash of empty counts")
         self.hash_tracts = {}
+        #point = Point(float(range.mm_longitude), float(range.mm_latitude))
+        for tract in CensusTract.objects.all().order_by("id"):
+            point = Point(float(tract.interp_long), float(range.interp_lat))
+            new_count = CountTract(census_tract=tract, mpoint=point)
+            self.has_tracts[tract.id] = new_count
 
-        # Max mind -> id = 2
-        #ip_range_source = IpRangeSource.objects.get(pk=2)
-        index_range = 0
-        all_ranges = MmIpRange.objects.all().order_by("id")
-        print(f"aggregate_tracts(), read {all_ranges.count()} ranges")
-        for range in all_ranges:
-            self._aggregate_range(range)
+    def _save_hash_tract_counts(self):
+        for index, count in enumerate(self.hash_tracts):
+            if count.range_count > 0:
+                count.save()
 
-        # Should save here
-        for tract_id, tract_count in self.hash_tracts.items():
-            print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}")
-            tract_count.save()
+    def aggregate_tracts_maxm(self, verbose=False):
+        # Create empty counts
+        self._create_hash_tract_counts()
+        index = 0
+        for range in MmIpRange.objects.all().order_by("id"):
+            count = self.hash_tracts[range.census_tract.id]
+            if index % 1000 == 0:
+                print(f"range[{index}] = {range}, count = {count}")
+            if not count:
+                raise Exception(f"aggregate_tracts_maxm(), could not find census_tract.id = {range.census_tract.id}")
+            count.range_count = count.range_count + 1
+            index = index + 1
+
+        # Save non-zero counts
+        self._save_hash_tract_counts()
 
     def _create_county_counter(self, county, ip_range_source):
         county_counter = CountCounty()
@@ -202,15 +217,15 @@ class Loader():
 #            range_source = IpRangeSource(description=name)
 #            range_source.save()
 
-    def map_ranges_census_maxm(self, verbose=False, progress=1000):
-        self.tracts = CensusTract.objects.all()
-        self.error_count = 0
-        print(f"map_ranges_census_maxm(), read {self.tracts.count()} census tracts")
-        ranges = MmIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")
-        index_range = 0
-        for range in ranges:
-            self._map_single_range_digel(range, index_range, 2)
-            index_range = index_range + 1
+#    def map_ranges_census_maxm(self, verbose=False, progress=1000):
+#        self.tracts = CensusTract.objects.all()
+#        self.error_count = 0
+#        print(f"map_ranges_census_maxm(), read {self.tracts.count()} census tracts")
+#        ranges = MmIpRange.objects.all().exclude(census_tract_id__isnull=False).order_by("id")
+#        index_range = 0
+#        for range in ranges:
+#            self._map_single_range_digel(range, index_range, 2)
+#            index_range = index_range + 1
 
 #
 # CUT
@@ -256,7 +271,7 @@ class Loader():
             ranges_returned = ranges.count()
             print(f"map_ranges_census_digel(), querying [{range_start},{range_end},{ranges_returned}]")
             for range in ranges:
-                self.__map_single_range_digel(range, index_range, 1)
+                self.__map_single_range(range, index_range)
                 index_range = index_range + 1
                 #print(f"Looking up tract: {tract}")
             if ranges_returned < CHUNK_SIZE or self.error_count > 3:
@@ -275,13 +290,10 @@ class Loader():
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census()")
 
-    def _map_single_range_digel(self, range, index_range, ip_range_source):
-        if ip_range_source == 1:
-            point = Point(float(range.pp_longitude), float(range.pp_latitude))
-        elif ip_range_source == 2:
-            point = Point(float(range.mm_longitude), float(range.mm_latitude))
-        else:
-            raise Exception(f"_map_single_range_digel(), invalid ip_range_source = {ip_range_source}")
+    def _map_single_range(self, range, index_range):
+        #point = Point(float(range.mm_longitude), float(range.mm_latitude))
+        #else:
+        #    raise Exception(f"_map_single_range(), invalid ip_range_source = {ip_range_source}")
 
         index_tract = 0
         found_in_tract = False
@@ -297,7 +309,7 @@ class Loader():
                 break
             index_tract = index_tract + 1
         if not found_in_tract:
-            print(f"_map_single_range_digel() index = {index_range}, could not map point {point} to a census tract!")
+            print(f"_map_single_range() index = {index_range}, could not map point {point} to a census tract!")
             self.error_count = self.error_count + 1
         return found_in_tract
 #TRACT_PATH = "/home/bitnami/Data/County/CensusTracts_03.shp"
