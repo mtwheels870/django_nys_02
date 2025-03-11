@@ -277,6 +277,21 @@ class Loader():
             county_counter.save()
             index_county = index_county + 1
 
+    def _create_state_counter(self, us_state):
+        state_counter = CountState()
+        state_counter.us_state = us_state
+        long = us_state.interp_long
+        if not long:
+            raise PowerScanValueException(f"_create_state_counter(), state = {us_state.state_name}, long = {long}")
+        lat = county.interp_lat
+        if not lat:
+            raise PowerScanValueException(f"_create_state_counter(), state = {us_state.state_name}, lat = {lat}")
+        # mpoint = MultiPoint(Point(float(long), float(lat)))
+        point = Point(float(long), float(lat))
+        state_counter.centroid = point
+        self.hash_states[us_state.state_fp] = state_counter
+        return state_counter
+
     def aggregate_states(self, verbose=False):
         print(f"aggregate_states()")
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
