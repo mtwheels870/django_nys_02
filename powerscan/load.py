@@ -181,30 +181,6 @@ class Loader():
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census_maxm()")
 
-    def _create_tract_count2(self, census_tract):
-        print(f"create_tract_count(), creating new, {census_tract}")
-        tract_count = CountTract()
-        tract_count.census_tract = census_tract
-        tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
-            float(census_tract.interp_lat)))
-        #tract_count.ip_source = ip_range_source
-        self.hash_tracts[census_tract.tract_id] = tract_count
-        return tract_count
-
-    def _aggregate_range2(self, range):
-        tract = range.census_tract
-        #print(f"Looking up tract: {tract}")
-        if tract.tract_id in self.hash_tracts:
-            tract_count = self.hash_tracts[tract.tract_id]
-        else:
-            tract_count = self._create_tract_count(tract)
-        tract_count.range_count = tract_count.range_count + 1 
-
-        # Should save here
-        for tract_id, tract_count in self.hash_tracts.items():
-            print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}")
-            tract_count.save()
-
     # Build a big hash of census tract(id) to an empty count
     def _create_hash_tract_counts(self):
         print(f"_create_hash_tract_counts(), creating hash of empty counts")
@@ -301,6 +277,33 @@ class Loader():
             county_counter.save()
             index_county = index_county + 1
 
+    def aggregate_states(self, verbose=False):
+        print(f"aggregate_states()")
+        #ip_range_source = IpRangeSource.objects.get(pk=source_id)
+        self.hash_states = {}
+        
+        index_county = 0
+        # for tract_range in CountTract.objects.filter(ip_source__id=source_id):
+        for county_counter in CountCounty.objects.all():
+            county = county_counter.county
+            state = county.us_state
+            state_fp = state.state_fp 
+            if index_county % 100 == 0:
+                print(f"county[{index_county}], id: {county.geoid}, Looking up state: {state_fp}")
+            try:
+                if state_fp in self.hash_states:
+                    state_counter = self.hash_states[state_fp]
+                else:
+                    state_counter = self._create_state_counter(state)
+                # +1 here counts the number of tracts, we want the number of IP ranges
+                state_counter.range_count = state_counter.range_count + county_counter.range_count
+            except PowerScanValueException as e:
+                print(f"aggregate_states(), e: {e}")
+            index_county = index_county + 1
+        # Should save here
+        for _, state_counter in self.hash_states.items():
+            print(f"Saving state: {state_counter.us_state.state_name}, {state_counter.range_count}")
+            state_counter.save()
 
 #    def load_ip_source(self, verbose=True):
 #        # Census tract 222, \n 217
@@ -447,3 +450,26 @@ class Loader():
 #            first_centroid = first_polygon.centroid
 #            print(f"_create_county_count(), creating new, {county}, centroid = {first_centroid}")
 #            county_counter.centroid = first_centroid
+    def _create_tract_count2(self, census_tract):
+        print(f"create_tract_count(), creating new, {census_tract}")
+        tract_count = CountTract()
+        tract_count.census_tract = census_tract
+        tract_count.mpoint = MultiPoint(Point(float(census_tract.interp_long), 
+            float(census_tract.interp_lat)))
+        #tract_count.ip_source = ip_range_source
+        self.hash_tracts[census_tract.tract_id] = tract_count
+        return tract_count
+
+    def _aggregate_range2(self, range):
+        tract = range.census_tract
+        #print(f"Looking up tract: {tract}")
+        if tract.tract_id in self.hash_tracts:
+            tract_count = self.hash_tracts[tract.tract_id]
+        else:
+            tract_count = self._create_tract_count(tract)
+        tract_count.range_count = tract_count.range_count + 1 
+
+        # Should save here
+        for tract_id, tract_count in self.hash_tracts.items():
+            print(f"aggregate_tracts(), save[{tract_id}]: count = {tract_count.range_count}")
+            tract_count.save()
