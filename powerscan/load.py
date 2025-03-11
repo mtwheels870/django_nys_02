@@ -260,15 +260,15 @@ class Loader():
     def _create_county_counter(self, county):
         county_counter = CountCounty()
         county_counter.county = county
-        long = tract.interp_long
+        long = county.interp_long
         if not long:
             raise PowerScanValueException(f"_create_county_counter(), county = {county_fp}, long = {long}")
-        lat = tract.interp_lat
+        lat = county.interp_lat
         if not lat:
             raise PowerScanValueException(f"_create_county_counter(), county = {county_fp}, lat = {lat}")
         mpoint = MultiPoint(Point(float(long), float(lat)))
         county_counter.centroid = mpoint
-        self.hash_counties[county.county_code] = county_counter
+        self.hash_counties[county.county_fp] = county_counter
         return county_counter
 
     def aggregate_counties(self, verbose=False):
