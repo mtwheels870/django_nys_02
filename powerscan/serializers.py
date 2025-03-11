@@ -34,14 +34,14 @@ class MmIpRangeSerializer(
 
 class CountStateSerializer(
     serializers.GeoFeatureModelSerializer):
-    state_name = fields.SerializerMethodField()
+    model_b_field = fields.SerializerMethodField()
 
     class Meta:
         fields = '__all__'
         geo_field = "centroid"
         model = CountState
 
-    def get_state_name(self, obj):
+    def get_model_b_field(self, obj):
         # print(f"get_model_b_count(), self = {self}, obj = {obj}")
         # return self.us_state.state_name
         return obj.us_state.state_name

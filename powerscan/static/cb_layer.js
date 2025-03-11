@@ -151,7 +151,7 @@ class LayerStateCounts extends LayerCircle {
     layer.setStyle(copiedStyle)
     var countyCode = feature.properties["county_code"]
     var id = feature["id"]
-    layer.bindPopup("<b>State: " + state_name + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
+    layer.bindPopup("<b>State: " + model_b_field + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
     let context = { agg_type: "CountRangeState", id: id, range_count: range_count };
     layer.on('click', handleCircleClick.bind(null, context));
   } 
