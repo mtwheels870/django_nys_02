@@ -137,6 +137,9 @@ class MtwChunker:
             self._range_end = self._range_start + MTW_CHUNK_SIZE
         return states
 
+class PowerScanValueException(Exception):
+    pass
+
 class Loader():
     def __init__(self):
         self.counter = 0
@@ -178,7 +181,7 @@ class Loader():
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
         print(f"ranges saved, now run: map_ranges_census_maxm()")
 
-    def _create_tract_count(self, census_tract):
+    def _create_tract_count2(self, census_tract):
         print(f"create_tract_count(), creating new, {census_tract}")
         tract_count = CountTract()
         tract_count.census_tract = census_tract
@@ -188,7 +191,7 @@ class Loader():
         self.hash_tracts[census_tract.tract_id] = tract_count
         return tract_count
 
-    def _aggregate_range(self, range):
+    def _aggregate_range2(self, range):
         tract = range.census_tract
         #print(f"Looking up tract: {tract}")
         if tract.tract_id in self.hash_tracts:
@@ -196,7 +199,6 @@ class Loader():
         else:
             tract_count = self._create_tract_count(tract)
         tract_count.range_count = tract_count.range_count + 1 
-
 
         # Should save here
         for tract_id, tract_count in self.hash_tracts.items():
@@ -255,17 +257,17 @@ class Loader():
         # Save non-zero counts
         self._save_hash_tract_counts()
 
-    def _create_county_counter(self, county, ip_range_source):
+    def _create_county_counter(self, county):
         county_counter = CountCounty()
-        county_counter.county_code = county
-        #county_counter.ip_source = ip_range_source
-        num_polys = len(county.mpoly)
-        print(f"_create_county_count(), creating new, {county}, num_polys: {num_polys}")
-        if (num_polys >= 1):
-            first_polygon = county.mpoly[0]
-            first_centroid = first_polygon.centroid
-            print(f"_create_county_count(), creating new, {county}, centroid = {first_centroid}")
-            county_counter.centroid = first_centroid
+        county_counter.county = county
+        long = tract.interp_long
+        if not long:
+            raise PowerScanValueException(f"_create_county_counter(), county = {county_fp}, long = {long}")
+        lat = tract.interp_lat
+        if not lat:
+            raise PowerScanValueException(f"_create_county_counter(), county = {county_fp}, lat = {lat}")
+        mpoint = MultiPoint(Point(float(long), float(lat)))
+        county_counter.centroid = mpoint
         self.hash_counties[county.county_code] = county_counter
         return county_counter
 
@@ -273,22 +275,24 @@ class Loader():
         print(f"aggregate_counties()")
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_counties = {}
-        chunker = RangeChunker()
         
         # for tract_range in CountTract.objects.filter(ip_source__id=source_id):
-        for tract_range in CountTract.objects.all():
-            county = tract_range.census_tract.county_code
-            code = county.county_code
-            print(f"tract: {tract_range.census_tract.tract_id}, Looking up county: {code}")
-            if code in self.hash_counties:
-                county_counter = self.hash_counties[code]
-            else:
-                county_counter = self._create_county_counter(county, ip_range_source)
-            # +1 here counts the number of tracts, we want the number of IP ranges
-            county_counter.range_count = county_counter.range_count + tract_range.range_count
+        for tract_counter in CountTract.objects.all():
+            county = tract_counter.census_tract.county
+            county_fp = county.county_fp
+            print(f"tract: {tract_counter.census_tract.tract_id}, Looking up county: {county_fp}")
+            try:
+                if county_fp in self.hash_counties:
+                    county_counter = self.hash_counties[county_fp]
+                else:
+                    county_counter = self._create_county_counter(county)
+                # +1 here counts the number of tracts, we want the number of IP ranges
+                county_counter.range_count = county_counter.range_count + tract_counter.range_count
+            except PowerScanValueException as e:
+                print(f"aggregate_counties(), e: {e}")
         # Should save here
-        for county_code, county_counter in self.hash_counties.items():
-            print(f"save[{county_code}]: source = {ip_range_source}, count = {county_counter.range_count}")
+        for county_fp, county_counter in self.hash_counties.items():
+            print(f"save[{county_fp}]: count = {county_counter.range_count}")
             county_counter.save()
 
 
@@ -429,3 +433,11 @@ class Loader():
 # Regular county: "county_name": "COUNTY", "county_code": "COUNTY_1",
 #    "pop2000": "POP2000",
 # These align with the GU CountyOrEquivalent (USGS, National Map)
+#        n.ip_source = ip_range_source
+#        num_polys = len(county.mpoly)
+#        print(f"_create_county_count(), creating new, {county}, num_polys: {num_polys}")
+#        if (num_polys >= 1):
+#            first_polygon = county.mpoly[0]
+#            first_centroid = first_polygon.centroid
+#            print(f"_create_county_count(), creating new, {county}, centroid = {first_centroid}")
+#            county_counter.centroid = first_centroid
