@@ -221,14 +221,16 @@ class Loader():
             mpoint = MultiPoint(Point(float(long), float(lat)))
             if index % 1000 == 0:
                 print(f"_create_hash_tract_counts(), [{index}], creating count from {tract}")
-            new_count = CountTract(census_tract=tract, mpoint=mpoint)
-            self.hash_tracts[tract.id] = new_count
+            new_counter = CountTract(census_tract=tract, mpoint=mpoint)
+            self.hash_tracts[tract.id] = new_counter 
             index = index + 1
 
     def _save_hash_tract_counts(self):
-        for index, count in enumerate(self.hash_tracts):
-            if count.range_count > 0:
-                count.save()
+        print(f"_save_hash_tract_counts(), iterating through dictionary...")
+        for tract_id, new_counter in self.hash_tracts.items():
+            if new_counter.range_count > 0:
+                print(f"_save_hash_tract_counts(), tract_id[{tract_id}] = {new_counter.range_count}")
+                new_counter.save()
 
     def aggregate_tracts_maxm(self, verbose=False):
         # Create empty counts
