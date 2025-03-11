@@ -27,7 +27,7 @@ class UsState(models.Model):
 #state_fp = models.CharField(max_length=2, db_index=True)
 class County(models.Model):
     geoid = models.CharField(max_length=5, db_index=True)
-    # COUNTY_1
+    # COUNTY_FP is not unique (across states)
     county_fp = models.CharField(max_length=3)
     # COUNTY
     county_name = models.CharField(max_length=100)

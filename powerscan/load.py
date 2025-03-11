@@ -269,7 +269,7 @@ class Loader():
         # mpoint = MultiPoint(Point(float(long), float(lat)))
         point = Point(float(long), float(lat))
         county_counter.centroid = point
-        self.hash_counties[county.county_fp] = county_counter
+        self.hash_counties[county.geoid] = county_counter
         return county_counter
 
     def aggregate_counties(self, verbose=False):
@@ -277,24 +277,29 @@ class Loader():
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_counties = {}
         
+        index_tract = 0
         # for tract_range in CountTract.objects.filter(ip_source__id=source_id):
         for tract_counter in CountTract.objects.all():
             county = tract_counter.census_tract.county
-            county_fp = county.county_fp
-            print(f"tract: {tract_counter.census_tract.tract_id}, Looking up county: {county_fp}")
+            geoid = county.geoid 
+            if index_tract % 100 == 0:
+                print(f"tract[{index_tract}], id: {tract_counter.census_tract.tract_id}, Looking up county: {geoid}")
             try:
-                if county_fp in self.hash_counties:
-                    county_counter = self.hash_counties[county_fp]
+                if geoid in self.hash_counties:
+                    county_counter = self.hash_counties[geoid]
                 else:
                     county_counter = self._create_county_counter(county)
                 # +1 here counts the number of tracts, we want the number of IP ranges
                 county_counter.range_count = county_counter.range_count + tract_counter.range_count
             except PowerScanValueException as e:
                 print(f"aggregate_counties(), e: {e}")
+            index_tract = index_tract + 1
         # Should save here
-        for county_fp, county_counter in self.hash_counties.items():
-            print(f"save[{county_fp}]: count = {county_counter.range_count}")
+        index_county = 0
+        for geoid, county_counter in self.hash_counties.items():
+            print(f"county[{index_county}], save[{geoid}]: count = {county_counter.range_count}")
             county_counter.save()
+            index_county = index_county + 1
 
 
 #    def load_ip_source(self, verbose=True):
