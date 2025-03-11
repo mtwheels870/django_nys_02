@@ -43,7 +43,8 @@ class CountStateSerializer(
 
     def get_model_b_count(self, obj):
         print(f"get_model_b_count(), self = {self}, obj = {obj}")
-        return self.us_state.state_name
+        # return self.us_state.state_name
+        return obj.state_name
 
 class CountCountySerializer(
     serializers.GeoFeatureModelSerializer):
