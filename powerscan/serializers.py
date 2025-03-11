@@ -1,5 +1,5 @@
-from rest_framework_gis import serializers
-from rest_framework_gis.serializers import fields
+from rest_framework_gis import serializers, fields
+# from rest_framework_gis.serializers import fields
 # from rest_framework_gis.serializers import SerializerMethodField
 
 from .models import CensusTract, County, MmIpRange, CountTract, CountCounty, CountState, UsState
