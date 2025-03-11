@@ -122,16 +122,16 @@ class PingStrategyIndexView(generic.ListView):
         """ Return the last five published IP surveys."""
         return IpRangeSurvey.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
 
-class PingStrategyDetailView(generic.DetailView):
-    model = IpRangeSurvey
-    template_name = "powerscan/ps_detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+#class PingStrategyDetailView(generic.DetailView):
+#    model = IpRangeSurvey
+#    template_name = "powerscan/ps_detail.html"
+#
+#    def get_context_data(self, **kwargs):
+#        context = super().get_context_data(**kwargs)
         # pk = self.kwargs.get('pk')  # Or 'product_id' if you customized the parameter name
         # Use pk to access the object or do other operations
         # print(f"PingStrategyDetailView.get_context_data(), pk = {pk}")
-        return context
+#        return context
 
 class PingStrategyResultsView(generic.DetailView):
     model = IpRangeSurvey

@@ -33,7 +33,7 @@
             <script type='module' defer src="{% static 'map.js' %}?{{ map_bbox }}"></script>
         </div>
         <div class="right-side">
-            <h2>IP Range Details</h2>
+            <h2>Visible Geospatial Entities</h2>
             <div id="table-stuff"></div>
             <form id="selected_tract_form" method="post" enctype="multipart/form-data" >
                 {% csrf_token %}

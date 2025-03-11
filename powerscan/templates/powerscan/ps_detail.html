@@ -5,8 +5,9 @@
     <title>Details Ping Strategy Page</title>
   </head>
   <body>
-    <h2>Celery Config: </h2>
-    <h3>{{ celery_stuff }} </h3>
+    <h2>Config Ip Range Survey (geography and timing): </h2>
+    <h3>Celery details (worker config): </h3>
+    <p>{{ celery_stuff }} </p>
 
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <!-- form action=" stuff here url 'app_centralny:approve_ping' object.id  method="post" -->
@@ -19,6 +20,10 @@
         <button type="submit" name="start_ping">Start Ping</button>
         <button type="submit" name="return_to_map">Return to Map</button>
         {% csrf_token %}
+    </form>
+  </body>
+</html>
+
         <!-- fieldset>
             <legend><h1>{{  object.ip_range.ip_range_start }}</h1></legend>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
@@ -28,7 +33,3 @@
             {% endfor %}
         </fieldset -->
         <!-- input type="submit" value="Approve / Schedule" -->
-    </form>
-  </body>
-</html>
-
