@@ -32,10 +32,15 @@ class MmIpRangeSerializer(
 
 class CountStateSerializer(
     serializers.GeoFeatureModelSerializer):
+    model_b_count = serializers.SerializerMethodField()
+
     class Meta:
-        fields = ("id", "us_state.name", "range_count")
+        fields = '__all__'
         geo_field = "centroid"
         model = CountState
+
+    def get_model_b_count(self, obj):
+        return self.us_state.state_name
 
 class CountCountySerializer(
     serializers.GeoFeatureModelSerializer):
