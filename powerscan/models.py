@@ -76,7 +76,7 @@ class CountState(models.Model):
         ordering = ["-range_count"]
 
     def __str__(self):
-        return f"County: {self.county.county_fp}"
+        return f"State: {self.us_state.state_name}"
 #
 # Power Scan, IP ranges (and aggregations)
 #
