@@ -266,8 +266,9 @@ class Loader():
         lat = county.interp_lat
         if not lat:
             raise PowerScanValueException(f"_create_county_counter(), county = {county_fp}, lat = {lat}")
-        mpoint = MultiPoint(Point(float(long), float(lat)))
-        county_counter.centroid = mpoint
+        # mpoint = MultiPoint(Point(float(long), float(lat)))
+        point = Point(float(long), float(lat))
+        county_counter.centroid = point
         self.hash_counties[county.county_fp] = county_counter
         return county_counter
 
