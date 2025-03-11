@@ -80,7 +80,7 @@ class LayerTractCounts extends LayerCircle {
 // Instantiate
 //   radius: 5, weight: 0.6,
 const layerTractCounts = new LayerTractCounts("tract_counts", "Aggregated IP Ranges in Tract", "range_count",
-  { color: "#2F118F", fillOpacity: 0.80, weight: 0, pane: CIRCLE_PANE}
+  { color: "#246bb3", fillOpacity: 0.80, weight: 0, pane: CIRCLE_PANE}
 );
 
 
@@ -97,24 +97,12 @@ class LayerCountyCounts extends LayerCircle {
     // Do the graduated circle
     var range_count = feature.properties["range_count"]
     var radiusGraduated;
-    /* Central NY, DigEl: if (range_count <= 500) {
-      radiusGraduated = 5;
+    // This version - MaxMind, SE US
+    if (range_count <= 1000) {
+      radiusGraduated = 3;
     } else if (range_count <= 2000) {
-      radiusGraduated = 10;
-    } else {
-      radiusGraduated = 15;
-    } */
-   /*  LA, DigEl: if (range_count <= 20000) {
       radiusGraduated = 5;
-    } else if (range_count <= 60000) {
-      radiusGraduated = 10;
-    } else {
-      radiusGraduated = 15;
-    } */
-    // This version - MaxMind, LA
-    if (range_count <= 800) {
-      radiusGraduated = 5;
-    } else if (range_count <= 2000) {
+    } else if (range_count <= 10000) {
       radiusGraduated = 10;
     } else {
       radiusGraduated = 15;
@@ -131,8 +119,46 @@ class LayerCountyCounts extends LayerCircle {
 }
 
 // Instantiate
-const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges in County", 
-    "range_counts", { color: "#20bb80", fillOpacity: 0.80, weight: 0, zIndex: 300, }
+const layerCountyCounts = new LayerCountyCounts("county_counts", "Aggregated IP Ranges by County", 
+    "range_counts", { color: "#24b3b3", fillOpacity: 0.80, weight: 0, zIndex: 300, }
+);
+
+/*
+ * CountyCounts -> Circle -> Base
+ */ 
+class LayerStateCounts extends LayerCircle {
+  constructor(urlComponent, description, popupField, myStyle) {
+    super(urlComponent, description, popupField, myStyle);
+  }
+
+  // Inside a class, format if methodName: function
+  onEachCircle = (feature, layer) => {
+    // Do the graduated circle
+    var range_count = feature.properties["range_count"]
+    var radiusGraduated;
+    // This version - MaxMind, SE US
+    if (range_count <= 5000) {
+      radiusGraduated = 3;
+    } else if (range_count <= 100000) {
+      radiusGraduated = 5;
+    } else if (range_count <= 200000) {
+      radiusGraduated = 10;
+    } else {
+      radiusGraduated = 15;
+    }
+    var copiedStyle = {...this.style};
+    copiedStyle["radius"] = radiusGraduated;
+    layer.setStyle(copiedStyle)
+    var countyCode = feature.properties["county_code"]
+    var id = feature["id"]
+    layer.bindPopup("<b>State: " + state_name + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
+    let context = { agg_type: "CountRangeState", id: id, range_count: range_count };
+    layer.on('click', handleCircleClick.bind(null, context));
+  } 
+}
+
+const layerStateCounts = new LayerStateCounts("state_counts", "Aggregated IP Ranges by State", 
+    "range_counts", { color: "#24b324", fillOpacity: 0.80, weight: 0, zIndex: 300, }
 );
 
 /*
@@ -267,10 +293,11 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
         partialBoundsString);
   // var layerControl = map_wrapper.layerControl
   if (zoom <= 7) {
+    layerStateCounts.renderClass(boundsString);
     layerStates.renderClass(boundsString); 
   } else if (zoom <= 10) {
     // Counties
-    // layerCountyCounts.renderClass(boundsString);
+    layerCountyCounts.renderClass(boundsString);
     layerCounties.renderClass(boundsString);
   } else if (zoom >= 15) {
     // Actual IP ranges
@@ -288,3 +315,17 @@ export function cb_render_all(map_wrapper, zoom, boundsString) {
     console.log('cb_render_all(), layer[' + i + '] (pane): ' + layer.pane);
 
   } */
+    /* Central NY, DigEl: if (range_count <= 500) {
+      radiusGraduated = 5;
+    } else if (range_count <= 2000) {
+      radiusGraduated = 10;
+    } else {
+      radiusGraduated = 15;
+    } */
+   /*  LA, DigEl: if (range_count <= 20000) {
+      radiusGraduated = 5;
+    } else if (range_count <= 60000) {
+      radiusGraduated = 10;
+    } else {
+      radiusGraduated = 15;
+    } */
