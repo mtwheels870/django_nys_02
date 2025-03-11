@@ -38,7 +38,7 @@ class CountStateSerializer(
 
     class Meta:
         # fields = '__all__'
-        fields = ["id", "range_count", "us_state"]
+        fields = ["id", "range_count", "us_state", "model_b_field"]
         geo_field = "centroid"
         model = CountState
 
