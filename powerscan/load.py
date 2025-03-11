@@ -283,7 +283,7 @@ class Loader():
         long = us_state.interp_long
         if not long:
             raise PowerScanValueException(f"_create_state_counter(), state = {us_state.state_name}, long = {long}")
-        lat = county.interp_lat
+        lat = us_state.interp_lat
         if not lat:
             raise PowerScanValueException(f"_create_state_counter(), state = {us_state.state_name}, lat = {lat}")
         # mpoint = MultiPoint(Point(float(long), float(lat)))
