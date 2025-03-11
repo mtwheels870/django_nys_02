@@ -1,5 +1,6 @@
 from rest_framework_gis import serializers
-from rest_framework_gis.serializers import SerializerMethodField
+from rest_framework_gis.serializers import fields
+# from rest_framework_gis.serializers import SerializerMethodField
 
 from .models import CensusTract, County, MmIpRange, CountTract, CountCounty, CountState, UsState
 
@@ -33,7 +34,7 @@ class MmIpRangeSerializer(
 
 class CountStateSerializer(
     serializers.GeoFeatureModelSerializer):
-    model_b_count = serializers.SerializerMethodField()
+    model_b_count = fields.SerializerMethodField()
 
     class Meta:
         fields = '__all__'
