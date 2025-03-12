@@ -232,6 +232,13 @@ class ConfigurePingView(generic.edit.FormView):
         print(f"CPV.get_context_data(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         print(f"CPV.after super.get_context_data(), context_data = {context_data}")
+        form = context_data['form']
+        fields = context_data['fields']
+        print(f"CPV.get_context_data() 3, form = {form}, fields = {fields}")
+        field_survey_id = form.fields['field_survey_id']
+        print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
+        field_survey_id.initial = "23"
+
         # There's an unbound, empty form in context_data...
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
