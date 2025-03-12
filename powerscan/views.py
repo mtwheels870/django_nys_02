@@ -231,13 +231,13 @@ class ConfigurePingView(generic.edit.FormView):
     def get_context_data(self, **kwargs):
         print(f"CPV.get_context_data(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
-        print(f"CPV.after super.get_context_data(), context_data = {context_data}")
+        #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
         form = context_data['form']
         # print(f"CPV.get_context_data() 3, form = {form}")
         field_survey_id = form.fields['field_survey_id']
-        print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
+        #print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
         field_survey_id.initial = "0"
-        print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
+        #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
         # There's an unbound, empty form in context_data...
         # File stuff
@@ -342,6 +342,7 @@ class ConfigurePingView(generic.edit.FormView):
         #cleaned_data = form.cleaned_data
         #print(f"     form.data = {data}, cleaned_data = {cleaned_data}")
         field_survey_id.initial = 23
+        print(f"AFTER SET,     dir(field) = {dir(field_survey_id)}")
         # data['field_survey_id'] = 23
 
         # No Work: field_survey_id.initial = self._survey_id
