@@ -23,23 +23,23 @@ class SelectedCensusTractForm(forms.Form):
         self.fields['map_bbox'].widget.attrs['readonly'] = True
 
 class PingStrategyForm(forms.Form):
-    CHOICES = [
-        ["value1", "Label 1"],
-        ["value2", "Label 2"],
-        ["value3", "Label 3"],
-    ]
+#    CHOICES = [
+#        ["value1", "Label 1"],
+#        ["value2", "Label 2"],
+#        ["value3", "Label 3"],
+#    ]
     # This is a combo box
-    field_single = forms.ChoiceField(choices=CHOICES, label="Single Choice Here:", 
-        help_text="Should only be able to pick one from this list")
+    # help_text="Should only be able to pick one from this list")
+    # field_single = forms.ChoiceField(choices=CHOICES, label="Single Choice Here:") 
 
     choices = []
-    for state in UsState.objects.all():
+    for state in UsState.objects.all().order_by("state_name"):
         choices.append([state.state_fp, state.state_name])
     # choices=[(1, "Option 1"), (2, "Option 2"), (3, "Option 3")],
+    # help_text="Select at least one state to configure ping")
     field_states = forms.MultipleChoiceField(
         choices=choices,
-        widget=forms.SelectMultiple, label="Select State(s) to Ping:", 
-        help_text="Select at least one state to configure ping")
+        widget=forms.SelectMultiple, label="Select State(s) to Ping:") 
 
 class IpRangePingForm(ModelForm):
     class Meta:

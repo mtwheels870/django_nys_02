@@ -279,8 +279,8 @@ class ConfigurePingView(generic.edit.FormView):
         #print(f"CPV.post(), kwargs = {kwargs}")
         form = PingStrategyForm(request.POST)
         if form.is_valid():
-            field_single = form.cleaned_data['field_single']
-            #print(f"CPV.post(), my_field = {my_field}")
+            selected_states = form.cleaned_data['field_states']
+            print(f"CPV.post(), selected_states = {selected_states}")
         else:
             print(f"CPV.post(), form is INVALID")
 

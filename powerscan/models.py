@@ -13,6 +13,7 @@ from django.contrib.gis.db import models
 class UsState(models.Model):
     # COUNTY_1
     state_fp = models.CharField(max_length=2, db_index=True)
+    state_abbrev = models.CharField(max_length=2, null=True)
     state_name = models.CharField(max_length=100)
     interp_lat = models.CharField(max_length=11)
     interp_long = models.CharField(max_length=12)
