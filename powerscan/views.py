@@ -273,7 +273,7 @@ class ConfigurePingView(generic.edit.FormView):
         # MaxM ranges
         print(f"CPV.build_whitelist(), apply_async()")
         async_result = build_whitelist.apply_async(
-            kwargs={"survey_id" : self._survey_id},
+            kwargs={"survey_id" : survey_id},
             queue=QUEUE_NAME,
             routing_key='ping.tasks.build_whitelist')
         return async_result
