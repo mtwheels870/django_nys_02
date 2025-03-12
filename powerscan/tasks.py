@@ -335,11 +335,12 @@ def zmap_from_file(self, *args, **kwargs):
     survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
     #ip_source_id = kwargs["ip_source_id"]
     survey = IpRangeSurvey.objects.get(pk=survey_id)
-    if survey.time_started:
-        print(f"zmap_from_file(), survey.time_started: {survey.time_started}, another worker grabbed it, exiting")
+
+    if survey.time_ping_started:
+        print(f"zmap_from_file(), survey.time_ping_started: {survey.time_ping_started}, another worker grabbed it, exiting")
         return 0
     # Save that we started the process, that's our (worker) lock
-    survey.time_started = timezone.now()
+    survey.time_ping_started = timezone.now()
     survey.save()
 
     #print(f"build_whitelist(), source_id = {ip_source_id}")
