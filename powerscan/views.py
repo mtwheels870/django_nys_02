@@ -331,17 +331,18 @@ class ConfigurePingView(generic.edit.FormView):
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()
         field_survey_id = form.fields['field_survey_id']
-        field_survey_id.clean(23)
+        #field_survey_id.clean(23)
         # field_survey_id.data = 23
-        print(f"CPV.post(), reloading page, survey_id = {self._survey_id}, field = {field_survey_id}")
-        print(f"     dir(field) = {dir(field_survey_id)}")
-        widget = field_survey_id.widget
-        print(f"     dir(widget) = {dir(widget)}")
-        print(f"     dir(form) = {dir(form)}")
-        data = form.data
-        cleaned_data = form.cleaned_data
-        print(f"     form.data = {data}, cleaned_data = {cleaned_data}")
-        data['field_survey_id'] = 23
+        #print(f"CPV.post(), reloading page, survey_id = {self._survey_id}, field = {field_survey_id}")
+        #print(f"     dir(field) = {dir(field_survey_id)}")
+        #widget = field_survey_id.widget
+        #print(f"     dir(widget) = {dir(widget)}")
+        #print(f"     dir(form) = {dir(form)}")
+        #data = form.data
+        #cleaned_data = form.cleaned_data
+        #print(f"     form.data = {data}, cleaned_data = {cleaned_data}")
+        field_survey_id.initial = 23
+        # data['field_survey_id'] = 23
 
         # No Work: field_survey_id.initial = self._survey_id
         # field_survey_id = self._survey_id
