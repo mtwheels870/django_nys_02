@@ -334,9 +334,9 @@ class ConfigurePingView(generic.edit.FormView):
         field_survey_id.clean(23)
         # field_survey_id.data = 23
         print(f"CPV.post(), reloading page, survey_id = {self._survey_id}, field = {field_survey_id}")
-        data = field_survey_id.data
+        data_value = field_survey_id.data_value
         initial = field_survey_id.initial
-        print(f"     data = {data}, initial = {initial}")
+        print(f"     data_value = {data_value}, initial = {initial}")
         # No Work: field_survey_id.initial = self._survey_id
         # field_survey_id = self._survey_id
         # FIELD_SURVEY_ID : self._survey_id}
