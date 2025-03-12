@@ -236,7 +236,7 @@ class ConfigurePingView(generic.edit.FormView):
         # print(f"CPV.get_context_data() 3, form = {form}")
         field_survey_id = form.fields['field_survey_id']
         print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
-        field_survey_id.initial = "23"
+        field_survey_id.initial = "0"
         print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
         # There's an unbound, empty form in context_data...
@@ -301,7 +301,8 @@ class ConfigurePingView(generic.edit.FormView):
     def post(self, request, *args, **kwargs):
         form = PingStrategyForm(request.POST)
         if not form.is_valid():
-            print(f"CPV.post(), form is INVALID")
+            print(f"CPV.post(), form is INVALID, creating empty")
+            form = PingStrategyForm()
         else:
             selected_states = form.cleaned_data['field_states']
 
@@ -330,6 +331,8 @@ class ConfigurePingView(generic.edit.FormView):
         print(f"CPV.post(), reloading page, survey_id = {self._survey_id}")
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()
+        field_survey_id = form.fields['field_survey_id']
+        field_survey_id.initial = _self.survey_id
         # FIELD_SURVEY_ID : self._survey_id}
         context = {"form" : form,
             FIELD_CELERY_DETAILS : celery_details,
