@@ -221,7 +221,7 @@ class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
     template_name = "powerscan/ps_detail.html"
-    _status_message = None
+    _status_message = ""
 
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
@@ -241,6 +241,40 @@ class ConfigurePingView(generic.edit.FormView):
 
         return context_data
 
+    def _build_whitelist(self):
+        print(f"CPV.post(), build_whitelist")
+        lock = WorkerLock()
+        lock.save()
+        # MaxM ranges
+        async_result = build_whitelist.apply_async(
+            kwargs={"worker_lock_id" : lock.id},
+                #"ip_source_id": IP_RANGE_SOURCE },
+            queue=QUEUE_NAME,
+            routing_key='ping.tasks.build_whitelist')
+        return async_result
+
+    def _start_ping(self):
+        #print(f"CPV.post(), start_ping...")
+        survey = IpRangeSurvey()
+        survey.save()
+        async_result = zmap_from_file.apply_async(
+            kwargs={"survey_id" : survey.id},
+                #"ip_source_id": IP_RANGE_SOURCE },
+            queue=QUEUE_NAME,
+            routing_key='ping.tasks.zmap_from_file')
+        return async_result
+
+    def _start_tally(self):
+        now = timezone.now()
+        print(f"CPV.post(), calling tally_results (delayed), now = {now}, seconds = {PING_RESULTS_DELAY}")
+        # Fire off the counting task
+        async_result2 = tally_results.apply_async(
+            countdown=PING_RESULTS_DELAY,
+            #"ip_source_id": IP_RANGE_SOURCE,
+            kwargs={"survey_id": survey.id,
+                "metadata_file": metadata_file} )
+        return async_result2
+
     def post(self, request, *args, **kwargs):
         #print(f"CPV.post(), kwargs = {kwargs}")
         form = PingStrategyForm(request.POST)
@@ -259,40 +293,17 @@ class ConfigurePingView(generic.edit.FormView):
             # Fall through
 
         if 'build_whitelist' in request.POST:
-            print(f"CPV.post(), build_whitelist")
-            lock = WorkerLock()
-            lock.save()
-            # MaxM ranges
-            async_result = build_whitelist.apply_async(
-                kwargs={"worker_lock_id" : lock.id},
-                    #"ip_source_id": IP_RANGE_SOURCE },
-                queue=QUEUE_NAME,
-                routing_key='ping.tasks.build_whitelist')
-            self._set_status_message("Built whitelist [] ...")
+            async_result = self._build_whitelist()
+            self._set_status_message(f"Built whitelist {async_result} ...")
             # Fall through
 
         if 'start_ping' in request.POST:
-            #print(f"CPV.post(), start_ping...")
-            survey = IpRangeSurvey()
-            survey.save()
-            async_result = zmap_from_file.apply_async(
-                kwargs={"survey_id" : survey.id},
-                    #"ip_source_id": IP_RANGE_SOURCE },
-                queue=QUEUE_NAME,
-                routing_key='ping.tasks.zmap_from_file')
+            async_result = self._start_ping()
             metadata_file = async_result.get()
             print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-            now = timezone.now()
-            print(f"CPV.post(), calling tally_results (delayed), now = {now}, seconds = {PING_RESULTS_DELAY}")
-            # Fire off the counting task
-            async_result2 = tally_results.apply_async(
-                countdown=PING_RESULTS_DELAY,
-                #"ip_source_id": IP_RANGE_SOURCE,
-                kwargs={"survey_id": survey.id,
-                    "metadata_file": metadata_file} )
-            # Fall through
-            self._set_status_message("Started ping [] ...")
+            async_result2 = self._start_tally()
+            self._set_status_message(f"Started tally, async_result2 = {async_result2}")
 
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()
