@@ -12,7 +12,8 @@ from django.utils import timezone
 
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
-    MmIpRange)
+    MmIpRange, IpSurveyState,
+    County)
 
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
 FILE_RANGE_IP = "RangeIp.csv"
