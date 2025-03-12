@@ -52,6 +52,7 @@ KEY_LEAFLET_MAP = "leaflet_map"
 # These fields are used in the templates
 FIELD_CELERY_DETAILS = "celery_stuff"
 FIELD_STATUS = "status_message" 
+FIELD_SURVEY_ID = "survey_id" 
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
@@ -222,24 +223,27 @@ class ConfigurePingView(generic.edit.FormView):
     form_class = PingStrategyForm
     template_name = "powerscan/ps_detail.html"
     _status_message = ""
+    _survey_id = 0
 
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
-
-    def _set_status_message(self, message):
-        self._status_message = message
-
-    def _get_status_message(self):
-        return self._status_message
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         # There's an unbound, empty form in context_data...
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
-        context_data[FIELD_STATUS] = self._get_status_message()
+        context_data[FIELD_STATUS] = self._status_message
+        context_data[FIELD_SURVEY_ID] = self._survey_id
 
         return context_data
+
+    def _configure_survey(self, selected_states):
+        abbrevs = []
+        print(f"CPV.post(), _configure_survey, selected_states = {selected_states}")
+        for state in UsState.objects.filter(state_fp__in=selected_states).order_by("state_abbrev"):
+            abbrevs.append(state.state_abbrev)
+        return abbrevs
 
     def _build_whitelist(self):
         print(f"CPV.post(), build_whitelist")
@@ -289,12 +293,14 @@ class ConfigurePingView(generic.edit.FormView):
 
         if 'configure_survey' in request.POST:
             print(f"CPV.post(), configure_survey()")
-            self._set_status_message("Configured survey here...")
+            abbrevs = self._configure_survey(selected_states)
+            abbrevs_string = ", ".join(abbrevs)
+            self._status_message = "Configured survey with states [{abbrevs_string}]"
             # Fall through
 
         if 'build_whitelist' in request.POST:
             async_result = self._build_whitelist()
-            self._set_status_message(f"Built whitelist {async_result} ...")
+            self._status_message = f"Built whitelist {async_result} ..."
             # Fall through
 
         if 'start_ping' in request.POST:
@@ -303,35 +309,12 @@ class ConfigurePingView(generic.edit.FormView):
             print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
             async_result2 = self._start_tally()
-            self._set_status_message(f"Started tally, async_result2 = {async_result2}")
+            self._status_message = f"Started tally, async_result2 = {async_result2}"
 
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()
-        status_message = self._get_status_message()
         context = {"form" : form,
             FIELD_CELERY_DETAILS : celery_details,
-            FIELD_STATUS : status_message}
+            FIELD_STATUS : self._status_message}
         return render(request, self.template_name, context)
 
-#
-# CRUFT
-#
-# /maps/api/markers (through DefaultRouter)
-#class MarkerViewSet(
-#    viewsets.ReadOnlyModelViewSet):
-    # print("MTW, views.MarkerViewSet()")
-#    bbox_filter_field = "location"
-#    filter_backends = [filters.InBBoxFilter]
-#    queryset = Marker.objects.all()
-#    serializer_class = MarkerSerializer
-
-#class DeIpRangeViewSet(
-#    viewsets.ReadOnlyModelViewSet):
-#    bbox_filter_field = "mpoint"
-#    filter_backends = [filters.InBBoxFilter]
-#    queryset = DeIpRange.objects.all()
-#    serializer_class = DeIpRangeSerializer
-#MAP_BBOX_INITIAL_VALUE = "a=b"
-
-# Use Maxmind
-#IP_RANGE_SOURCE = 2
