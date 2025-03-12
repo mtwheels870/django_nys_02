@@ -328,12 +328,13 @@ class ConfigurePingView(generic.edit.FormView):
                 async_result2 = self._start_tally()
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
-        print(f"CPV.post(), reloading page, survey_id = {self._survey_id}")
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()
         field_survey_id = form.fields['field_survey_id']
+        field_survey_id.clean(23)
+        print(f"CPV.post(), reloading page, survey_id = {self._survey_id}, field = {field_survey_id}")
         # No Work: field_survey_id.initial = self._survey_id
-        field_survey_id = self._survey_id
+        # field_survey_id = self._survey_id
         # FIELD_SURVEY_ID : self._survey_id}
         context = {"form" : form,
             FIELD_CELERY_DETAILS : celery_details,
