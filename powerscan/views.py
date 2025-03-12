@@ -292,32 +292,32 @@ class ConfigurePingView(generic.edit.FormView):
 
     def post(self, request, *args, **kwargs):
         form = PingStrategyForm(request.POST)
-        if form.is_valid():
-            selected_states = form.cleaned_data['field_states']
-        else:
+        if not form.is_valid():
             print(f"CPV.post(), form is INVALID")
+        else:
+            selected_states = form.cleaned_data['field_states']
 
-        if 'return_to_map' in request.POST:
-            return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
+            if 'return_to_map' in request.POST:
+                return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
 
-        if 'configure_survey' in request.POST:
-            abbrevs, survey_id = self._configure_survey(selected_states)
-            abbrevs_string = ", ".join(abbrevs)
-            self._status_message = f"Configured survey {survey_id} with states [{abbrevs_string}]"
-            # Fall through
+            if 'configure_survey' in request.POST:
+                abbrevs, survey_id = self._configure_survey(selected_states)
+                abbrevs_string = ", ".join(abbrevs)
+                self._status_message = f"Configured survey {survey_id} with states [{abbrevs_string}]"
+                # Fall through
 
-        if 'build_whitelist' in request.POST:
-            async_result = self._build_whitelist()
-            self._status_message = f"Built whitelist {async_result} ..."
-            # Fall through
+            if 'build_whitelist' in request.POST:
+                async_result = self._build_whitelist()
+                self._status_message = f"Built whitelist {async_result} ..."
+                # Fall through
 
-        if 'start_ping' in request.POST:
-            async_result = self._start_ping()
-            metadata_file = async_result.get()
-            print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
+            if 'start_ping' in request.POST:
+                async_result = self._start_ping()
+                metadata_file = async_result.get()
+                print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-            async_result2 = self._start_tally()
-            self._status_message = f"Started tally, async_result2 = {async_result2}"
+                async_result2 = self._start_tally()
+                self._status_message = f"Started tally, async_result2 = {async_result2}"
 
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()

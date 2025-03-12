@@ -29,7 +29,8 @@ class PingStrategyForm(forms.Form):
     field_states = forms.MultipleChoiceField(
         choices=choices,
         widget=forms.SelectMultiple, label="Select State(s) to Ping:") 
-    field_survey_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}), label="Survey Id (if created)")
+    field_survey_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
+        label="Survey Id (if created)", initial="0")
 
 class IpRangePingForm(ModelForm):
     class Meta:
