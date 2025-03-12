@@ -341,15 +341,15 @@ class ConfigurePingView(generic.edit.FormView):
         #data = form.data
         #cleaned_data = form.cleaned_data
         #print(f"     form.data = {data}, cleaned_data = {cleaned_data}")
-        field_survey_id.initial = 23
-        print(f"AFTER SET,     dir(field) = {dir(field_survey_id)}")
-        stuff = field_survey_id.initial
-        cleaned_survey_id = form.cleaned_data['field_survey_id']
-        print(f"     stuff = {stuff}, cleaned = {cleaned_survey_id}")
-        form.cleaned_data['field_survey_id'] = 23
+        #field_survey_id.initial = 23
+        #print(f"AFTER SET,     dir(field) = {dir(field_survey_id)}")
+        #stuff = field_survey_id.initial
+        #cleaned_survey_id = form.cleaned_data['field_survey_id']
+        #print(f"     stuff = {stuff}, cleaned = {cleaned_survey_id}")
+        #form.cleaned_data['field_survey_id'] = 23
         # data['field_survey_id'] = 23
 
-        initial_data = {"field_survey_id" : '46'}
+        initial_data = {"field_survey_id" : '46', "field_states" : selected_states }
         new_form = PingStrategyForm(initial=initial_data)
 
         # No Work: field_survey_id.initial = self._survey_id
