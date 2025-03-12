@@ -351,10 +351,12 @@ class ConfigurePingView(generic.edit.FormView):
         print(f"     bound_data = {bound_data}")
         # data['field_survey_id'] = 23
 
+        new_form = PingStrategyForm(field_survey_id=46)
+
         # No Work: field_survey_id.initial = self._survey_id
         # field_survey_id = self._survey_id
         # FIELD_SURVEY_ID : self._survey_id}
-        context = {"form" : form,
+        context = {"form" : new_form,
             FIELD_CELERY_DETAILS : celery_details,
             FIELD_STATUS : self._status_message}
         return render(request, self.template_name, context)
