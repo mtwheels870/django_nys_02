@@ -33,8 +33,8 @@ class PingStrategyForm(forms.Form):
     # field_single = forms.ChoiceField(choices=CHOICES, label="Single Choice Here:") 
 
     choices = []
-    for state in UsState.objects.all().order_by("state_name"):
-        choices.append([state.state_fp, state.state_name])
+#    for state in UsState.objects.all().order_by("state_name"):
+#        choices.append([state.state_fp, state.state_name])
     # choices=[(1, "Option 1"), (2, "Option 2"), (3, "Option 3")],
     # help_text="Select at least one state to configure ping")
     field_states = forms.MultipleChoiceField(
