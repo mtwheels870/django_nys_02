@@ -328,8 +328,18 @@ class ConfigurePingView(generic.edit.FormView):
                 async_result2 = self._start_tally()
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
-        # Load up the celery details for the next form
-        celery_details = self._get_celery_details()
+        # Not sure why we have to create a new form here (but it works)
+        initial_data = {"field_survey_id" : self._survey_id, "field_states" : selected_states }
+        new_form = PingStrategyForm(initial=initial_data)
+
+        # No Work: field_survey_id.initial = self._survey_id
+        # field_survey_id = self._survey_id
+        # FIELD_SURVEY_ID : self._survey_id}
+        context = {"form" : new_form,
+            FIELD_CELERY_DETAILS : self._get_celery_details(),
+            FIELD_STATUS : self._status_message}
+        return render(request, self.template_name, context)
+
         #field_survey_id = form.fields['field_survey_id']
         #field_survey_id.clean(23)
         # field_survey_id.data = 23
@@ -348,15 +358,3 @@ class ConfigurePingView(generic.edit.FormView):
         #print(f"     stuff = {stuff}, cleaned = {cleaned_survey_id}")
         #form.cleaned_data['field_survey_id'] = 23
         # data['field_survey_id'] = 23
-
-        initial_data = {"field_survey_id" : self._survey_id, "field_states" : selected_states }
-        new_form = PingStrategyForm(initial=initial_data)
-
-        # No Work: field_survey_id.initial = self._survey_id
-        # field_survey_id = self._survey_id
-        # FIELD_SURVEY_ID : self._survey_id}
-        context = {"form" : new_form,
-            FIELD_CELERY_DETAILS : celery_details,
-            FIELD_STATUS : self._status_message}
-        return render(request, self.template_name, context)
-

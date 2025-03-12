@@ -35,25 +35,44 @@ class RangeIpCount:
 
     
 class PingSurveyManager:
-    def __init__(self, create_new=True):
-        if create_new:
-            self._create_directory()
-            self._create_whitelist()
-        else:
-            self._load_latest()
-            self._create_whitelist(write_mode=False)
+    def __init__(self, survey_id, linked_survey_id=None):
+        self._create_directory(survey_id)
+        self._traverse_geography(survey_id)
+        self._create_whitelist()
 
-    def _create_directory(self):
-        now = datetime.datetime.now()
-        folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
+    def _create_directory(self, survey_id):
+        # now = datetime.datetime.now()
+        # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
+        folder_snapshot = f"Survey_{survey_id:05}"
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
         print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
             os.makedirs(full_path)
         self.directory = full_path
 
+    def _traverse_geography(self, survey_id):
+        survey = IpRangeSurvey.objects.get(pk=survey_id)
+        print(f"PSM._traverse_geography(), survey = {survey}")
+        
+        selected_survey_states = IpSurveyState.objects.filter(survey_id=survey_id)
+        print(f"PSM._traverse_geography(), selected_survey_states = {selected_survey_states}")
+
+        state_ids = []
+        for survey_state in selected_survey_states :
+            state_ids.append(survey_state.us_state.id)
+
+        county_ids = []
+        counties_in_states = County.objects.filter(us_state_id__in=state_ids)
+        for county in counties_in_state:
+            county_ids.append(county.id)
+        print(f"PSM._traverse_geography(), county_ids = {county_ids}")
+
+
     # Open two files
     def _create_whitelist(self, write_mode=True):
+        print(f"PSM._create_whitelist(), for now, just returning")
+        return
+
         self.path_range_ip = os.path.join(self.directory, FILE_RANGE_IP)
         self.path_whitelist = os.path.join(self.directory, FILE_WHITELIST)
         self.path_output = os.path.join(self.directory, FILE_OUTPUT)

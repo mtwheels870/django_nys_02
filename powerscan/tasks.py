@@ -68,8 +68,6 @@ def start_range_survey(self, *args, **kwargs):
     # Main method
     print(f"start_range_survey(), self = {self}, kwargs = {kwargs}, creating survey")
 
-    survey = IpRangeSurvey()
-    survey.save()
     # Use the minus to be descending
     count_range_tracts = CountTract.objects.order_by("-range_count")
     
@@ -280,8 +278,16 @@ def build_whitelist(self, *args, **kwargs):
     survey.time_whitelist_started = timezone.now()
     survey.save()
 
+    print(f"build_whitelist(), getting states for survey_id {survey_id}")
+    survey_states = ["13"]
+
+    
+
+            survey_state = IpSurveyState(survey=survey, us_state=state)
+            survey_state.save()
+
     #print(f"build_whitelist(), source_id = {ip_source_id}")
-    survey_manager = PingSurveyManager()
+    survey_manager = PingSurveyManager(survey_id)
     #if ip_source_id == 2:
     num_ranges = whitelist_maxm(survey_manager)
     #elif ip_source_id == 1:
