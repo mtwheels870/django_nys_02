@@ -123,10 +123,10 @@ class MmIpRange(models.Model):
 #
 # Classes to work with celery workers and do a scan
 #
-class WorkerLock(models.Model):
-    purpose = models.CharField(max_length=12)
-    time_created = models.DateTimeField(auto_now_add=True)
-    time_started = models.DateTimeField(null=True)
+#class WorkerLock(models.Model):
+#    purpose = models.CharField(max_length=12)
+#    time_created = models.DateTimeField(auto_now_add=True)
+#    time_started = models.DateTimeField(null=True)
 
 class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)

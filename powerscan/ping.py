@@ -11,7 +11,7 @@ import cidr_trie.cidr_util
 from django.utils import timezone
 
 from .models import (
-    IpRangeSurvey, CountTract, IpRangePing, WorkerLock,
+    IpRangeSurvey, CountTract, IpRangePing, 
     MmIpRange)
 
 TEMP_DIRECTORY = "/tmp/exec_zmap/"

@@ -23,7 +23,7 @@ from django.utils import timezone
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .models import (
-    IpRangeSurvey, CountTract, IpRangePing, WorkerLock,
+    IpRangeSurvey, CountTract, IpRangePing, 
     MmIpRange)
 
 from .ping import PingSurveyManager
@@ -278,18 +278,11 @@ def build_whitelist(self, *args, **kwargs):
     survey.time_whitelist_started = timezone.now()
     survey.save()
 
-    print(f"build_whitelist(), getting states for survey_id {survey_id}")
-    survey_states = ["13"]
-
-    
-
-            survey_state = IpSurveyState(survey=survey, us_state=state)
-            survey_state.save()
 
     #print(f"build_whitelist(), source_id = {ip_source_id}")
     survey_manager = PingSurveyManager(survey_id)
     #if ip_source_id == 2:
-    num_ranges = whitelist_maxm(survey_manager)
+    #num_ranges = whitelist_maxm(survey_manager)
     #elif ip_source_id == 1:
     #    print(f"build_whitelist(), currently don't support ip_source_id = {ip_source_id}")
     #else:
@@ -297,7 +290,7 @@ def build_whitelist(self, *args, **kwargs):
 
     print(f"build_whitelist(), cleaning up survey manager, lock")
     survey_manager.close()
-    worker_lock.delete()
+    #worker_lock.delete()
     return num_ranges
 
 def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):

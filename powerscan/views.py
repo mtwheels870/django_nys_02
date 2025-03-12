@@ -26,7 +26,6 @@ from .models import (
     MmIpRange,
     IpRangePing,
     IpRangeSurvey,
-    WorkerLock,
     IpSurveyState
 )
 
