@@ -344,7 +344,8 @@ class ConfigurePingView(generic.edit.FormView):
         field_survey_id.initial = 23
         print(f"AFTER SET,     dir(field) = {dir(field_survey_id)}")
         stuff = field_survey_id.initial
-        print(f"     stuff = {stuff}")
+        cleaned_survey_id = form.cleaned_data['field_survey_id']
+        print(f"     stuff = {stuff}, cleaned = {cleaned_survey_id}")
         # data['field_survey_id'] = 23
 
         # No Work: field_survey_id.initial = self._survey_id
