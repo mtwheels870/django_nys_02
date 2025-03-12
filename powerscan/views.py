@@ -338,6 +338,10 @@ class ConfigurePingView(generic.edit.FormView):
         widget = field_survey_id.widget
         print(f"     dir(widget) = {dir(widget)}")
         print(f"     dir(form) = {dir(form)}")
+        data = form.data
+        cleaned_data = form.cleaned_data
+        print(f"     form.data = {data}, cleaned_data = {cleaned_data}")
+
         # No Work: field_survey_id.initial = self._survey_id
         # field_survey_id = self._survey_id
         # FIELD_SURVEY_ID : self._survey_id}
