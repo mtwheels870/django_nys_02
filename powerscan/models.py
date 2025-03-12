@@ -131,11 +131,14 @@ class WorkerLock(models.Model):
 class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
+    time_whitelist_created = models.DateTimeField(null=True)
+    time_whitelist_started = models.DateTimeField(null=True)
+
     # First celery worker sets this (effectively the lock)
-    time_started = models.DateTimeField(null=True)
+    time_ping_started = models.DateTimeField(null=True)
 
     # After a successful ping campaign, celery worker will set time stopped and num objects
-    time_stopped = models.DateTimeField(null=True)
+    time_ping_stopped = models.DateTimeField(null=True)
     num_total_ranges = models.IntegerField(default=0)
 
     def __str__(self):
@@ -151,29 +154,12 @@ class IpRangePing(models.Model):
     num_ranges_responded = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Range[{self.id}]: [{self.ip_range.ip_range_start},{self.ip_range.ip_range_end}], time_pinged = {self.time_pinged}"
+        first = f"Range[{self.id}]: [{self.ip_range.ip_range_start},{self.ip_range.ip_range_end}], "
+        second = f"time_pinged = {self.time_pinged}"
+        return first + second
 
-#
-# Unused
-#
-class DeIpRange(models.Model):
-    # Note, this is just for IPv4.  We might have to change for IPv6
-    ip_range_start = models.CharField("IP Start", max_length=20)
-    ip_range_end = models.CharField("IP End", max_length=20)
-    pp_cxn_speed = models.CharField(max_length=20)
-    pp_cxn_type = models.CharField(max_length=10)
-    pp_latitude = models.CharField(max_length=20)
-    pp_longitude = models.CharField(max_length=20)
-    company_name = models.CharField(max_length=60, null=True)
-    naics_code = models.CharField(max_length=8, null=True)
-    organization = models.CharField(max_length=80, null=True)
-    srs_company_name = models.CharField(max_length=60, null=True)
-    srs_issuer_id = models.CharField(max_length=10, null=True)
-    srs_latitude = models.CharField(max_length=20, null=True)
-    srs_longitude = models.CharField(max_length=20, null=True)
-    srs_strength = models.CharField(max_length=3, null=True)
-    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
-    mpoint = models.MultiPointField(null=True)
-
-    def __str__(self):
-        return self.ip_range_start
+class IpSurveyState(models.Model):
+    survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
+    us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
+    num_ranges_pinged = models.IntegerField(default=0)
+    num_ranges_responded = models.IntegerField(default=0)

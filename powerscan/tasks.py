@@ -33,6 +33,8 @@ TOTAL_OBJECTS = 22000
 
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
 
+CELERY_FIELD_SURVEY_ID = "survey_id"
+
 #@shared_task(bind=True)
 # Nested method
 def _get_all_ranges(survey, tract, index_range):
@@ -230,10 +232,6 @@ def _ping_all_ranges(survey, tract, debug):
 def zmap_all(self, *args, **kwargs):
 
     # Main method
-
-    survey = IpRangeSurvey()
-    survey.time_started = timezone.now()
-    survey.save()
     print(f"zmap_all(), self = {self}, kwargs = {kwargs}, created survey = {survey.id}")
     # Use the minus to be descending
     count_range_tracts = CountTract.objects.order_by("-range_count")
@@ -271,15 +269,14 @@ def whitelist_maxm(survey_manager):
 def build_whitelist(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
-    worker_lock_id = kwargs["worker_lock_id"]
-    #ip_source_id = kwargs["ip_source_id"]
-    worker_lock = WorkerLock.objects.get(pk=worker_lock_id)
-    if worker_lock.time_started:
-        print(f"build_whitelist(), worker_lock.time_started: {worker_lock.time_started}, another worker grabbed it, exiting")
+    survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
+    survey = IpRangeSurvey.objects.get(pk=survey_id)
+    if survey.time_whitelist_started 
+        print(f"build_whitelist(), survey.time_whitelist_started : {survey.time_whitelist_started}, another worker grabbed it, exiting")
         return 0
     # Save that we started the process, that's our (worker) lock
-    worker_lock.time_started = timezone.now()
-    worker_lock.save()
+    survey.time_whitelist_started = timezone.now()
+    survey.save()
 
     #print(f"build_whitelist(), source_id = {ip_source_id}")
     survey_manager = PingSurveyManager()
@@ -333,7 +330,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 def zmap_from_file(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     # print(f"zmap_from_file(), self = {self}, kwargs = {kwargs}")
-    survey_id = kwargs["survey_id"]
+    survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
     #ip_source_id = kwargs["ip_source_id"]
     survey = IpRangeSurvey.objects.get(pk=survey_id)
     if survey.time_started:
@@ -369,7 +366,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job):
 def tally_results(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     print(f"tally_results(), self = {self}, kwargs = {kwargs}")
-    survey_id = kwargs["survey_id"]
+    survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
     #ip_source_id = kwargs["ip_source_id"]
     metadata_file = kwargs["metadata_file"]
     survey = IpRangeSurvey.objects.get(pk=survey_id)

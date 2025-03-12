@@ -14,7 +14,7 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import build_whitelist, zmap_from_file, tally_results
+from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_SURVEY_ID
 
 from .models import (
     UsState,
@@ -238,29 +238,39 @@ class ConfigurePingView(generic.edit.FormView):
 
         return context_data
 
+    # Configure just creates the state survey items, everything else is done asynchronously in
+    # build_whitelist.  REasons - slow to create all of those database entries.  We don't want to pass a list
+    # of states to the celery worker.  So, we create the survey, pass the survey id to the worker, and she reads
+    # the pre-saved states from the database
     def _configure_survey(self, selected_states):
+        survey = IpRangeSurvey()
+        survey.save()
         abbrevs = []
         print(f"CPV.post(), _configure_survey, selected_states = {selected_states}")
         for state in UsState.objects.filter(state_fp__in=selected_states).order_by("state_abbrev"):
             abbrevs.append(state.state_abbrev)
-        return abbrevs
+            survey_state = IpSurveyState(survey=survey, us_state=state)
+            survey_state.save()
+        self._survey_id = survey.id
+        return abbrevs, survey.id
 
     def _build_whitelist(self):
-        print(f"CPV.post(), build_whitelist")
-        lock = WorkerLock()
-        lock.save()
+        if self._survey_id == 0:
+            print(f"CPV.post(), build_whitelist, survey not configured!")
+            return None
+
+        print(f"CPV.post(), build_whitelist, survey: {self._survey_id}")
+        survey = IpRangeSurvey.objects.get(pk=self._survey_id)
+        survey.time_whitelist_created = timezone.now()
         # MaxM ranges
         async_result = build_whitelist.apply_async(
-            kwargs={"worker_lock_id" : lock.id},
-                #"ip_source_id": IP_RANGE_SOURCE },
+            kwargs={"survey_id" : self._survey_id},
             queue=QUEUE_NAME,
             routing_key='ping.tasks.build_whitelist')
         return async_result
 
     def _start_ping(self):
         #print(f"CPV.post(), start_ping...")
-        survey = IpRangeSurvey()
-        survey.save()
         async_result = zmap_from_file.apply_async(
             kwargs={"survey_id" : survey.id},
                 #"ip_source_id": IP_RANGE_SOURCE },
@@ -291,9 +301,9 @@ class ConfigurePingView(generic.edit.FormView):
             return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
 
         if 'configure_survey' in request.POST:
-            abbrevs = self._configure_survey(selected_states)
+            abbrevs, survey_id = self._configure_survey(selected_states)
             abbrevs_string = ", ".join(abbrevs)
-            self._status_message = f"Configured survey with states [{abbrevs_string}]"
+            self._status_message = f"Configured survey {survey_id} with states [{abbrevs_string}]"
             # Fall through
 
         if 'build_whitelist' in request.POST:
