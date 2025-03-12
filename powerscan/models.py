@@ -163,3 +163,5 @@ class IpSurveyState(models.Model):
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
     num_ranges_pinged = models.IntegerField(default=0)
     num_ranges_responded = models.IntegerField(default=0)
+    def __str__(self):
+        return f"Survey results for state: {self.us_state.state_abbrev}"
