@@ -290,7 +290,7 @@ class ConfigurePingView(generic.edit.FormView):
         return async_result2
 
     def post(self, request, *args, **kwargs):
-        print(f"CPV.post(), kwargs = {kwargs}")
+        print(f"CPV.post(), kwargs = {kwargs}, context_data = {get_context_data}")
         form = PingStrategyForm(request.POST)
         if form.is_valid():
             selected_states = form.cleaned_data['field_states']
