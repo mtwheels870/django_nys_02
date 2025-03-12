@@ -349,7 +349,8 @@ class ConfigurePingView(generic.edit.FormView):
         form.cleaned_data['field_survey_id'] = 23
         # data['field_survey_id'] = 23
 
-        new_form = PingStrategyForm(field_survey_id=46)
+        initial_data = {"field_survey_id" : '46'}
+        new_form = PingStrategyForm(initial=initial_data)
 
         # No Work: field_survey_id.initial = self._survey_id
         # field_survey_id = self._survey_id
