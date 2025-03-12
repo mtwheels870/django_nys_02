@@ -23,6 +23,19 @@ class SelectedCensusTractForm(forms.Form):
         self.fields['map_bbox'].widget.attrs['readonly'] = True
 
 class PingStrategyForm(forms.Form):
+    choices = []
+    for state in UsState.objects.all().order_by("state_name"):
+        choices.append([state.state_fp, state.state_name])
+    field_states = forms.MultipleChoiceField(
+        choices=choices,
+        widget=forms.SelectMultiple, label="Select State(s) to Ping:") 
+    field_survey_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}), label="Survey Id (if created)")
+
+class IpRangePingForm(ModelForm):
+    class Meta:
+        model = IpRangePing
+        fields = ["time_pinged"]
+
 #    CHOICES = [
 #        ["value1", "Label 1"],
 #        ["value2", "Label 2"],
@@ -31,17 +44,5 @@ class PingStrategyForm(forms.Form):
     # This is a combo box
     # help_text="Should only be able to pick one from this list")
     # field_single = forms.ChoiceField(choices=CHOICES, label="Single Choice Here:") 
-
-    choices = []
-    for state in UsState.objects.all().order_by("state_name"):
-        choices.append([state.state_fp, state.state_name])
     # choices=[(1, "Option 1"), (2, "Option 2"), (3, "Option 3")],
     # help_text="Select at least one state to configure ping")
-    field_states = forms.MultipleChoiceField(
-        choices=choices,
-        widget=forms.SelectMultiple, label="Select State(s) to Ping:") 
-
-class IpRangePingForm(ModelForm):
-    class Meta:
-        model = IpRangePing
-        fields = ["time_pinged"]
