@@ -295,7 +295,7 @@ class ConfigurePingView(generic.edit.FormView):
             print(f"CPV.post(), configure_survey()")
             abbrevs = self._configure_survey(selected_states)
             abbrevs_string = ", ".join(abbrevs)
-            self._status_message = "Configured survey with states [{abbrevs_string}]"
+            self._status_message = f"Configured survey with states [{abbrevs_string}]"
             # Fall through
 
         if 'build_whitelist' in request.POST:
