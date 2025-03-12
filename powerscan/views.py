@@ -49,7 +49,9 @@ KEY_AGG_TYPE = "agg_type"
 KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
+# These fields are used in the templates
 FIELD_CELERY_DETAILS = "celery_stuff"
+FIELD_STATUS = "status_message" 
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
@@ -223,11 +225,18 @@ class ConfigurePingView(generic.edit.FormView):
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
+    def _set_status_message(self, message)
+        self._status_message = message
+
+    def _get_status_message(self, message)
+        return self._status_message
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         # There's an unbound, empty form in context_data...
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
+        context_data[FIELD_STATUS] = self._get_status_message()
 
         return context_data
 
@@ -235,13 +244,19 @@ class ConfigurePingView(generic.edit.FormView):
         #print(f"CPV.post(), kwargs = {kwargs}")
         form = PingStrategyForm(request.POST)
         if form.is_valid():
-            my_field = form.cleaned_data['my_field']
+            field_single = form.cleaned_data['field_single']
             #print(f"CPV.post(), my_field = {my_field}")
         else:
             print(f"CPV.post(), form is INVALID")
 
         if 'return_to_map' in request.POST:
             return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
+
+        <button type="submit" name="">Configured Survey</button>
+        if 'configure_survey' in request.POST:
+            print(f"CPV.post(), configure_survey()")
+            self._set_status_message("Configured survey here...")
+            # Fall through
 
         if 'build_whitelist' in request.POST:
             print(f"CPV.post(), build_whitelist")
@@ -253,6 +268,7 @@ class ConfigurePingView(generic.edit.FormView):
                     #"ip_source_id": IP_RANGE_SOURCE },
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.build_whitelist')
+            self._set_status_message("Built whitelist [] ...")
             # Fall through
 
         if 'start_ping' in request.POST:
@@ -276,10 +292,14 @@ class ConfigurePingView(generic.edit.FormView):
                 kwargs={"survey_id": survey.id,
                     "metadata_file": metadata_file} )
             # Fall through
+            self._set_status_message("Started ping [] ...")
 
         # Load up the celery details for the next form
         celery_details = self._get_celery_details()
-        context = {"form" : form, FIELD_CELERY_DETAILS : celery_details}
+        status_message = self._get_status_message()
+        context = {"form" : form,
+            FIELD_CELERY_DETAILS : celery_details,
+            FIELD_STATUS : status_message}
         return render(request, self.template_name, context)
 
 #

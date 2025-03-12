@@ -16,11 +16,14 @@
         {{ form.errors }}
         {{ form.media }}
         {{ form.as_div }}
+        <button type="submit" name="configure_survey">Configured Survey</button>
         <button type="submit" name="build_whitelist">Build Whitelist</button>
         <button type="submit" name="start_ping">Start Ping</button>
         <button type="submit" name="return_to_map">Return to Map</button>
         {% csrf_token %}
     </form>
+    <h3>Status: </h3>
+    <p>{{ status_message }} </p>
   </body>
 </html>
 
