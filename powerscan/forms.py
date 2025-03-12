@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import CountTract, IpRangePing
+from .models import CountTract, IpRangePing, UsState
 
 # widget=forms.HiddenInput())
 class SelectedCensusTractForm(forms.Form):
