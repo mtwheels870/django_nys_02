@@ -228,7 +228,7 @@ class ConfigurePingView(generic.edit.FormView):
     def _set_status_message(self, message):
         self._status_message = message
 
-    def _get_status_message(self, message):
+    def _get_status_message(self):
         return self._status_message
 
     def get_context_data(self, **kwargs):
