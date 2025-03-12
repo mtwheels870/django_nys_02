@@ -233,8 +233,7 @@ class ConfigurePingView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         print(f"CPV.after super.get_context_data(), context_data = {context_data}")
         form = context_data['form']
-        fields = context_data['fields']
-        print(f"CPV.get_context_data() 3, form = {form}, fields = {fields}")
+        print(f"CPV.get_context_data() 3, form = {form}")
         field_survey_id = form.fields['field_survey_id']
         print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
         field_survey_id.initial = "23"
