@@ -29,11 +29,13 @@ class PingStrategyForm(forms.Form):
         ["value3", "Label 3"],
     ]
     # This is a combo box
-    field_single = forms.ChoiceField(choices=CHOICES)
+    field_single = forms.ChoiceField(choices=CHOICES, label="Single Choice Here:", 
+        help_text="Should only be able to pick one from this list")
 
     field_states = forms.MultipleChoiceField(
         choices=[(1, "Option 1"), (2, "Option 2"), (3, "Option 3")],
-        widget=forms.SelectMultiple)
+        widget=forms.SelectMultiple, label="Select State(s) to Ping:", 
+        help_text="Select at least one state to configure ping")
 
 class IpRangePingForm(ModelForm):
     class Meta:
