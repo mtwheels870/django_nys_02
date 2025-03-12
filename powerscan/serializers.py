@@ -60,19 +60,3 @@ class CountTractSerializer(
         fields = ("id", "census_tract", "range_count")
         geo_field = "mpoint"
         model = CountTract
-#
-# CRUFT
-#
-
-#class MarkerSerializer(
-#    serializers.GeoFeatureModelSerializer):
-#    class Meta:
-#        fields = ("id", "name")
-#        geo_field = "location"
-#        model = Marker
-#class DeIpRangeSerializer(
-#    serializers.GeoFeatureModelSerializer):
-#    class Meta:
-#        fields = ("id", "ip_range_start", "company_name")
-#        geo_field = "mpoint"
-#        model = DeIpRange

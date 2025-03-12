@@ -1,6 +1,5 @@
 from rest_framework import routers
 
-    #DeIpRangeViewSet,
 from .views import (
     CensusTractViewSet,
     CountyViewSet,
@@ -18,7 +17,6 @@ router = routers.DefaultRouter()
 router.register(r"states", UsStateViewSet)
 router.register(r"counties", CountyViewSet)
 router.register(r"tracts", CensusTractViewSet)
-# router.register(r"ip_ranges", DeIpRangeViewSet)
 router.register(r"state_counts", CountStateViewSet)
 router.register(r"county_counts", CountCountyViewSet)
 router.register(r"tract_counts", CountTractViewSet)

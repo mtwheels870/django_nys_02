@@ -205,7 +205,6 @@ class MapNavigationView(generic.edit.FormView):
                 # print(f"build_table(), agg_type = {agg_type}, id = {id}, census_tract_id = {census_tract.id}")
                 queryset = MmIpRange.objects.filter(census_tract__id=census_tract.id)
                 table = queryset
-                # table = DeIpRangeTable(data=queryset)
             case "MmIpRange":
                 table = MmIpRange.objects.none()
             case "CountCounty":
