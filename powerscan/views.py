@@ -254,7 +254,7 @@ class ConfigurePingView(generic.edit.FormView):
         survey = IpRangeSurvey()
         survey.save()
         abbrevs = []
-        print(f"CPV.post(), _configure_survey, selected_states = {selected_states}")
+        print(f"CPV._configure_survey(), selected_states = {selected_states}")
         for state in UsState.objects.filter(state_fp__in=selected_states).order_by("state_abbrev"):
             abbrevs.append(state.state_abbrev)
             survey_state = IpSurveyState(survey=survey, us_state=state)
@@ -262,15 +262,16 @@ class ConfigurePingView(generic.edit.FormView):
         self._survey_id = survey.id
         return abbrevs, survey.id
 
-    def _build_whitelist(self):
-        if self._survey_id == 0:
-            print(f"CPV.post(), build_whitelist, survey not configured!")
+    def _build_whitelist(self, survey_id):
+        if not survey_id:
+            print(f"CPV.build_whitelist(), survey not configured! (should be extracted from the form)")
             return None
 
-        print(f"CPV.post(), build_whitelist, survey: {self._survey_id}")
-        survey = IpRangeSurvey.objects.get(pk=self._survey_id)
+        print(f"CPV.build_whitelist(), survey: {survey_id}")
+        survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_whitelist_created = timezone.now()
         # MaxM ranges
+        print(f"CPV.build_whitelist(), apply_async()")
         async_result = build_whitelist.apply_async(
             kwargs={"survey_id" : self._survey_id},
             queue=QUEUE_NAME,
@@ -288,7 +289,7 @@ class ConfigurePingView(generic.edit.FormView):
 
     def _start_tally(self):
         now = timezone.now()
-        print(f"CPV.post(), calling tally_results (delayed), now = {now}, seconds = {PING_RESULTS_DELAY}")
+        print(f"CPV._start_tally(), calling tally_results (delayed), now = {now}, seconds = {PING_RESULTS_DELAY}")
         # Fire off the counting task
         async_result2 = tally_results.apply_async(
             countdown=PING_RESULTS_DELAY,
@@ -304,6 +305,7 @@ class ConfigurePingView(generic.edit.FormView):
             form = PingStrategyForm()
         else:
             selected_states = form.cleaned_data['field_states']
+            survey_id = form.cleaned_data['field_survey_id']
 
             if 'return_to_map' in request.POST:
                 return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
@@ -315,7 +317,7 @@ class ConfigurePingView(generic.edit.FormView):
                 # Fall through
 
             if 'build_whitelist' in request.POST:
-                async_result = self._build_whitelist()
+                async_result = self._build_whitelist(survey_id)
                 self._status_message = f"Built whitelist {async_result} ..."
                 # Fall through
 
