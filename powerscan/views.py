@@ -229,6 +229,7 @@ class ConfigurePingView(generic.edit.FormView):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
     def get_context_data(self, **kwargs):
+        print(f"CPV.get_context_data(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         # There's an unbound, empty form in context_data...
         # File stuff
