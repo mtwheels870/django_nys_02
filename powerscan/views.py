@@ -252,7 +252,6 @@ class ConfigurePingView(generic.edit.FormView):
         if 'return_to_map' in request.POST:
             return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
 
-        <button type="submit" name="">Configured Survey</button>
         if 'configure_survey' in request.POST:
             print(f"CPV.post(), configure_survey()")
             self._set_status_message("Configured survey here...")
