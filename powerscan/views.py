@@ -284,7 +284,6 @@ class ConfigurePingView(generic.edit.FormView):
         form = PingStrategyForm(request.POST)
         if form.is_valid():
             selected_states = form.cleaned_data['field_states']
-            print(f"CPV.post(), selected_states = {selected_states}")
         else:
             print(f"CPV.post(), form is INVALID")
 
@@ -292,7 +291,6 @@ class ConfigurePingView(generic.edit.FormView):
             return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
 
         if 'configure_survey' in request.POST:
-            print(f"CPV.post(), configure_survey()")
             abbrevs = self._configure_survey(selected_states)
             abbrevs_string = ", ".join(abbrevs)
             self._status_message = f"Configured survey with states [{abbrevs_string}]"
@@ -315,6 +313,7 @@ class ConfigurePingView(generic.edit.FormView):
         celery_details = self._get_celery_details()
         context = {"form" : form,
             FIELD_CELERY_DETAILS : celery_details,
-            FIELD_STATUS : self._status_message}
+            FIELD_STATUS : self._status_message,
+            FIELD_SURVEY_ID : self._survey_id}
         return render(request, self.template_name, context)
 
