@@ -271,8 +271,10 @@ def build_whitelist(self, *args, **kwargs):
     print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
     survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
     survey = IpRangeSurvey.objects.get(pk=survey_id)
-    if survey.time_whitelist_started 
-        print(f"build_whitelist(), survey.time_whitelist_started : {survey.time_whitelist_started}, another worker grabbed it, exiting")
+    if survey.time_whitelist_started:
+        first = f"build_whitelist(), survey.time_whitelist_started : {survey.time_whitelist_started},"
+        second = "another worker grabbed it, exiting")
+        print(first + second)
         return 0
     # Save that we started the process, that's our (worker) lock
     survey.time_whitelist_started = timezone.now()
