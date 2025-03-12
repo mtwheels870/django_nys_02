@@ -221,6 +221,7 @@ class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
     template_name = "powerscan/ps_detail.html"
+    _status_message = None
 
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
