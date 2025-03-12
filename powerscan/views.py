@@ -27,6 +27,7 @@ from .models import (
     IpRangePing,
     IpRangeSurvey,
     WorkerLock,
+    IpSurveyState
 )
 
 from .serializers import (
