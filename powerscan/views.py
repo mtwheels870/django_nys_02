@@ -57,6 +57,7 @@ FIELD_SURVEY_ID = "survey_id"
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
 PING_RESULTS_DELAY = 15 * 60
+PING_SMALL_DELAY = 20
 
 class UsStateViewSet(
     viewsets.ReadOnlyModelViewSet):
@@ -336,7 +337,7 @@ class ConfigurePingView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                ping_delay = 40
+                ping_delay = PING_SMALL_DELAY
                 async_result2 = self._start_tally(survey_id, metadata_file, ping_delay)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
