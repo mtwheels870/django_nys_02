@@ -38,6 +38,34 @@ class RangeIpCount:
         return f"range[{self.id}] = {self.ip_network}, count = {self.count}"
 
     
+class TrieWrapper:
+    def __init__(self):
+        self.dictionary = {}
+
+    def _get_hashed_trie(self, ip_network, create_new=False):
+        octets = ip_network.split('.')
+        first_octet = octets[0]
+        if not first_octet in self.dictionary:
+            if not create_new:
+                raise Exception(f"No trie for octet = {first_octent}")
+            return_trie = PatriciaTrie()
+            self.dictionary[first_octet] = return_trie 
+        else:
+            return_trie = self.dictionary[first_octet]
+        return return_trie
+
+    def insert(self, ip_network, data):
+        trie = self._get_hashed_trie(ip_network, create_new=True)
+        trie.insert(ip_network, data)
+
+    def find_all(self, ip_network):
+        trie = self._get_hashed_trie(ip_network)
+        return trie.find_all(ip_network)
+            
+    def traverse(self, ip_network):
+        trie = self._get_hashed_trie(ip_network)
+        return trie.traverse(ip_network)
+
 class PingSurveyManager:
     class FileDebugger:
         def __init__(self, directory, name):
@@ -243,8 +271,9 @@ class PingSurveyManager:
             possible_hosts = self._calculate_possible(ip_network)
             # Hang a counter on the tree
             range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
-            self._writer_cidr_trie.write(f"Trie_insert: {ip_network}")
-            self.trie.insert(ip_network, range_ip)
+            self._writer_cidr_trie.write(f"Trie_insert: {ip_network}\n")
+            self.trie_wrapper.insert(ip_network, range_ip)
+            # self.trie.insert(ip_network, range_ip)
 
     def _match_zmap_replies(self):
         df = pd.read_csv(self.path_output)
@@ -253,9 +282,10 @@ class PingSurveyManager:
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
-            self._writer_cidr_trie.write(f"Trie_lookup: {saddr}")
+            self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
             print(f"_match_zmap_replies(), saddr = {saddr}")
-            results = self.trie.find_all(saddr)
+            # results = self.trie.find_all(saddr)
+            results = self.trie_wrapper.find_all(saddr)
             num_results = len(results)
             #if index < 20:
             #    print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
@@ -289,7 +319,7 @@ class PingSurveyManager:
             target_mask = network_parts[1]
             # Now, look up each network in our trie
             index = 0
-            for node in self.trie.traverse(ip_network):
+            for node in self.trie_wrapper.traverse(ip_network):
                 # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
                 ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
                 #print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
@@ -314,6 +344,7 @@ class PingSurveyManager:
 
     # Returns the number of pings saved to the database (count > 0)
     def process_results(self, survey):
+        self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
         self._build_radix_tree()
         self._match_zmap_replies()
