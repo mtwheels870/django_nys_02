@@ -228,11 +228,12 @@ def tally_results(self, *args, **kwargs):
     metadata_file = kwargs["metadata_file"]
     survey_id = (int) survey_id_string
     survey = IpRangeSurvey.objects.get(pk=survey_id)
-
-    = models.DateTimeField(null=True)
     if survey.time_tally_started:
         print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
         return 0
+    survey.time_tally_started = timezone.now()
+    survey.save()
+
     survey_manager = PingSurveyManager.find(survey_id)
     pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file)
     survey.time_stopped = timezone.now()
