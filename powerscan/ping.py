@@ -70,7 +70,7 @@ class PingSurveyManager:
                 array_len = array_len - sub_array_len
 
     def __init__(self, survey_id_string, linked_survey_id=None):
-        self.survey_id = int(survey_id_string)
+        self._survey_id = int(survey_id_string)
         self._create_directory()
 
     def _create_directory(self):
@@ -83,7 +83,8 @@ class PingSurveyManager:
             os.makedirs(full_path)
         self.directory = full_path
 
-    def _traverse_geography(self, survey_id):
+    def _traverse_geography(self):
+        survey_id = self._survey_id
         debugger = self.FileDebugger(self.directory, "TraverseGeography")
         survey = IpRangeSurvey.objects.get(pk=self.survey_id)
         print(f"PSM._traverse_geography(), survey = {survey}")
@@ -119,7 +120,7 @@ class PingSurveyManager:
 
     # Return the number of ranges
     def _create_whitelist(self, write_mode=True):
-        print(f"PSM._create_whitelist(), for now, just returning")
+        print(f"PSM._create_whitelist(), for now, just returning, survey_id = {self._survey_id}")
         return 23
 
         self.path_range_ip = os.path.join(self.directory, FILE_RANGE_IP)
