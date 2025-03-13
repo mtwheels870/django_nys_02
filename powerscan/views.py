@@ -330,12 +330,13 @@ class ConfigurePingView(generic.edit.FormView):
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
             if 'ping_96' in request.POST:
+                survey_id = 96
                 print(f"CPV.post(), ping_96")
-                async_result = self._start_ping(96)
+                async_result = self._start_ping(survey_id)
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                ping_delay = 60
+                ping_delay = 20
                 async_result2 = self._start_tally(survey_id, metadata_file, ping_delay)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
