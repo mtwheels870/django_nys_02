@@ -287,7 +287,7 @@ def build_whitelist(self, *args, **kwargs):
     #else:
     #    raise Exception(f"build_whitelist(), unrecognized source_id: {ip_source_id}")
 
-    print(f"build_whitelist(), cleaning up survey manager, lock")
+    print(f"build_whitelist(), {num_ranges} ranges, cleaning up survey manager")
     survey_manager.close()
     #worker_lock.delete()
     return num_ranges
