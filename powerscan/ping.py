@@ -135,9 +135,9 @@ class PingSurveyManager:
         # Use the set() notation
         ip_ranges = tract.mmiprange_set.all()
         for range in ip_ranges:
-            string1 = f"{range_id},{ip_network}\n"
+            string1 = f"{range.id},{range.ip_network}\n"
             self.writer_range_ip.write(string1)
-            self.writer_whitelist.write(f"{ip_network}\n")
+            self.writer_whitelist.write(f"{range.ip_network}\n")
         ranges_added = ip_ranges.count()
         return ranges_added
 
