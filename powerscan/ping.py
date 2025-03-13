@@ -261,6 +261,7 @@ class PingSurveyManager:
         full_path = os.path.join(self.directory, FILE_CIDR_TRIE)
         self._writer_cidr_trie = open(full_path, "w+")
         self.trie = PatriciaTrie()
+        print(f"build_radix_tree(), self = {self}, trie = {self.trie}")
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
         #print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
@@ -287,6 +288,7 @@ class PingSurveyManager:
         df = pd.read_csv(self.path_output)
         column_names = df.columns.tolist()
         #print(f"_match_zmap_replies(), num_rows = {df.shape[0]}, column_names = {column_names}")
+        print(f"_match_zmap_replies(), self = {self}, trie = {self.trie}")
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
