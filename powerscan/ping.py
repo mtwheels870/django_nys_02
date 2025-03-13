@@ -295,23 +295,8 @@ class PingSurveyManager:
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
             self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-            results = self.pyt.get(saddr)
-            # results = self.trie_wrapper.find_all(saddr)
-            num_results = len(results)
-            #if index < 20:
-            #    print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
-            #    print(f"        results = {results}")
-            if num_results == 0:
-                print(f"_match_zmap_replies(), no Trie results for {saddr}, results = {results}!")
-                # self.debug_matches(saddr)
-            elif num_results > 1:
-                print(f"_match_zmap_replies(), multiple Trie results for {saddr}!")
-            else:
-                address = results[0][0]
-                counter = results[0][1]
-                #if index < 20:
-                #    print(f"    found ONE, address = {address}, counter = {counter}")
-                counter.count = counter.count + 1
+            range_counter = self.pyt.get(saddr)
+            counter.count = counter.count + 1
         self._writer_cidr_trie.close()
         print(f"_match_zmap_replies(), debug_file {FILE_CIDR_TRIE}")
 
@@ -378,3 +363,18 @@ class PingSurveyManager:
 #                if target_mask in node.masks:
 #                    ip_range_counter = node.masks[target_mask]
 #                    break
+            # results = self.trie_wrapper.find_all(saddr)
+#            #num_results = len(results)
+#            #if index < 20:
+#            #    print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
+#            #    print(f"        results = {results}")
+#            if num_results == 0:
+#                print(f"_match_zmap_replies(), no Trie results for {saddr}, results = {results}!")
+#                # self.debug_matches(saddr)
+#            elif num_results > 1:
+#                print(f"_match_zmap_replies(), multiple Trie results for {saddr}!")
+#            else:
+#                address = results[0][0]
+#                counter = results[0][1]
+#                #if index < 20:
+#                #    print(f"    found ONE, address = {address}, counter = {counter}")
