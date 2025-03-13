@@ -85,7 +85,7 @@ class PingSurveyManager:
         self.directory = full_path
 
     def _traverse_geography(self, survey_id):
-        debugger = FileDebugger(self.directory, "TraverseGeography")
+        debugger = self.FileDebugger(self.directory, "TraverseGeography")
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         print(f"PSM._traverse_geography(), survey = {survey}")
         
