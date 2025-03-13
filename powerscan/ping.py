@@ -231,7 +231,7 @@ class PingSurveyManager:
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
         full_path = os.path.join(self.directory, FILE_CIDR_TRIE)
-        self._writer_cidr_trie = open(self._full_path, "w+")
+        self._writer_cidr_trie = open(full_path, "w+")
         self.trie = PatriciaTrie()
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
