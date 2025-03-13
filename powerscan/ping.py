@@ -13,7 +13,7 @@ from django.utils import timezone
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
     MmIpRange, IpSurveyState,
-    County)
+    County, CensusTract)
 
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
 FILE_RANGE_IP = "RangeIp.csv"
@@ -77,7 +77,7 @@ class PingSurveyManager:
     def _create_directory(self, survey_id):
         # now = datetime.datetime.now()
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
-        folder_snapshot = f"Survey_{survey_id:05}"
+        folder_snapshot = f"Survey_{survey_id:05d}"
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
         print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
