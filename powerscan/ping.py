@@ -89,7 +89,7 @@ class PingSurveyManager:
 
     @staticmethod
     def _find_survey(survey_id):
-        survey_dir_name = _build_survey_name(survey_id)
+        survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
         if not os.path.exists(full_path):
             print(f"PingSurveyManager._find_survey(), could not find path: {full_path}")
