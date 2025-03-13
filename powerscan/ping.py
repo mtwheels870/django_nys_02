@@ -128,8 +128,9 @@ class PingSurveyManager:
         debugger.print("PSM._traverse_geography(), tract_ids:", tract_ids)
 
         file_name = debugger.get_file()
-        print(f"PSM._traverse_geography(), file output: {file_name}")
         debugger.close()
+        print(f"PSM._traverse_geography(), file output: {file_name}, total_ranges = {total_ranges}")
+        return total_ranges
 
     def _tract_ranges_whitelist(self, tract):
         # Use the set() notation
