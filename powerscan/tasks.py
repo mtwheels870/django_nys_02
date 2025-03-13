@@ -226,7 +226,7 @@ def tally_results(self, *args, **kwargs):
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     #ip_source_id = kwargs["ip_source_id"]
     metadata_file = kwargs["metadata_file"]
-    survey_id = (int) survey_id_string
+    survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
     if survey.time_tally_started:
         print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
