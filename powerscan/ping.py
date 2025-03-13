@@ -5,8 +5,9 @@ import pandas as pd
 import ipaddress
 import netaddr
 
-from cidr_trie import PatriciaTrie
-import cidr_trie.cidr_util
+#from cidr_trie import PatriciaTrie
+#import cidr_trie.cidr_util
+import pytricia
 
 from django.utils import timezone
 
@@ -260,8 +261,9 @@ class PingSurveyManager:
     def _build_radix_tree(self):
         full_path = os.path.join(self.directory, FILE_CIDR_TRIE)
         self._writer_cidr_trie = open(full_path, "w+")
-        self.trie = PatriciaTrie()
-        print(f"build_radix_tree(), self = {self}, trie = {self.trie}")
+        self.pyt = pytricia.Pytricia()
+
+        print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
         #print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
@@ -274,13 +276,13 @@ class PingSurveyManager:
             range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
             self._writer_cidr_trie.write(f"Trie_insert: {ip_network}\n")
             # self.trie_wrapper.insert(ip_network, range_ip)
-            self.trie.insert(ip_network, range_ip)
+            self.pyt.insert(ip_network, range_ip)
 
     def debug_matches(self, ip_network):
         print(f"_debug_matches(), calling traverse on {ip_network}")
         index = 0
         # for node in self.trie_wrapper.traverse(ip_network):
-        for node in self.trie.traverse(ip_network):
+        for node in self.pyt.traverse(ip_network):
             print(f"_debug_matches(), node[{index} = {node}")
             index = index + 1
 
@@ -288,12 +290,12 @@ class PingSurveyManager:
         df = pd.read_csv(self.path_output)
         column_names = df.columns.tolist()
         #print(f"_match_zmap_replies(), num_rows = {df.shape[0]}, column_names = {column_names}")
-        print(f"_match_zmap_replies(), self = {self}, trie = {self.trie}")
+        print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
             self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-            results = self.trie.find_all(saddr)
+            results = self.pyt.get(saddr)
             # results = self.trie_wrapper.find_all(saddr)
             num_results = len(results)
             #if index < 20:
@@ -329,24 +331,22 @@ class PingSurveyManager:
             target_mask = network_parts[1]
             # Now, look up each network in our trie
             index = 0
-            # for node in self.trie_wrapper.traverse(ip_network):
-            for node in self.trie.traverse(ip_network):
-                # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
-                ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
-                #print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
-                if target_mask in node.masks:
-                    ip_range_counter = node.masks[target_mask]
-                    count = ip_range_counter.count
-                    if count > 0:
-                        ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
-                        possible_hosts = ip_range_counter.possible_hosts
-                        range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
-                            num_ranges_pinged=possible_hosts,
-                            num_ranges_responded=count,
-                            time_pinged=timezone.now())
-                        range_ping.save()
-                        saved_to_db = saved_to_db + 1
-                    break
+            # for node in self.pyt.traverse(ip_network):
+            for prefix in self.pyt:
+                node = self.pyt[prefix]
+                print(f"_save_to_db(), prefix[{index}]: {prefix} = {node}")
+                count = ip_range_counter.count
+                if count > 0:
+                    # Pull up the original range object, so we can get the database reference
+                    ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
+                    possible_hosts = ip_range_counter.possible_hosts
+                    range_ping = IpRangePing(ip_survey=survey,
+                        ip_range=ip_range,
+                        num_ranges_pinged=possible_hosts,
+                        num_ranges_responded=count,
+                        time_pinged=timezone.now())
+                    range_ping.save()
+                    saved_to_db = saved_to_db + 1
                 #ip_range = node.masks
                 #print(f"           count = {ip_range.count}")
                 index = index + 1
@@ -355,7 +355,7 @@ class PingSurveyManager:
 
     # Returns the number of pings saved to the database (count > 0)
     def process_results(self, survey):
-        self.trie_wrapper = TrieWrapper()
+        #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
         self._build_radix_tree()
         self._match_zmap_replies()
@@ -370,3 +370,11 @@ class PingSurveyManager:
 
         if self.writer_log:
             self.writer_log.close()
+
+#            
+#                # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
+#                ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
+#                #print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
+#                if target_mask in node.masks:
+#                    ip_range_counter = node.masks[target_mask]
+#                    break
