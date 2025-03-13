@@ -117,7 +117,7 @@ class PingSurveyManager:
         # now = datetime.datetime.now()
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
         # folder_snapshot = f"Survey_{self._survey_id:05d}"
-        folder_snapshot = _build_survey_name(self._survey_id)
+        folder_snapshot = PingSurveyManager._build_survey_name(self._survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
         print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
