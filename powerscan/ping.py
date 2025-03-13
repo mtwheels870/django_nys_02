@@ -12,7 +12,7 @@ from django.utils import timezone
 
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
-    MmIpRange, IpSurveyState,
+    MmIpRange, IpSurveyState, IpSurveyCounty,
     IpSurveyTract,
     County, CensusTract)
 
