@@ -341,21 +341,3 @@ class ConfigurePingView(generic.edit.FormView):
             FIELD_STATUS : self._status_message}
         return render(request, self.template_name, context)
 
-        #field_survey_id = form.fields['field_survey_id']
-        #field_survey_id.clean(23)
-        # field_survey_id.data = 23
-        #print(f"CPV.post(), reloading page, survey_id = {self._survey_id}, field = {field_survey_id}")
-        #print(f"     dir(field) = {dir(field_survey_id)}")
-        #widget = field_survey_id.widget
-        #print(f"     dir(widget) = {dir(widget)}")
-        #print(f"     dir(form) = {dir(form)}")
-        #data = form.data
-        #cleaned_data = form.cleaned_data
-        #print(f"     form.data = {data}, cleaned_data = {cleaned_data}")
-        #field_survey_id.initial = 23
-        #print(f"AFTER SET,     dir(field) = {dir(field_survey_id)}")
-        #stuff = field_survey_id.initial
-        #cleaned_survey_id = form.cleaned_data['field_survey_id']
-        #print(f"     stuff = {stuff}, cleaned = {cleaned_survey_id}")
-        #form.cleaned_data['field_survey_id'] = 23
-        # data['field_survey_id'] = 23

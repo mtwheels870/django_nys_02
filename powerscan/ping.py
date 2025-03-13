@@ -73,14 +73,53 @@ class PingSurveyManager:
                 index = end
                 array_len = array_len - sub_array_len
 
-    def __init__(self, survey_id_string, linked_survey_id=None):
-        self._survey_id = int(survey_id_string)
-        self._create_directory()
+    def __init__(self, survey_id_string, create_new=True, linked_survey_id=None):
+        if create_new:
+            self._survey_id = int(survey_id_string)
+            self._create_directory()
+        else:
+
+
+    @staticmethod
+    def find(survey_id) -> PingSurveyManager:
+        return PingSurveyManager._find_survey(survey_id)
+        
+    @staticmethod
+    def _build_survey_name(survey_id) -> str:
+        folder_snapshot = f"Survey_{self._survey_id:05d}"
+        return folder_snapshot
+
+    @staticmethod
+    def _find_survey(survey_id):
+        survey_dir_name = _build_survey_name(survey_id)
+        full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
+        if not os.path.exists(full_path):
+            print(f"PingSurveyManager._find_survey(), could not find path: {full_path}")
+            return None
+        psm = PingSurveyManager(survey_id, create_new=False)
+        return psm
+
+    @staticmethod
+    def _load_all_surveys():
+        most_recent_dir = None
+        with os.scandir(TEMP_DIRECTORY) as entries:
+            for entry in entries:
+                if entry.is_file():
+                    continue
+                if not most_recent_dir :
+                    most_recent_dir = entry
+                elif entry.name > most_recent_dir.name:
+                    most_recent_dir = entry
+        if not most_recent_dir:
+            raise Exception(f"_load_latest(), could not find a data directory in: {TEMP_DIRECTORY}")
+        print(f"_load_latest(), using most_recent_dir {most_recent_dir.name}")
+        self.directory = most_recent_dir.path
 
     def _create_directory(self):
         # now = datetime.datetime.now()
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
-        folder_snapshot = f"Survey_{self._survey_id:05d}"
+        # folder_snapshot = f"Survey_{self._survey_id:05d}"
+        folder_snapshot = _build_survey_name(self._survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
         print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
@@ -163,21 +202,6 @@ class PingSurveyManager:
         num_ranges = self._traverse_geography()
         return num_ranges
 
-    def _load_latest(self):
-        most_recent_dir = None
-        with os.scandir(TEMP_DIRECTORY) as entries:
-            for entry in entries:
-                if entry.is_file():
-                    continue
-                if not most_recent_dir :
-                    most_recent_dir = entry
-                elif entry.name > most_recent_dir.name:
-                    most_recent_dir = entry
-        if not most_recent_dir:
-            raise Exception(f"_load_latest(), could not find a data directory in: {TEMP_DIRECTORY}")
-        print(f"_load_latest(), using most_recent_dir {most_recent_dir.name}")
-        self.directory = most_recent_dir.path
-        
     def add(self, index, range_id, ip_network):
         if index == 0:
             self.writer_range_ip.write(HEADER)

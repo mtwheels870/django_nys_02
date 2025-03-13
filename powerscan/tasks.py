@@ -182,8 +182,8 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 @shared_task(bind=True)
 def zmap_from_file(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
-    # print(f"zmap_from_file(), self = {self}, kwargs = {kwargs}")
     survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
+    print(f"zmap_from_file(), survey_id = {survey_id}")
     #ip_source_id = kwargs["ip_source_id"]
     survey = IpRangeSurvey.objects.get(pk=survey_id)
 
@@ -195,7 +195,7 @@ def zmap_from_file(self, *args, **kwargs):
     survey.save()
 
     #print(f"build_whitelist(), source_id = {ip_source_id}")
-    survey_manager = PingSurveyManager(create_new=False)
+    survey_manager = PingSurveyManager.find(survey_id)
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
     # Run Zmap command here. We'll process the output file when the zmap is done running
