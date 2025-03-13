@@ -278,10 +278,10 @@ class ConfigurePingView(generic.edit.FormView):
             routing_key='ping.tasks.build_whitelist')
         return async_result
 
-    def _start_ping(self):
+    def _start_ping(self, survey_id):
         #print(f"CPV.post(), start_ping...")
         async_result = zmap_from_file.apply_async(
-            kwargs={"survey_id" : survey.id},
+            kwargs={"survey_id" : survey_id},
                 #"ip_source_id": IP_RANGE_SOURCE },
             queue=QUEUE_NAME,
             routing_key='ping.tasks.zmap_from_file')
@@ -322,7 +322,7 @@ class ConfigurePingView(generic.edit.FormView):
                 # Fall through
 
             if 'start_ping' in request.POST:
-                async_result = self._start_ping()
+                async_result = self._start_ping(survey_id)
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
