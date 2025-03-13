@@ -287,7 +287,7 @@ class ConfigurePingView(generic.edit.FormView):
             routing_key='ping.tasks.zmap_from_file')
         return async_result
 
-    def _start_tally(self, survey_id):
+    def _start_tally(self, survey_id, metadata_file):
         now = timezone.now()
         print(f"CPV._start_tally(), calling tally_results (delayed), now = {now}, seconds = {PING_RESULTS_DELAY}")
         # Fire off the counting task
@@ -326,7 +326,7 @@ class ConfigurePingView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                async_result2 = self._start_tally(survey_id)
+                async_result2 = self._start_tally(survey_id, metadata_file)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
             # Not sure why we have to create a new form here (but it works)
