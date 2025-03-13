@@ -23,6 +23,7 @@ FILE_OUTPUT = "ZmapOutput.csv"
 FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
 FILE_TRAVERSE_GEO = "TraverseGeo.txt"
+FILE_CIDR_TRIE = "CidrTrie.txt"
 
 HEADER = "range_id,ip_network\n"
 
@@ -213,7 +214,7 @@ class PingSurveyManager:
         num_ranges = self._traverse_geography()
         return num_ranges
 
-    def add(self, index, range_id, ip_network):
+    def unused_add(self, index, range_id, ip_network):
         if index == 0:
             self.writer_range_ip.write(HEADER)
         string1 = f"{range_id},{ip_network}\n"
@@ -229,6 +230,8 @@ class PingSurveyManager:
 
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
+        full_path = os.path.join(directory, FILE_CIDR_TRIE)
+        self._writer_cidr_trie = open(self._full_path, "w+")
         self.trie = PatriciaTrie()
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
@@ -240,6 +243,7 @@ class PingSurveyManager:
             possible_hosts = self._calculate_possible(ip_network)
             # Hang a counter on the tree
             range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
+            self._writer_cidr_trie.write(f"Trie_insert: {ip_network}")
             self.trie.insert(ip_network, range_ip)
 
     def _match_zmap_replies(self):
@@ -249,6 +253,7 @@ class PingSurveyManager:
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
+            self._writer_cidr_trie.write(f"Trie_lookup: {saddr}")
             results = self.trie.find_all(saddr)
             num_results = len(results)
             #if index < 20:
@@ -264,6 +269,8 @@ class PingSurveyManager:
                 #if index < 20:
                 #    print(f"    found ONE, address = {address}, counter = {counter}")
                 counter.count = counter.count + 1
+        self._writer_cidr_trie.close()
+        print(f"_match_zmap_replies(), debug_file {FILE_CIDR_TRIE}")
 
     def _save_to_db(self, survey):
         # print(f"_save_to_db(), size (of tree): {self.trie.size}")
