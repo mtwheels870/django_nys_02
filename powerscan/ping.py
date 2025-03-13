@@ -47,7 +47,7 @@ class TrieWrapper:
         first_octet = octets[0]
         if not first_octet in self.dictionary:
             if not create_new:
-                raise Exception(f"No trie for octet = {first_octent}")
+                raise Exception(f"No trie for octet = {first_octet}")
             return_trie = PatriciaTrie()
             self.dictionary[first_octet] = return_trie 
         else:
@@ -327,7 +327,8 @@ class PingSurveyManager:
             target_mask = network_parts[1]
             # Now, look up each network in our trie
             index = 0
-            for node in self.trie_wrapper.traverse(ip_network):
+            # for node in self.trie_wrapper.traverse(ip_network):
+            for node in self.trie.traverse(ip_network):
                 # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
                 ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
                 #print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
