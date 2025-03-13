@@ -70,15 +70,13 @@ class PingSurveyManager:
                 array_len = array_len - sub_array_len
 
     def __init__(self, survey_id_string, linked_survey_id=None):
-        survey_id = int(survey_id_string)
-        self._create_directory(survey_id)
-        self._traverse_geography(survey_id)
-        self._create_whitelist()
+        self.survey_id = int(survey_id_string)
+        self._create_directory()
 
-    def _create_directory(self, survey_id):
+    def _create_directory(self):
         # now = datetime.datetime.now()
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
-        folder_snapshot = f"Survey_{survey_id:05d}"
+        folder_snapshot = f"Survey_{self.survey_id:05d}"
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
         print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
@@ -87,7 +85,7 @@ class PingSurveyManager:
 
     def _traverse_geography(self, survey_id):
         debugger = self.FileDebugger(self.directory, "TraverseGeography")
-        survey = IpRangeSurvey.objects.get(pk=survey_id)
+        survey = IpRangeSurvey.objects.get(pk=self.survey_id)
         print(f"PSM._traverse_geography(), survey = {survey}")
         
         selected_survey_states = IpSurveyState.objects.filter(survey_id=survey_id)
@@ -119,10 +117,10 @@ class PingSurveyManager:
         print(f"PSM._traverse_geography(), file output: {file_name}")
         debugger.close()
 
-    # Open two files
+    # Return the number of ranges
     def _create_whitelist(self, write_mode=True):
         print(f"PSM._create_whitelist(), for now, just returning")
-        return
+        return 23
 
         self.path_range_ip = os.path.join(self.directory, FILE_RANGE_IP)
         self.path_whitelist = os.path.join(self.directory, FILE_WHITELIST)
@@ -133,6 +131,11 @@ class PingSurveyManager:
             self.writer_range_ip = open(self.path_range_ip, "w+")
             self.writer_whitelist = open(self.path_whitelist, "w+")
             self.writer_log = open(self.path_log, "w+")
+
+    def build_whitelist(self):
+        self._traverse_geography()
+        num_ranges = self._create_whitelist()
+        return num_ranges
 
     def _load_latest(self):
         most_recent_dir = None

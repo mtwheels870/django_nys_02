@@ -278,11 +278,10 @@ def build_whitelist(self, *args, **kwargs):
     survey.time_whitelist_started = timezone.now()
     survey.save()
 
-
     #print(f"build_whitelist(), source_id = {ip_source_id}")
     survey_manager = PingSurveyManager(survey_id)
     #if ip_source_id == 2:
-    #num_ranges = whitelist_maxm(survey_manager)
+    num_ranges = survey_manager.build_whitelist()
     #elif ip_source_id == 1:
     #    print(f"build_whitelist(), currently don't support ip_source_id = {ip_source_id}")
     #else:
