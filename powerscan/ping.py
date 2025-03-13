@@ -283,7 +283,6 @@ class PingSurveyManager:
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
             self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-            print(f"_match_zmap_replies(), saddr = {saddr}")
             # results = self.trie.find_all(saddr)
             results = self.trie_wrapper.find_all(saddr)
             num_results = len(results)
