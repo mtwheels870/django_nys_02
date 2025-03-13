@@ -275,6 +275,13 @@ class PingSurveyManager:
             self.trie_wrapper.insert(ip_network, range_ip)
             # self.trie.insert(ip_network, range_ip)
 
+    def debug_matches(self, saddr):
+        print(f"_debug_matches(), calling traverse on {saddr}")
+        index = 0
+        for node in self.trie_wrapper.traverse(ip_network):
+            print(f"_debug_matches(), node[{index} = {node}")
+            index = index + 1
+
     def _match_zmap_replies(self):
         df = pd.read_csv(self.path_output)
         column_names = df.columns.tolist()
@@ -291,6 +298,7 @@ class PingSurveyManager:
             #    print(f"        results = {results}")
             if num_results == 0:
                 print(f"_match_zmap_replies(), no Trie results for {saddr}!")
+                self.debug_matches(saddr)
             elif num_results > 1:
                 print(f"_match_zmap_replies(), multiple Trie results for {saddr}!")
             else:
