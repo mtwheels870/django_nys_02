@@ -73,13 +73,14 @@ class PingSurveyManager:
                 index = end
                 array_len = array_len - sub_array_len
 
-    def __init__(self, survey_id_string, create_new=True, linked_survey_id=None):
-        self._survey_id = int(survey_id_string)
+    def __init__(self, survey_id, create_new=True, linked_survey_id=None):
+        self._survey_id = survey_id_string
         if create_new:
             self._create_directory()
 
     @staticmethod
-    def find(survey_id):
+    def find(survey_id_string):
+        survey_id = survey_id_string
         return PingSurveyManager._find_survey(survey_id)
         
     @staticmethod

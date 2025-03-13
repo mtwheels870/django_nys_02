@@ -126,7 +126,8 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
 def build_whitelist(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
-    survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
+    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
+    survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
     if survey.time_whitelist_started:
         first = f"build_whitelist(), survey.time_whitelist_started : {survey.time_whitelist_started},"
@@ -136,6 +137,7 @@ def build_whitelist(self, *args, **kwargs):
     # Save that we started the process, that's our (worker) lock
     survey.time_whitelist_started = timezone.now()
     survey.save()
+
 
     survey_manager = PingSurveyManager(survey_id)
     num_ranges = survey_manager.build_whitelist()
@@ -182,9 +184,10 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 @shared_task(bind=True)
 def zmap_from_file(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
-    survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
-    print(f"zmap_from_file(), survey_id = {survey_id}")
+    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
+    print(f"zmap_from_file(), survey_id = {survey_id_string}")
     #ip_source_id = kwargs["ip_source_id"]
+    survey_id = int(survey_id)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
 
     if survey.time_ping_started:
