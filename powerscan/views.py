@@ -336,7 +336,7 @@ class ConfigurePingView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                ping_delay = 20
+                ping_delay = 40
                 async_result2 = self._start_tally(survey_id, metadata_file, ping_delay)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
