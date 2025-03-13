@@ -97,8 +97,8 @@ class PingSurveyManager:
         if not os.path.exists(full_path):
             print(f"PingSurveyManager._find_survey(), could not find path: {full_path}")
             return None
-        self.directory = full_path
         psm = PingSurveyManager(survey_id, create_new=False)
+        psm.directory = full_path
         return psm
 
     @staticmethod
