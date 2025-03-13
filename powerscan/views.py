@@ -292,7 +292,7 @@ class ConfigurePingView(generic.edit.FormView):
         print(f"CPV._start_tally(), calling tally_results (delayed), now = {now}, seconds = {results_delay}")
         # Fire off the counting task
         async_result2 = tally_results.apply_async(
-            countdown=PING_RESULTS_DELAY,
+            countdown=results_delay,
             #"ip_source_id": IP_RANGE_SOURCE,
             kwargs={"survey_id": survey_id,
                 "metadata_file": metadata_file} )
