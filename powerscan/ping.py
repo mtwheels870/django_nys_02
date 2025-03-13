@@ -160,7 +160,6 @@ class PingSurveyManager:
     def build_whitelist(self):
         self._create_whitelist_files()
         num_ranges = self._traverse_geography()
-        self._create_whitelist()
         return num_ranges
 
     def _load_latest(self):
