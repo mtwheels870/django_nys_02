@@ -69,7 +69,8 @@ class PingSurveyManager:
                 index = end
                 array_len = array_len - sub_array_len
 
-    def __init__(self, survey_id, linked_survey_id=None):
+    def __init__(self, survey_id_string, linked_survey_id=None):
+        survey_id = int(survey_id_string)
         self._create_directory(survey_id)
         self._traverse_geography(survey_id)
         self._create_whitelist()
