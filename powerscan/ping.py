@@ -111,7 +111,7 @@ class PingSurveyManager:
         counties_in_state = County.objects.filter(us_state__id__in=state_ids)
         for county in counties_in_state:
             county_ids.append(county.id)
-            survey_county = IpSurveyCounty(survey=survey, county=count)
+            survey_county = IpSurveyCounty(survey=survey, county=county)
             survey_county.save()
         #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
         debugger.print("PSM._traverse_geography(), county_ids:", county_ids)
