@@ -79,7 +79,7 @@ class PingSurveyManager:
             self._create_directory()
 
     @staticmethod
-    def find(survey_id) -> PingSurveyManager:
+    def find(survey_id):
         return PingSurveyManager._find_survey(survey_id)
         
     @staticmethod
