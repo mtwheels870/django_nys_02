@@ -261,7 +261,7 @@ class PingSurveyManager:
     def _build_radix_tree(self):
         full_path = os.path.join(self.directory, FILE_CIDR_TRIE)
         self._writer_cidr_trie = open(full_path, "w+")
-        self.pyt = pytricia.Pytricia()
+        self.pyt = pytricia.PyTricia()
 
         print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
