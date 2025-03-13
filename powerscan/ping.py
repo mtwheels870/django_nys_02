@@ -93,7 +93,6 @@ class PingSurveyManager:
 
         debugger.print("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
 
- = FileDebugger(self.directory, "TraverseGeography")
         print(f"PSM._traverse_geography(), selected_survey_states = {selected_survey_states}")
 
         state_ids = []
