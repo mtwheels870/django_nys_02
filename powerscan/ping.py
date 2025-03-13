@@ -74,7 +74,7 @@ class PingSurveyManager:
                 array_len = array_len - sub_array_len
 
     def __init__(self, survey_id, create_new=True, linked_survey_id=None):
-        self._survey_id = survey_id_string
+        self._survey_id = survey_id
         if create_new:
             self._create_directory()
 
