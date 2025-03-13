@@ -90,7 +90,7 @@ class PingSurveyManager:
         
         selected_survey_states = IpSurveyState.objects.filter(survey_id=self._survey_id)
 
-        debugger.print("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
+        # debugger.print("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
 
         print(f"PSM._traverse_geography(), selected_survey_states = {selected_survey_states}")
 
