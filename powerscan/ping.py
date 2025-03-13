@@ -272,13 +272,14 @@ class PingSurveyManager:
             # Hang a counter on the tree
             range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
             self._writer_cidr_trie.write(f"Trie_insert: {ip_network}\n")
-            self.trie_wrapper.insert(ip_network, range_ip)
-            # self.trie.insert(ip_network, range_ip)
+            # self.trie_wrapper.insert(ip_network, range_ip)
+            self.trie.insert(ip_network, range_ip)
 
     def debug_matches(self, ip_network):
         print(f"_debug_matches(), calling traverse on {ip_network}")
         index = 0
-        for node in self.trie_wrapper.traverse(ip_network):
+        # for node in self.trie_wrapper.traverse(ip_network):
+        for node in self.trie.traverse(ip_network):
             print(f"_debug_matches(), node[{index} = {node}")
             index = index + 1
 
@@ -290,15 +291,15 @@ class PingSurveyManager:
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
             self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-            # results = self.trie.find_all(saddr)
-            results = self.trie_wrapper.find_all(saddr)
+            results = self.trie.find_all(saddr)
+            # results = self.trie_wrapper.find_all(saddr)
             num_results = len(results)
             #if index < 20:
             #    print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
             #    print(f"        results = {results}")
             if num_results == 0:
-                print(f"_match_zmap_replies(), no Trie results for {saddr}!")
-                self.debug_matches(saddr)
+                print(f"_match_zmap_replies(), no Trie results for {saddr}, results = {results}!")
+                # self.debug_matches(saddr)
             elif num_results > 1:
                 print(f"_match_zmap_replies(), multiple Trie results for {saddr}!")
             else:

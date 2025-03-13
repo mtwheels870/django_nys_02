@@ -118,7 +118,7 @@ class MmIpRange(models.Model):
     mpoint = models.MultiPointField(null=True)
 
     def __str__(self):
-        return f"{self.geoname_id}: {self.ip_network}"
+        return f"{self.ip_network}"
 
 #
 # Classes to work with celery workers and do a scan
