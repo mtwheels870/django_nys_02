@@ -275,8 +275,8 @@ class PingSurveyManager:
             self.trie_wrapper.insert(ip_network, range_ip)
             # self.trie.insert(ip_network, range_ip)
 
-    def debug_matches(self, saddr):
-        print(f"_debug_matches(), calling traverse on {saddr}")
+    def debug_matches(self, ip_network):
+        print(f"_debug_matches(), calling traverse on {ip_network}")
         index = 0
         for node in self.trie_wrapper.traverse(ip_network):
             print(f"_debug_matches(), node[{index} = {node}")
