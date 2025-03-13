@@ -77,6 +77,8 @@ class PingSurveyManager:
         self._survey_id = survey_id
         if create_new:
             self._create_directory()
+        # In either init() [create or read existing], we want to configure the files
+        self._configure_whitelist_files()
 
     @staticmethod
     def find(survey_id_string):
@@ -99,7 +101,7 @@ class PingSurveyManager:
         return psm
 
     @staticmethod
-    def _load_all_surveys():
+    def _unused_load_all_surveys():
         most_recent_dir = None
         with os.scandir(TEMP_DIRECTORY) as entries:
             for entry in entries:
@@ -181,23 +183,28 @@ class PingSurveyManager:
         return ranges_added
 
     # Return the number of ranges
-    def _create_whitelist_files(self):
+    def _configure_whitelist_files(self):
         self.path_range_ip = os.path.join(self.directory, FILE_RANGE_IP)
-
-        # range_ip is how we get back to the databaes (ip_range_id (in the database), to network).
-        self.writer_range_ip = open(self.path_range_ip, "w+")
-        self.writer_range_ip.write(HEADER)
-
         self.path_whitelist = os.path.join(self.directory, FILE_WHITELIST)
-        self.writer_whitelist = open(self.path_whitelist, "w+")
-
         self.path_output = os.path.join(self.directory, FILE_OUTPUT)
         self.path_metadata = os.path.join(self.directory, FILE_METADATA)
         self.path_log = os.path.join(self.directory, FILE_LOG)
+
+        # By default, set these to None
+        self.writer_range_ip = None
+        self.writer_whitelist = None
+        self.writer_log = None
+
+    # Return the number of ranges
+    def _create_writers(self):
+        # range_ip is how we get back to the databaes (ip_range_id (in the database), to network).
+        self.writer_range_ip = open(self.path_range_ip, "w+")
+        self.writer_range_ip.write(HEADER)
+        self.writer_whitelist = open(self.path_whitelist, "w+")
         self.writer_log = open(self.path_log, "w+")
 
     def build_whitelist(self):
-        self._create_whitelist_files()
+        self._create_writers()
         num_ranges = self._traverse_geography()
         return num_ranges
 
@@ -300,6 +307,11 @@ class PingSurveyManager:
         return self._save_to_db(survey)
         
     def close(self):
-        self.writer_range_ip.close()
-        self.writer_whitelist.close()
-        self.writer_log.close()
+        if self.writer_range_ip:
+            self.writer_range_ip.close()
+
+        if self.writer_whitelist:
+            self.writer_whitelist.close()
+
+        if self.writer_log:
+            self.writer_log.close()
