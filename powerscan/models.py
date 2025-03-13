@@ -173,3 +173,11 @@ class IpSurveyCounty(models.Model):
     num_ranges_responded = models.IntegerField(default=0)
     def __str__(self):
         return f"Survey results for county: {self.county.county_fp}"
+
+class IpSurveyTract(models.Model):
+    survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
+    tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
+    num_ranges_pinged = models.IntegerField(default=0)
+    num_ranges_responded = models.IntegerField(default=0)
+    def __str__(self):
+        return f"Survey results for tract: {self.tract.tract_id}"

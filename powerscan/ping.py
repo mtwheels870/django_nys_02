@@ -13,6 +13,7 @@ from django.utils import timezone
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
     MmIpRange, IpSurveyState,
+    IpSurveyTract,
     County, CensusTract)
 
 TEMP_DIRECTORY = "/tmp/exec_zmap/"
@@ -62,8 +63,10 @@ class PingSurveyManager:
                 end = index + 15
                 sub_array = array_output[index:end]
                 sub_array_len = len(sub_array)
-                # print(f"FileDebugger.print(), array_len = {array_len}, querying [{index},{end}], sub_array_len = {sub_array_len}")
+                # print(f"FileDebugger.print(), array_len = {array_len}, querying [{index},{end}],
+                #      sub_array_len = {sub_array_len}")
                 if sub_array_len == 0:
+                    # Shouldn't get here
                     break
                 self.print_one_line(sub_array)
                 # Print subarray here
@@ -102,40 +105,62 @@ class PingSurveyManager:
         debugger.print("PSM._traverse_geography(), state_ids:", state_ids)
 
         county_ids = []
+
+        # Could also do:
+        # counties = state.county_set.all()
         counties_in_state = County.objects.filter(us_state__id__in=state_ids)
         for county in counties_in_state:
             county_ids.append(county.id)
+            survey_county = IpSurveyCounty(survey=survey, county=count)
+            survey_county.save()
         #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
         debugger.print("PSM._traverse_geography(), county_ids:", county_ids)
 
+        total_ranges = 0
         tract_ids = []
         tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
         for tract in tracts_in_counties:
             tract_ids.append(tract.id)
+            survey_tract = IpSurveyTract(survey=survey, tract=tract)
+            survey_tract.save()
+            ranges_added = self._tract_ranges_whitelist(tract)
+            total_ranges = total_ranges + ranges_added
         debugger.print("PSM._traverse_geography(), tract_ids:", tract_ids)
 
         file_name = debugger.get_file()
         print(f"PSM._traverse_geography(), file output: {file_name}")
         debugger.close()
 
-    # Return the number of ranges
-    def _create_whitelist(self, write_mode=True):
-        print(f"PSM._create_whitelist(), for now, just returning, survey_id = {self._survey_id}")
-        return 23
+    def _tract_ranges_whitelist(self, tract):
+        # Use the set() notation
+        ip_ranges = tract.mmiprange_set.all()
+        for range in ip_ranges:
+            string1 = f"{range_id},{ip_network}\n"
+            self.writer_range_ip.write(string1)
+            self.writer_whitelist.write(f"{ip_network}\n")
+        ranges_added = ip_ranges.count()
+        return ranges_added
 
+    # Return the number of ranges
+    def _create_whitelist_files(self):
         self.path_range_ip = os.path.join(self.directory, FILE_RANGE_IP)
+
+        # range_ip is how we get back to the databaes (ip_range_id (in the database), to network).
+        self.writer_range_ip = open(self.path_range_ip, "w+")
+        self.writer_range_ip.write(HEADER)
+
         self.path_whitelist = os.path.join(self.directory, FILE_WHITELIST)
+        self.writer_whitelist = open(self.path_whitelist, "w+")
+
         self.path_output = os.path.join(self.directory, FILE_OUTPUT)
         self.path_metadata = os.path.join(self.directory, FILE_METADATA)
         self.path_log = os.path.join(self.directory, FILE_LOG)
-        if write_mode:
-            self.writer_range_ip = open(self.path_range_ip, "w+")
-            self.writer_whitelist = open(self.path_whitelist, "w+")
-            self.writer_log = open(self.path_log, "w+")
+        self.writer_log = open(self.path_log, "w+")
 
     def build_whitelist(self):
-        self._traverse_geography()
-        num_ranges = self._create_whitelist()
+        self._create_whitelist_files()
+        num_ranges = self._traverse_geography()
+        self._create_whitelist()
         return num_ranges
 
     def _load_latest(self):
@@ -252,7 +277,6 @@ class PingSurveyManager:
         return self._save_to_db(survey)
         
     def close(self):
-        print(f"close(), should close files here")
-        #self.writer_range_ip.close()
-        #self.writer_whitelist.close()
-        #self.writer_log.close()
+        self.writer_range_ip.close()
+        self.writer_whitelist.close()
+        self.writer_log.close()

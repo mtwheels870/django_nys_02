@@ -254,7 +254,7 @@ class ConfigurePingView(generic.edit.FormView):
         survey = IpRangeSurvey()
         survey.save()
         abbrevs = []
-        print(f"CPV._configure_survey(), selected_states = {selected_states}")
+        print(f"CPV._configure_survey(), selected_states (fp) = {selected_states}")
         for state in UsState.objects.filter(state_fp__in=selected_states).order_by("state_abbrev"):
             abbrevs.append(state.state_abbrev)
             survey_state = IpSurveyState(survey=survey, us_state=state)
