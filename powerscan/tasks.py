@@ -187,7 +187,7 @@ def zmap_from_file(self, *args, **kwargs):
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     print(f"zmap_from_file(), survey_id = {survey_id_string}")
     #ip_source_id = kwargs["ip_source_id"]
-    survey_id = int(survey_id)
+    survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
 
     if survey.time_ping_started:
