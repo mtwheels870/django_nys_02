@@ -136,9 +136,11 @@ class IpRangeSurvey(models.Model):
 
     # First celery worker sets this (effectively the lock)
     time_ping_started = models.DateTimeField(null=True)
-
-    # After a successful ping campaign, celery worker will set time stopped and num objects
     time_ping_stopped = models.DateTimeField(null=True)
+
+    time_tally_started = models.DateTimeField(null=True)
+    time_tally_stopped = models.DateTimeField(null=True)
+
     num_total_ranges = models.IntegerField(default=0)
 
     def __str__(self):

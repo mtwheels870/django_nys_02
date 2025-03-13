@@ -223,14 +223,17 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job):
 def tally_results(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     print(f"tally_results(), self = {self}, kwargs = {kwargs}")
-    survey_id = kwargs[CELERY_FIELD_SURVEY_ID]
+    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     #ip_source_id = kwargs["ip_source_id"]
     metadata_file = kwargs["metadata_file"]
+    survey_id = (int) survey_id_string
     survey = IpRangeSurvey.objects.get(pk=survey_id)
-    if not survey.time_started:
-        print(f"tally_results(), survey.time_started is null! (never started)")
+
+    = models.DateTimeField(null=True)
+    if survey.time_tally_started:
+        print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
         return 0
-    survey_manager = PingSurveyManager(create_new=False)
+    survey_manager = PingSurveyManager.find(survey_id)
     pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file)
     survey.time_stopped = timezone.now()
     survey.save()
