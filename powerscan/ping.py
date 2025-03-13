@@ -84,7 +84,7 @@ class PingSurveyManager:
         
     @staticmethod
     def _build_survey_name(survey_id) -> str:
-        folder_snapshot = f"Survey_{self._survey_id:05d}"
+        folder_snapshot = f"Survey_{survey_id:05d}"
         return folder_snapshot
 
     @staticmethod
