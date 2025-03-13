@@ -49,7 +49,8 @@ class PingSurveyManager:
             return self._full_path
 
         def print_one_line(self, sub_array):
-            array_string = ", ".join(sub_array)
+            sub_array_strings = map(str, sub_array)
+            array_string = ", ".join(sub_array_strings)
             self._writer.write(array_string + "\n")
 
         def print(self, description, array_output):
