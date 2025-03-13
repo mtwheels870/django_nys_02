@@ -302,7 +302,7 @@ class ConfigurePingView(generic.edit.FormView):
         form = PingStrategyForm(request.POST)
         if not form.is_valid():
             print(f"CPV.post(), form is INVALID, creating empty")
-            form = PingStrategyForm()
+            new_form = PingStrategyForm()
         else:
             selected_states = form.cleaned_data['field_states']
             survey_id = form.cleaned_data['field_survey_id']
@@ -329,9 +329,9 @@ class ConfigurePingView(generic.edit.FormView):
                 async_result2 = self._start_tally()
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
-        # Not sure why we have to create a new form here (but it works)
-        initial_data = {"field_survey_id" : self._survey_id, "field_states" : selected_states }
-        new_form = PingStrategyForm(initial=initial_data)
+            # Not sure why we have to create a new form here (but it works)
+            initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
+            new_form = PingStrategyForm(initial=initial_data)
 
         # No Work: field_survey_id.initial = self._survey_id
         # field_survey_id = self._survey_id

@@ -21,6 +21,7 @@ FILE_WHITELIST = "Whitelist.csv"
 FILE_OUTPUT = "ZmapOutput.csv"
 FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
+FILE_TRAVERSE_GEO = "TraverseGeo.txt"
 
 HEADER = "range_id,ip_network\n"
 
@@ -36,6 +37,38 @@ class RangeIpCount:
 
     
 class PingSurveyManager:
+    class FileDebugger:
+        def __init__(self, directory, name):
+            self._full_path = os.path.join(directory, FILE_TRAVERSE_GEO)
+            self._writer = open(self._full_path, "w+")
+
+        def close(self):
+            self._writer.close()
+
+        def get_file(self):
+            return self._full_path
+
+        def print_one_line(self, sub_array):
+            array_string = ", ".join(sub_array)
+            self._writer.write(array_string + "\n")
+
+        def print(self, description, array_output):
+            array_len = len(array_output)
+            print(f"FileDebugger.print(), description = {description}, array_len = {array_len}")
+            self._writer.write(description + "\n")
+            index = 0
+            while array_len > 0:
+                end = index + 20
+                print(f"FileDebugger.print(), querying [{index},{end}]")
+                sub_array = array_output[index:end]
+                sub_array_len = len(sub_array)
+                if sub_array_len == 0:
+                    self.print_one_line(sub_array)
+                    break
+                # Print subarray here
+                index = end
+                array_len = array_len - sub_array_len
+
     def __init__(self, survey_id, linked_survey_id=None):
         self._create_directory(survey_id)
         self._traverse_geography(survey_id)
@@ -47,27 +80,44 @@ class PingSurveyManager:
         folder_snapshot = f"Survey_{survey_id:05}"
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
         print(f"PSM.create_directory(), directory = {str(full_path)}")
-        if not os.path.exists(full_path):
+        if not os.path.exists(self.full_path):
             os.makedirs(full_path)
         self.directory = full_path
 
     def _traverse_geography(self, survey_id):
+        debugger = FileDebugger(self.directory, "TraverseGeography")
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         print(f"PSM._traverse_geography(), survey = {survey}")
         
         selected_survey_states = IpSurveyState.objects.filter(survey_id=survey_id)
+
+        debugger.print("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
+
+ = FileDebugger(self.directory, "TraverseGeography")
         print(f"PSM._traverse_geography(), selected_survey_states = {selected_survey_states}")
 
         state_ids = []
         for survey_state in selected_survey_states :
             state_ids.append(survey_state.us_state.id)
 
+        debugger.print("PSM._traverse_geography(), state_ids:", state_ids)
+
         county_ids = []
-        counties_in_state = County.objects.filter(us_state_id__in=state_ids)
+        counties_in_state = County.objects.filter(us_state__id__in=state_ids)
         for county in counties_in_state:
             county_ids.append(county.id)
-        print(f"PSM._traverse_geography(), county_ids = {county_ids}")
+        #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
+        debugger.print("PSM._traverse_geography(), county_ids:", county_ids)
 
+        tract_ids = []
+        tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
+        for tract in tracts_in_counties:
+            tract_ids.append(tract.id)
+        debugger.print("PSM._traverse_geography(), tract_ids:", tract_ids)
+
+        file_name = debugger.get_file()
+        print(f"PSM._traverse_geography(), file output: {file_name}")
+        debugger.close()
 
     # Open two files
     def _create_whitelist(self, write_mode=True):
@@ -198,6 +248,7 @@ class PingSurveyManager:
         return self._save_to_db(survey)
         
     def close(self):
-        self.writer_range_ip.close()
-        self.writer_whitelist.close()
-        self.writer_log.close()
+        print(f"close(), should close files here")
+        #self.writer_range_ip.close()
+        #self.writer_whitelist.close()
+        #self.writer_log.close()
