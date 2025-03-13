@@ -59,12 +59,12 @@ class PingSurveyManager:
             index = 0
             while array_len > 0:
                 end = index + 20
-                print(f"FileDebugger.print(), querying [{index},{end}]")
                 sub_array = array_output[index:end]
                 sub_array_len = len(sub_array)
+                print(f"FileDebugger.print(), array_len = {array_len}, querying [{index},{end}], sub_array_len = {sub_array_len}")
                 if sub_array_len == 0:
-                    self.print_one_line(sub_array)
                     break
+                self.print_one_line(sub_array)
                 # Print subarray here
                 index = end
                 array_len = array_len - sub_array_len
