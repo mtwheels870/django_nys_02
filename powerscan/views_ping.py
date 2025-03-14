@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 import django.dispatch
-from celery.signals import after_task_publish
+from celery.signals import task_postrun
 
 # from  django_tables2.config import RequestConfig
 
@@ -115,9 +115,9 @@ class ConfigurePingView(generic.edit.FormView):
             routing_key='ping.tasks.build_whitelist')
         return async_result
 
-    @after_task_publish.connect(sender='ping.tasks.build_whitelist')
-    def task_sent_handler(sender=None, headers=None, body=None, **kwargs):
-        print("CPV.task_sent_handler(), whitelist built")
+    @task_postrun.connect()
+    def task_postrun(task_id, task, *args, **kwargs, retval):
+        print("CPV.task_postrun(), task_id = {task_id}, task = {task}, args = {args}, kwargs ={kwargs}")
         # information about task are located in headers for task messages
         # using the task protocol version 2.
         info = headers if 'task' in headers else body
