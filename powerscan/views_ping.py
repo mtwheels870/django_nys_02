@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 import django.dispatch
 
-from  django_tables2.config import RequestConfig
+# from  django_tables2.config import RequestConfig
 
 from rest_framework import viewsets
 from rest_framework_gis import filters
@@ -19,13 +19,6 @@ from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_
 
 from .models import (
     UsState,
-    County,
-    CensusTract,
-    CountState,
-    CountCounty,
-    CountTract,
-    MmIpRange,
-    IpRangePing,
     IpRangeSurvey,
     IpSurveyState
 )
@@ -43,7 +36,7 @@ KEY_LEAFLET_MAP = "leaflet_map"
 FIELD_CELERY_DETAILS = "celery_stuff"
 FIELD_STATUS = "status_message" 
 FIELD_SURVEY_ID = "survey_id" 
-FIELD_COLOR = "color" 
+FIELD_SURVEY_STATUS = "survey_status" 
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
@@ -51,10 +44,11 @@ PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
 
 # State machines for ping stuff
-class Color(Enum):
-    RED = "red"
-    GREEN = "green"
-    BLUE = "blue"
+class SurveyStatus(Enum):
+    NULL = 0
+    CONFIGURED_WL = 1
+    PING_STARTED = 2
+    PING_COMPLETED = 3
 
     def __str__(self):
         return self.value
@@ -65,6 +59,7 @@ class ConfigurePingView(generic.edit.FormView):
     template_name = "powerscan/ps_detail.html"
     _status_message = ""
     _survey_id = 0
+    _current_status = SurveyStatus.NULL
 
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
@@ -84,7 +79,7 @@ class ConfigurePingView(generic.edit.FormView):
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
-        context_data[FIELD_COLOR] = Color.RED
+        context_data[FIELD_SURVEY_STATUS] = self._current_status
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
         return context_data
@@ -163,6 +158,7 @@ class ConfigurePingView(generic.edit.FormView):
                 async_result = self._build_whitelist(survey_id)
                 self._status_message = f"Built whitelist {async_result} ..."
                 # Fall through
+                self._current_status = SurveyStatus.CONFIGURED_WL 
 
             if 'start_ping' in request.POST:
                 async_result = self._start_ping(survey_id)
@@ -171,6 +167,7 @@ class ConfigurePingView(generic.edit.FormView):
 
                 async_result2 = self._start_tally(survey_id, metadata_file, PING_RESULTS_DELAY)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
+                self._current_status = SurveyStatus.PING_STARTED 
 
             if 'ping_96' in request.POST:
                 survey_id = 96
@@ -192,6 +189,8 @@ class ConfigurePingView(generic.edit.FormView):
         # FIELD_SURVEY_ID : self._survey_id}
         context = {"form" : new_form,
             FIELD_CELERY_DETAILS : self._get_celery_details(),
-            FIELD_STATUS : self._status_message}
+            FIELD_STATUS : self._status_message,
+            FIELD_SURVEY_STATUS : self._current_status
+        }
         return render(request, self.template_name, context)
 

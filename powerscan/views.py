@@ -13,9 +13,9 @@ from  django_tables2.config import RequestConfig
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
-from django_nys_02.celery import app as celery_app, QUEUE_NAME
+#from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_SURVEY_ID
+#from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_SURVEY_ID
 
 from .models import (
     UsState,
