@@ -19,7 +19,7 @@
         {{ form.media }}
         {{ form.as_div }}
         <br>
-        <button type="submit" name="configure_survey">
+        <button type="submit" name="configure_survey"
             {% if survey_status.value == 0 %} enabled {%else%} disabled {% endif %}>
             Configure Survey</button>
         <button type="submit" name="build_whitelist"
