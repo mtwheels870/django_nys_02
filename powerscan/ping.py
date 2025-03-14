@@ -298,7 +298,6 @@ class PingSurveyManager:
             self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
             range_counter = self.pyt.get(saddr)
             range_counter.count = range_counter.count + 1
-        self._writer_cidr_trie.close()
         print(f"_match_zmap_replies(), debug_file {FILE_CIDR_TRIE}")
 
     def _save_to_db(self, survey):
@@ -313,7 +312,8 @@ class PingSurveyManager:
             ip_network = row['ip_network']
             range_counter = self.pyt.get(ip_network)
             count = range_counter.count
-            print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
+            # print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
+            self._writer_cidr_trie.write(f"_save_to_db(), network[{index}]: {ip_network} = {count}\n")
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
                 ip_range = MmIpRange.objects.get(pk=range_counter.id)
@@ -326,6 +326,7 @@ class PingSurveyManager:
                 range_ping.save()
                 saved_to_db = saved_to_db + 1
         print(f"_save_to_db(), saved {saved_to_db} objects to database")
+        self._writer_cidr_trie.close()
         return saved_to_db
 
     # Returns the number of pings saved to the database (count > 0)
@@ -346,49 +347,3 @@ class PingSurveyManager:
         if self.writer_log:
             self.writer_log.close()
 
-#            
-#                # print(f"_save_to_db(), traverse[{index}] = ip: x{node.ip:08X}, bit = {node.bit}, masks = {node.masks}")
-#                ip_string = cidr_trie.cidr_util.ip_itoa(node.ip, False)
-#                #print(f"_save_to_db(), traverse[{index}] = ip: {ip_string}, bit = {node.bit}, masks = {node.masks}")
-#                if target_mask in node.masks:
-#                    ip_range_counter = node.masks[target_mask]
-#                    break
-            # results = self.trie_wrapper.find_all(saddr)
-#            #num_results = len(results)
-#            #if index < 20:
-#            #    print(f"[{index}], saddr = {saddr}, timestamp = {timestamp}, results = {results}")
-#            #    print(f"        results = {results}")
-#            if num_results == 0:
-#                print(f"_match_zmap_replies(), no Trie results for {saddr}, results = {results}!")
-#                # self.debug_matches(saddr)
-#            elif num_results > 1:
-#                print(f"_match_zmap_replies(), multiple Trie results for {saddr}!")
-#            else:
-#                address = results[0][0]
-#                counter = results[0][1]
-#                #if index < 20:
-#                #    print(f"    found ONE, address = {address}, counter = {counter}")
-#            
-#            #print(f"_save_to_db(), looking up [{range_id}], ip_network {ip_network}")
-#            #network_parts = cidr_trie.cidr_util.cidr_atoi(ip_network) 
-#            #target_mask = network_parts[1]
-#            # Now, look up each network in our trie
-#            index = 0
-#            # for node in self.pyt.traverse(ip_network):
-#            for prefix in self.pyt:
-#                node = self.pyt[prefix]
-#                count = ip_range_counter.count
-#                if count > 0:
-#                    # Pull up the original range object, so we can get the database reference
-#                    ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
-#                    possible_hosts = ip_range_counter.possible_hosts
-#                    range_ping = IpRangePing(ip_survey=survey,
-#                        ip_range=ip_range,
-#                        num_ranges_pinged=possible_hosts,
-#                        num_ranges_responded=count,
-#                        time_pinged=timezone.now())
-#                    range_ping.save()
-#                    saved_to_db = saved_to_db + 1
-#                #ip_range = node.masks
-#                #print(f"           count = {ip_range.count}")
-#                index = index + 1
