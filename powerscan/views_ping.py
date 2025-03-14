@@ -116,8 +116,8 @@ class ConfigurePingView(generic.edit.FormView):
         return async_result
 
     @task_postrun.connect(sender=build_whitelist)
-    def task_postrun(task_id, task, retval, *args, **kwargs):
-        print(f"CPV.task_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+    def build_whitelist_postrun(task_id, task, retval, *args, **kwargs):
+        print(f"CPV.build_whitelist_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
         # information about task are located in headers for task messages
         # using the task protocol version 2.
         #info = headers if 'task' in headers else body
@@ -133,6 +133,10 @@ class ConfigurePingView(generic.edit.FormView):
             queue=QUEUE_NAME,
             routing_key='ping.tasks.zmap_from_file')
         return async_result
+
+    @task_postrun.connect(sender=zmap_from_file)
+    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
+        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
 
     def _start_tally(self, survey_id, metadata_file, results_delay):
         now = timezone.now()
