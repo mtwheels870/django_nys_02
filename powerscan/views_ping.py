@@ -37,6 +37,7 @@ FIELD_CELERY_DETAILS = "celery_stuff"
 FIELD_STATUS = "status_message" 
 FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
+FIELD_COLOR = "color" 
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
@@ -50,6 +51,14 @@ class SurveyStatus(Enum):
     BUILT_WL = 2
     PING_STARTED = 3
     PING_COMPLETED = 4
+
+    def __str__(self):
+        return str(self.name)
+
+class Color(Enum):
+    RED = "red"
+    GREEN = "green"
+    BLUE = "blue"
 
     def __str__(self):
         return str(self.name)
@@ -81,6 +90,8 @@ class ConfigurePingView(generic.edit.FormView):
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
         context_data[FIELD_SURVEY_STATUS] = self._current_status
+        context_data[FIELD_COLOR] = Color.RED
+
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
         return context_data
@@ -196,7 +207,8 @@ class ConfigurePingView(generic.edit.FormView):
         context = {"form" : new_form,
             FIELD_CELERY_DETAILS : self._get_celery_details(),
             FIELD_STATUS : self._status_message,
-            FIELD_SURVEY_STATUS : self._current_status
+            FIELD_SURVEY_STATUS : self._current_status,
+            FIELD_COLOR : Color.RED
         }
         return render(request, self.template_name, context)
 
