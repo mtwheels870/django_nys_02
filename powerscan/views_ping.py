@@ -52,7 +52,7 @@ class SurveyStatus(Enum):
     PING_COMPLETED = 4
 
     def __str__(self):
-        return str(self.key)
+        return str(self.name)
 
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
