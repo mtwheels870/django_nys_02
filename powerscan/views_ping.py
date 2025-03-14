@@ -117,7 +117,7 @@ class ConfigurePingView(generic.edit.FormView):
 
     @task_postrun.connect(sender=build_whitelist)
     def task_postrun(task_id, task, retval, *args, **kwargs):
-        print("CPV.task_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+        print(f"CPV.task_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
         # information about task are located in headers for task messages
         # using the task protocol version 2.
         #info = headers if 'task' in headers else body
