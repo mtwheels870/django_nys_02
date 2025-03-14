@@ -310,31 +310,20 @@ class PingSurveyManager:
         for index, row in self.df_ranges.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
-            
-            #print(f"_save_to_db(), looking up [{range_id}], ip_network {ip_network}")
-            network_parts = cidr_trie.cidr_util.cidr_atoi(ip_network) 
-            target_mask = network_parts[1]
-            # Now, look up each network in our trie
-            index = 0
-            # for node in self.pyt.traverse(ip_network):
-            for prefix in self.pyt:
-                node = self.pyt[prefix]
-                print(f"_save_to_db(), prefix[{index}]: {prefix} = {node}")
-                count = ip_range_counter.count
-                if count > 0:
-                    # Pull up the original range object, so we can get the database reference
-                    ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
-                    possible_hosts = ip_range_counter.possible_hosts
-                    range_ping = IpRangePing(ip_survey=survey,
-                        ip_range=ip_range,
-                        num_ranges_pinged=possible_hosts,
-                        num_ranges_responded=count,
-                        time_pinged=timezone.now())
-                    range_ping.save()
-                    saved_to_db = saved_to_db + 1
-                #ip_range = node.masks
-                #print(f"           count = {ip_range.count}")
-                index = index + 1
+            range_counter = self.pyt.get(ip_network)
+            count = ip_range_counter.count
+            print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
+            if count > 0:
+                # Pull up the original range object, so we can get the database reference
+                ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
+                possible_hosts = ip_range_counter.possible_hosts
+                range_ping = IpRangePing(ip_survey=survey,
+                    ip_range=ip_range,
+                    num_ranges_pinged=possible_hosts,
+                    num_ranges_responded=count,
+                    time_pinged=timezone.now())
+                range_ping.save()
+                saved_to_db = saved_to_db + 1
         print(f"_save_to_db(), saved {saved_to_db} objects to database")
         return saved_to_db
 
@@ -378,3 +367,27 @@ class PingSurveyManager:
 #                counter = results[0][1]
 #                #if index < 20:
 #                #    print(f"    found ONE, address = {address}, counter = {counter}")
+#            
+#            #print(f"_save_to_db(), looking up [{range_id}], ip_network {ip_network}")
+#            #network_parts = cidr_trie.cidr_util.cidr_atoi(ip_network) 
+#            #target_mask = network_parts[1]
+#            # Now, look up each network in our trie
+#            index = 0
+#            # for node in self.pyt.traverse(ip_network):
+#            for prefix in self.pyt:
+#                node = self.pyt[prefix]
+#                count = ip_range_counter.count
+#                if count > 0:
+#                    # Pull up the original range object, so we can get the database reference
+#                    ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
+#                    possible_hosts = ip_range_counter.possible_hosts
+#                    range_ping = IpRangePing(ip_survey=survey,
+#                        ip_range=ip_range,
+#                        num_ranges_pinged=possible_hosts,
+#                        num_ranges_responded=count,
+#                        time_pinged=timezone.now())
+#                    range_ping.save()
+#                    saved_to_db = saved_to_db + 1
+#                #ip_range = node.masks
+#                #print(f"           count = {ip_range.count}")
+#                index = index + 1
