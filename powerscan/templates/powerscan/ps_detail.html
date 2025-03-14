@@ -8,6 +8,7 @@
     <h2>Config Ip Range Survey (geography and timing): </h2>
     <h3>Celery details (worker config): </h3>
     <p>{{ celery_stuff }} </p>
+    <p>{{ color }} </p>
 
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <!-- form action=" stuff here url 'app_centralny:approve_ping' object.id  method="post" -->
@@ -17,7 +18,8 @@
         {{ form.media }}
         {{ form.as_div }}
         <br>
-        <button type="submit" name="configure_survey">Configure Survey</button>
+        <button type="submit" name="configure_survey" {% if condition %} {% else %} disabled {% endif %}>
+            Configure Survey</button>
         <button type="submit" name="build_whitelist">Build Whitelist</button>
         <button type="submit" name="start_ping">Start Ping</button>
         <br>

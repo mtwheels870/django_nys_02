@@ -1,3 +1,4 @@
+import Enum
 import logging
 from django.shortcuts import render
 from django.utils import timezone
@@ -53,11 +54,18 @@ KEY_LEAFLET_MAP = "leaflet_map"
 FIELD_CELERY_DETAILS = "celery_stuff"
 FIELD_STATUS = "status_message" 
 FIELD_SURVEY_ID = "survey_id" 
+FIELD_COLOR = "color" 
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
 PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
+
+# State machines for ping stuff
+class Color(Enum):
+    RED = "red"
+    GREEN = "green"
+    BLUE = "blue"
 
 class UsStateViewSet(
     viewsets.ReadOnlyModelViewSet):
@@ -243,6 +251,7 @@ class ConfigurePingView(generic.edit.FormView):
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
+        context_data[FIELD_COLOR] = Color.RED
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
         return context_data
