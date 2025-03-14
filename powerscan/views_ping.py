@@ -37,7 +37,6 @@ FIELD_CELERY_DETAILS = "celery_stuff"
 FIELD_STATUS = "status_message" 
 FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
-FIELD_COLOR = "color1" 
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
@@ -78,7 +77,6 @@ class ConfigurePingView(generic.edit.FormView):
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
         context_data[FIELD_SURVEY_STATUS] = self._current_status
-        context_data[FIELD_COLOR] = Color.RED
 
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
@@ -196,7 +194,6 @@ class ConfigurePingView(generic.edit.FormView):
             FIELD_CELERY_DETAILS : self._get_celery_details(),
             FIELD_STATUS : self._status_message,
             FIELD_SURVEY_STATUS : self._current_status,
-            FIELD_COLOR : Color.RED
         }
         return render(request, self.template_name, context)
 
