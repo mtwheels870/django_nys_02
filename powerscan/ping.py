@@ -28,6 +28,7 @@ FILE_CIDR_TRIE = "CidrTrie.txt"
 
 HEADER = "range_id,ip_network\n"
 
+# Should rename this.  It doesn't like a Model (but it's Local to here)
 class RangeIpCount:
     def __init__(self, db_range_id, ip_network, possible_hosts):
         self.id = db_range_id
@@ -315,7 +316,7 @@ class PingSurveyManager:
             print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
-                ip_range = MmIpRange.objects.get(pk=ip_range_counter.id)
+                ip_range = MmIpRange.objects.get(pk=range_counter.id)
                 possible_hosts = ip_range_counter.possible_hosts
                 range_ping = IpRangePing(ip_survey=survey,
                     ip_range=ip_range,
