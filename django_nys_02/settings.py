@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
 #    'mycalendar.apps.MyCalendarConfig',
 #    'file_picker',
 INSTALLED_APPS = [
+    'daphne',
     'powerscan.apps.PowerScanConfig',
     'django.contrib.admin',
     'django.contrib.auth',
