@@ -24,7 +24,7 @@ FILE_OUTPUT = "ZmapOutput.csv"
 FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
 FILE_TRAVERSE_GEO = "TraverseGeo.txt"
-FILE_CIDR_TRIE = "CidrTrie.txt"
+FILE_PATRICIA_TRIE = "PatriciaTrie.txt"
 
 HEADER = "range_id,ip_network\n"
 
@@ -260,7 +260,7 @@ class PingSurveyManager:
 
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
-        full_path = os.path.join(self.directory, FILE_CIDR_TRIE)
+        full_path = os.path.join(self.directory, FILE_PATRICIA_TRIE)
         self._writer_cidr_trie = open(full_path, "w+")
         self.pyt = pytricia.PyTricia()
 
@@ -298,7 +298,7 @@ class PingSurveyManager:
             self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
             range_counter = self.pyt.get(saddr)
             range_counter.count = range_counter.count + 1
-        print(f"_match_zmap_replies(), debug_file {FILE_CIDR_TRIE}")
+        print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
 
     def _save_to_db(self, survey):
         # print(f"_save_to_db(), size (of tree): {self.trie.size}")
