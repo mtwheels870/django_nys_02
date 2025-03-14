@@ -311,7 +311,7 @@ class PingSurveyManager:
             range_id = row['range_id']
             ip_network = row['ip_network']
             range_counter = self.pyt.get(ip_network)
-            count = ip_range_counter.count
+            count = range_counter.count
             print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
