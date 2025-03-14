@@ -30,18 +30,7 @@ from .models import (
     IpSurveyState
 )
 
-from .serializers import (
-    TractSerializer,
-    CountySerializer,
-    MmIpRangeSerializer,
-    CountTractSerializer,
-    CountCountySerializer,
-    UsStateSerializer,
-    CountStateSerializer,
-)
-
-from .forms import SelectedCensusTractForm, PingStrategyForm
-from .tables import MmIpRangeTable
+from .forms import PingStrategyForm
 
 # Import our neighbors
 
@@ -66,6 +55,9 @@ class Color(Enum):
     RED = "red"
     GREEN = "green"
     BLUE = "blue"
+
+    def __str__(self):
+        return self.value
 
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
