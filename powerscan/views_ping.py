@@ -37,7 +37,7 @@ FIELD_CELERY_DETAILS = "celery_stuff"
 FIELD_STATUS = "status_message" 
 FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
-FIELD_COLOR = "color" 
+FIELD_COLOR = "color1" 
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15

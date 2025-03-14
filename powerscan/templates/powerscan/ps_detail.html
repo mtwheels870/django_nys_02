@@ -8,7 +8,7 @@
     <h2>Config Ip Range Survey (geography and timing): </h2>
     <h3>Celery details (worker config): </h3>
     <p>{{ celery_stuff }} </p>
-    <p>{{ color }} </p>
+    <p>{{ color1 }} </p>
     <p>Task Status: {{ survey_status }} </p>
 
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
@@ -21,7 +21,7 @@
         <br>
         <button type="submit" name="configure_survey">Configure Survey</button>
         <button type="submit" name="build_whitelist"
-            {% if color != Color.RED %} {%else%} disabled {% endif %}>
+            {% if color1 == Color.RED %} disabled {% endif %}>
             Build Whitelist</button>
         <button type="submit" name="start_ping" {% if survey_status == SurveyStatus.BUILT_WL %} enabled  {%else%} disabled {% endif %}>
             Start Ping</button>
