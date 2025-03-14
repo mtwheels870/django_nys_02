@@ -317,7 +317,7 @@ class PingSurveyManager:
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
                 ip_range = MmIpRange.objects.get(pk=range_counter.id)
-                possible_hosts = ip_range_counter.possible_hosts
+                possible_hosts = range_counter.possible_hosts
                 range_ping = IpRangePing(ip_survey=survey,
                     ip_range=ip_range,
                     num_ranges_pinged=possible_hosts,
