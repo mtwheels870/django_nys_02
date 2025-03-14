@@ -46,9 +46,10 @@ PING_SMALL_DELAY = 20
 # State machines for ping stuff
 class SurveyStatus(Enum):
     NULL = 0
-    CONFIGURED_WL = 1
-    PING_STARTED = 2
-    PING_COMPLETED = 3
+    STATES_CONFIGURED = 1
+    BUILT_WL = 2
+    PING_STARTED = 3
+    PING_COMPLETED = 4
 
     def __str__(self):
         return self.value
@@ -153,12 +154,13 @@ class ConfigurePingView(generic.edit.FormView):
                 abbrevs_string = ", ".join(abbrevs)
                 self._status_message = f"Configured survey {survey_id} with states [{abbrevs_string}]"
                 # Fall through
+                self._current_status = SurveyStatus.STATES_CONFIGURED 
 
             if 'build_whitelist' in request.POST:
                 async_result = self._build_whitelist(survey_id)
                 self._status_message = f"Built whitelist {async_result} ..."
                 # Fall through
-                self._current_status = SurveyStatus.CONFIGURED_WL 
+                self._current_status = SurveyStatus.BUILT_WL 
 
             if 'start_ping' in request.POST:
                 async_result = self._start_ping(survey_id)
