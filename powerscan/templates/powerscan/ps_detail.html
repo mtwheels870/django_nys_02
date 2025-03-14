@@ -19,11 +19,13 @@
         {{ form.media }}
         {{ form.as_div }}
         <br>
-        <button type="submit" name="configure_survey">Configure Survey</button>
+        <button type="submit" name="configure_survey">
+            {% if survey_status.value == 0 %} enabled {%else%} disabled {% endif %}>
+            Configure Survey</button>
         <button type="submit" name="build_whitelist"
-            {% if survey_status.value == 0 %} disabled {% endif %}>
+            {% if survey_status.value == 1 %} enabled {%else%} disabled {% endif %}>
             Build Whitelist</button>
-        <button type="submit" name="start_ping" {% if survey_status.value == 1 %} enabled  {%else%} disabled {% endif %}>
+        <button type="submit" name="start_ping" {% if survey_status.value == 2 %} enabled  {%else%} disabled {% endif %}>
             Start Ping</button>
         <button type="submit" name="cancel_ping" {% if survey_status.value == 3 %} enabled  {%else%} disabled {% endif %}>
             Cancel Current Ping</button>

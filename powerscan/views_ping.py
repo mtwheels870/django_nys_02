@@ -55,14 +55,6 @@ class SurveyStatus(Enum):
     def __str__(self):
         return str(self.name)
 
-class Color(Enum):
-    RED = "red"
-    GREEN = "green"
-    BLUE = "blue"
-
-    def __str__(self):
-        return str(self.value)
-
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
@@ -77,13 +69,9 @@ class ConfigurePingView(generic.edit.FormView):
     def get_context_data(self, **kwargs):
         print(f"CPV.get_context_data(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
-        #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
         form = context_data['form']
-        # print(f"CPV.get_context_data() 3, form = {form}")
         field_survey_id = form.fields['field_survey_id']
-        #print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
         field_survey_id.initial = "0"
-        #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
         # There's an unbound, empty form in context_data...
         # File stuff
@@ -212,3 +200,8 @@ class ConfigurePingView(generic.edit.FormView):
         }
         return render(request, self.template_name, context)
 
+
+        #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
+        # print(f"CPV.get_context_data() 3, form = {form}")
+        #print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
+        #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
