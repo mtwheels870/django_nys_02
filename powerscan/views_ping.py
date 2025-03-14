@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 import django.dispatch
-import django.signals
+from celery.signals import after_task_publish
 
 # from  django_tables2.config import RequestConfig
 
