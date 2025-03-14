@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 import django.dispatch
+import django.signals
 
 # from  django_tables2.config import RequestConfig
 
@@ -113,6 +114,16 @@ class ConfigurePingView(generic.edit.FormView):
             queue=QUEUE_NAME,
             routing_key='ping.tasks.build_whitelist')
         return async_result
+
+    @after_task_publish.connect(sender='ping.tasks.build_whitelist')
+    def task_sent_handler(sender=None, headers=None, body=None, **kwargs):
+        print("CPV.task_sent_handler(), whitelist built")
+        # information about task are located in headers for task messages
+        # using the task protocol version 2.
+        info = headers if 'task' in headers else body
+        print('after_task_publish for task id {info[id]}'.format(
+            info=info,
+        ))
 
     def _start_ping(self, survey_id):
         #print(f"CPV.post(), start_ping...")
