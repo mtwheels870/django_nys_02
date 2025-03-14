@@ -182,6 +182,10 @@ class ConfigurePingView(generic.edit.FormView):
                 async_result2 = self._start_tally(survey_id, metadata_file, ping_delay)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
 
+            if 'cancel_ping' in request.POST:
+                print(f"CPV.post(), cancel_ping, survey_id = {survey_id}")
+                self._current_status = SurveyStatus.NULL 
+
             # Not sure why we have to create a new form here (but it works)
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
             new_form = PingStrategyForm(initial=initial_data)
