@@ -125,9 +125,10 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
 def send_task_result(data):
     channel_layer = get_channel_layer()
     result = {"result": f"Processed: {data}"}
-    async_to_sync(channel_layer.group_send) {
+    # Is this passing a function pointer?
+    async_to_sync(channel_layer.group_send) (
         "task_updates", {"type": "task.completed", "message": result}
-    }
+    )
 
 
 #def _ping_all_ranges(survey, tract, debug):
