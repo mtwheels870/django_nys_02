@@ -6,7 +6,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from django_celery_results.models import TaskResult
 
