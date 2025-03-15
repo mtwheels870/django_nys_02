@@ -57,7 +57,7 @@ class TaskConsumer(WebsocketConsumer):
     def task_completed(self, event):
         message = event["message"]
         print(f"TaskConsumer.task_completed(), message = {message}")
-        self.send(text_data=json.dumps({"message" : message})
+        self.send(text_data=json.dumps({"message" : message}))
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
