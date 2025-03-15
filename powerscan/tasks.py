@@ -68,12 +68,13 @@ class CeleryResultsHandler:
     def get_status(self):
         return self._survey_status
 
-    def set_status(self, new_status):
+    def set_status(self, new_status, task_result=None):
         self._survey_status = new_status
+        if task_result:
+            self._pending_task_result[task_result] = None
 
     def save_pending(self, task_result):
         self._pending_task_result[task_result] = None
-
 
 celery_results_handler = CeleryResultsHandler()
 
