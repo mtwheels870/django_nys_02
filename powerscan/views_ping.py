@@ -22,7 +22,7 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_SURVEY_ID
+from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_SURVEY_ID, celery_results_handler
 
 from .models import (
     UsState,
@@ -142,8 +142,7 @@ class ConfigurePingView(generic.edit.FormView):
             #"ip_source_id": IP_RANGE_SOURCE,
             kwargs={"survey_id": survey_id,
                 "metadata_file": metadata_file} )
-AQUI
-        celery_results_handler = CeleryResultsHandler()
+        celery_results_handler.save_pending(async_result2)
         return async_result2
 
     def post(self, request, *args, **kwargs):
