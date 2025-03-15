@@ -72,7 +72,7 @@ class ConfigurePingView(generic.edit.FormView):
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
-        context_data[FIELD_SURVEY_STATUS] = celery_results_handler.get_status()
+        context_data[FIELD_SURVEY_STATUS] = celery_results_handler.reset()
 
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
