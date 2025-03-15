@@ -221,7 +221,7 @@ class ConfigurePingView(generic.edit.FormView):
 @receiver(post_save, sender=TaskResult)
 def task_result_saved(sender, **kwargs):
     #print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
-    task_result = kwargs[instance]
+    task_result = kwargs['instance']
     id = task_result.task_id
     status = task_result.status
     print(f"task_result_saved(), task_result = {task_result}")
