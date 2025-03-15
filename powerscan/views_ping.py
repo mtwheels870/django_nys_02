@@ -19,7 +19,11 @@ from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_SURVEY_ID, celery_results_handler
+from .tasks import (
+    build_whitelist, zmap_from_file, tally_results,
+    CELERY_FIELD_SURVEY_ID, celery_results_handler,
+    CeleryResultsHandler
+)
 
 from .models import (
     UsState,
