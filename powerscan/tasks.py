@@ -73,10 +73,16 @@ class CeleryResultsHandler:
         self._survey_status = new_status
         if task_result:
             print(f"CeleryResultsHandler.set_status(), self = {self}")
-            self._pending_task_result[task_result] = None
+            self._pending_task_result[task_result.id] = None
 
     def save_pending(self, task_result):
-        self._pending_task_result[task_result] = None
+        self._pending_task_result[task_result.id] = None
+
+    def store_task_result(self, task_result):
+        task_id = task_result.id
+        print(f"store_task_result(), task_result = {task_id}")
+        if not task_id in self._pending_task_result:
+            print(f"store_task_result(), should not be here!, task_id = {task_id} not in dictionary")
 
 celery_results_handler = CeleryResultsHandler()
 
