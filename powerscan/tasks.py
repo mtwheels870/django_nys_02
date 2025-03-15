@@ -63,7 +63,8 @@ class CeleryResultsHandler:
     def __init__(self):
         self._hash_task_ids = {}
         self._survey_status = self.SurveyStatus.NULL
-        self._pending_task_result = None
+        self._pending_task_result = {}
+        print(f"CeleryResultsHandler.init(), self = {self}")
 
     def get_status(self):
         return self._survey_status
@@ -71,6 +72,7 @@ class CeleryResultsHandler:
     def set_status(self, new_status, task_result=None):
         self._survey_status = new_status
         if task_result:
+            print(f"CeleryResultsHandler.set_status(), self = {self}")
             self._pending_task_result[task_result] = None
 
     def save_pending(self, task_result):
