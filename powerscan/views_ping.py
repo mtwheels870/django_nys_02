@@ -53,7 +53,6 @@ class ConfigurePingView(generic.edit.FormView):
     template_name = "powerscan/ps_detail.html"
     _status_message = ""
     _survey_id = 0
-    _current_status = SurveyStatus.NULL
 
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
@@ -69,7 +68,7 @@ class ConfigurePingView(generic.edit.FormView):
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
-        context_data[FIELD_SURVEY_STATUS] = self._current_status
+        context_data[FIELD_SURVEY_STATUS] = celery_results_handler.get_status()
 
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
@@ -189,7 +188,7 @@ class ConfigurePingView(generic.edit.FormView):
 
             if 'cancel_ping' in request.POST:
                 print(f"CPV.post(), cancel_ping, survey_id = {survey_id}")
-                self._current_status = SurveyStatus.NULL 
+                celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.NULL)
 
             # Not sure why we have to create a new form here (but it works)
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
@@ -201,7 +200,7 @@ class ConfigurePingView(generic.edit.FormView):
         context = {"form" : new_form,
             FIELD_CELERY_DETAILS : self._get_celery_details(),
             FIELD_STATUS : self._status_message,
-            FIELD_SURVEY_STATUS : self._current_status,
+            FIELD_SURVEY_STATUS : celery_results_handler.get_status(),
         }
         return render(request, self.template_name, context)
 
