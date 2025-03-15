@@ -22,8 +22,7 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .tasks import (
     build_whitelist, zmap_from_file, tally_results,
-    CELERY_FIELD_SURVEY_ID, celery_results_handler,
-    CeleryResultsHandler
+    CELERY_FIELD_SURVEY_ID, 
 )
 
 from .models import (
@@ -33,6 +32,7 @@ from .models import (
 )
 
 from .forms import PingStrategyForm
+from .consumers import celery_results_handler, CeleryResultsHandler
 
 # Import our neighbors
 
