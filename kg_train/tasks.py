@@ -151,7 +151,7 @@ def prodigy_ner_manual(self, *args, **kwargs):
 
     return process.pid
 
-def _prodigy_recipe(self, recipe, args, kwargs):
+def _prodigy_recipe(recipe, args, kwargs):
     file_id = kwargs['file_id']
 
     dir_path = make_temp_dir()
@@ -182,5 +182,5 @@ def _prodigy_recipe(self, recipe, args, kwargs):
 @shared_task(bind=True)
 def prodigy_rel_manual(self, *args, **kwargs):
     print(f"prodigy_rel_manual(), self = {self}")
-    return self._prodigy_recipe("rel.manual", args, kwargs)
+    return _prodigy_recipe("rel.manual", args, kwargs)
 
