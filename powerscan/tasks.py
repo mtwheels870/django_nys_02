@@ -11,8 +11,6 @@ import shutil
 import ipaddress
 import netaddr
 
-from enum import Enum
-
 # Celery / Django
 import celery
 from celery import shared_task, Task, group, chain

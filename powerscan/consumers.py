@@ -1,5 +1,7 @@
 import json
 
+from enum import Enum
+
 from channels.generic.websocket import WebsocketConsumer
 
 class CeleryResultsHandler:
