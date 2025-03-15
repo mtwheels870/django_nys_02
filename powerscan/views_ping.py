@@ -6,7 +6,11 @@ from django.views import generic
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
-import django.dispatch
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from django_celery_results.models import TaskResult
+
 from celery.signals import task_postrun
 
 # from  django_tables2.config import RequestConfig
@@ -212,6 +216,10 @@ class ConfigurePingView(generic.edit.FormView):
         }
         return render(request, self.template_name, context)
 
+    @receiver(post_save, sender=TaskResult)
+    def task_result_saved(sender, **kwargs) {
+        print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
+    }
 
         #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
         # print(f"CPV.get_context_data() 3, form = {form}")
