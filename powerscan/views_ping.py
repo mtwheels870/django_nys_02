@@ -95,6 +95,9 @@ class ConfigurePingView(generic.edit.FormView):
         self._survey_id = survey.id
         return abbrevs, survey.id
 
+    def _whitelist_return(self):
+        print(f"_whitelist_return()")
+
     def _build_whitelist(self, survey_id):
         if not survey_id:
             print(f"CPV.build_whitelist(), survey not configured! (should be extracted from the form)")
@@ -108,7 +111,8 @@ class ConfigurePingView(generic.edit.FormView):
         async_result = build_whitelist.apply_async(
             kwargs={"survey_id" : survey_id},
             queue=QUEUE_NAME,
-            routing_key='ping.tasks.build_whitelist')
+            routing_key='ping.tasks.build_whitelist',
+            link=_whitelist_return)
         celery_results_handler.save_pending(async_result)
         return async_result
 
