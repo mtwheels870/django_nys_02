@@ -47,49 +47,6 @@ RESULTS_COUNTIES = "counties"
 RESULTS_TRACTS = "tracts"
 RESULTS_RANGES = "ranges"
 
-class CeleryResultsHandler:
-    # State machines for ping stuff
-    class SurveyStatus(Enum):
-        NULL = 0
-        STATES_CONFIGURED = 1
-        BUILT_WL = 2
-        PING_STARTED = 3
-        PING_COMPLETED = 4
-        TALLY_COMPLETED = 5
-
-        def __str__(self):
-            return str(self.name)
-
-    def __init__(self):
-        print(f"CeleryResultsHandler.init(), self = {self}")
-        self.reset()
-
-    def get_status(self):
-        return self._survey_status
-
-    def set_status(self, new_status, task_result=None):
-        self._survey_status = new_status
-        if task_result:
-            print(f"CeleryResultsHandler.set_status(), self = {self}, task_result = {task_result.task_id}")
-            self._pending_task_result[task_result.task_id] = None
-
-    def reset(self):
-        self._hash_task_ids = {}
-        self._pending_task_result = {}
-        self.set_status(self.SurveyStatus.NULL)
-        return self.SurveyStatus.NULL
-
-    def save_pending(self, task_result):
-        self._pending_task_result[task_result.id] = None
-
-    def store_task_result(self, task_result):
-        task_id = task_result.task_id
-        print(f"store_task_result(), task_result = {task_id}")
-        if not task_id in self._pending_task_result:
-            print(f"store_task_result(), should not be here!, task_id = {task_id} not in dictionary")
-
-celery_results_handler = CeleryResultsHandler()
-
 def start_tracts(self, *args, **kwargs):
 
     # Main method
@@ -165,6 +122,14 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         time_pinged=timezone.now())
     range_ping.save()
 
+def send_task_result(data):
+    channel_layer = get_channel_layer()
+    result = {"result": f"Processed: {data}"}
+    async_to_sync(channel_layer.group_send) {
+        "task_updates", {"type": "task.completed", "message": result}
+    }
+
+
 #def _ping_all_ranges(survey, tract, debug):
 #    print(f"_ping_all_ranges(), tract = {tract}, debug = {debug}")
 #    ip_ranges = tract.deiprange_set.all()
@@ -197,10 +162,11 @@ def build_whitelist(self, *args, **kwargs):
     survey_manager = PingSurveyManager(survey_id)
     num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
 
-    print(f"build_whitelist(), {num_ranges} ranges, cleaning up survey manager")
+    message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
 
-    #worker_lock.delete()
+    # Django channels back to the caller
+    send_task_result(message)
     return num_states, num_counties, num_tracts, num_ranges
 
 def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):

@@ -52,10 +52,6 @@ FIELD_SURVEY_STATUS = "survey_status"
 PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
 
-@shared_task(bind=True)
-def _whitelist_return(self, *args, **kwargs):
-    print(f"_whitelist_return(), args = {args}, kwargs = {kwargs}")
-
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
@@ -76,7 +72,7 @@ class ConfigurePingView(generic.edit.FormView):
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
-        survey_status = celery_results_handler.reset()
+        # survey_status = celery_results_handler.reset()
         context_data[FIELD_SURVEY_STATUS] = survey_status 
         print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
 
@@ -113,9 +109,8 @@ class ConfigurePingView(generic.edit.FormView):
         async_result = build_whitelist.apply_async(
             kwargs={"survey_id" : survey_id},
             queue=QUEUE_NAME,
-            routing_key='ping.tasks.build_whitelist',
-            link=_whitelist_return.s())
-        celery_results_handler.save_pending(async_result)
+            routing_key='ping.tasks.build_whitelist')
+        #celery_results_handler.save_pending(async_result)
         return async_result
 
 #    @task_postrun.connect(sender=build_whitelist)
@@ -150,7 +145,7 @@ class ConfigurePingView(generic.edit.FormView):
             #"ip_source_id": IP_RANGE_SOURCE,
             kwargs={"survey_id": survey_id,
                 "metadata_file": metadata_file} )
-        celery_results_handler.save_pending(async_result2)
+        #celery_results_handler.save_pending(async_result2)
         return async_result2
 
     def post(self, request, *args, **kwargs):
@@ -170,13 +165,13 @@ class ConfigurePingView(generic.edit.FormView):
                 abbrevs_string = ", ".join(abbrevs)
                 self._status_message = f"Configured survey {survey_id} with states [{abbrevs_string}]"
                 # Fall through
-                celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.STATES_CONFIGURED)
+                #celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.STATES_CONFIGURED)
 
             if 'build_whitelist' in request.POST:
                 async_result = self._build_whitelist(survey_id)
                 self._status_message = f"Built whitelist: {async_result} ..."
                 # Fall through
-                celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.BUILT_WL, async_result)
+                #celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.BUILT_WL, async_result)
 
             if 'start_ping' in request.POST:
                 async_result = self._start_ping(survey_id)
