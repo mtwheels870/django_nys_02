@@ -77,6 +77,7 @@ class CeleryResultsHandler:
         self._hash_task_ids = {}
         self._pending_task_result = {}
         self.set_status(self.SurveyStatus.NULL)
+        return self.SurveyStatus.NULL
 
     def save_pending(self, task_result):
         self._pending_task_result[task_result.id] = None

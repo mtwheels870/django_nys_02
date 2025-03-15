@@ -62,7 +62,6 @@ class ConfigurePingView(generic.edit.FormView):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
     def get_context_data(self, **kwargs):
-        print(f"CPV.get_context_data(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         form = context_data['form']
         field_survey_id = form.fields['field_survey_id']
@@ -72,7 +71,9 @@ class ConfigurePingView(generic.edit.FormView):
         # File stuff
         context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
-        context_data[FIELD_SURVEY_STATUS] = celery_results_handler.reset()
+        survey_status = celery_results_handler.reset()
+        context_data[FIELD_SURVEY_STATUS] = survey_status 
+        print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
 
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
