@@ -13,6 +13,7 @@ urlpatterns = [
     path("map/", views.MapNavigationView.as_view(), name="map_viewer"),
 
     path("ping/", views_ping.ConfigurePingView.as_view(), name="ping_strat_index"),
+    path("chat/", views.index, name="chat_index"),
     # ex: /tutorial/5/
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")

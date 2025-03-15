@@ -220,3 +220,5 @@ class MapNavigationView(generic.edit.FormView):
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
 
+def chat_index(request):
+    return render(request, "powerscan/chat_index.html")
