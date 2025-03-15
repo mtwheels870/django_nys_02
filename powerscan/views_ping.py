@@ -216,7 +216,7 @@ class ConfigurePingView(generic.edit.FormView):
         }
         return render(request, self.template_name, context)
 
-@receiver(post_save)
+@receiver(post_save, sender=django_celery_results.models.TaskResult)
 def task_result_saved(sender, **kwargs):
     print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
 
