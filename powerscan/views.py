@@ -222,3 +222,6 @@ class MapNavigationView(generic.edit.FormView):
 
 def chat_index(request):
     return render(request, "powerscan/chat_index.html")
+
+def chat_room(request, room_name):
+    return render(request, "powerscan/chat_room.html", {"room_name": room_name})

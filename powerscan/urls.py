@@ -14,6 +14,7 @@ urlpatterns = [
 
     path("ping/", views_ping.ConfigurePingView.as_view(), name="ping_strat_index"),
     path("chat/", views.chat_index, name="chat_index"),
+    path("chat/<str:room_name>/", views.chat_room, name="chat_room"),
     # ex: /tutorial/5/
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")
