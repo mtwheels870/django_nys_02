@@ -158,13 +158,13 @@ class ConfigurePingView(generic.edit.FormView):
                 abbrevs_string = ", ".join(abbrevs)
                 self._status_message = f"Configured survey {survey_id} with states [{abbrevs_string}]"
                 # Fall through
-                celery_results_handler.set_status(SurveyStatus.STATES_CONFIGURED)
+                celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.STATES_CONFIGURED)
 
             if 'build_whitelist' in request.POST:
                 async_result = self._build_whitelist(survey_id)
                 self._status_message = f"Built whitelist: {async_result} ..."
                 # Fall through
-                celery_results_handler.set_status(SurveyStatus.BUILT_WL, async_result)
+                celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.BUILT_WL, async_result)
 
             if 'start_ping' in request.POST:
                 async_result = self._start_ping(survey_id)
@@ -173,7 +173,7 @@ class ConfigurePingView(generic.edit.FormView):
 
                 async_result2 = self._start_tally(survey_id, metadata_file, PING_RESULTS_DELAY)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
-                celery_results_handler.set_status(SurveyStatus.PING_STARTED)
+                celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
 
             if 'ping_96' in request.POST:
                 survey_id = 96
