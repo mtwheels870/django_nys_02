@@ -8,9 +8,10 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 from django_celery_results.models import TaskResult
 
+from celery import shared_task
 
 # @receiver(post_save, sender=django_celery_results.models.TaskResult)
-from celery.signals import task_postrun
+# from celery.signals import task_postrun
 
 # from  django_tables2.config import RequestConfig
 
@@ -95,8 +96,9 @@ class ConfigurePingView(generic.edit.FormView):
         self._survey_id = survey.id
         return abbrevs, survey.id
 
-    def _whitelist_return(self):
-        print(f"_whitelist_return()")
+    @shared_task(bind=True)
+    def _whitelist_return(self, *args, **kwargs):
+        print(f"_whitelist_return(), args = {args}, kwargs = {kwargs}")
 
     def _build_whitelist(self, survey_id):
         if not survey_id:
