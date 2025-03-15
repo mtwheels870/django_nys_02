@@ -114,7 +114,7 @@ class ConfigurePingView(generic.edit.FormView):
             kwargs={"survey_id" : survey_id},
             queue=QUEUE_NAME,
             routing_key='ping.tasks.build_whitelist',
-            link=_whitelist_return.s)
+            link=_whitelist_return.s())
         celery_results_handler.save_pending(async_result)
         return async_result
 
