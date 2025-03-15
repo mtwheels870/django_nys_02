@@ -174,12 +174,8 @@ def build_whitelist(self, *args, **kwargs):
     print(f"build_whitelist(), {num_ranges} ranges, cleaning up survey manager")
     survey_manager.close()
 
-RESULTS_STATES = "states"
-RESULTS_COUNTIES = "counties"
-RESULTS_TRACTS = "tracts"
-RESULTS_RANGES = "ranges"
     #worker_lock.delete()
-    return num_ranges
+    return num_states, num_counties, num_tracts, num_ranges
 
 def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
     try:
