@@ -52,6 +52,10 @@ FIELD_SURVEY_STATUS = "survey_status"
 PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
 
+@shared_task(bind=True)
+def _whitelist_return(self, *args, **kwargs):
+    print(f"_whitelist_return(), args = {args}, kwargs = {kwargs}")
+
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
@@ -95,10 +99,6 @@ class ConfigurePingView(generic.edit.FormView):
             survey_state.save()
         self._survey_id = survey.id
         return abbrevs, survey.id
-
-    @shared_task(bind=True)
-    def _whitelist_return(self, *args, **kwargs):
-        print(f"_whitelist_return(), args = {args}, kwargs = {kwargs}")
 
     def _build_whitelist(self, survey_id):
         if not survey_id:
