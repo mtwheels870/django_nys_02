@@ -11,6 +11,8 @@ from django.dispatch import receiver
 
 from django_celery_results.models import TaskResult
 
+
+# @receiver(post_save, sender=django_celery_results.models.TaskResult)
 from celery.signals import task_postrun
 
 # from  django_tables2.config import RequestConfig
@@ -216,7 +218,7 @@ class ConfigurePingView(generic.edit.FormView):
         }
         return render(request, self.template_name, context)
 
-@receiver(post_save, sender=django_celery_results.models.TaskResult)
+@receiver(post_save, sender=TaskResult)
 def task_result_saved(sender, **kwargs):
     print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
 
