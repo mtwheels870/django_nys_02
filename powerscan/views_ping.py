@@ -121,9 +121,9 @@ class ConfigurePingView(generic.edit.FormView):
             routing_key='ping.tasks.build_whitelist')
         return async_result
 
-    @task_postrun.connect(sender=build_whitelist)
-    def build_whitelist_postrun(task_id, task, retval, *args, **kwargs):
-        print(f"CPV.build_whitelist_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+#    @task_postrun.connect(sender=build_whitelist)
+#    def build_whitelist_postrun(task_id, task, retval, *args, **kwargs):
+#        print(f"CPV.build_whitelist_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
         # information about task are located in headers for task messages
         # using the task protocol version 2.
         #info = headers if 'task' in headers else body
@@ -140,9 +140,9 @@ class ConfigurePingView(generic.edit.FormView):
             routing_key='ping.tasks.zmap_from_file')
         return async_result
 
-    @task_postrun.connect(sender=zmap_from_file)
-    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
-        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+#    @task_postrun.connect(sender=zmap_from_file)
+#    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
+#        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
 
     def _start_tally(self, survey_id, metadata_file, results_delay):
         now = timezone.now()
@@ -220,7 +220,13 @@ class ConfigurePingView(generic.edit.FormView):
 
 @receiver(post_save, sender=TaskResult)
 def task_result_saved(sender, **kwargs):
-    print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
+    #print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
+    task_result = kwargs[instance]
+    id = task_result.task_id
+    status = task_result.status
+    print(f"task_result_saved(), task_result = {task_result}")
+    print(f"     id = {id}, status = {status}")
+
 
         #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
         # print(f"CPV.get_context_data() 3, form = {form}")
