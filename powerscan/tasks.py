@@ -35,6 +35,32 @@ TEMP_DIRECTORY = "/tmp/exec_zmap/"
 
 CELERY_FIELD_SURVEY_ID = "survey_id"
 
+RESULTS_STATES = "states"
+RESULTS_COUNTIES = "counties"
+RESULTS_TRACTS = "tracts"
+RESULTS_RANGES = "ranges"
+
+class CeleryResultsHandler:
+    # State machines for ping stuff
+    class SurveyStatus(Enum):
+        NULL = 0
+        STATES_CONFIGURED = 1
+        BUILT_WL = 2
+        PING_STARTED = 3
+        PING_COMPLETED = 4
+        TALLY_COMPLETED = 5
+
+        def __str__(self):
+            return str(self.name)
+
+    def __init__(self):
+        self._hash_task_ids = {}
+        self._survey_status = SurveyStatus.NULL
+        self._last_task_result = None
+
+
+celery_results_handler = CeleryResultsHandler()
+
 def start_tracts(self, *args, **kwargs):
 
     # Main method
@@ -140,10 +166,15 @@ def build_whitelist(self, *args, **kwargs):
 
 
     survey_manager = PingSurveyManager(survey_id)
-    num_ranges = survey_manager.build_whitelist()
+    num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
 
     print(f"build_whitelist(), {num_ranges} ranges, cleaning up survey manager")
     survey_manager.close()
+
+RESULTS_STATES = "states"
+RESULTS_COUNTIES = "counties"
+RESULTS_TRACTS = "tracts"
+RESULTS_RANGES = "ranges"
     #worker_lock.delete()
     return num_ranges
 
@@ -240,6 +271,22 @@ def tally_results(self, *args, **kwargs):
     survey.save()
     print(f"tally_results(), saved {pings_to_db} to database survey_id = {survey_id}")
     return pings_to_db 
+
+@receiver(post_save, sender=TaskResult)
+def task_result_saved(sender, **kwargs):
+    #print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
+    task_result = kwargs['instance']
+    id = task_result.task_id
+    status = task_result.status
+    result = task_result.result
+    print(f"task_result_saved(), task_result = {task_result}")
+    print(f"     id = {id}, status = {status}, result = {result}")
+    if status == states.SUCCESS:
+        celery_results_handler.store_task_result(task_result)
+    else:
+        print(f"task_result_saved(), status = {status}, ignoring")
+        
+
 
     #print(f"build_whitelist(), source_id = {ip_source_id}")
     #if ip_source_id == 2:

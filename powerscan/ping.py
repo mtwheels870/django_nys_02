@@ -164,7 +164,7 @@ class PingSurveyManager:
         self.directory = full_path
 
     def _traverse_geography(self):
-        debugger = self.FileDebugger(self.directory, "TraverseGeography")
+        # debugger = self.FileDebugger(self.directory, "TraverseGeography")
         survey = IpRangeSurvey.objects.get(pk=self._survey_id)
         print(f"PSM._traverse_geography(), survey = {survey}")
         
@@ -178,7 +178,7 @@ class PingSurveyManager:
         for survey_state in selected_survey_states :
             state_ids.append(survey_state.us_state.id)
 
-        debugger.print("PSM._traverse_geography(), state_ids:", state_ids)
+        # debugger.print("PSM._traverse_geography(), state_ids:", state_ids)
 
         county_ids = []
 
@@ -190,7 +190,7 @@ class PingSurveyManager:
             survey_county = IpSurveyCounty(survey=survey, county=county)
             survey_county.save()
         #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
-        debugger.print("PSM._traverse_geography(), county_ids:", county_ids)
+        # debugger.print("PSM._traverse_geography(), county_ids:", county_ids)
 
         total_ranges = 0
         tract_ids = []
@@ -201,12 +201,17 @@ class PingSurveyManager:
             survey_tract.save()
             ranges_added = self._tract_ranges_whitelist(tract)
             total_ranges = total_ranges + ranges_added
-        debugger.print("PSM._traverse_geography(), tract_ids:", tract_ids)
+        # debugger.print("PSM._traverse_geography(), tract_ids:", tract_ids)
 
-        file_name = debugger.get_file()
-        debugger.close()
-        print(f"PSM._traverse_geography(), file output: {file_name}, total_ranges = {total_ranges}")
-        return total_ranges
+        # file_name = debugger.get_file()
+        # debugger.close()
+        first = "PSM._traverse_geography(), states/counties/tracts/ranges = "
+        second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}")
+        print(first + second)
+        num_states = len(state_ids)
+        num_counties = len(county_ids)
+        num_tracts = len(tract_ids)
+        return num_states, num_counties, num_tracts, total_ranges
 
     def _tract_ranges_whitelist(self, tract):
         # Use the set() notation
@@ -241,8 +246,8 @@ class PingSurveyManager:
 
     def build_whitelist(self):
         self._create_writers()
-        num_ranges = self._traverse_geography()
-        return num_ranges
+        num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
+        return num_states, num_counties, num_tracts, num_ranges
 
     def unused_add(self, index, range_id, ip_network):
         if index == 0:

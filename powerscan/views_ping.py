@@ -50,17 +50,6 @@ FIELD_SURVEY_STATUS = "survey_status"
 PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
 
-# State machines for ping stuff
-class SurveyStatus(Enum):
-    NULL = 0
-    STATES_CONFIGURED = 1
-    BUILT_WL = 2
-    PING_STARTED = 3
-    PING_COMPLETED = 4
-
-    def __str__(self):
-        return str(self.name)
-
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
@@ -153,6 +142,8 @@ class ConfigurePingView(generic.edit.FormView):
             #"ip_source_id": IP_RANGE_SOURCE,
             kwargs={"survey_id": survey_id,
                 "metadata_file": metadata_file} )
+AQUI
+        celery_results_handler = CeleryResultsHandler()
         return async_result2
 
     def post(self, request, *args, **kwargs):
@@ -172,13 +163,13 @@ class ConfigurePingView(generic.edit.FormView):
                 abbrevs_string = ", ".join(abbrevs)
                 self._status_message = f"Configured survey {survey_id} with states [{abbrevs_string}]"
                 # Fall through
-                self._current_status = SurveyStatus.STATES_CONFIGURED 
+                celery_results_handler.set_status(SurveyStatus.STATES_CONFIGURED)
 
             if 'build_whitelist' in request.POST:
                 async_result = self._build_whitelist(survey_id)
-                self._status_message = f"Built whitelist {async_result} ..."
+                self._status_message = f"Built whitelist: {async_result} ..."
                 # Fall through
-                self._current_status = SurveyStatus.BUILT_WL 
+                celery_results_handler.set_status(SurveyStatus.BUILT_WL, async_result)
 
             if 'start_ping' in request.POST:
                 async_result = self._start_ping(survey_id)
@@ -187,7 +178,7 @@ class ConfigurePingView(generic.edit.FormView):
 
                 async_result2 = self._start_tally(survey_id, metadata_file, PING_RESULTS_DELAY)
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
-                self._current_status = SurveyStatus.PING_STARTED 
+                celery_results_handler.set_status(SurveyStatus.PING_STARTED)
 
             if 'ping_96' in request.POST:
                 survey_id = 96
@@ -217,16 +208,6 @@ class ConfigurePingView(generic.edit.FormView):
             FIELD_SURVEY_STATUS : self._current_status,
         }
         return render(request, self.template_name, context)
-
-@receiver(post_save, sender=TaskResult)
-def task_result_saved(sender, **kwargs):
-    #print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
-    task_result = kwargs['instance']
-    id = task_result.task_id
-    status = task_result.status
-    print(f"task_result_saved(), task_result = {task_result}")
-    print(f"     id = {id}, status = {status}")
-
 
         #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
         # print(f"CPV.get_context_data() 3, form = {form}")
