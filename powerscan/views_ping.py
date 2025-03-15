@@ -217,9 +217,8 @@ class ConfigurePingView(generic.edit.FormView):
         return render(request, self.template_name, context)
 
     @receiver(post_save, sender=TaskResult)
-    def task_result_saved(sender, **kwargs) {
+    def task_result_saved(sender, **kwargs):
         print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
-    }
 
         #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
         # print(f"CPV.get_context_data() 3, form = {form}")
