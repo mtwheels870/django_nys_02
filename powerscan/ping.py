@@ -206,7 +206,7 @@ class PingSurveyManager:
         # file_name = debugger.get_file()
         # debugger.close()
         first = "PSM._traverse_geography(), states/counties/tracts/ranges = "
-        second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}")
+        second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}"
         print(first + second)
         num_states = len(state_ids)
         num_counties = len(county_ids)
