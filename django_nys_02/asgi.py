@@ -30,9 +30,12 @@ application = ProtocolTypeRouter({
     "http": django_asgi_app,
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
-    'channel': ChannelNameRouter({
-        'task-one': TaskConsumer.as_asgi(actions={"generate":"task_one"}),
-        'task-two': TaskConsumer.as_asgi(actions={"delete":"task_two"}),
-        'test-worker': TestWorker.as_asgi(),
+    "channel": ChannelNameRouter({
+        "task-queue": TaskConsumer.as_asgi(),
         }),
     })
+#    'channel': ChannelNameRouter({
+#        'task-one': TaskConsumer.as_asgi(actions={"generate":"task_one"}),
+#        'task-two': TaskConsumer.as_asgi(actions={"delete":"task_two"}),
+#        'test-worker': TestWorker.as_asgi(),
+#        }),

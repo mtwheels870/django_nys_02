@@ -324,14 +324,14 @@ class Loader():
             state_counter.save()
 
     def ping_channel(self):
-        data = 123
-        print(f"Loader.ping_channel(), pinging")
         channel_layer = get_channel_layer()
-        channel_name = "test-worker"
-        print(f"ping_channel(), channel_layer = {channel_layer}, channel_name = {channel_name}")
-        result = async_to_sync(channel_layer.send)(channel_name, {
-            "type": "triggerWorker",
-        })
+
+        async_to_sync(channel_layer.send)(
+            "task-queue", {
+                "type": "do_task",
+                "task_name": "process_data",
+            }
+        )
         #channel_name = "task-one"
         #result = {"result": f"Processed: {data}"}
         # Is this passing a function pointer?

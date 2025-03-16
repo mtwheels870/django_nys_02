@@ -48,7 +48,7 @@ class CeleryResultsHandler:
 
 celery_results_handler = CeleryResultsHandler()
 
-class TaskConsumer(AsyncWebsocketConsumer):
+class TaskConsumer2(AsyncWebsocketConsumer):
     # groups = ["task_updates"]
     groups = ["task-one", "task-two"]
 
@@ -56,13 +56,13 @@ class TaskConsumer(AsyncWebsocketConsumer):
         self.topic_name = "task-one"
         #self.room_name = self.scope['url_route']['kwargs']['room_name']
         #self.room_group_name = f"chat_{self.room_name}"
-        print(f"TaskConsumer.connect(), group_add {self.topic_name},{self.channel_name}")
+        print(f"TaskConsumer2.connect(), group_add {self.topic_name},{self.channel_name}")
         await self.channel_layer.group_add(
             self.topc_name,
             self.channel_name
         )
 
-        print(f"TaskConsumer.connect(), calling accept()")
+        print(f"TaskConsumer2.connect(), calling accept()")
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -72,7 +72,7 @@ class TaskConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        print(f"TaskConsumer.receive(), text_data = {text_data}")
+        print(f"TaskConsumer2.receive(), text_data = {text_data}")
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
     
@@ -129,3 +129,15 @@ class TestWorker(SyncConsumer):
 
     def echo_msg(self, message):
         print("Message to worker ", message)
+
+class TaskConsumer(SyncConsumer):
+    def do_task(self, message):
+        print(f"Task received: {message['task_name']}")
+        # Perform the task
+        self.send({
+            "type": "task.finished",
+            "result": "Task completed successfully"
+        })
+    
+    def task_finished(self, message):
+        print(f"Task finished with result: {message['result']}")
