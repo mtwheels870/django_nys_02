@@ -82,12 +82,15 @@ class TaskConsumer(AsyncWebsocketConsumer):
             }
         )
     
-        async def chat_message(self, event):
-            message = event['message']
-    
-            await self.send(text_data=json.dumps({
-                'message': message
-            }))
+    async def chat_message(self, event):
+        message = event['message']
+
+        await self.send(text_data=json.dumps({
+            'message': message
+        }))
+
+    def get_channel_name(self):
+        return self.channel_name
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
