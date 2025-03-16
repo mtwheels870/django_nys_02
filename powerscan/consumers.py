@@ -132,7 +132,7 @@ class TestWorker(SyncConsumer):
 
 class TaskConsumer(SyncConsumer):
     def do_task(self, message):
-        print(f"Task received: {message['task_name']}")
+        print(f"TaskConsumer.do_task(), Task received: {message['task_name']}")
         # Perform the task
         self.send({
             "type": "task.finished",
