@@ -36,7 +36,7 @@ from .models import (
 )
 
 from .forms import PingStrategyForm
-from .consumers import celery_results_handler, CeleryResultsHandler, TaskConsumer
+from .consumers import celery_results_handler, CeleryResultsHandler
 
 # Import our neighbors
 
