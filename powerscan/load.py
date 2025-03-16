@@ -323,14 +323,17 @@ class Loader():
             print(f"Saving state: {state_counter.us_state.state_name}, {state_counter.range_count}")
             state_counter.save()
 
-    def ping_channel(self):
-        channel_layer = get_channel_layer()
-        result = async_to_sync(channel_layer.send) (
-            "background_tasks",
-            {
-                "type": "background_task",
-                "task_name": "example_task",
-            })
+    def ping_c(self):
+        try:
+            channel_layer = get_channel_layer()
+            result = async_to_sync(channel_layer.send) (
+                "background_tasks",
+                {
+                    "type": "background_task",
+                    "task_name": "example_task",
+                })
+        except Exception as e:
+            print(f"ping_c(), exception {e}")
         # Straight send generates: RuntimeWarning: coroutine 'RedisChannelLayer.send' was never awaited
         #channel_name = "task-one"
         #result = {"result": f"Processed: {data}"}
