@@ -15,7 +15,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 
 from django.core.asgi import get_asgi_application
 
-from powerscan.consumers import TaskConsumer
+from powerscan.consumers import TaskConsumer, TestWorker
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 
