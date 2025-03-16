@@ -198,6 +198,18 @@ LOGGING = {
         "handlers": ["console"],
         "level": "WARNING",
     },
+    'loggers': {
+        'django.channels.worker': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'powerscan.consumers': {  # Add logger for your consumers
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
 }
 
 BOWER_INSTALLED_APPS = (
