@@ -3,8 +3,6 @@ import json
 from enum import Enum
 
 from channels.generic.websocket import WebsocketConsumer
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 
 class CeleryResultsHandler:
     # State machines for ping stuff
