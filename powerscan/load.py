@@ -6,6 +6,9 @@ from django.contrib.gis.geos import Point, MultiPoint
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models.functions import Centroid
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 from .models import (
     UsState, County, CensusTract,
     CountTract, CountCounty, CountState,
@@ -319,4 +322,19 @@ class Loader():
         for _, state_counter in self.hash_states.items():
             print(f"Saving state: {state_counter.us_state.state_name}, {state_counter.range_count}")
             state_counter.save()
+
+    def ping_channel(self):
+        data = 123
+        print(f"Loader.ping_channel(), pinging")
+        channel_layer = get_channel_layer()
+        channel_name = "task-one"
+        print(f"send_task_result(), channel_layer = {channel_layer}, channel_name = {channel_name}")
+        result = {"result": f"Processed: {data}"}
+        # Is this passing a function pointer?
+        # "task_updates", {"type": "task.completed", "message": result}
+        result = async_to_sync(channel_layer.group_send) (
+            channel_name, {"type": "task.completed", "message": result}
+        )
+        print(f"    result = {result}")
+
 

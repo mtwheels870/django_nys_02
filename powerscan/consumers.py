@@ -48,7 +48,8 @@ class CeleryResultsHandler:
 celery_results_handler = CeleryResultsHandler()
 
 class TaskConsumer(AsyncWebsocketConsumer):
-    groups = ["task_updates"]
+    # groups = ["task_updates"]
+    groups = ["task-one", "task-two"]
 
     async def connect(self):
         self.topic_name = "task-one"
