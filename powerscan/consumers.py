@@ -18,7 +18,7 @@ class CeleryResultsHandler:
             return str(self.name)
 
     def __init__(self):
-        print(f"CeleryResultsHandler.init(), self = {self}")
+        # print(f"CeleryResultsHandler.init(), self = {self}")
         self.reset()
 
     def get_status(self):

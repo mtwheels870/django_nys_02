@@ -100,6 +100,9 @@ class ConfigurePingView(generic.edit.FormView):
             survey_state.save()
         self._survey_id = survey.id
         print(f"CPV._configure_survey(), application = {application}, dir(application) = {dir(application)}")
+        mapping = application.application_mapping
+        for key, value in mapping.items():
+            print(f"     application_mapping[{key}] = {value}")
         return abbrevs, survey.id
 
     def _build_whitelist(self, survey_id):
