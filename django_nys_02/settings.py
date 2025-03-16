@@ -200,12 +200,12 @@ LOGGING = {
     },
     'loggers': {
         'django.channels.worker': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'handlers': ['console'],
             'propagate': False,
         },
         'powerscan.consumers': {  # Add logger for your consumers
-            'level': 'DEBUG',
+            'level': 'INFO',
             'handlers': ['console'],
             'propagate': False,
         },
