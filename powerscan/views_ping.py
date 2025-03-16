@@ -18,6 +18,9 @@ from celery import shared_task
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 from django_nys_02.asgi import application
 
@@ -138,12 +141,19 @@ class ConfigurePingView(generic.edit.FormView):
         #))
 
     def _start_ping(self, survey_id):
-        #print(f"CPV.post(), start_ping...")
-        async_result = zmap_from_file.apply_async(
-            kwargs={"survey_id" : survey_id},
-                #"ip_source_id": IP_RANGE_SOURCE },
-            queue=QUEUE_NAME,
-            routing_key='ping.tasks.zmap_from_file')
+        if survey_id == 96:
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.send)("test_worker", {
+                "type": "triggerWorker",
+            })
+            async_result = None
+        else:
+            #print(f"CPV.post(), start_ping...")
+            async_result = zmap_from_file.apply_async(
+                kwargs={"survey_id" : survey_id},
+                    #"ip_source_id": IP_RANGE_SOURCE },
+                queue=QUEUE_NAME,
+                routing_key='ping.tasks.zmap_from_file')
         return async_result
 
 #    @task_postrun.connect(sender=zmap_from_file)
