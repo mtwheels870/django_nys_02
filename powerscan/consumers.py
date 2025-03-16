@@ -92,6 +92,12 @@ class TaskConsumer(AsyncWebsocketConsumer):
     def get_channel_name(self):
         print(f"TaskConsumer.g_c_n(), dir(self): {dir(self)}")
         return "MickeyMouse"
+    
+    async def task_one(self, event):
+        print(f"TaskConsumer.task_one(), self = {self}, event = {event}")
+
+    async def task_two(self, event):
+        print(f"TaskConsumer.task_two(), self = {self}, event = {event}")
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
