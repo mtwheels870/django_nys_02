@@ -329,7 +329,7 @@ class Loader():
         channel_layer = get_channel_layer()
         channel_name = "test-worker"
         print(f"ping_channel(), channel_layer = {channel_layer}, channel_name = {channel_name}")
-        async_to_sync(channel_layer.send)(channel_name, {
+        result = async_to_sync(channel_layer.send)(channel_name, {
             "type": "triggerWorker",
         })
         #channel_name = "task-one"

@@ -33,6 +33,6 @@ application = ProtocolTypeRouter({
     'channel': ChannelNameRouter({
         'task-one': TaskConsumer.as_asgi(actions={"generate":"task_one"}),
         'task-two': TaskConsumer.as_asgi(actions={"delete":"task_two"}),
-        'test_worker': TestWorker,
+        'test-worker': TestWorker.as_asgi(),
         }),
     })
