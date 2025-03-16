@@ -325,7 +325,7 @@ class Loader():
 
     def ping_channel(self):
         channel_layer = get_channel_layer()
-        channel_layer.send(
+        result = channel_layer.send(
             "background_tasks",
             {
                 "type": "background_task",
