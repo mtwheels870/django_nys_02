@@ -51,7 +51,7 @@ class TaskConsumer(AsyncWebsocketConsumer):
     groups = ["task_updates"]
 
     async def connect(self):
-        self.topic_name "mike01"
+        self.topic_name = "mike01"
         #self.room_name = self.scope['url_route']['kwargs']['room_name']
         #self.room_group_name = f"chat_{self.room_name}"
         print(f"TaskConsumer.connect(), group_add {self.topic_name},{self.channel_name}")
