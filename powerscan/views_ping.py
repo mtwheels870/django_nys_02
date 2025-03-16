@@ -52,9 +52,9 @@ FIELD_SURVEY_STATUS = "survey_status"
 PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
 
-task_consumer = TaskConsumer()
-channel_name = task_consumer.get_channel_name()
-print(f"After TaskConsumer() create, channel name = {channel_name}")
+#task_consumer = TaskConsumer()
+#channel_name = task_consumer.get_channel_name()
+#print(f"After TaskConsumer() create, channel name = {channel_name}")
 
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
