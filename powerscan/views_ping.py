@@ -32,7 +32,7 @@ from .models import (
 )
 
 from .forms import PingStrategyForm
-from .consumers import celery_results_handler, CeleryResultsHandler
+from .consumers import celery_results_handler, CeleryResultsHandler, TaskConsumer
 
 # Import our neighbors
 
@@ -51,6 +51,8 @@ FIELD_SURVEY_STATUS = "survey_status"
 # PING_RESULTS_DELAY = 15
 PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
+
+task_consumer = TaskConsumer()
 
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
