@@ -123,8 +123,11 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         time_pinged=timezone.now())
     range_ping.save()
 
+# Maybe we need to be a task to get the channel layer
+@shared_task
 def send_task_result(data):
     channel_layer = get_channel_layer()
+    print(f"send_task_result(), channel_layer = {channel_layer}")
     result = {"result": f"Processed: {data}"}
     # Is this passing a function pointer?
     async_to_sync(channel_layer.group_send) (
