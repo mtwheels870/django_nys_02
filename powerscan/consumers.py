@@ -130,7 +130,7 @@ class TestWorker(SyncConsumer):
     def echo_msg(self, message):
         print("Message to worker ", message)
 
-class TaskConsumer(SyncConsumer):
+class FredConsumer(SyncConsumer):
     def background_task(self, message):
         print(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task

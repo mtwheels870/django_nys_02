@@ -15,7 +15,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 
 from django.core.asgi import get_asgi_application
 
-from powerscan.consumers import TaskConsumer, TestWorker
+from powerscan.consumers import FredConsumer, TestWorker
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 
@@ -29,7 +29,7 @@ from powerscan.routing import websocket_urlpatterns
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "channel": ChannelNameRouter({
-        "background_tasks": TaskConsumer.as_asgi(),
+        "background_tasks": FredConsumer.as_asgi(),
         }),
     })
 #    "http": django_asgi_app,
