@@ -19,6 +19,7 @@ from rest_framework import viewsets
 from rest_framework_gis import filters
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
+from django_nys_02.asgi import application
 
 from .tasks import (
     build_whitelist, zmap_from_file, tally_results,
@@ -98,6 +99,7 @@ class ConfigurePingView(generic.edit.FormView):
             survey_state = IpSurveyState(survey=survey, us_state=state)
             survey_state.save()
         self._survey_id = survey.id
+        print(f"CPV._configure_survey(), application = {application}, dir(application) = {dir(application)}")
         return abbrevs, survey.id
 
     def _build_whitelist(self, survey_id):
