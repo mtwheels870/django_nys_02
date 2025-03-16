@@ -103,6 +103,8 @@ class ConfigurePingView(generic.edit.FormView):
         mapping = application.application_mapping
         for key, value in mapping.items():
             print(f"     application_mapping[{key}] = {value}")
+            if key == "channel":
+                print(f"     more_stuff (dir): {dir(value)}")
         return abbrevs, survey.id
 
     def _build_whitelist(self, survey_id):
