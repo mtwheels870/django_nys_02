@@ -325,12 +325,13 @@ class Loader():
 
     def ping_channel(self):
         channel_layer = get_channel_layer()
-        result = channel_layer.send(
+        result = async_to_sync(channel_layer.send) (
             "background_tasks",
             {
                 "type": "background_task",
                 "task_name": "example_task",
             })
+        # Straight send generates: RuntimeWarning: coroutine 'RedisChannelLayer.send' was never awaited
         #channel_name = "task-one"
         #result = {"result": f"Processed: {data}"}
         # Is this passing a function pointer?
