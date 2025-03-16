@@ -240,13 +240,13 @@ CELERY_WORKER_CANCEL_LONG_RUNNING_TASKS_ON_CONNECTION_LOSS = True
 # This probably works b/c the web socket stuff gets through
 ASGI_APPLICATION = "django_nys_02.asgi.application"
 
-#CHANNEL_LAYERS = {
-#    "default": {
-#        "BACKEND": "channels_redis.core.RedisChannelLayer",
-#        "CONFIG": {
-#            "hosts": [("127.0.0.1", 6379)],
-#        },
-#    },
-#}
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 
