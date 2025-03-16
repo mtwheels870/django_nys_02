@@ -130,8 +130,9 @@ def send_task_result(data):
     print(f"send_task_result(), channel_layer = {channel_layer}")
     result = {"result": f"Processed: {data}"}
     # Is this passing a function pointer?
+    # "task_updates", {"type": "task.completed", "message": result}
     async_to_sync(channel_layer.group_send) (
-        "task_updates", {"type": "task.completed", "message": result}
+        "mike01", {"type": "task.completed", "message": result}
     )
 
 
