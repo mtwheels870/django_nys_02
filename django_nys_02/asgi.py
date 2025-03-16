@@ -27,13 +27,13 @@ django_asgi_app = get_asgi_application()
 from powerscan.routing import websocket_urlpatterns
 
 application = ProtocolTypeRouter({
-    "http": django_asgi_app,
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
     "channel": ChannelNameRouter({
         "task-queue": TaskConsumer.as_asgi(),
         }),
     })
+#    "http": django_asgi_app,
+#    "websocket": AllowedHostsOriginValidator(
+#        AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
 #    'channel': ChannelNameRouter({
 #        'task-one': TaskConsumer.as_asgi(actions={"generate":"task_one"}),
 #        'task-two': TaskConsumer.as_asgi(actions={"delete":"task_two"}),

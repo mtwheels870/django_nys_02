@@ -325,9 +325,11 @@ class Loader():
 
     def ping_channel(self):
         channel_layer = get_channel_layer()
+        channel_name = "task-queue"
+        print(f"ping_channel(), channel_layer = {channel_layer}, channel_name = {channel_name}")
 
         result = async_to_sync(channel_layer.send)(
-            "task-queue", {
+            channel_name, {
                 "type": "do_task",
                 "task_name": "process_data",
             }
