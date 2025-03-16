@@ -117,49 +117,6 @@ class ChatConsumer(WebsocketConsumer):
         #self.send(text_data=json.dumps({"message": message}))
         self.send(text_data=json.dumps({"message": reply}))
 
-I am trying to set up an app which uses django2.0.2 and channels2.1.1. What I would like to achieve is using a background/worker task to perform some work that will produce data, that should dynamically appear on the website. My problem, related primarily to channels, is: how do I correctly establish communication between the worker, and the consumer connected to a websocket?
-
-Below is a minimal example highlighting the issue: The idea is that the user triggers the worker, the worker produces some data and sends it, via the channel layer, to a consumer that is connected to the websocket.
-
-#routing.py
-from channels.routing import ChannelNameRouter, ProtocolTypeRouter, URLRouter
-from channels.auth import AuthMiddlewareStack
-from django.urls import path
-from testApp.consumers import *
-
-application = ProtocolTypeRouter({
-    "websocket":AuthMiddlewareStack(
-        URLRouter([
-            path("wspath",TestConsumer),
-        ]),
-    ),
-    "channel":ChannelNameRouter({
-        "test_worker": TestWorker,
-    }),
-})
-The consumers:
-
-#consumers.py
-from channels.consumer import SyncConsumer
-from channels.generic.websocket import WebsocketConsumer
-from asgiref.sync import async_to_sync
-
-class TestConsumer(WebsocketConsumer):
-    def websocket_connect(self,message):
-        async_to_sync(self.channel_layer.group_add)("testGroup",self.channel_name)
-        self.connect()
-        #I understand this next part is a bit weird, but I figured it 
-        #is the most concise way to explain my problem
-        async_to_sync(self.channel_layer.group_send)(
-            "testGroup",
-            {
-                'type':"echo_msg",
-                'msg':"sent from WebsocketConsumer",
-            })
-
-    def echo_msg(self, message):
-        print("Message to WebsocketConsumer", message)
-
 class TestWorker(SyncConsumer):
     def triggerWorker(self, message):
         async_to_sync(self.channel_layer.group_add)("testGroup",self.channel_name)
