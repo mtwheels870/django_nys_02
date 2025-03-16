@@ -53,6 +53,7 @@ PING_RESULTS_DELAY = 15 * 60
 PING_SMALL_DELAY = 20
 
 task_consumer = TaskConsumer()
+print(f"After TaskConsumer() create, channel name = {task_consumer.channel_name}")
 
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
