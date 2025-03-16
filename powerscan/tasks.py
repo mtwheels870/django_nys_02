@@ -268,19 +268,19 @@ def tally_results(self, *args, **kwargs):
     print(f"tally_results(), saved {pings_to_db} to database survey_id = {survey_id}")
     return pings_to_db 
 
-@receiver(post_save, sender=TaskResult)
-def task_result_saved(sender, **kwargs):
-    #print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
-    task_result = kwargs['instance']
-    id = task_result.task_id
-    status = task_result.status
-    result = task_result.result
-    print(f"task_result_saved(), task_result = {task_result}")
-    print(f"     id = {id}, status = {status}, result = {result}")
-    if status == states.SUCCESS:
-        celery_results_handler.store_task_result(task_result)
-    else:
-        print(f"task_result_saved(), status = {status}, ignoring")
+#@receiver(post_save, sender=TaskResult)
+#def task_result_saved(sender, **kwargs):
+#    #print(f"task_result_saved(), sender = {sender}, kwargs = {kwargs}")
+#    task_result = kwargs['instance']
+#    id = task_result.task_id
+#    status = task_result.status
+#    result = task_result.result
+#    print(f"task_result_saved(), task_result = {task_result}")
+#    print(f"     id = {id}, status = {status}, result = {result}")
+#    if status == states.SUCCESS:
+#        celery_results_handler.store_task_result(task_result)
+#    else:
+#        print(f"task_result_saved(), status = {status}, ignoring")
         
 
 
