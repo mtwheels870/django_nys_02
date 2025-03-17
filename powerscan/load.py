@@ -327,7 +327,8 @@ class Loader():
         try:
             channel_layer = get_channel_layer()
             result = async_to_sync(channel_layer.send) (
-                "background_tasks",
+                #"background_tasks",
+                "a",
                 {
                     "type": "background_task",
                     "task_name": "example_task",

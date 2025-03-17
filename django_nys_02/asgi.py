@@ -28,8 +28,11 @@ from powerscan.routing import websocket_urlpatterns
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
+    "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
     "channel": ChannelNameRouter({
         "background_tasks": FredConsumer.as_asgi(),
+        "a": FredConsumer.as_asgi(),
         }),
     })
 #    "http": django_asgi_app,
