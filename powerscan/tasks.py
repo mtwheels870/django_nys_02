@@ -127,14 +127,20 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
 @shared_task
 def send_task_result(data):
     channel_layer = get_channel_layer()
-    channel_name = "task-one"
-    print(f"send_task_result(), channel_layer = {channel_layer}, channel_name = {channel_name}")
-    result = {"result": f"Processed: {data}"}
+    result = async_to_sync(send) (
+        "background_tasks",
+        {
+            "type": "background_task",
+            "task_name": "example_task",
+        })
+    #channel_name = "task-one"
+    #print(f"send_task_result(), channel_layer = {channel_layer}, channel_name = {channel_name}")
+    #result = {"result": f"Processed: {data}"}
     # Is this passing a function pointer?
     # "task_updates", {"type": "task.completed", "message": result}
-    result = async_to_sync(channel_layer.group_send) (
-        channel_name, {"type": "task.completed", "message": result}
-    )
+    #result = async_to_sync(channel_layer.group_send) (
+    #    channel_name, {"type": "task.completed", "message": result}
+    #)
     print(f"    result = {result}")
 
 

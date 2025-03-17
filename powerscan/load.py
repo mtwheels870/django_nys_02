@@ -326,9 +326,10 @@ class Loader():
     def ping_c(self):
         try:
             channel_layer = get_channel_layer()
-            result = async_to_sync(channel_layer.send) (
+            # result = async_to_sync(channel_layer.send) (
                 #"background_tasks",
-                "a",
+            result = async_to_sync(send) (
+                "background_tasks",
                 {
                     "type": "background_task",
                     "task_name": "example_task",
