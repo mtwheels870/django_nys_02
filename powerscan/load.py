@@ -9,6 +9,8 @@ from django.contrib.gis.db.models.functions import Centroid
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
+from django_nys_02.asgi import application
+
 from .models import (
     UsState, County, CensusTract,
     CountTract, CountCounty, CountState,
@@ -325,10 +327,19 @@ class Loader():
 
     def ping_c(self):
         try:
+            print(f"ping_c(), application = {application}, dir(application) = {dir(application)}")
+            mapping = application.application_mapping
+            for key, value in mapping.items():
+                print(f"     application_mapping[{key}] = {value}")
+                if key == "channel":
+                    print(f"     more_stuff (dir): {dir(value)}\napp_mapping2:\n")
+                    mapping2 = value.application_mapping
+                    for key2, value2 in mapping2.items():
+                        print(f"     app_mapping2[{key2}] = {value2}")
             channel_layer = get_channel_layer()
-            # result = async_to_sync(channel_layer.send) (
+            print(f"ping_c(), channel_layer = {channel_layer}")
                 #"background_tasks",
-            result = async_to_sync(send) (
+            result = async_to_sync(channel_layer.send) (
                 "background_tasks",
                 {
                     "type": "background_task",

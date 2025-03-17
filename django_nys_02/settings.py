@@ -246,9 +246,12 @@ ASGI_APPLICATION = "django_nys_02.asgi.application"
 #        "BACKEND": "channels_redis.core.RedisChannelLayer",
 #        "CONFIG": {
 #            "hosts": [("localhost", 6379)],
+#        "BACKEND": "channels.layers.InMemoryChannelLayer",
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
     },
 }
 
