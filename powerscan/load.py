@@ -333,12 +333,13 @@ class Loader():
             print(f"ping_c(), channel_layer = {channel_layer}")
                 #"background_tasks",
             # This should probably use a group_send (to be consistent)
-            result = async_to_sync(channel_layer.send) (
+            #result = async_to_sync(channel_layer.send) (
+            channel_layer.group_send(CHANNEL_GROUP_CONTROLLERS,
                 CHANNEL_NAME_TASK_RESULT,
                 {
                     # This should match the method name
-                    "type": "background_task",
-                    "task_result_data": "somed sample data here",
+                    "type": "process_task_result",
+                    "task_result_data": "some sample data here",
                 })
         except Exception as e:
             print(f"ping_c(), exception {e}")

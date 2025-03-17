@@ -60,13 +60,8 @@ def start_tracts(self, *args, **kwargs):
     count_range_tracts = CountTract.objects.order_by("-range_count")
     f = lambda crt: crt.census_tract.id
     batch_one = [f(x) for x in count_range_tracts[:10]]
-    #batch_two = [f(x) for x in count_range_tracts[11:20]]
-    #batch_three = [f(x) for x in count_range_tracts[21:30]]
     ending_task = finish_survey.s(survey.id)
 
-#    grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
-#        ping_tracts.s(survey.id, batch_three)) 
-    # chained_task = chain(grouped_tasks, ending_task)
     chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
     print(f"start_tracts(), chained_task = {chained_task}")
     result = chained_task.apply_async(
@@ -137,29 +132,8 @@ def send_task_result(data):
                 "task_name": "example_task",
             })
     except Exception as e:
-        print(f"ping_c(), exception {e}")
+        print(f"send_task_result(), exception {e}")
     print(f"    result = {result}")
-    #channel_name = "task-one"
-    #print(f"send_task_result(), channel_layer = {channel_layer}, channel_name = {channel_name}")
-    #result = {"result": f"Processed: {data}"}
-    # Is this passing a function pointer?
-    # "task_updates", {"type": "task.completed", "message": result}
-    #result = async_to_sync(channel_layer.group_send) (
-    #    channel_name, {"type": "task.completed", "message": result}
-    #)
-
-
-#def _ping_all_ranges(survey, tract, debug):
-#    print(f"_ping_all_ranges(), tract = {tract}, debug = {debug}")
-#    ip_ranges = tract.deiprange_set.all()
-#    total_ranges = ip_ranges.count()
-#    if debug:
-#        print(f"_ping_all_ranges(), tract_id = {tract.id}, total_ranges = {total_ranges}")
-#    dir_path = make_temp_dir(tract.id)
-
-#    for index, ip_range in enumerate(ip_ranges):
-#        _ping_single_range(survey, tract, ip_range, dir_path, debug)
-#    return total_ranges
 
 @shared_task(bind=True)
 def build_whitelist(self, *args, **kwargs):
@@ -282,3 +256,27 @@ def tally_results(self, *args, **kwargs):
     print(f"tally_results(), saved {pings_to_db} to database survey_id = {survey_id}")
     return pings_to_db 
 
+    #channel_name = "task-one"
+    #print(f"send_task_result(), channel_layer = {channel_layer}, channel_name = {channel_name}")
+    #result = {"result": f"Processed: {data}"}
+    # Is this passing a function pointer?
+    # "task_updates", {"type": "task.completed", "message": result}
+    #result = async_to_sync(channel_layer.group_send) (
+    #    channel_name, {"type": "task.completed", "message": result}
+    #)
+
+
+#def _ping_all_ranges(survey, tract, debug):
+#    print(f"_ping_all_ranges(), tract = {tract}, debug = {debug}")
+#    ip_ranges = tract.deiprange_set.all()
+#    total_ranges = ip_ranges.count()
+#    if debug:
+#        print(f"_ping_all_ranges(), tract_id = {tract.id}, total_ranges = {total_ranges}")
+#    dir_path = make_temp_dir(tract.id)
+
+#    for index, ip_range in enumerate(ip_ranges):
+#        _ping_single_range(survey, tract, ip_range, dir_path, debug)
+#    return total_ranges
+#    grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
+#        ping_tracts.s(survey.id, batch_three)) 
+    # chained_task = chain(grouped_tasks, ending_task)

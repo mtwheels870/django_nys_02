@@ -108,35 +108,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def task_two(self, event):
         print(f"TaskConsumer.task_two(), self = {self}, event = {event}")
 
-class ChatConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
-
-    def disconnect(self, close_code):
-        pass
-
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
-        print(f"ChatConsumer.receive(), read message = {message}")
-        reply = "reply to " + message
-
-        #self.send(text_data=json.dumps({"message": message}))
-        self.send(text_data=json.dumps({"message": reply}))
-
-class TestWorker(SyncConsumer):
-    def triggerWorker(self, message):
-        async_to_sync(self.channel_layer.group_add)("testGroup",self.channel_name)
-        async_to_sync(self.channel_layer.group_send)(
-            "testGroup",
-            {
-                'type':"echo_msg",
-                'msg':"sent from worker",
-            })
-
-    def echo_msg(self, message):
-        print("Message to worker ", message)
-
 # The Task consumer recieves the results (when the task is done)
 class TaskConsumer(AsyncConsumer):
     def __init__(self):
@@ -151,8 +122,8 @@ class TaskConsumer(AsyncConsumer):
         print(f"TaskConsumer.disconnect(), never get this")
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
-    async def background_task(self, message):
-        print(f"TaskConsumer.background_task(), Task received: ({message['task_result_data']})")
+    async def process_task_result(self, message):
+        print(f"TaskConsumer.process_task_result(), Task received: ({message['task_result_data']})")
         #self.logger.info(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task
         await self.channel_layer.group_send(CHANNEL_GROUP_WORKERS,
