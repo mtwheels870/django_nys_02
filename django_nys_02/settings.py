@@ -40,9 +40,10 @@ ALLOWED_HOSTS = [
 #    'mycalendar.apps.MyCalendarConfig',
 #    'file_picker',
 #    'daphne',
+#    'daphne.apps.DaphneConfig',
 INSTALLED_APPS = [
     'channels',
-    'daphne.apps.DaphneConfig',
+    'daphne',
     'powerscan.apps.PowerScanConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -254,6 +255,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [("localhost", 6379)],
         },
+        "ROUTING": ".asgi.application",
     },
 }
 
