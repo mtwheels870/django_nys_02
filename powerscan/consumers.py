@@ -6,6 +6,11 @@ from enum import Enum
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, SyncConsumer, AsyncConsumer
 from asgiref.sync import async_to_sync
 
+CHANNEL_GROUP_WORKERS = "workers"
+CHANNEL_GROUP_CONTROLLERS = "controllers"
+
+CHANNEL_NAME_TASK_RESULT = "task_result"
+CHANNEL_NAME_RESULT_ACK = "result_ack"
 
 class CeleryResultsHandler:
     # State machines for ping stuff
@@ -132,29 +137,27 @@ class TestWorker(SyncConsumer):
     def echo_msg(self, message):
         print("Message to worker ", message)
 
-class FredConsumer(AsyncConsumer):
+# The Task consumer recieves the results (when the task is done)
+class TaskConsumer(AsyncConsumer):
     def __init__(self):
-        print(f"FredConsumer.init()")
-        self.group_name = "workers"
-        self.channel_name = "background_tasks"
+        print(f"TaskConsumer.init()")
 
     async def connnect(self):
-        print(f"TaskConsumer.connect()")
-
+        print(f"TaskConsumer.connect(), we don't get this")
         await self.channel_layer.group_add(self.group_name, self.channel_name)
-
         await self.accept()
 
     async def disconnect(self, close_code):
-        print(f"TaskConsumer.disconnect()")
+        print(f"TaskConsumer.disconnect(), never get this")
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def background_task(self, message):
-        print(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
+        print(f"TaskConsumer.background_task(), Task received: ({message['task_result_data']})")
         #self.logger.info(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task
-        await self.channel_layer.group_send(self.group_name,
+        await self.channel_layer.group_send(CHANNEL_GROUP_WORKERS,
         {
+            # Why is this task.finished?  (and not underscore?)
             "type": "task.finished",
             "result": "Task completed successfully"
         })
