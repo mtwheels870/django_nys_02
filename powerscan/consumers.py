@@ -133,10 +133,13 @@ class TestWorker(SyncConsumer):
         print("Message to worker ", message)
 
 class FredConsumer(AsyncConsumer):
-    async def connnect(self):
-        print(f"TaskConsumer.connect()")
+    def __init__(self):
+        print(f"FredConsumer.init()")
         self.group_name = "workers"
         self.channel_name = "background_tasks"
+
+    async def connnect(self):
+        print(f"TaskConsumer.connect()")
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
 
