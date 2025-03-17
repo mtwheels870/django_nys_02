@@ -11,6 +11,8 @@ from asgiref.sync import async_to_sync
 
 from django_nys_02.asgi import application
 
+from .consumers import CHANNEL_NAME_TASK_RESULT
+
 from .models import (
     UsState, County, CensusTract,
     CountTract, CountCounty, CountState,
