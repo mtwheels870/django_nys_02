@@ -327,15 +327,15 @@ class Loader():
 
     def ping_c(self):
         try:
-            print(f"ping_c(), application = {application}, dir(application) = {dir(application)}")
-            mapping = application.application_mapping
-            for key, value in mapping.items():
-                print(f"     application_mapping[{key}] = {value}")
-                if key == "channel":
-                    print(f"     more_stuff (dir): {dir(value)}\napp_mapping2:\n")
-                    mapping2 = value.application_mapping
-                    for key2, value2 in mapping2.items():
-                        print(f"     app_mapping2[{key2}] = {value2}")
+            #print(f"ping_c(), application = {application}, dir(application) = {dir(application)}")
+            #mapping = application.application_mapping
+            #for key, value in mapping.items():
+            #    print(f"     application_mapping[{key}] = {value}")
+            #    if key == "channel":
+            #        print(f"     more_stuff (dir): {dir(value)}\napp_mapping2:\n")
+            #        mapping2 = value.application_mapping
+            #        for key2, value2 in mapping2.items():
+            #            print(f"     app_mapping2[{key2}] = {value2}")
             channel_layer = get_channel_layer()
             print(f"ping_c(), channel_layer = {channel_layer}")
                 #"background_tasks",
