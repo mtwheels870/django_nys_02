@@ -55,7 +55,7 @@ class CeleryResultsHandler:
 
 celery_results_handler = CeleryResultsHandler()
 
-class TaskConsumer2(AsyncWebsocketConsumer):
+class ChatConsumer(AsyncWebsocketConsumer):
     # groups = ["task_updates"]
     groups = ["task-one", "task-two"]
 
@@ -63,13 +63,13 @@ class TaskConsumer2(AsyncWebsocketConsumer):
         self.topic_name = "task-one"
         #self.room_name = self.scope['url_route']['kwargs']['room_name']
         #self.room_group_name = f"chat_{self.room_name}"
-        print(f"TaskConsumer2.connect(), group_add {self.topic_name},{self.channel_name}")
+        print(f"ChatConsumer.connect(), group_add {self.topic_name},{self.channel_name}")
         await self.channel_layer.group_add(
             self.topc_name,
             self.channel_name
         )
 
-        print(f"TaskConsumer2.connect(), calling accept()")
+        print(f"ChatConsumer.connect(), calling accept()")
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -79,7 +79,7 @@ class TaskConsumer2(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        print(f"TaskConsumer2.receive(), text_data = {text_data}")
+        print(f"ChatConsumer.receive(), text_data = {text_data}")
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
     
