@@ -126,14 +126,19 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
 # Maybe we need to be a task to get the channel layer
 @shared_task
 def send_task_result(data):
-    channel_layer = get_channel_layer()
-    print(f"send_task_result(), channel_layer = {channel_layer}")
-    result = async_to_sync(channel_layer.send) (
-        "background_tasks",
-        {
-            "type": "background_task",
-            "task_name": "example_task",
-        })
+    try:
+        channel_layer = get_channel_layer()
+        print(f"send_task_result(), channel_layer = {channel_layer}")
+            #"background_tasks",
+        result = async_to_sync(channel_layer.send) (
+            "background_tasks",
+            {
+                "type": "background_task",
+                "task_name": "example_task",
+            })
+    except Exception as e:
+        print(f"ping_c(), exception {e}")
+    print(f"    result = {result}")
     #channel_name = "task-one"
     #print(f"send_task_result(), channel_layer = {channel_layer}, channel_name = {channel_name}")
     #result = {"result": f"Processed: {data}"}
@@ -142,7 +147,6 @@ def send_task_result(data):
     #result = async_to_sync(channel_layer.group_send) (
     #    channel_name, {"type": "task.completed", "message": result}
     #)
-    print(f"    result = {result}")
 
 
 #def _ping_all_ranges(survey, tract, debug):
