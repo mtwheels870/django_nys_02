@@ -3,7 +3,7 @@ import logging
 
 from enum import Enum
 
-from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, SyncConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, SyncConsumer, AsyncConsumer
 
 
 class CeleryResultsHandler:
@@ -131,7 +131,7 @@ class TestWorker(SyncConsumer):
     def echo_msg(self, message):
         print("Message to worker ", message)
 
-class FredConsumer(SyncConsumer):
+class FredConsumer(AsyncConsumer):
     def __init__(self):
         print(f"FredConsumer.__init__()")
         self.logger = logging.getLogger(__name__)
