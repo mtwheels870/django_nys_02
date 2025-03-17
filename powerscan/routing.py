@@ -1,7 +1,13 @@
 # chat/routing.py
 from django.urls import re_path
 
-from . import consumers
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
+from channels.security.websocket import AllowedHostsOriginValidator
+
+from django.core.asgi import get_asgi_application
+from .consumers import FredConsumer, TestWorker
+#from . import consumers
 
 
 # This as_asgi() works like Django's as_view()
@@ -9,3 +15,13 @@ from . import consumers
 websocket_urlpatterns = [
     re_path(r"ws/powerscan/chat/(?P<room_name>\w+)/$", consumers.TaskConsumer2.as_asgi()),
 ]
+
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
+    "channel": ChannelNameRouter({
+        "background_tasks": FredConsumer.as_asgi(),
+        "a": FredConsumer.as_asgi(),
+        }),
+    })
