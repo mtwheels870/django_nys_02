@@ -13,7 +13,7 @@ from .consumers import FredConsumer, TestWorker, TaskConsumer2
 # This as_asgi() works like Django's as_view()
 # https://channels.readthedocs.io/en/stable/tutorial/part_2.html
 websocket_urlpatterns = [
-    re_path(r"ws/powerscan/chat/(?P<room_name>\w+)/$", consumers.TaskConsumer2.as_asgi()),
+    re_path(r"ws/powerscan/chat/(?P<room_name>\w+)/$", TaskConsumer2.as_asgi()),
 ]
 
 application = ProtocolTypeRouter({
