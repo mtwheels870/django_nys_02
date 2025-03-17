@@ -133,15 +133,22 @@ class TestWorker(SyncConsumer):
         print("Message to worker ", message)
 
 class FredConsumer(AsyncConsumer):
-    def __init__(self):
-        print(f"FredConsumer.__init__()")
-        self.logger = logging.getLogger(__name__)
+    async def connnect(self):
+        self.group_name = "workers"
+        self.channel_name = "background_tasks"
+
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def background_task(self, message):
         print(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         #self.logger.info(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task
-        await self.channel_layer.send(
+        await self.channel_layer.group_send(self.group_name,
         {
             "type": "task.finished",
             "result": "Task completed successfully"
