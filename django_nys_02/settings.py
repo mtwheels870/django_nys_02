@@ -41,6 +41,7 @@ ALLOWED_HOSTS = [
 #    'file_picker',
 INSTALLED_APPS = [
     'daphne',
+    'channels',
     'powerscan.apps.PowerScanConfig',
     'django.contrib.admin',
     'django.contrib.auth',
