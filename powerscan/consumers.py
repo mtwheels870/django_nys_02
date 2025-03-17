@@ -140,7 +140,7 @@ class FredConsumer(AsyncConsumer):
         print(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         self.logger.info(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task
-        async_to_sync(self.channel_layer.group_send)(
+        self.channel_layer.async_to_sync(self.channel_layer.group_send)(
         {
             "type": "task.finished",
             "result": "Task completed successfully"
