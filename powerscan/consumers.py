@@ -134,6 +134,7 @@ class TestWorker(SyncConsumer):
 
 class FredConsumer(AsyncConsumer):
     async def connnect(self):
+        print(f"TaskConsumer.connect()")
         self.group_name = "workers"
         self.channel_name = "background_tasks"
 
@@ -142,6 +143,7 @@ class FredConsumer(AsyncConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
+        print(f"TaskConsumer.disconnect()")
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def background_task(self, message):
