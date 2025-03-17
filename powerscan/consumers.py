@@ -4,6 +4,7 @@ import logging
 from enum import Enum
 
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, SyncConsumer, AsyncConsumer
+from asgiref.sync import async_to_sync
 
 
 class CeleryResultsHandler:
@@ -140,7 +141,7 @@ class FredConsumer(AsyncConsumer):
         print(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         self.logger.info(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task
-        self.channel_layer.async_to_sync(self.channel_layer.group_send)(
+        async_to_sync(self.channel_layer.group_send)(
         {
             "type": "task.finished",
             "result": "Task completed successfully"
