@@ -127,7 +127,8 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
 @shared_task
 def send_task_result(data):
     channel_layer = get_channel_layer()
-    result = async_to_sync(send) (
+    print(f"send_task_result(), channel_layer = {channel_layer}")
+    result = async_to_sync(channel_layer.send) (
         "background_tasks",
         {
             "type": "background_task",
