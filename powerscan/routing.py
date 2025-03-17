@@ -7,7 +7,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 
 from django.core.asgi import get_asgi_application
 # from . import consumers
-from .consumers import FredConsumer, TestWorker, TaskConsumer2
+from .consumers import TaskConsumer, CHANNEL_NAME_TASK_RESULT 
 
 
 # This as_asgi() works like Django's as_view()
@@ -21,6 +21,6 @@ application = ProtocolTypeRouter({
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
     "channel": ChannelNameRouter({
-        "background_tasks": FredConsumer.as_asgi(),
+        CHANNEL_NAME_TASK_RESULT : TaskConsumer.as_asgi(),
         }),
     })
