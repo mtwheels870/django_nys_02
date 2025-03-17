@@ -132,6 +132,7 @@ class TestWorker(SyncConsumer):
 
 class FredConsumer(SyncConsumer):
     def __init__(self):
+        print(f"FredConsumer.__init__()")
         self.logger = logging.getLogger(__name__)
 
     def background_task(self, message):
