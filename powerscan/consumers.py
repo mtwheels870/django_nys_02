@@ -136,14 +136,17 @@ class FredConsumer(SyncConsumer):
         print(f"FredConsumer.__init__()")
         self.logger = logging.getLogger(__name__)
 
-    def background_task(self, message):
+    async def background_task(self, message):
         print(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         self.logger.info(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task
-        self.send({
+        await self.send({
             "type": "task.finished",
             "result": "Task completed successfully"
         })
     
-    def task_finished(self, message):
+    async def task_finished(self, message):
         print(f"Task finished with result: {message['result']}")
+
+    async def application_send(self, event):
+        await self.send(event['text'])

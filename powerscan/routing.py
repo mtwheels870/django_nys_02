@@ -22,6 +22,5 @@ application = ProtocolTypeRouter({
         AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
     "channel": ChannelNameRouter({
         "background_tasks": FredConsumer.as_asgi(),
-        "a": FredConsumer.as_asgi(),
         }),
     })
