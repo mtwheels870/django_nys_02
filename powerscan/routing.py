@@ -6,8 +6,8 @@ from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 
 from django.core.asgi import get_asgi_application
-from .consumers import FredConsumer, TestWorker
-#from . import consumers
+# from . import consumers
+from .consumers import FredConsumer, TestWorker, TaskConsumer2
 
 
 # This as_asgi() works like Django's as_view()
