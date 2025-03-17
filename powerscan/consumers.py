@@ -131,8 +131,12 @@ class TestWorker(SyncConsumer):
         print("Message to worker ", message)
 
 class FredConsumer(SyncConsumer):
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
     def background_task(self, message):
         print(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
+        self.logger.info(f"TaskConsumer.background_task(), Task received: {message['task_name']}")
         # Perform the task
         self.send({
             "type": "task.finished",

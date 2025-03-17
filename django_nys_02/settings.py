@@ -199,13 +199,14 @@ LOGGING = {
         "level": "WARNING",
     },
     'loggers': {
+        # We don't use django.channels.worker (b/c we use celery)
         'django.channels.worker': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'handlers': ['console'],
             'propagate': False,
         },
         'powerscan.consumers': {  # Add logger for your consumers
-            'level': 'INFO',
+            'level': 'DEBUG',
             'handlers': ['console'],
             'propagate': False,
         },
@@ -241,12 +242,12 @@ CELERY_WORKER_CANCEL_LONG_RUNNING_TASKS_ON_CONNECTION_LOSS = True
 ASGI_APPLICATION = "django_nys_02.asgi.application"
 
 #            "hosts": [("127.0.0.1", 6379)],
+#        "BACKEND": "channels_redis.core.RedisChannelLayer",
+#        "CONFIG": {
+#            "hosts": [("localhost", 6379)],
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
-        },
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
 
