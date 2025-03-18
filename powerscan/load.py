@@ -327,6 +327,28 @@ class Loader():
             print(f"Saving state: {state_counter.us_state.state_name}, {state_counter.range_count}")
             state_counter.save()
 
+    def load_state_counts(self, verbose=False):
+        counts = [
+            ('01', 52689),
+            ('12', 224637),
+            ('13', 105332),
+            ('22',  31860),
+            ('28',  18817),
+            ('37', 153162),
+            ('45',  50655),
+            ('48', 322290),
+            ('72',   3512),
+            ('78',      34),
+            ]
+        for count in counts:
+            state_fp = count[0]
+            estimated_count = count[1]
+            print(f"load_state_counts(), looking for state = {state_fp}")
+            us_state = UsState.objects.filter(state_fp=state_fp)
+            state_counter = CountState.objects.filter(us_state=us_state)
+            print(f"load_state_counts(), found state_counter = {state_counter.id}, setting to {estimated_count}")
+        
+
     def ping_c(self):
         try:
             channel_layer = get_channel_layer()
