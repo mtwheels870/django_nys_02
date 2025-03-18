@@ -328,6 +328,7 @@ class Loader():
             state_counter.save()
 
     def load_state_counts(self, verbose=False):
+        # ('78',      34),
         counts = [
             ('01', 52689),
             ('12', 224637),
@@ -338,7 +339,6 @@ class Loader():
             ('45',  50655),
             ('48', 322290),
             ('72',   3512),
-            ('78',      34),
             ]
         for count in counts:
             state_fp = count[0]
@@ -346,6 +346,9 @@ class Loader():
             print(f"load_state_counts(), looking for state = {state_fp}")
             us_state = UsState.objects.get(state_fp=state_fp)
             state_counter = CountState.objects.get(us_state=us_state)
+            state_counter.estimated_ranges = estimated_count
+            state_counter.save()
+
             print(f"load_state_counts(), found state_counter = {state_counter.id}, setting to {estimated_count}")
         
 
