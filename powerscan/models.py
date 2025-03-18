@@ -72,6 +72,7 @@ class CountState(models.Model):
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
     range_count = models.IntegerField(default=0)
     centroid = models.PointField(null=True)
+    estimated_ranges = models.IntegerField(null=True)
 
     class Meta:
         ordering = ["-range_count"]

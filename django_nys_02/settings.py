@@ -213,6 +213,11 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
+        'daphne': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
     },
 }
 
