@@ -345,7 +345,7 @@ class Loader():
             estimated_count = count[1]
             print(f"load_state_counts(), looking for state = {state_fp}")
             us_state = UsState.objects.filter(state_fp=state_fp)
-            state_counter = CountState.objects.filter(us_state=us_state)
+            state_counter = CountState.objects.get(us_state=us_state)
             print(f"load_state_counts(), found state_counter = {state_counter.id}, setting to {estimated_count}")
         
 
