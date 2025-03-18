@@ -133,6 +133,7 @@ def send_task_result(data):
             })
     except Exception as e:
         print(f"send_task_result(), exception {e}")
+        result = None
     print(f"    result = {result}")
 
 @shared_task(bind=True)
