@@ -169,7 +169,7 @@ class ConfigurePingView(generic.edit.FormView):
         tally_start = now + delta
         formatted_tally_start = tally_start.strftime("%H:%M:%S")
         first = "CPV._start_tally(), calling tally_results (delayed), delay: "
-        second = f"{delay_mins}m, now: {formmated_now}, tally_start: {formatted_tally_start}"
+        second = f"{delay_mins}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
         print(first + second)
         async_result2 = tally_results.apply_async(
             countdown=delay_secs,
