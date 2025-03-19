@@ -268,7 +268,7 @@ def tally_results(self, *args, **kwargs):
         tally_start = now + delta
         formatted__start = tally_start.strftime("%H:%M:%S")
         first = "Task.tally_results(), empty_zmap_file, delay:"
-        second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}")
+        second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}"
         print(first + second)
         async_result2 = tally_results.apply_async(
             countdown=TALLY_DELAY_SECS, 
