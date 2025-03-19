@@ -240,8 +240,8 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     survey.time_ping_stopped = now
     survey.save()
     timedelta = survey.time_ping_stopped - survey.time_ping_started
-    timedelta_mins = timedelta / timedelta(minutes=1)
-    print(f"_process_zmap_results(), zmap time = {timedelta_mins} mins")
+    timedelta_mins = timedelta.total_seconds() / 60
+    print(f"_process_zmap_results(), zmap time = {timedelta_mins:.1f} mins")
     return survey_manager.process_results(survey)
 
 @shared_task(bind=True)
