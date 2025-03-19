@@ -162,7 +162,7 @@ class ConfigurePingView(generic.edit.FormView):
 #    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
 #        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
 
-    def _start_tally(self, survey_id, metadata_file, delay_mins, delays_secs):
+    def _start_tally(self, survey_id, metadata_file, delay_mins, delay_secs):
         now = timezone.now()
         formatted_now = now.strftime("%H:%M:%S")
         delta = timedelta(seconds=delay_secs)
