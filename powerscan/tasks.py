@@ -224,7 +224,7 @@ def zmap_from_file(self, *args, **kwargs):
     ret_val = _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)
     return metadata_file
 
-def _process_zmap_results(survey, survey_manager, metadata_file_job):
+def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
     if metadata_file_job != metadata_file_survey:
         print(f"_process_zmap_results(), metadata1 = {metadata_file_job}, metadata2 = {metadata_file_survey}")
@@ -237,6 +237,8 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job):
         return 0
 
     # Calculate zmap time
+    survey.time_ping_stopped = now
+    survey.save()
     timedelta = survey.time_ping_stopped - survey.time_ping_started
     timedelta_mins = timedelta / timedelta(minutes=1)
     print(f"_process_zmap_results(), zmap time = {timedelta_mins} mins")
@@ -260,7 +262,7 @@ def tally_results(self, *args, **kwargs):
     survey.save()
 
     survey_manager = PingSurveyManager.find(survey_id)
-    pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file)
+    pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
     if pings_to_db == 0:
         print(f"Task.tally_results(), scheduling again in {TALLY_DELAY_MINS}m")
         async_result2 = tally_results.apply_async(
