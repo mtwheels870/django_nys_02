@@ -170,9 +170,10 @@ class PingSurveyManager:
         
         selected_survey_states = IpSurveyState.objects.filter(survey_id=self._survey_id)
 
+        state_abbrevs = [s.us_state.state_abbrev for s in selected_survey_states]
         # debugger.print("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
 
-        print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {selected_survey_states}")
+        print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
 
         state_ids = []
         for survey_state in selected_survey_states :
@@ -330,7 +331,7 @@ class PingSurveyManager:
                     time_pinged=timezone.now())
                 range_ping.save()
                 saved_to_db = saved_to_db + 1
-        print(f"_save_to_db(), saved {saved_to_db} objects to database")
+        # print(f"_save_to_db(), saved {saved_to_db} objects to database")
         #self._writer_cidr_trie.close()
         return saved_to_db
 
