@@ -266,7 +266,7 @@ def tally_results(self, *args, **kwargs):
         formatted_now = now.strftime("%H:%M:%S")
         delta = timedelta(seconds=TALLY_DELAY_SECS)
         tally_start = now + delta
-        formatted__start = tally_start.strftime("%H:%M:%S")
+        formatted_start = tally_start.strftime("%H:%M:%S")
         first = "Task.tally_results(), empty_zmap_file, delay:"
         second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}"
         print(first + second)
