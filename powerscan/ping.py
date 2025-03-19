@@ -269,7 +269,7 @@ class PingSurveyManager:
         #self._writer_cidr_trie = open(full_path, "w+")
         self.pyt = pytricia.PyTricia()
 
-        print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
+        # print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
         #print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")

@@ -204,7 +204,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 def zmap_from_file(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
-    print(f"zmap_from_file(), survey_id = {survey_id_string}")
+    # print(f"zmap_from_file(), survey_id = {survey_id_string}")
     #ip_source_id = kwargs["ip_source_id"]
     survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
@@ -233,7 +233,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     # See whether the metadata file has values
     size = os.path.getsize(metadata_file_job)
     if size == 0:
-        print(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
+        #print(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
         return 0
 
     # Calculate zmap time
@@ -263,7 +263,13 @@ def tally_results(self, *args, **kwargs):
     survey_manager = PingSurveyManager.find(survey_id)
     pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
     if pings_to_db == 0:
-        print(f"Task.tally_results(), scheduling again in {TALLY_DELAY_MINS}m")
+        formatted_now = now.strftime("%H:%M:%S")
+        delta = timedelta(seconds=TALLY_DELAY_SECS)
+        tally_start = now + delta
+        formatted__start = tally_start.strftime("%H:%M:%S")
+        first = "Task.tally_results(), empty_zmap_file, delay:"
+        second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}")
+        print(first + second)
         async_result2 = tally_results.apply_async(
             countdown=TALLY_DELAY_SECS, 
             #"ip_source_id": IP_RANGE_SOURCE,
