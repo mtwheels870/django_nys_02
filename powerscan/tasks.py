@@ -52,6 +52,8 @@ RESULTS_RANGES = "ranges"
 TALLY_DELAY_MINS = 3
 TALLY_DELAY_SECS = TALLY_DELAY_MINS * 60
 
+TIME_FORMAT_STRING = "%H:%M:%S"
+
 def start_tracts(self, *args, **kwargs):
 
     # Main method
@@ -143,7 +145,7 @@ def send_task_result(data):
 @shared_task(bind=True)
 def build_whitelist(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
-    print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
+    # print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
@@ -188,7 +190,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
-        print(f"\n_ping_single_range(), should track metadata file: {metadata_file}")
+        print(f"\n_ping_single_range(), tracking metadata file: {metadata_file} (non-zero)")
         # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
         #stdout, stderr = process.communicate(timeout=10)
         ret_val = process.returncode
@@ -248,7 +250,8 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 def tally_results(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
-    print(f"tally_results(), now = {now}, kwargs = {kwargs}")
+    formatted_now = now.strftime(TIME_FORMAT_STRING)
+    print(f"tally_results(), now: {formatted_now}")
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     metadata_file = kwargs["metadata_file"]
     survey_id = int(survey_id_string)
@@ -263,10 +266,9 @@ def tally_results(self, *args, **kwargs):
     survey_manager = PingSurveyManager.find(survey_id)
     pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
     if pings_to_db == 0:
-        formatted_now = now.strftime("%H:%M:%S")
         delta = timedelta(seconds=TALLY_DELAY_SECS)
         tally_start = now + delta
-        formatted_start = tally_start.strftime("%H:%M:%S")
+        formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
         first = "Task.tally_results(), empty_zmap_file, delay:"
         second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}"
         print(first + second)

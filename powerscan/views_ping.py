@@ -29,6 +29,7 @@ from django_nys_02.asgi import application
 from .tasks import (
     build_whitelist, zmap_from_file, tally_results,
     CELERY_FIELD_SURVEY_ID, 
+    TIME_FORMAT_STRING
 )
 
 from .models import (
@@ -164,10 +165,10 @@ class ConfigurePingView(generic.edit.FormView):
 
     def _start_tally(self, survey_id, metadata_file, delay_mins, delay_secs):
         now = timezone.now()
-        formatted_now = now.strftime("%H:%M:%S")
+        formatted_now = now.strftime(TIME_FORMAT_STRING)
         delta = timedelta(seconds=delay_secs)
         tally_start = now + delta
-        formatted_tally_start = tally_start.strftime("%H:%M:%S")
+        formatted_tally_start = tally_start.strftime(TIME_FORMAT_STRING)
         first = "CPV._start_tally(), calling tally_results (delayed), delay: "
         second = f"{delay_mins}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
         print(first + second)
