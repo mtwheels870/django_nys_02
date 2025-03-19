@@ -280,7 +280,7 @@ class PingSurveyManager:
             possible_hosts = self._calculate_possible(ip_network)
             # Hang a counter on the tree
             range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
-            self._writer_cidr_trie.write(f"Trie_insert: {ip_network}\n")
+            #self._writer_cidr_trie.write(f"Trie_insert: {ip_network}\n")
             # self.trie_wrapper.insert(ip_network, range_ip)
             self.pyt.insert(ip_network, range_ip)
 
@@ -300,7 +300,7 @@ class PingSurveyManager:
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
-            self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
+            # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
             range_counter = self.pyt.get(saddr)
             range_counter.count = range_counter.count + 1
         print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
