@@ -24,7 +24,7 @@ FILE_OUTPUT = "ZmapOutput.csv"
 FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
 FILE_TRAVERSE_GEO = "TraverseGeo.txt"
-FILE_PATRICIA_TRIE = "PatriciaTrie.txt"
+#FILE_PATRICIA_TRIE = "PatriciaTrie.txt"
 
 HEADER = "range_id,ip_network\n"
 
@@ -265,8 +265,8 @@ class PingSurveyManager:
 
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
-        full_path = os.path.join(self.directory, FILE_PATRICIA_TRIE)
-        self._writer_cidr_trie = open(full_path, "w+")
+        #full_path = os.path.join(self.directory, FILE_PATRICIA_TRIE)
+        #self._writer_cidr_trie = open(full_path, "w+")
         self.pyt = pytricia.PyTricia()
 
         print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
@@ -296,14 +296,14 @@ class PingSurveyManager:
         df = pd.read_csv(self.path_output)
         column_names = df.columns.tolist()
         #print(f"_match_zmap_replies(), num_rows = {df.shape[0]}, column_names = {column_names}")
-        print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
+        #print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
         for index, row in df.iterrows():
             saddr = row['saddr']
             timestamp = row['timestamp-ts']
             # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
             range_counter = self.pyt.get(saddr)
             range_counter.count = range_counter.count + 1
-        print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
+        #print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
 
     def _save_to_db(self, survey):
         # print(f"_save_to_db(), size (of tree): {self.trie.size}")
@@ -318,7 +318,7 @@ class PingSurveyManager:
             range_counter = self.pyt.get(ip_network)
             count = range_counter.count
             # print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
-            self._writer_cidr_trie.write(f"_save_to_db(), network[{index}]: {ip_network} = {count}\n")
+            #self._writer_cidr_trie.write(f"_save_to_db(), network[{index}]: {ip_network} = {count}\n")
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
                 ip_range = MmIpRange.objects.get(pk=range_counter.id)
@@ -331,7 +331,7 @@ class PingSurveyManager:
                 range_ping.save()
                 saved_to_db = saved_to_db + 1
         print(f"_save_to_db(), saved {saved_to_db} objects to database")
-        self._writer_cidr_trie.close()
+        #self._writer_cidr_trie.close()
         return saved_to_db
 
     # Returns the number of pings saved to the database (count > 0)

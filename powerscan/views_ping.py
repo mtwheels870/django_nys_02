@@ -53,7 +53,8 @@ FIELD_SURVEY_STATUS = "survey_status"
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
-PING_RESULTS_DELAY = 12 * 60
+PING_RESULTS_MINS = 1
+PING_RESULTS_SECS = PING_RESULTS_MINS * 60
 
 #task_consumer = TaskConsumer()
 #channel_name = task_consumer.get_channel_name()
@@ -159,12 +160,17 @@ class ConfigurePingView(generic.edit.FormView):
 #    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
 #        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
 
-    def _start_tally(self, survey_id, metadata_file, results_delay):
+    def _start_tally(self, survey_id, metadata_file, delay_mins, delays_secs):
         now = timezone.now()
-        print(f"CPV._start_tally(), calling tally_results (delayed), now = {now}, seconds = {results_delay}")
-        # Fire off the counting task
+        formatted_now = now.strftime("%H:%M:%S")
+        delta = timedelta(seconds=delay_secs)
+        tally_start = now + delta
+        formatted_tally_start = tally_start.strftime("%H:%M:%S")
+        first = "CPV._start_tally(), calling tally_results (delayed), delay: "
+        second = f"{delay_mins}m, now: {formmated_now}, tally_start: {formatted_tally_start}"
+        print(first + second)
         async_result2 = tally_results.apply_async(
-            countdown=results_delay,
+            countdown=delay_secs,
             #"ip_source_id": IP_RANGE_SOURCE,
             kwargs={"survey_id": survey_id,
                 "metadata_file": metadata_file} )
@@ -201,7 +207,9 @@ class ConfigurePingView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                async_result2 = self._start_tally(survey_id, metadata_file, PING_RESULTS_DELAY)
+                delay_mins = PING_RESULTS_MINS 
+                delay_secs = PING_RESULTS_SECS
+                async_result2 = self._start_tally(survey_id, metadata_file, delay_mins, delay_secs )
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
 
