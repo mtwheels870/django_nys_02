@@ -5,6 +5,7 @@
 import sys
 import os
 import datetime
+from datetime import timedelta
 import json
 import subprocess
 import shutil
@@ -47,6 +48,9 @@ RESULTS_STATES = "states"
 RESULTS_COUNTIES = "counties"
 RESULTS_TRACTS = "tracts"
 RESULTS_RANGES = "ranges"
+
+TALLY_DELAY_MINS = 3
+TALLY_DELAY_SECS = TALLY_DELAY_MINS * 60
 
 def start_tracts(self, *args, **kwargs):
 
@@ -152,7 +156,6 @@ def build_whitelist(self, *args, **kwargs):
     survey.time_whitelist_started = timezone.now()
     survey.save()
 
-
     survey_manager = PingSurveyManager(survey_id)
     num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
 
@@ -160,7 +163,7 @@ def build_whitelist(self, *args, **kwargs):
     survey_manager.close()
 
     # Django channels back to the caller
-    send_task_result(message)
+    # send_task_result(message)
     return num_states, num_counties, num_tracts, num_ranges
 
 def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
@@ -233,12 +236,17 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job):
         print(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
         return 0
 
+    # Calculate zmap time
+    timedelta = survey.time_ping_stopped - survey.time_ping_started
+    timedelta_mins = timedelta / timedelta(minutes=1)
+    print(f"_process_zmap_results(), zmap time = {timedelta_mins} mins")
     return survey_manager.process_results(survey)
 
 @shared_task(bind=True)
 def tally_results(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
-    print(f"tally_results(), self = {self}, kwargs = {kwargs}")
+    now = timezone.now()
+    print(f"tally_results(), now = {now}, kwargs = {kwargs}")
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     #ip_source_id = kwargs["ip_source_id"]
     metadata_file = kwargs["metadata_file"]
@@ -247,37 +255,25 @@ def tally_results(self, *args, **kwargs):
     if survey.time_tally_started:
         print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
         return 0
-    survey.time_tally_started = timezone.now()
+    # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
+    survey.time_tally_started = now
     survey.save()
 
     survey_manager = PingSurveyManager.find(survey_id)
     pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file)
+    if pings_to_db == 0:
+        print(f"Task.tally_results(), scheduling again in {TALLY_DELAY_MINS}m")
+        async_result2 = tally_results.apply_async(
+            countdown=TALLY_DELAY_SECS, 
+            #"ip_source_id": IP_RANGE_SOURCE,
+            kwargs={"survey_id": survey_id_string,
+                "metadata_file": metadata_file} )
+        survey.time_tally_started = null
+        survey.save()
+        return 0
+
     survey.time_stopped = timezone.now()
     survey.save()
     print(f"tally_results(), saved {pings_to_db} to database survey_id = {survey_id}")
     return pings_to_db 
 
-    #channel_name = "task-one"
-    #print(f"send_task_result(), channel_layer = {channel_layer}, channel_name = {channel_name}")
-    #result = {"result": f"Processed: {data}"}
-    # Is this passing a function pointer?
-    # "task_updates", {"type": "task.completed", "message": result}
-    #result = async_to_sync(channel_layer.group_send) (
-    #    channel_name, {"type": "task.completed", "message": result}
-    #)
-
-
-#def _ping_all_ranges(survey, tract, debug):
-#    print(f"_ping_all_ranges(), tract = {tract}, debug = {debug}")
-#    ip_ranges = tract.deiprange_set.all()
-#    total_ranges = ip_ranges.count()
-#    if debug:
-#        print(f"_ping_all_ranges(), tract_id = {tract.id}, total_ranges = {total_ranges}")
-#    dir_path = make_temp_dir(tract.id)
-
-#    for index, ip_range in enumerate(ip_ranges):
-#        _ping_single_range(survey, tract, ip_range, dir_path, debug)
-#    return total_ranges
-#    grouped_tasks = group(ping_tracts.s(survey.id, batch_one), ping_tracts.s(survey.id, batch_two), 
-#        ping_tracts.s(survey.id, batch_three)) 
-    # chained_task = chain(grouped_tasks, ending_task)

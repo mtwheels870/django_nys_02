@@ -53,8 +53,7 @@ FIELD_SURVEY_STATUS = "survey_status"
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
-PING_RESULTS_DELAY = 15 * 60
-PING_SMALL_DELAY = 20
+PING_RESULTS_DELAY = 12 * 60
 
 #task_consumer = TaskConsumer()
 #channel_name = task_consumer.get_channel_name()
@@ -127,7 +126,7 @@ class ConfigurePingView(generic.edit.FormView):
             kwargs={"survey_id" : survey_id},
             queue=QUEUE_NAME,
             routing_key='ping.tasks.build_whitelist')
-        celery_results_handler.save_pending(async_result)
+        #celery_results_handler.save_pending(async_result)
         return async_result
 
 #    @task_postrun.connect(sender=build_whitelist)
@@ -169,7 +168,7 @@ class ConfigurePingView(generic.edit.FormView):
             #"ip_source_id": IP_RANGE_SOURCE,
             kwargs={"survey_id": survey_id,
                 "metadata_file": metadata_file} )
-        celery_results_handler.save_pending(async_result2)
+        #celery_results_handler.save_pending(async_result2)
         return async_result2
 
     def post(self, request, *args, **kwargs):
