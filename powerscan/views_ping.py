@@ -56,7 +56,7 @@ FIELD_SURVEY_STATUS = "survey_status"
 
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
-PING_RESULTS_MINS = 1
+PING_RESULTS_MINS = 60
 PING_RESULTS_SECS = PING_RESULTS_MINS * 60
 
 #task_consumer = TaskConsumer()
