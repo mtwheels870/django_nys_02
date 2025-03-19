@@ -158,7 +158,7 @@ class PingSurveyManager:
         # folder_snapshot = f"Survey_{self._survey_id:05d}"
         folder_snapshot = PingSurveyManager._build_survey_name(self._survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
-        print(f"PSM.create_directory(), directory = {str(full_path)}")
+        #print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
             os.makedirs(full_path)
         self.directory = full_path
@@ -166,13 +166,13 @@ class PingSurveyManager:
     def _traverse_geography(self):
         # debugger = self.FileDebugger(self.directory, "TraverseGeography")
         survey = IpRangeSurvey.objects.get(pk=self._survey_id)
-        print(f"PSM._traverse_geography(), survey = {survey}")
+        #print(f"PSM._traverse_geography(), survey = {survey}")
         
         selected_survey_states = IpSurveyState.objects.filter(survey_id=self._survey_id)
 
         # debugger.print("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
 
-        print(f"PSM._traverse_geography(), selected_survey_states = {selected_survey_states}")
+        print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {selected_survey_states}")
 
         state_ids = []
         for survey_state in selected_survey_states :
@@ -208,7 +208,7 @@ class PingSurveyManager:
         num_states = len(state_ids)
         num_counties = len(county_ids)
         num_tracts = len(tract_ids)
-        first = "PSM._traverse_geography(), states/counties/tracts/ranges = "
+        first = "PSM._traverse_geography(), created (s/c/t/r) = "
         second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}"
         print(first + second)
         return num_states, num_counties, num_tracts, total_ranges

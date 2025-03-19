@@ -269,7 +269,7 @@ def tally_results(self, *args, **kwargs):
             #"ip_source_id": IP_RANGE_SOURCE,
             kwargs={"survey_id": survey_id_string,
                 "metadata_file": metadata_file} )
-        survey.time_tally_started = null
+        survey.time_tally_started = None
         survey.save()
         return 0
 
