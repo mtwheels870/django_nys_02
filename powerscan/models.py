@@ -21,7 +21,7 @@ class UsState(models.Model):
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
 
-    #virtual = models.BooleanField(default=False)
+    virtual = models.BooleanField(default=False)
 
     # Returns the string representation of the model.
     def __str__(self):
