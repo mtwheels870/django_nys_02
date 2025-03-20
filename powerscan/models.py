@@ -43,7 +43,7 @@ class County(models.Model):
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
 
-    #virtual = models.BooleanField(default=False)
+    virtual = models.BooleanField(default=False)
     #@property
     #@admin.display(description="Population 2000", ordering="pop2000")
     #def pop2000_formatted(self):
