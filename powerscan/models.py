@@ -188,7 +188,7 @@ class IpSurveyTract(models.Model):
     def __str__(self):
         return f"Survey results for tract: {self.tract.tract_id}"
 
-class MilitaryPoint(models.Model):
+class MilitaryBase(models.Model):
     # Should be county_ref or something (it's not an actual code)
     base_id = models.IntegerField(default=0, db_index=True)
     name = models.CharField(max_length=30)
