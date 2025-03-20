@@ -21,6 +21,8 @@ class UsState(models.Model):
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
 
+    virtual = models.BooleanField(default=False)
+
     # Returns the string representation of the model.
     def __str__(self):
         return self.state_name
@@ -41,6 +43,7 @@ class County(models.Model):
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
 
+    virtual = models.BooleanField(default=False)
     #@property
     #@admin.display(description="Population 2000", ordering="pop2000")
     #def pop2000_formatted(self):
@@ -184,3 +187,12 @@ class IpSurveyTract(models.Model):
     num_ranges_responded = models.IntegerField(default=0)
     def __str__(self):
         return f"Survey results for tract: {self.tract.tract_id}"
+
+class MilitaryPoint(models.Model):
+    # Should be county_ref or something (it's not an actual code)
+    base_id = models.IntegerField(default=0, db_index=True)
+    name = models.CharField(max_length=30)
+    point = models.PointField(null=True)
+
+    def __str__(self):
+        return {self.name.county_fp}
