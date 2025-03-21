@@ -54,10 +54,11 @@ FIELD_STATUS = "status_message"
 FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
 
+ESTIMATED_RANGES_MIN = 3800
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
-PING_RESULTS_MINS = 60
-PING_RESULTS_SECS = PING_RESULTS_MINS * 60
+#PING_RESULTS_MINS = 60
+#PING_RESULTS_SECS = PING_RESULTS_MINS * 60
 
 #task_consumer = TaskConsumer()
 #channel_name = task_consumer.get_channel_name()
@@ -141,7 +142,14 @@ class ConfigurePingView(generic.edit.FormView):
             estimated_ranges = state.estimated_ranges
             print(f"       state: {state.state_abbrev}, count = {estimated_ranges}")
             total_ranges = total_ranges + estimated_ranges
-        return PING_RESULTS_MINS, PING_RESULTS_SECS
+        estimated_mins = total_ranges / ESTIMATED_RANGES_MIN 
+        estimated_secs = estimated_mins * 60
+
+        folder_snapshot = f"Survey_{survey_id:05d}"
+        first = "_estimate_zmap_time(), total_ranges = "
+        second = f"{total_ranges}, estimated m/s = {estimated_min:.1f}/{estimated_secs:.0f}"
+        print(first + second)
+        return estimated_mins, estimated_secs
 
     def _start_tally(self, survey_id, metadata_file, delay_mins, delay_secs):
         now = timezone.now()
@@ -190,7 +198,7 @@ class ConfigurePingView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                delay_mins, delay_seconds = self._estimate_zmap_time(survey_id)
+                delay_mins, delay_sec = self._estimate_zmap_time(survey_id)
                 async_result2 = self._start_tally(survey_id, metadata_file, delay_mins, delay_secs )
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
