@@ -352,6 +352,8 @@ class Loader():
             print(f"load_state_counts(), found state_counter = {state_counter.id}, setting to {estimated_count}")
         
 
+    # Try and get the Django channels stuff working (works w/ a Django worker, but not with celery.
+    # Was hoping that Django would serve the WSGI channel name stuff (since we're running w/ daphne now).
     def ping_c(self):
         try:
             channel_layer = get_channel_layer()
@@ -371,20 +373,18 @@ class Loader():
         print(f"    result = {result}")
 
 
-            #print(f"ping_c(), application = {application}, dir(application) = {dir(application)}")
-            #mapping = application.application_mapping
-            #for key, value in mapping.items():
-            #    print(f"     application_mapping[{key}] = {value}")
-            #    if key == "channel":
-            #        print(f"     more_stuff (dir): {dir(value)}\napp_mapping2:\n")
-            #        mapping2 = value.application_mapping
-            #        for key2, value2 in mapping2.items():
-            #            print(f"     app_mapping2[{key2}] = {value2}")
-        # Straight send generates: RuntimeWarning: coroutine 'RedisChannelLayer.send' was never awaited
-        #channel_name = "task-one"
-        #result = {"result": f"Processed: {data}"}
-        # Is this passing a function pointer?
-        # "task_updates", {"type": "task.completed", "message": result}
-        #result = async_to_sync(channel_layer.group_send) (
-        #    channel_name, {"type": "task.completed", "message": result}
-        #)
+    def mil_state(self):
+        path = "/home/bitnami/Data/PowerScan/Military/Military_Bases_02.shp",
+        state_shp = Path(path)
+        military_state = {
+            "state_fp": "STATEFP",
+            "state_name": "NAME",
+            "interp_lat": "INTPTLAT",
+            "interp_long": "INTPTLON",
+            "mpoly": "MULTIPOLYGON",
+            "state_abbrev": "STATE_ABBR",
+        }
+        lm = LayerMapping(UsState, state_shp, military_state, transform=False)
+        lm.save(strict=True, verbose=verbose)
+
+
