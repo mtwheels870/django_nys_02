@@ -78,12 +78,13 @@ class ConfigurePingView(generic.edit.FormView):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
     def _get_tasks(self):
+        inspect = control.inspect()
         string_array = ["task1", "task2", "task3"]
-        tasks_active = control.active()
+        tasks_active = inspect.active()
         index = 0
         for task in tasks_active:
             print(f"CPV.g_tasks(), active task[{index}] = {task}")
-        tasks_scheduled = control.scheduled()
+        tasks_scheduled = inspect.scheduled()
         for task in tasks_scheduled :
             print(f"CPV.g_tasks(), scheduled task[{index}] = {task}")
         return string_array
