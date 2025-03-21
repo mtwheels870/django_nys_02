@@ -144,8 +144,6 @@ class ConfigurePingView(generic.edit.FormView):
             total_ranges = total_ranges + estimated_ranges
         estimated_mins = total_ranges / ESTIMATED_RANGES_MIN 
         estimated_secs = estimated_mins * 60
-
-        folder_snapshot = f"Survey_{survey_id:05d}"
         first = "_estimate_zmap_time(), total_ranges = "
         second = f"{total_ranges}, estimated m/s = {estimated_min:.1f}/{estimated_secs:.0f}"
         print(first + second)
