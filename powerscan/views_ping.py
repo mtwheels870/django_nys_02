@@ -54,7 +54,7 @@ FIELD_STATUS = "status_message"
 FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
 
-ESTIMATED_RANGES_MIN = 3800
+ESTIMATED_RANGES_MIN = 4500
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
 #PING_RESULTS_MINS = 60
@@ -140,7 +140,7 @@ class ConfigurePingView(generic.edit.FormView):
         for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
             state = survey_state.us_state
             estimated_ranges = state.estimated_ranges
-            print(f"       state: {state.state_abbrev}, count = {estimated_ranges}")
+            print(f"       state: {state.state_abbrev}, count = {estimated_ranges:_}")
             total_ranges = total_ranges + estimated_ranges
         estimated_mins = total_ranges / ESTIMATED_RANGES_MIN 
         estimated_secs = estimated_mins * 60
@@ -156,7 +156,7 @@ class ConfigurePingView(generic.edit.FormView):
         tally_start = now + delta
         formatted_tally_start = tally_start.strftime(TIME_FORMAT_STRING)
         first = "CPV._start_tally(), calling tally_results (delayed), delay: "
-        second = f"{delay_mins}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
+        second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
         print(first + second)
         async_result2 = tally_results.apply_async(
             countdown=delay_secs,

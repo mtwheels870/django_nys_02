@@ -243,15 +243,15 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     survey.save()
     timedelta = survey.time_ping_stopped - survey.time_ping_started
     timedelta_mins = timedelta.total_seconds() / 60
-    print(f"_process_zmap_results(), zmap time = {timedelta_mins:.1f} mins")
+    formatted_now = now.strftime(TIME_FORMAT_STRING)
+    print(f"_process_zmap_results(), now {formatted_now}, zmap time = {timedelta_mins:.1f} mins")
     return survey_manager.process_results(survey)
 
 @shared_task(bind=True)
 def tally_results(self, *args, **kwargs):
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
-    formatted_now = now.strftime(TIME_FORMAT_STRING)
-    print(f"tally_results(), now: {formatted_now}")
+    # print(f"tally_results(), now: {formatted_now}")
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     metadata_file = kwargs["metadata_file"]
     survey_id = int(survey_id_string)

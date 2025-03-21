@@ -303,7 +303,10 @@ class PingSurveyManager:
             timestamp = row['timestamp-ts']
             # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
             range_counter = self.pyt.get(saddr)
-            range_counter.count = range_counter.count + 1
+            if not range_counter:
+                print(f"Ping._match_zmap_replies(), could not find range counter for: {saddr}")
+            else:
+                range_counter.count = range_counter.count + 1
         #print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
 
     def _save_to_db(self, survey):
