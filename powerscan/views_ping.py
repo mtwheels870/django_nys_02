@@ -139,7 +139,7 @@ class ConfigurePingView(generic.edit.FormView):
         for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
             state = survey_state.us_state
             estimated_ranges = state.estimated_ranges
-            print(f"       state: {state.state_abbrev}, count = {estimates_ranges}")
+            print(f"       state: {state.state_abbrev}, count = {estimated_ranges}")
             total_ranges = total_ranges + estimated_ranges
         return PING_RESULTS_MINS, PING_RESULTS_SECS
 
