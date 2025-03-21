@@ -384,6 +384,7 @@ class Loader():
             "mpoly": "MULTIPOLYGON",
             "state_abbrev": "STATE_ABBR",
         }
+        # Need to set virtual to True in here!
         lm = LayerMapping(UsState, state_shp, military_state, transform=False)
         lm.save(strict=True, verbose=verbose)
 

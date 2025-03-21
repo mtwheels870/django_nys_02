@@ -105,15 +105,6 @@ class ConfigurePingView(generic.edit.FormView):
             survey_state = IpSurveyState(survey=survey, us_state=state)
             survey_state.save()
         self._survey_id = survey.id
-        #print(f"CPV._configure_survey(), application = {application}, dir(application) = {dir(application)}")
-        #mapping = application.application_mapping
-        #for key, value in mapping.items():
-        #    print(f"     application_mapping[{key}] = {value}")
-        #    if key == "channel":
-        #        print(f"     more_stuff (dir): {dir(value)}\napp_mapping2:\n")
-        #        mapping2 = value.application_mapping
-        #        for key2, value2 in mapping2.items():
-        #            print(f"     app_mapping2[{key2}] = {value2}")
         return abbrevs, survey.id
 
     def _build_whitelist(self, survey_id):
@@ -133,35 +124,24 @@ class ConfigurePingView(generic.edit.FormView):
         #celery_results_handler.save_pending(async_result)
         return async_result
 
-#    @task_postrun.connect(sender=build_whitelist)
-#    def build_whitelist_postrun(task_id, task, retval, *args, **kwargs):
-#        print(f"CPV.build_whitelist_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
-        # information about task are located in headers for task messages
-        # using the task protocol version 2.
-        #info = headers if 'task' in headers else body
-        #print('after_task_publish for task id {info[id]}'.format(
-        #    info=info,
-        #))
-
     def _start_ping(self, survey_id):
-        if survey_id == 96:
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.send)("test_worker", {
-                "type": "triggerWorker",
-            })
-            async_result = None
-        else:
-            #print(f"CPV.post(), start_ping...")
-            async_result = zmap_from_file.apply_async(
-                kwargs={"survey_id" : survey_id},
-                    #"ip_source_id": IP_RANGE_SOURCE },
-                queue=QUEUE_NAME,
-                routing_key='ping.tasks.zmap_from_file')
+        #print(f"CPV.post(), start_ping...")
+        async_result = zmap_from_file.apply_async(
+            kwargs={"survey_id" : survey_id},
+                #"ip_source_id": IP_RANGE_SOURCE },
+            queue=QUEUE_NAME,
+            routing_key='ping.tasks.zmap_from_file')
         return async_result
 
-#    @task_postrun.connect(sender=zmap_from_file)
-#    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
-#        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+    def _estimate_zmap_time(self, survey_id):
+        total_ranges = 0
+        print(f"_estimate_zmap_time(), survey_id = {survey_id}")
+        for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
+            state = survey_state.us_state
+            estimated_ranges = :
+            mins, seconds = self._estimate_zmap_time(survey_id)
+                delay_mins = PING_RESULTS_MINS 
+                delay_secs = PING_RESULTS_SECS
 
     def _start_tally(self, survey_id, metadata_file, delay_mins, delay_secs):
         now = timezone.now()
@@ -210,22 +190,10 @@ class ConfigurePingView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                delay_mins = PING_RESULTS_MINS 
-                delay_secs = PING_RESULTS_SECS
+                delay_mins, delay_seconds = self._estimate_zmap_time(survey_id)
                 async_result2 = self._start_tally(survey_id, metadata_file, delay_mins, delay_secs )
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
-
-            if 'ping_96' in request.POST:
-                survey_id = 96
-                print(f"CPV.post(), ping_96")
-                async_result = self._start_ping(survey_id)
-                metadata_file = async_result.get()
-                print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
-
-                ping_delay = PING_SMALL_DELAY
-                async_result2 = self._start_tally(survey_id, metadata_file, ping_delay)
-                self._status_message = f"Started tally, async_result2 = {async_result2}"
 
             if 'cancel_ping' in request.POST:
                 print(f"CPV.post(), cancel_ping, survey_id = {survey_id}")
@@ -235,9 +203,6 @@ class ConfigurePingView(generic.edit.FormView):
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
             new_form = PingStrategyForm(initial=initial_data)
 
-        # No Work: field_survey_id.initial = self._survey_id
-        # field_survey_id = self._survey_id
-        # FIELD_SURVEY_ID : self._survey_id}
         context = {"form" : new_form,
             FIELD_CELERY_DETAILS : self._get_celery_details(),
             FIELD_STATUS : self._status_message,
@@ -245,7 +210,25 @@ class ConfigurePingView(generic.edit.FormView):
         }
         return render(request, self.template_name, context)
 
-        #print(f"CPV.after super.get_context_data(), context_data = {context_data}")
-        # print(f"CPV.get_context_data() 3, form = {form}")
-        #print(f"CPV.get_context_data() 4, field_survey_id = {field_survey_id}")
-        #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
+        #print(f"CPV._configure_survey(), application = {application}, dir(application) = {dir(application)}")
+        #mapping = application.application_mapping
+        #for key, value in mapping.items():
+        #    print(f"     application_mapping[{key}] = {value}")
+        #    if key == "channel":
+        #        print(f"     more_stuff (dir): {dir(value)}\napp_mapping2:\n")
+        #        mapping2 = value.application_mapping
+        #        for key2, value2 in mapping2.items():
+        #            print(f"     app_mapping2[{key2}] = {value2}")
+#    @task_postrun.connect(sender=build_whitelist)
+#    def build_whitelist_postrun(task_id, task, retval, *args, **kwargs):
+#        print(f"CPV.build_whitelist_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+        # information about task are located in headers for task messages
+        # using the task protocol version 2.
+        #info = headers if 'task' in headers else body
+        #print('after_task_publish for task id {info[id]}'.format(
+        #    info=info,
+        #))
+#    @task_postrun.connect(sender=zmap_from_file)
+#    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
+#        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+

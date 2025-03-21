@@ -17,6 +17,7 @@ class UsState(models.Model):
     state_name = models.CharField(max_length=100)
     interp_lat = models.CharField(max_length=11)
     interp_long = models.CharField(max_length=12)
+    estimated_ranges = models.IntegerField(null=True)
 
     # GeoDjango-specific: a geometry field (MultiPolygonField)
     mpoly = models.MultiPolygonField()
@@ -75,7 +76,6 @@ class CountState(models.Model):
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
     range_count = models.IntegerField(default=0)
     centroid = models.PointField(null=True)
-    estimated_ranges = models.IntegerField(null=True)
 
     class Meta:
         ordering = ["-range_count"]
@@ -127,11 +127,6 @@ class MmIpRange(models.Model):
 #
 # Classes to work with celery workers and do a scan
 #
-#class WorkerLock(models.Model):
-#    purpose = models.CharField(max_length=12)
-#    time_created = models.DateTimeField(auto_now_add=True)
-#    time_started = models.DateTimeField(null=True)
-
 class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
 
@@ -196,3 +191,8 @@ class MilitaryBase(models.Model):
 
     def __str__(self):
         return {self.name.county_fp}
+
+#class WorkerLock(models.Model):
+#    purpose = models.CharField(max_length=12)
+#    time_created = models.DateTimeField(auto_now_add=True)
+#    time_started = models.DateTimeField(null=True)
