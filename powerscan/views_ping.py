@@ -85,7 +85,7 @@ class ConfigurePingView(generic.edit.FormView):
         #active_task_names = [f(x) for x in inspect.active()]
         index = 0
         for task in tasks_active:
-            print(f"CPV.g_tasks(), active task[{index}] = {task}")
+            print(f"CPV.g_tasks(), active task[{index}] = {task}, {type(task)}")
         tasks_scheduled = inspect.scheduled()
         for task in tasks_scheduled :
             print(f"CPV.g_tasks(), scheduled task[{index}] = {task}")
