@@ -138,10 +138,10 @@ class ConfigurePingView(generic.edit.FormView):
         print(f"_estimate_zmap_time(), survey_id = {survey_id}")
         for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
             state = survey_state.us_state
-            estimated_ranges = :
-            mins, seconds = self._estimate_zmap_time(survey_id)
-                delay_mins = PING_RESULTS_MINS 
-                delay_secs = PING_RESULTS_SECS
+            estimated_ranges = state.estimated_ranges
+            print(f"       state: {state.state_abbrev}, count = {estimates_ranges}")
+            total_ranges = total_ranges + estimated_ranges
+        return PING_RESULTS_MINS, PING_RESULTS_SECS
 
     def _start_tally(self, survey_id, metadata_file, delay_mins, delay_secs):
         now = timezone.now()
