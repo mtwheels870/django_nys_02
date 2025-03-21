@@ -23,7 +23,7 @@ FILE_WHITELIST = "Whitelist.csv"
 FILE_OUTPUT = "ZmapOutput.csv"
 FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
-FILE_TRAVERSE_GEO = "TraverseGeo.txt"
+FILE_DEBUG_ZMAP = "ProcessZmapResults.txt"
 #FILE_PATRICIA_TRIE = "PatriciaTrie.txt"
 
 HEADER = "range_id,ip_network\n"
@@ -38,7 +38,6 @@ class RangeIpCount:
 
     def str(self):
         return f"range[{self.id}] = {self.ip_network}, count = {self.count}"
-
     
 class TrieWrapper:
     def __init__(self):
@@ -71,21 +70,25 @@ class TrieWrapper:
 class PingSurveyManager:
     class FileDebugger:
         def __init__(self, directory, name):
-            self._full_path = os.path.join(directory, FILE_TRAVERSE_GEO)
+            self._error_count = 0
+            self._full_path = os.path.join(directory, FILE_DEBUG_ZMAP)
             self._writer = open(self._full_path, "w+")
 
         def close(self):
+            if self._error_count > 0:
+                print
+                self._writer.write(f"FileDebugger.close(), {self._error_count} errors\n")
             self._writer.close()
 
         def get_file(self):
             return self._full_path
 
-        def print_one_line(self, sub_array):
+        def print_array_line(self, sub_array):
             sub_array_strings = map(str, sub_array)
             array_string = ", ".join(sub_array_strings)
             self._writer.write(array_string + "\n")
 
-        def print(self, description, array_output):
+        def print_array(self, description, array_output):
             array_len = len(array_output)
             print(f"FileDebugger.print(), description = {description}, array_len = {array_len}")
             self._writer.write(description + "\n")
@@ -99,10 +102,15 @@ class PingSurveyManager:
                 if sub_array_len == 0:
                     # Shouldn't get here
                     break
-                self.print_one_line(sub_array)
+                self.print_array_line(sub_array)
                 # Print subarray here
                 index = end
                 array_len = array_len - sub_array_len
+
+        def print_error(self, string1, error=False):
+            self._writer.write(string1+ "\n")
+            if error:
+                self._error_count = self._error_count + 1
 
     def __init__(self, survey_id, create_new=True, linked_survey_id=None):
         self._survey_id = survey_id
@@ -164,14 +172,13 @@ class PingSurveyManager:
         self.directory = full_path
 
     def _traverse_geography(self):
-        # debugger = self.FileDebugger(self.directory, "TraverseGeography")
         survey = IpRangeSurvey.objects.get(pk=self._survey_id)
         #print(f"PSM._traverse_geography(), survey = {survey}")
         
         selected_survey_states = IpSurveyState.objects.filter(survey_id=self._survey_id)
 
         state_abbrevs = [s.us_state.state_abbrev for s in selected_survey_states]
-        # debugger.print("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
+        # debugger.print_array("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
 
         print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
 
@@ -179,7 +186,7 @@ class PingSurveyManager:
         for survey_state in selected_survey_states :
             state_ids.append(survey_state.us_state.id)
 
-        # debugger.print("PSM._traverse_geography(), state_ids:", state_ids)
+        # debugger.print_array("PSM._traverse_geography(), state_ids:", state_ids)
 
         county_ids = []
 
@@ -191,7 +198,7 @@ class PingSurveyManager:
             survey_county = IpSurveyCounty(survey=survey, county=county)
             survey_county.save()
         #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
-        # debugger.print("PSM._traverse_geography(), county_ids:", county_ids)
+        # debugger.print_array("PSM._traverse_geography(), county_ids:", county_ids)
 
         total_ranges = 0
         tract_ids = []
@@ -202,7 +209,7 @@ class PingSurveyManager:
             survey_tract.save()
             ranges_added = self._tract_ranges_whitelist(tract)
             total_ranges = total_ranges + ranges_added
-        # debugger.print("PSM._traverse_geography(), tract_ids:", tract_ids)
+        # debugger.print_array("PSM._traverse_geography(), tract_ids:", tract_ids)
 
         # file_name = debugger.get_file()
         # debugger.close()
@@ -304,7 +311,9 @@ class PingSurveyManager:
             # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
             range_counter = self.pyt.get(saddr)
             if not range_counter:
-                print(f"Ping._match_zmap_replies(), could not find range counter for: {saddr}")
+                first = "Ping._match_zmap_replies(), could not find range counter for: "
+                second = f"{saddr}"
+                self.file_debugger.print_error(first + second, error=True)
             else:
                 range_counter.count = range_counter.count + 1
         #print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
@@ -340,11 +349,14 @@ class PingSurveyManager:
 
     # Returns the number of pings saved to the database (count > 0)
     def process_results(self, survey):
+        self.file_debugger = FileDebugger()
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
         self._build_radix_tree()
         self._match_zmap_replies()
-        return self._save_to_db(survey)
+        self.file_debugger.close()
+        rows_saved = self._save_to_db(survey)
+        return rows_saved 
         
     def close(self):
         if self.writer_range_ip:
