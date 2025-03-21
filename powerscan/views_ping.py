@@ -80,7 +80,7 @@ class ConfigurePingView(generic.edit.FormView):
     def _get_tasks(self):
         inspect = celery_app.control.inspect()
         string_array = ["task1", "task2", "task3"]
-        f = lambda task: task.census_tract.id
+        f = lambda task: task.name
         active_task_names = [f(x) for x in inspect.active()]
         index = 0
         for task in tasks_active:
