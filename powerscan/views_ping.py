@@ -81,11 +81,13 @@ class ConfigurePingView(generic.edit.FormView):
         inspect = celery_app.control.inspect()
         string_array = ["task1", "task2", "task3"]
         tasks_active = inspect.active()
+        for index, (key, value) in enumerate(tasks_active.items()):
+            print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
         #f = lambda task: task.name
         #active_task_names = [f(x) for x in inspect.active()]
-        index = 0
-        for task in tasks_active:
-            print(f"CPV.g_tasks(), active task[{index}] = {task}, {type(task)}")
+        #index = 0
+        #for task in tasks_active:
+        #    print(f"CPV.g_tasks(), active task[{index}] = {task}, {type(task)}")
         tasks_scheduled = inspect.scheduled()
         for task in tasks_scheduled :
             print(f"CPV.g_tasks(), scheduled task[{index}] = {task}")
