@@ -8,7 +8,7 @@ from celery import Celery
 # MTW os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 
-# PRODUCTION CHANGE 
+# PRODUCTION CHANGE: /dev/production/, /cb_development/cb_production/
 app = Celery('celery_django_dev')
 QUEUE_NAME = "cb_development"
 

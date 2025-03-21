@@ -6,7 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    # PRODUCTION CHANGE
+    # PRODUCTION CHANGE (should be good as this...)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
     try:
         from django.core.management import execute_from_command_line
