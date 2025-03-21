@@ -78,7 +78,7 @@ class ConfigurePingView(generic.edit.FormView):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
     def _get_tasks(self):
-        inspect = control.inspect()
+        inspect = celery_app.control.inspect()
         string_array = ["task1", "task2", "task3"]
         tasks_active = inspect.active()
         index = 0
