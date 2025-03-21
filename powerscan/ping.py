@@ -77,7 +77,7 @@ class PingSurveyManager:
         def close(self):
             if self._error_count > 0:
                 self._writer.write(f"FileDebugger.close(), {self._error_count} errors\n")
-            else
+            else:
                 self._writer.write(f"FileDebugger.close(), matched all replies\n")
             self._writer.close()
 
