@@ -228,7 +228,7 @@ class ConfigurePingView(generic.edit.FormView):
         context = {"form" : new_form,
             FIELD_STATUS : self._status_message,
             FIELD_SURVEY_STATUS : celery_results_handler.get_status(),
-            FIELD_TASKS = self._get_tasks(),
+            FIELD_TASKS : self._get_tasks(),
         }
         return render(request, self.template_name, context)
 
