@@ -196,7 +196,7 @@ class ConfigurePingView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                delay_mins, delay_sec = self._estimate_zmap_time(survey_id)
+                delay_mins, delay_secs = self._estimate_zmap_time(survey_id)
                 async_result2 = self._start_tally(survey_id, metadata_file, delay_mins, delay_secs )
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
