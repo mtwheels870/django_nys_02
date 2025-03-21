@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django_celery_results.models import TaskResult
 
 from celery import shared_task
+from celery.app import control 
 
 # @receiver(post_save, sender=django_celery_results.models.TaskResult)
 # from celery.signals import task_postrun
@@ -49,10 +50,12 @@ KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
 # These fields are used in the templates
-FIELD_CELERY_DETAILS = "celery_stuff"
+#FIELD_CELERY_DETAILS = "celery_stuff"
 FIELD_STATUS = "status_message" 
-FIELD_SURVEY_ID = "survey_id" 
+#FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
+FIELD_TASKS = "tasks" 
+
 
 ESTIMATED_RANGES_MIN = 4500
 # For our test case, we just use 15s
@@ -74,6 +77,17 @@ class ConfigurePingView(generic.edit.FormView):
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
+    def _get_tasks(self):
+        string_array = ["task1", "task2", "task3"]
+        tasks_active = control.active()
+        index = 0
+        for task in tasks_active:
+            print(f"CPV.g_tasks(), active task[{index}] = {task}")
+        tasks_scheduled = control.scheduled()
+        for task in tasks_scheduled :
+            print(f"CPV.g_tasks(), scheduled task[{index}] = {task}")
+        return string_array
+
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         form = context_data['form']
@@ -82,10 +96,11 @@ class ConfigurePingView(generic.edit.FormView):
 
         # There's an unbound, empty form in context_data...
         # File stuff
-        context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
+        #context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
         survey_status = celery_results_handler.reset()
         context_data[FIELD_SURVEY_STATUS] = survey_status 
+        context_data[FIELD_TASKS] = self._get_tasks()
         print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
 
         #context_data[FIELD_SURVEY_ID] = self._survey_id
@@ -209,10 +224,11 @@ class ConfigurePingView(generic.edit.FormView):
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
             new_form = PingStrategyForm(initial=initial_data)
 
+        # FIELD_CELERY_DETAILS : self._get_celery_details(),
         context = {"form" : new_form,
-            FIELD_CELERY_DETAILS : self._get_celery_details(),
             FIELD_STATUS : self._status_message,
             FIELD_SURVEY_STATUS : celery_results_handler.get_status(),
+            FIELD_TASKS = self._get_tasks(),
         }
         return render(request, self.template_name, context)
 

@@ -6,11 +6,6 @@
   </head>
   <body>
     <h2>Config Ip Range Survey (geography and timing): </h2>
-    <h3>Celery details (worker config): </h3>
-    <p>{{ celery_stuff }} </p>
-    <p>Color1: {{ color1 }} </p>
-    <p>Task Status: {{ survey_status }} </p>
-
     <!-- use of app_name = nys below, csrf = cross site request forgeries -->
     <!-- form action=" stuff here url 'app_centralny:approve_ping' object.id  method="post" -->
     <form method="post" enctype="multipart/form-data" >
@@ -35,6 +30,7 @@
         {% csrf_token %}
     </form>
     <h3>Status: </h3> {{ status_message }} 
+    <h3>Tasks:</h3> {{ tasks }} 
   </body>
 </html>
 
