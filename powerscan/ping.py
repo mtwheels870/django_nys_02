@@ -349,7 +349,7 @@ class PingSurveyManager:
 
     # Returns the number of pings saved to the database (count > 0)
     def process_results(self, survey):
-        self.file_debugger = FileDebugger()
+        self.file_debugger = self.FileDebugger()
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
         self._build_radix_tree()
