@@ -374,8 +374,8 @@ class Loader():
 
 
     def mil_state(self):
-        path = "/home/bitnami/Data/PowerScan/Military/Military_Bases_02.shp",
-        state_shp = Path(path)
+        path01 = "/home/bitnami/Data/PowerScan/Military/Military_Bases_02.shp"
+        state_shp = Path(path01)
         military_state = {
             "state_fp": "STATEFP",
             "state_name": "NAME",
