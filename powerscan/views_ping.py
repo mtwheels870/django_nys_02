@@ -264,8 +264,7 @@ class RecentTaskView(SingleTableView):
         # We get the last 20 (so that's two pages worth)
         #queryset = IpRangeSurvey.objects.order_by("-time_created")[:20]
         queryset = IpRangeSurvey.objects.order_by("-id")
-        sliced = queryset[:20]
-        return sliced
+        return queryset 
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
