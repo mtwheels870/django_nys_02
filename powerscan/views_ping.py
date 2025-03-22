@@ -42,6 +42,8 @@ from .models import (
 from .forms import PingStrategyForm
 from .consumers import celery_results_handler, CeleryResultsHandler
 
+from .tables import IpSurveyTable
+
 # Import our neighbors
 
 KEY_ID = "id"
@@ -159,7 +161,7 @@ class ConfigurePingView(generic.edit.FormView):
         for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
             state = survey_state.us_state
             estimated_ranges = state.estimated_ranges
-            print(f"       state: {state.state_abbrev}, count = {estimated_ranges:_}")
+            print(f"       state: {state.state_abbrev}, count = {estimated_ranges:,}")
             total_ranges = total_ranges + estimated_ranges
         estimated_mins = total_ranges / ESTIMATED_RANGES_MIN 
         estimated_secs = estimated_mins * 60
@@ -236,25 +238,47 @@ class ConfigurePingView(generic.edit.FormView):
         }
         return render(request, self.template_name, context)
 
-        #print(f"CPV._configure_survey(), application = {application}, dir(application) = {dir(application)}")
-        #mapping = application.application_mapping
-        #for key, value in mapping.items():
-        #    print(f"     application_mapping[{key}] = {value}")
-        #    if key == "channel":
-        #        print(f"     more_stuff (dir): {dir(value)}\napp_mapping2:\n")
-        #        mapping2 = value.application_mapping
-        #        for key2, value2 in mapping2.items():
-        #            print(f"     app_mapping2[{key2}] = {value2}")
-#    @task_postrun.connect(sender=build_whitelist)
-#    def build_whitelist_postrun(task_id, task, retval, *args, **kwargs):
-#        print(f"CPV.build_whitelist_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
-        # information about task are located in headers for task messages
-        # using the task protocol version 2.
-        #info = headers if 'task' in headers else body
-        #print('after_task_publish for task id {info[id]}'.format(
-        #    info=info,
-        #))
-#    @task_postrun.connect(sender=zmap_from_file)
-#    def zmap_from_file_postrun(task_id, task, retval, *args, **kwargs):
-#        print(f"CPV.zmap_from_file_postrun(), task_id = {task_id}, task = {task}, retval = {retval}, kwargs = {kwargs}")
+class RecentTaskView(SingleTableView):
+    model = IpRangeSurvey
+    table_class = IpSurveyTable
+    template_name = "powerscan/tasks_table.html"
+    table_pagination = {
+        "per_page": 10
+    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+        self.folder_id = self.kwargs.get('folder_id')
+        # print(f"TFDV.get_queryset(), doing query")
+        # We get the last 20 (so that's two pages worth)
+        queryset = IpRangeSurvey.objects.order_by("-time_created")[:20]
+        return queryset
+
+    def post(self, request, *args, **kwargs):
+        folder_id = kwargs["folder_id"]
+        selected_pks = request.POST.getlist('selection')
+        num_selected = len(selected_pks)
+        if num_selected  == 0:
+            print(f"TFDV.post(), no selected rows")
+            return redirect(request.path)
+        elif num_selected > 1:
+            print(f"TFDV.post(), >1 selected rows")
+            return redirect(request.path)
+        else:
+            # Check which button we're in: edit or label
+            file_id = selected_pks[0]
+            if 'edit' in request.POST:
+                print(f"TFDV.post(), editing page")
+                return HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(folder_id, file_id,)))
+            elif 'label' in request.POST:
+                return self.label_page(request, folder_id, file_id)
+            else:
+                print(f"TFDV.post(), unrecognized button:")
+                for i, key in enumerate(request.POST):
+                    value = request.POST[key]
+                    print(f"          [{i}]: {key} = {value}")
+                return redirect(request.path)
 

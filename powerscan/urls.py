@@ -13,8 +13,9 @@ urlpatterns = [
     path("map/", views.MapNavigationView.as_view(), name="map_viewer"),
 
     path("ping/", views_ping.ConfigurePingView.as_view(), name="ping_strat_index"),
-    path("chat/", views.chat_index, name="chat_index"),
-    path("chat/<str:room_name>/", views.chat_room, name="chat_room"),
+    #path("chat/", views.chat_index, name="chat_index"),
+    #path("chat/<str:room_name>/", views.chat_room, name="chat_room"),
+    path("tasks/", views_ping.RecentTaskView.as_view(), name="task_table"),
     # ex: /tutorial/5/
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")
