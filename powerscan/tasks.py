@@ -256,34 +256,38 @@ def tally_results(self, *args, **kwargs):
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     metadata_file = kwargs["metadata_file"]
     survey_id = int(survey_id_string)
-    survey = IpRangeSurvey.objects.get(pk=survey_id)
-    if survey.time_tally_started:
-        print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
-        return 0
-    # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
-    survey.time_tally_started = now
-    survey.save()
-
-    survey_manager = PingSurveyManager.find(survey_id)
-    pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
-    if pings_to_db == 0:
-        delta = timedelta(seconds=TALLY_DELAY_SECS)
-        tally_start = now + delta
-        formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
-        first = "Task.tally_results(), empty_zmap_file, delay:"
-        second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}"
-        print(first + second)
-        async_result2 = tally_results.apply_async(
-            countdown=TALLY_DELAY_SECS, 
-            #"ip_source_id": IP_RANGE_SOURCE,
-            kwargs={"survey_id": survey_id_string,
-                "metadata_file": metadata_file} )
-        survey.time_tally_started = None
+    try:
+        survey = IpRangeSurvey.objects.get(pk=survey_id)
+        if survey.time_tally_started:
+            print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
+            return 0
+        # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
+        survey.time_tally_started = now
         survey.save()
-        return 0
 
-    survey.time_stopped = timezone.now()
-    survey.save()
-    print(f"Task.tally_results(), survey: {survey_id}, saved {pings_to_db} to db")
+        survey_manager = PingSurveyManager.find(survey_id)
+        pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
+        if pings_to_db == 0:
+            delta = timedelta(seconds=TALLY_DELAY_SECS)
+            tally_start = now + delta
+            formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
+            first = "Task.tally_results(), empty_zmap_file, delay:"
+            second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}"
+            print(first + second)
+            async_result2 = tally_results.apply_async(
+                countdown=TALLY_DELAY_SECS, 
+                #"ip_source_id": IP_RANGE_SOURCE,
+                kwargs={"survey_id": survey_id_string,
+                    "metadata_file": metadata_file} )
+            survey.time_tally_started = None
+            survey.save()
+            return 0
+
+        survey.time_stopped = timezone.now()
+        survey.save()
+        print(f"Task.tally_results(), survey: {survey_id}, saved {pings_to_db} to db")
+    except Exception as e:
+        print(f"Task.tally_results(), survey_id: {survey_id_string}, exception: {e}")
+        pings_to_db = -1
     return pings_to_db 
 
