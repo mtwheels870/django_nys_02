@@ -263,8 +263,9 @@ class RecentTaskView(SingleTableView):
         # print(f"TFDV.get_queryset(), doing query")
         # We get the last 20 (so that's two pages worth)
         #queryset = IpRangeSurvey.objects.order_by("-time_created")[:20]
-        queryset = IpRangeSurvey.objects.order_by("time_created")[:20]
-        return queryset
+        queryset = IpRangeSurvey.objects.order_by("-time_created")
+        sliced = queryset[:20]
+        return sliced
 
     def post(self, request, *args, **kwargs):
         folder_id = kwargs["folder_id"]
