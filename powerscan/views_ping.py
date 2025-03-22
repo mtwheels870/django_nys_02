@@ -256,16 +256,14 @@ class RecentTaskView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(f"RTV.g_c_d()")
         return context
 
     def get_queryset(self):
-        print(f"RTV.g_queryset()")
         #self.folder_id = self.kwargs.get('folder_id')
         # print(f"TFDV.get_queryset(), doing query")
         # We get the last 20 (so that's two pages worth)
         #queryset = IpRangeSurvey.objects.order_by("-time_created")[:20]
-        queryset = IpRangeSurvey.objects.order_by("-time_created")
+        queryset = IpRangeSurvey.objects.order_by("-time_created")[-20]
         return queryset
 
     def post(self, request, *args, **kwargs):
