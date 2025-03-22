@@ -94,7 +94,7 @@ class ConfigurePingView(generic.edit.FormView):
             return tasks_active 
         else:
             print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
-        return "No tasks"
+        return "No tasks (is celery running?)"
 
         #f = lambda task: task.name
         #active_task_names = [f(x) for x in inspect.active()]
