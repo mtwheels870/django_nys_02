@@ -84,17 +84,23 @@ class ConfigurePingView(generic.edit.FormView):
     def _get_tasks(self):
         inspect = celery_app.control.inspect()
         tasks_active = inspect.active()
-        for index, (key, value) in enumerate(tasks_active.items()):
-            print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+        if tasks_active:
+            for index, (key, value) in enumerate(tasks_active.items()):
+                print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+
+            tasks_scheduled = inspect.scheduled()
+            for index, (key, value) in enumerate(tasks_scheduled.items()):
+                print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
+            return tasks_active 
+        else:
+            print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
+        return "No tasks"
+
         #f = lambda task: task.name
         #active_task_names = [f(x) for x in inspect.active()]
         #index = 0
         #for task in tasks_active:
         #    print(f"CPV.g_tasks(), active task[{index}] = {task}, {type(task)}")
-        tasks_scheduled = inspect.scheduled()
-        for index, (key, value) in enumerate(tasks_scheduled.items()):
-            print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
-        return tasks_active 
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
