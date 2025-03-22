@@ -33,20 +33,20 @@ class IpSurveyTable(tables.Table):
         fields = ["selection", "time_created"]
         #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
-    def render_time(self, value):
-        if value == null:
-            return ""
-        else: 
-            return value.strftime(TIME_FORMAT)
+#    def render_time(self, value):
+#        if value == null:
+#            return ""
+#        else: 
+#            return value.strftime(TIME_FORMAT)
 
-    def render_time_created(self, value, record):
-        return self.render_time(value)
+#    def render_time_created(self, value, record):
+#        return self.render_time(value)
+#
+#    def render_time_ping_started(self, value, record):
+#        return self.render_time(value)
+#
+#    def render_time_rally_stopped(self, value, record):
+#        return self.render_time(value)
 
-    def render_time_ping_started(self, value, record):
-        return self.render_time(value)
-
-    def render_time_rally_stopped(self, value, record):
-        return self.render_time(value)
-
-    def render_num_total_ranges(self, value, record):
-        return "{value:,}"
+#    def render_num_total_ranges(self, value, record):
+#        return "{value:,}"
