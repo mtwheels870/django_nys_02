@@ -29,7 +29,8 @@ class IpSurveyTable(tables.Table):
         model = IpRangeSurvey
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
-        fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
+        # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
+        fields = ["selection", "time_created"]
         #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
     def render_time(self, value):
