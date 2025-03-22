@@ -8,6 +8,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 
+from django_tables2 import SingleTableView
+
 from django_celery_results.models import TaskResult
 
 from celery import shared_task
