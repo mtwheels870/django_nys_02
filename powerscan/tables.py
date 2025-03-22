@@ -4,7 +4,7 @@ import django_tables2 as tables
 
 from .models import MmIpRange
 
-TIME_FORMAT = "%H:%M:%S")
+TIME_FORMAT = "%H:%M:%S"
 
 MAX_STRING_LENGTH = 15
 class MmIpRangeTable(tables.Table):
