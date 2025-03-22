@@ -226,7 +226,7 @@ async function load_target(url_field, boundsString) {
     );
     // If disconnected, the above actually throws a TypeError (doesn't get here)
     if (!response.ok) {
-      throw new Error("HTTP error! status: ${response.status");
+      throw new Error("HTTP error! url: " + markers_url + ", status: " + response.status);
     }
     const geojson = await response.json();
     return geojson;
