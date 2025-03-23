@@ -392,7 +392,7 @@ class Loader():
         index = 0
         for survey in IpRangeSurvey.objects.all():
             print(f"fix_name(), survey[{index}] = {survey.id}")
-            states = survey.ipsurveystate_set()
+            states = survey.ipsurveystate_set.all()
             f = lambda state_survey: state_survey.us_state.state_abbrev
             abbrevs = [f(x) for x in states]
             state_string = ",".join(abbrevs)
