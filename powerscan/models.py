@@ -131,17 +131,20 @@ class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(auto_now_add=True, verbose_name="Created (EDT)")
     name = models.CharField(max_length=40, null=True)
 
+    time_scheduled = models.DateTimeField(null=True, verbose_name="Scheduled")
     time_whitelist_created = models.DateTimeField(null=True)
     time_whitelist_started = models.DateTimeField(null=True)
 
     # First celery worker sets this (effectively the lock)
-    time_ping_started = models.DateTimeField(null=True)
+    time_ping_started = models.DateTimeField(null=True, verbose_name="Ping Started")
     time_ping_stopped = models.DateTimeField(null=True)
 
     time_tally_started = models.DateTimeField(null=True)
-    time_tally_stopped = models.DateTimeField(null=True)
+    time_tally_stopped = models.DateTimeField(null=True, verbose_name="Results Processed")
 
-    num_total_ranges = models.IntegerField(default=0, verbose_name="Ranges(K)")
+    num_total_ranges = models.IntegerField(default=0, verbose_name="Ranges(K) Pinged")
+    num_ranges_responded = models.IntegerField(default=0, verbose_name="Responded(K)")
+    parent_survey_id = models.BigIntegerField(null=True, verbose_name"Copies")
 
     def __str__(self):
         return f"Survey[{self.id}]"

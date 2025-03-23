@@ -163,6 +163,8 @@ def build_whitelist(self, *args, **kwargs):
 
     message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
+    survey.num_total_ranges = num_ranges
+    survey.save()
 
     # Django channels back to the caller
     # send_task_result(message)

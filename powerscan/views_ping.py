@@ -246,10 +246,10 @@ class ConfigurePingView(generic.edit.FormView):
         }
         return render(request, self.template_name, context)
 
-class RecentTaskView(SingleTableView):
+class RecentSurveyView(SingleTableView):
     model = IpRangeSurvey
     table_class = IpSurveyTable
-    template_name = "powerscan/tasks_table.html"
+    template_name = "powerscan/surveys_table.html"
     table_pagination = {
         "per_page": 10
     }

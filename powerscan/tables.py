@@ -31,11 +31,10 @@ class IpSurveyTable(tables.Table):
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
         # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
-        fields = ["selection", "id", "name", "time_created", "time_ping_started", "time_tally_stopped", 
-            "num_total_ranges"]
-        #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
+        fields = ["selection", "id", "parent_survey_id", "name", "time_created", "time_scheduled", "time_ping_started",
+            "time_tally_stopped", "num_ranges_responded", "num_total_ranges"]
 
-    def render_time(self, value, include_date=False):
+    def _render_time(self, value, include_date=False):
         if not value:
             return_string = ""
         elif include_date:
@@ -45,14 +44,23 @@ class IpSurveyTable(tables.Table):
         return return_string
 
     def render_time_created(self, value, record):
-        return self.render_time(value, include_date=True)
+        return self._render_time(value, include_date=True)
+
+    def render_time_scheduled(self, value, record):
+        return self._render_time(value)
 
     def render_time_ping_started(self, value, record):
-        return self.render_time(value)
+        return self._render_time(value)
 
     def render_time_tally_stopped(self, value, record):
-        return self.render_time(value)
+        return self._render_time(value)
 
-    def render_num_total_ranges(self, value, record):
+    def _render_thousands(self, value):
         thousands = float(value) / 1000.0
         return f"{thousands:,}"
+
+    def render_num_ranges_responded(self, value, record):
+        return self._render_thousands(value)
+
+    def render_num_total_ranges(self, value, record):
+        return self._render_thousands(value)
