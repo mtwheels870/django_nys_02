@@ -285,7 +285,7 @@ def tally_results(self, *args, **kwargs):
             survey.save()
             return 0
 
-        survey.time_stopped = timezone.now()
+        survey.time_tally_stopped = timezone.now()
         survey.num_ranges_responded = pings_to_db
         survey.save()
         print(f"Task.tally_results(), survey: {survey_id}, saved {pings_to_db} to db")
