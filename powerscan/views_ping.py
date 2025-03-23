@@ -300,7 +300,7 @@ class CeleryTasksView(SingleTableView):
         {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
     ]
     table_class = NonModelTable 
-    table = NonModelTable(data, "tasks"=self._get_tasks())
+    table = NonModelTable(data, kwargs={"tasks" : self._get_tasks()})
     #table_class = NonModelTable
     template_name = "powerscan/tasks_table.html"
     table_pagination = {
