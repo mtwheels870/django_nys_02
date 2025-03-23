@@ -31,12 +31,11 @@ class IpSurveyTable(tables.Table):
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
         # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
-        fields = ["selection", "id", "time_created", "states", "abc"]
+        fields = ["selection", "id", "time_created", "ipsurveystate_set", "abc"]
         #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
-    def render_states(self, value, record):
-        survey_states = record.ipsurveystate_set()
-        print(f"IST.render_states(), survey_states = {survey_states}")
+    def render_ipsurveystate_set(self, value, record):
+        print(f"IST.render_states(), survey_states = {value}")
         return "a, b, c"
 
     def render_time(self, value):
