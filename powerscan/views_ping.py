@@ -299,6 +299,7 @@ class CeleryTasksView(SingleTableView):
         {"name": "John", "surname": "Doe", "address": "123 Main St"},
         {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
     ]
+    table_class = NonModelTable 
     table = NonModelTable(data)
     #table_class = NonModelTable
     template_name = "powerscan/surveys_table.html"
