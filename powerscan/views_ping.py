@@ -127,7 +127,6 @@ class ConfigurePingView(generic.edit.FormView):
     # the pre-saved states from the database
     def _configure_survey(self, selected_states):
         survey = IpRangeSurvey()
-        survey.save()
         abbrevs = []
         print(f"CPV._configure_survey(), selected_states (fp) = {selected_states}")
         for state in UsState.objects.filter(state_fp__in=selected_states).order_by("state_abbrev"):
@@ -135,6 +134,9 @@ class ConfigurePingView(generic.edit.FormView):
             survey_state = IpSurveyState(survey=survey, us_state=state)
             survey_state.save()
         self._survey_id = survey.id
+        abbrev_string = ",".join(abbrevs)
+        survey.name = abbrev_string
+        survey.save()
         return abbrevs, survey.id
 
     def _build_whitelist(self, survey_id):
