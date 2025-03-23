@@ -129,6 +129,7 @@ class MmIpRange(models.Model):
 #
 class IpRangeSurvey(models.Model):
     time_created = models.DateTimeField(auto_now_add=True, verbose_name="Created (EDT)")
+    name = models.CharField(max_length=40, null=True)
 
     time_whitelist_created = models.DateTimeField(null=True)
     time_whitelist_started = models.DateTimeField(null=True)
