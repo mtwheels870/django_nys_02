@@ -36,7 +36,6 @@ class IpSurveyTable(tables.Table):
         #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
     def render_time(self, value, include_date=False):
-        return_string
         if not value:
             return_string = ""
         elif include_date:
