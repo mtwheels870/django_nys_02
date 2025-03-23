@@ -388,4 +388,15 @@ class Loader():
         lm = LayerMapping(UsState, state_shp, military_state, transform=False)
         lm.save(strict=True, verbose=verbose)
 
-
+    def fix_names(self, verbose=True):
+        index = 0
+        for survey in IpRangeSurvey.objects.all():
+            print(f"fix_name(), survey[{index}] = {survey.id}")
+            states = survey.ipsurveystate_set()
+            f = lambda state_survey: state_survey.us_state.state_abbrev
+            abbrevs = [f(x) for x in states]
+            state_string = ",".join(abbrevs)
+            print(f"      name = {state_string}")
+            survey.name = state_string
+            survey.save()
+            index = index + 1
