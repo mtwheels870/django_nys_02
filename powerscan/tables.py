@@ -25,18 +25,14 @@ class MmIpRangeTable(tables.Table):
 
 class IpSurveyTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
-    abc = tables.Column(accessor="abc__one__two")
     class Meta:
         model = IpRangeSurvey
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
         # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
-        fields = ["selection", "id", "time_created", "ipsurveystate_set", "abc"]
+        fields = ["selection", "id", "name", "time_created", "time_ping_started", "time_tally_stopped", 
+            "num_total_ranges"]
         #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
-
-    def render_ipsurveystate_set(self, value, record):
-        print(f"IST.render_states(), survey_states = {value}")
-        return "a, b, c"
 
     def render_time(self, value):
         if not value:
@@ -46,12 +42,12 @@ class IpSurveyTable(tables.Table):
 
     def render_time_created(self, value, record):
         return self.render_time(value)
-#
-#    def render_time_ping_started(self, value, record):
-#        return self.render_time(value)
-#
-#    def render_time_rally_stopped(self, value, record):
-#        return self.render_time(value)
 
-#    def render_num_total_ranges(self, value, record):
-#        return "{value:,}"
+    def render_time_ping_started(self, value, record):
+        return self.render_time(value)
+
+    def render_time_tally_stopped(self, value, record):
+        return self.render_time(value)
+
+    def render_num_total_ranges(self, value, record):
+        return "{value:,}"

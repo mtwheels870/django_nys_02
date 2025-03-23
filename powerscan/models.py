@@ -141,7 +141,7 @@ class IpRangeSurvey(models.Model):
     time_tally_started = models.DateTimeField(null=True)
     time_tally_stopped = models.DateTimeField(null=True)
 
-    num_total_ranges = models.IntegerField(default=0)
+    num_total_ranges = models.IntegerField(default=0, verbose_name="Ranges(K)")
 
     def __str__(self):
         return f"Survey[{self.id}]"
