@@ -128,7 +128,7 @@ class MmIpRange(models.Model):
 # Classes to work with celery workers and do a scan
 #
 class IpRangeSurvey(models.Model):
-    time_created = models.DateTimeField(auto_now_add=True)
+    time_created = models.DateTimeField(auto_now_add=True, verbose_name="Created (EDT)")
 
     time_whitelist_created = models.DateTimeField(null=True)
     time_whitelist_started = models.DateTimeField(null=True)
