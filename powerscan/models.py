@@ -144,7 +144,7 @@ class IpRangeSurvey(models.Model):
 
     num_total_ranges = models.IntegerField(default=0, verbose_name="Ranges(K) Pinged")
     num_ranges_responded = models.IntegerField(default=0, verbose_name="Responded(K)")
-    parent_survey_id = models.BigIntegerField(null=True, verbose_name"Copies")
+    parent_survey_id = models.BigIntegerField(null=True, verbose_name="Copies")
 
     def __str__(self):
         return f"Survey[{self.id}]"
