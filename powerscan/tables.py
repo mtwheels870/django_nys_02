@@ -25,12 +25,13 @@ class MmIpRangeTable(tables.Table):
 
 class IpSurveyTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
+    abc = tables.Column(accessor="abc__one__two")
     class Meta:
         model = IpRangeSurvey
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
         # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
-        fields = ["selection", "id", "time_created", "states"]
+        fields = ["selection", "id", "time_created", "states", "abc"]
         #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
     def render_states(self, value, record):
