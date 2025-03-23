@@ -73,3 +73,15 @@ class NonModelTable(tables.Table):
     class Meta:
         template_name = "django_tables2/bootstrap4.html"
 
+    def __init__(self, *args, **kwargs):
+        print(f"NonModelTable.__init__(), args = {args}, kwargs = {kwargs}")
+        super().__init__(*args, **kwargs)
+
+    def render_name(self, value, record):
+        return f"Name: {value}"
+
+    def render_surname(self, value, record):
+        return f"Surname: {value}"
+
+    def render_address(self, value, record):
+        return f"Address: {value}"

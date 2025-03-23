@@ -300,12 +300,28 @@ class CeleryTasksView(SingleTableView):
         {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
     ]
     table_class = NonModelTable 
-    table = NonModelTable(data)
+    table = NonModelTable(data, "tasks"=self._get_tasks())
     #table_class = NonModelTable
-    template_name = "powerscan/surveys_table.html"
+    template_name = "powerscan/tasks_table.html"
     table_pagination = {
         "per_page": 10
     }
+
+    def _get_tasks(self):
+        print(f"CTV.g_tasks()")
+        inspect = celery_app.control.inspect()
+        tasks_active = inspect.active()
+        if tasks_active:
+            for index, (key, value) in enumerate(tasks_active.items()):
+                print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+
+            tasks_scheduled = inspect.scheduled()
+            for index, (key, value) in enumerate(tasks_scheduled.items()):
+                print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
+            return tasks_active 
+        else:
+            print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
+        return "No tasks (is celery running?)"
 
     def get_queryset(self):
         return self.data
