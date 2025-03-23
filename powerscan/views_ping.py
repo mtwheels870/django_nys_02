@@ -44,7 +44,7 @@ from .models import (
 from .forms import PingStrategyForm
 from .consumers import celery_results_handler, CeleryResultsHandler
 
-from .tables import IpSurveyTable
+from .tables import IpSurveyTable, NonModelTable
 
 # Import our neighbors
 
@@ -294,3 +294,14 @@ class RecentSurveyView(SingleTableView):
                     print(f"          [{i}]: {key} = {value}")
                 return redirect(request.path)
 
+class CeleryTasksView(SingleTableView):
+    data = [
+        {"name": "John", "surname": "Doe", "address": "123 Main St"},
+        {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
+    ]
+    table = NonModelTable(data)
+    #table_class = NonModelTable
+    template_name = "powerscan/surveys_table.html"
+    table_pagination = {
+        "per_page": 10
+    }

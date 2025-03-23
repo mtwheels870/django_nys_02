@@ -28,6 +28,8 @@ FILE_DEBUG_ZMAP = "ProcessZmapResults.txt"
 
 HEADER = "range_id,ip_network\n"
 
+PD_CHUNK_SIZE = 10000
+
 # Should rename this.  It doesn't like a Model (but it's Local to here)
 class RangeIpCount:
     def __init__(self, db_range_id, ip_network, possible_hosts):
@@ -302,21 +304,23 @@ class PingSurveyManager:
             index = index + 1
 
     def _match_zmap_replies(self):
-        df = pd.read_csv(self.path_output)
-        column_names = df.columns.tolist()
-        #print(f"_match_zmap_replies(), num_rows = {df.shape[0]}, column_names = {column_names}")
-        #print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
-        for index, row in df.iterrows():
-            saddr = row['saddr']
-            timestamp = row['timestamp-ts']
-            # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-            range_counter = self.pyt.get(saddr)
-            if not range_counter:
-                first = "Ping._match_zmap_replies(), could not find range counter for: "
-                second = f"{saddr}"
-                self.file_debugger.print_error(first + second, error=True)
-            else:
-                range_counter.count = range_counter.count + 1
+        index_chunk = 0
+        for chunk in read_csv(self.path_output, chunksize=PD_CHUNK_SIZE)
+            column_names = chunk.columns.tolist()
+            print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {df.shape[0]}, column = {column_names}")
+            #print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
+            for index, row in chunk.iterrows():
+                saddr = row['saddr']
+                timestamp = row['timestamp-ts']
+                # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
+                range_counter = self.pyt.get(saddr)
+                if not range_counter:
+                    first = "Ping._match_zmap_replies(), could not find range counter for: "
+                    second = f"{saddr}"
+                    self.file_debugger.print_error(first + second, error=True)
+                else:
+                    range_counter.count = range_counter.count + 1
+            index_chunk = index_chunk + 1 
         #print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
 
     def _save_to_db(self, survey):

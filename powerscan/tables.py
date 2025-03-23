@@ -64,3 +64,12 @@ class IpSurveyTable(tables.Table):
 
     def render_num_total_ranges(self, value, record):
         return self._render_thousands(value)
+
+class NonModelTable(tables.Table):
+    name = tables.Column()
+    surname = tables.Column()
+    address = tables.Column()
+
+    class Meta:
+        template_name = "django_tables2/bootstrap4.html"
+
