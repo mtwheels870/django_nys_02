@@ -305,3 +305,6 @@ class CeleryTasksView(SingleTableView):
     table_pagination = {
         "per_page": 10
     }
+
+    def get_queryset(self):
+        return self.data
