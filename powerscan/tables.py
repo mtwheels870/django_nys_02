@@ -2,6 +2,8 @@ from django.utils.html import format_html
 
 import django_tables2 as tables
 
+from django_nys_02.celery import app as celery_app, QUEUE_NAME
+
 from .models import MmIpRange, IpRangeSurvey
 
 DATE_TIME_FORMAT = "%m/%d %H:%M:%S"
@@ -74,6 +76,9 @@ class NonModelTable(tables.Table):
         template_name = "django_tables2/bootstrap4.html"
 
     def __init__(self, *args, **kwargs):
+        inspect = celery_app.control.inspect()
+        tasks_active = inspect.active()
+        tasks_scheduled = inspect.scheduled()
         print(f"NonModelTable.__init__(), args = {args}, kwargs = {kwargs}")
         super().__init__(*args, **kwargs)
 
