@@ -4,6 +4,7 @@ import django_tables2 as tables
 
 from .models import MmIpRange, IpRangeSurvey
 
+DATE_TIME_FORMAT = "%m/%d %H:%M:%S"
 TIME_FORMAT = "%H:%M:%S"
 
 MAX_STRING_LENGTH = 15
@@ -34,14 +35,18 @@ class IpSurveyTable(tables.Table):
             "num_total_ranges"]
         #print(f"CPV.get_context_data() 5, (after setting initial) field_survey_id = {field_survey_id}")
 
-    def render_time(self, value):
+    def render_time(self, value, include_date=False):
+        return_string
         if not value:
-            return ""
-        else: 
-            return value.strftime(TIME_FORMAT)
+            return_string = ""
+        elif include_date:
+            return_string = value.strftime(DATE_TIME_FORMAT)
+        else:
+            return_string = value.strftime(TIME_FORMAT)
+        return return_string
 
     def render_time_created(self, value, record):
-        return self.render_time(value)
+        return self.render_time(value, include_date=True)
 
     def render_time_ping_started(self, value, record):
         return self.render_time(value)
@@ -50,4 +55,5 @@ class IpSurveyTable(tables.Table):
         return self.render_time(value)
 
     def render_num_total_ranges(self, value, record):
-        return "{value:,}"
+        thousands = float(value) / 1000.0
+        return f"{thousands:,}"
