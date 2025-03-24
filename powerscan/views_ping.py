@@ -352,7 +352,7 @@ class ScheduleSurveyView(generic.edit.FormView):
         return context_data
 
     def get(self, request, *args, **kwargs):
-        survey_id = kwargs["survey_id"]
+        survey_id = kwargs["pk"]
         print(f"SSV.get(), survey_id = {survey_id}")
 
     def post(self, request, *args, **kwargs):
