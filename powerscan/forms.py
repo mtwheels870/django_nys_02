@@ -43,4 +43,7 @@ class ScheduleSurveyForm(forms.Form):
         self.fields['field_survey_id'].widget.attrs['readonly'] = True
         self.fields['field_survey_name'].widget.attrs['readonly'] = True
     
+    class Meta:
+        model = TextFile
+        fields = "__all__"
 
