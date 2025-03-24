@@ -32,18 +32,15 @@ class PingStrategyForm(forms.Form):
     # field_survey_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
     field_survey_id = forms.CharField(label="Survey Id (if created)", initial="0")
 
-class IpRangePingForm(ModelForm):
-    class Meta:
-        model = IpRangePing
-        fields = ["time_pinged"]
+class ScheduleSurveyForm(ModelForm):
+    field_survey_id = forms.IntegerField(label="Survey ID:")
+    field_survey_name = forms.CharField(label="States:")
+    field_start_time = forms.DateTimeField(label="Start Time (first ping):")
+    field_recurring = forms.DurationField(label="Recurring (amount)")
 
-#    CHOICES = [
-#        ["value1", "Label 1"],
-#        ["value2", "Label 2"],
-#        ["value3", "Label 3"],
-#    ]
-    # This is a combo box
-    # help_text="Should only be able to pick one from this list")
-    # field_single = forms.ChoiceField(choices=CHOICES, label="Single Choice Here:") 
-    # choices=[(1, "Option 1"), (2, "Option 2"), (3, "Option 3")],
-    # help_text="Select at least one state to configure ping")
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['field_survey_id'].widget.attrs['readonly'] = True
+        self.fields['field_survey_name'].widget.attrs['readonly'] = True
+    
+

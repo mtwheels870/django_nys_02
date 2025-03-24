@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Schedule Survey Config</title>
+  </head>
+  <body>
+    <h2>Schedule Survey (time and recurrence): </h2>
+    <!-- use of app_name = nys below, csrf = cross site request forgeries -->
+    <!-- form action=" stuff here url 'app_centralny:approve_ping' object.id  method="post" -->
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {{ form.errors }}
+        {{ form.media }}
+        {{ form.as_div }}
+        <br>
+        <button type="submit" name="submit">Submit</button>
+        <button type="submit" name="discard">Discard</button>
+    </form>
+  </body>
+</html>
+<!--  _% if survey_status.value == 3 %_ enabled  _%else%_ disabled _% endif %_ -->

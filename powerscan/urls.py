@@ -17,6 +17,7 @@ urlpatterns = [
     #path("chat/<str:room_name>/", views.chat_room, name="chat_room"),
     path("surveys/", views_ping.RecentSurveyView.as_view(), name="survey_table"),
     path("tasks/", views_ping.CeleryTasksView.as_view(), name="task_table"),
+    path("schedule-survey/<int:pk>", views_ping.ScheduleSurveyView.as_view(), name="schedule_survey"),
     # ex: /tutorial/5/
 ]
 #print(f"markers.urlpatterns = {urlpatterns}")

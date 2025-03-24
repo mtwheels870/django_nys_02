@@ -54,6 +54,8 @@ FIELD_STATUS = "status_message"
 #FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
 FIELD_TASKS = "tasks" 
+FIELD_SURVEY_ID = "survey_id"
+FIELD_SURVEY_NAME = "survey_name"
 
 
 ESTIMATED_RANGES_MIN = 4500
@@ -95,7 +97,7 @@ class ConfigurePingView(generic.edit.FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         form = context_data['form']
-        field_survey_id = form.fields['field_survey_id']
+        field_survey_id = form.fields[FIELD_SURVEY_ID]
         field_survey_id.initial = "0"
 
         # There's an unbound, empty form in context_data...
@@ -225,6 +227,7 @@ class ConfigurePingView(generic.edit.FormView):
 
             if 'schedule_survey' in request.POST:
                 print(f"CPV.post(), schedule_survey, survey_id = {survey_id}, NO LOGIC HERE")
+                return HttpResponseRedirect(reverse("app_cybsen:schedule_survey"), args=(survey_id))
 
             # Not sure why we have to create a new form here (but it works)
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
@@ -324,3 +327,28 @@ class CeleryTasksView(SingleTableView):
                     tuple = self._make_task_tuple("scheduled", task)
                     data.append(tuple)
         return data
+
+class ScheduleSurveyView(generic.edit.FormView):
+    form_class = ScheduleSurveyForm
+    template_name = "powerscan/schedule_survey.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        form = context_data['form']
+        survey_id = self.kwargs.get('pk')
+        context_data['file_id'] = file_id
+        survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+        field_survey_id = form.fields[FIELD_SURVEY_ID]
+        field_survey_id.initial = survey_id
+        field_survey_name = form.fields[FIELD_SURVEY_NAME]
+        field_survey_name.initial = survey.name
+        return context_data
+
+    def post(self, request, *args, **kwargs):
+        survey_id = kwargs["survey_id"]
+        if 'submit' in request.POST:
+            print(f"SSV.post(), submitting")
+
+        if 'discard' in request.POST:
+            print(f"SSV.post(), discarding")
+

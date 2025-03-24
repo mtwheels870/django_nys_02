@@ -108,17 +108,17 @@ class CountTractViewSet(
     queryset = CountTract.objects.all()
     serializer_class = CountTractSerializer
     
-class PingStrategyIndexView(generic.ListView):
-    template_name = "powerscan/ps_index.html"
-    context_object_name = "latest_strategy_list"
+#class PingStrategyIndexView(generic.ListView):
+#    template_name = "powerscan/ps_index.html"
+#    context_object_name = "latest_strategy_list"
 
-    def get_queryset(self):
-        """ Return the last five published IP surveys."""
-        return IpRangeSurvey.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
+#    def get_queryset(self):
+#        """ Return the last five published IP surveys."""
+#        return IpRangeSurvey.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
 
-class PingStrategyResultsView(generic.DetailView):
-    model = IpRangeSurvey
-    template_name = "powerscan/ps_results.html"
+#class PingStrategyResultsView(generic.DetailView):
+#    model = IpRangeSurvey
+#    template_name = "powerscan/ps_results.html"
 
 # Reverse mapping from clicking on a index, detail
 def approve_ping(request, id):
@@ -147,7 +147,7 @@ class MapNavigationView(generic.edit.FormView):
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
         map_bbox = form.fields[KEY_MAP_BBOX]
-        print(f"g_c_d(), map_bbox = {map_bbox}")
+        #print(f"g_c_d(), map_bbox = {map_bbox}")
         # We need this, so it's in the Django templates (for the search parms)
         context_data['map_bbox'] = map_bbox
         table = self.create_table(MmIpRange.objects.none())
