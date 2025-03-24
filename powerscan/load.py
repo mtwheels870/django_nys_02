@@ -400,3 +400,8 @@ class Loader():
             survey.name = state_string
             survey.save()
             index = index + 1
+
+    def create_debug(self):
+        debug_power = DebugPowerScan(profile_name="Primary")
+        debug_power.save()
+

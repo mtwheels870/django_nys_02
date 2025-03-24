@@ -197,14 +197,15 @@ class MilitaryBase(models.Model):
         return {self.name.county_fp}
 
 class DebugPowerScan(models.Model):
+    profile_name =  models.CharField(max_length=30)
     whitelist = models.BooleanField(default=False)
     zmap = models.BooleanField(default=False)
     tally_results = models.BooleanField(default=False)
     calculate_baseline = models.BooleanField(default=False)
 
     def __str__(self):
-        first = f"whitelist = {self.whitelist}, zmap = {self.zmap}, tally_results = {tally_results},"
-        second = f"       calculate_baseline = {calculate_baseline}"
+        first = f"profile[{self.profile_name}, whitelist = {self.whitelist}, zmap = {self.zmap}, "
+        second = f"     tally_results = {tally_results}, calculate_baseline = {calculate_baseline}"
         return first + second
 
 #class WorkerLock(models.Model):
