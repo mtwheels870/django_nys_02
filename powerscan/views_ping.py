@@ -98,7 +98,7 @@ class ConfigurePingView(generic.edit.FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         form = context_data['form']
-        field_survey_id = form.fields[FIELD_SURVEY_ID]
+        field_survey_id = form.fields['field_survey_id']
         field_survey_id.initial = "0"
 
         # There's an unbound, empty form in context_data...
