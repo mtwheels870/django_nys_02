@@ -67,10 +67,11 @@ class IpSurveyTable(tables.Table):
     def render_num_total_ranges(self, value, record):
         return self._render_thousands(value)
 
-class NonModelTable(tables.Table):
+class CeleryTaskTable(tables.Table):
+    status = tables.Column()
+    survey_id = tables.Column()
     name = tables.Column()
-    surname = tables.Column()
-    address = tables.Column()
+    eta = tables.Column()
 
     class Meta:
         template_name = "django_tables2/bootstrap4.html"
@@ -79,14 +80,9 @@ class NonModelTable(tables.Table):
         inspect = celery_app.control.inspect()
         tasks_active = inspect.active()
         tasks_scheduled = inspect.scheduled()
-        print(f"NonModelTable.__init__(), args = {args}, kwargs = {kwargs}")
+        print(f"CeleryTaskTable.__init__(), args = {args}, kwargs = {kwargs}")
         super().__init__(*args, **kwargs)
 
-    def render_name(self, value, record):
-        return f"Name: {value}"
-
-    def render_surname(self, value, record):
-        return f"Surname: {value}"
-
-    def render_address(self, value, record):
-        return f"Address: {value}"
+    def render_eta(self, value, record):
+        print(f"render_eta(), value = {value}")
+        return f"{value}"
