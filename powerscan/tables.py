@@ -76,7 +76,7 @@ class CeleryTaskTable(tables.Table):
     status = tables.Column()
     survey_id = tables.Column()
     name = tables.Column()
-    eta = tables.Column()
+    eta = tables.Column(verbose_name="Start Time")
 
     class Meta:
         template_name = "django_tables2/bootstrap4.html"
@@ -90,5 +90,5 @@ class CeleryTaskTable(tables.Table):
 
     def render_eta(self, value, record):
         dt = iso8601.parse_iso8601(value)
-        print(f"render_eta(), value = {value}, dt = {dt}")
-        return f"{value}"
+        # print(f"render_eta(), value = {value}, dt = {dt}")
+        return dt.strftime(DATE_TIME_FORMAT)

@@ -104,7 +104,7 @@ class ConfigurePingView(generic.edit.FormView):
         context_data[FIELD_STATUS] = self._status_message
         survey_status = celery_results_handler.reset()
         context_data[FIELD_SURVEY_STATUS] = survey_status 
-        context_data[FIELD_TASKS] = self._get_tasks()
+        #context_data[FIELD_TASKS] = self._get_tasks()
         # print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
 
         #context_data[FIELD_SURVEY_ID] = self._survey_id
@@ -223,8 +223,9 @@ class ConfigurePingView(generic.edit.FormView):
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
 
-            if 'cancel_ping' in request.POST:
-                print(f"CPV.post(), cancel_ping, survey_id = {survey_id}")
+        <button type="submit" name="" {% if survey_status.value == 3 %} enabled  {%else%} disabled {% endif %}>
+            if 'schedule_survey' in request.POST:
+                print(f"CPV.post(), schedule_survey, survey_id = {survey_id}")
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.NULL)
 
             # Not sure why we have to create a new form here (but it works)
@@ -234,8 +235,8 @@ class ConfigurePingView(generic.edit.FormView):
         # FIELD_CELERY_DETAILS : self._get_celery_details(),
         context = {"form" : new_form,
             FIELD_STATUS : self._status_message,
-            FIELD_SURVEY_STATUS : celery_results_handler.get_status(),
-            FIELD_TASKS : self._get_tasks(),
+            FIELD_SURVEY_STATUS : celery_results_handler.get_status())
+            #FIELD_TASKS : self._get_tasks(),
         }
         return render(request, self.template_name, context)
 
