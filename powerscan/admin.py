@@ -43,6 +43,6 @@ class MmIpRangeAdmin(admin.GISModelAdmin):
             "classes": ["collapse"]}),
     ]
 
-
+@admin.register(DebugPowerScan)
 class DebugPowerScanAdmin(admin.ModelAdmin):
     model = DebugPowerScan
