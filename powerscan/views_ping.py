@@ -228,7 +228,8 @@ class ConfigurePingView(generic.edit.FormView):
 
             if 'schedule_survey' in request.POST:
                 print(f"CPV.post(), schedule_survey, survey_id = {survey_id}, NO LOGIC HERE")
-                return HttpResponseRedirect(reverse("app_cybsen:schedule_survey", args=(survey_id)))
+                int_survey_id = int(survey_id)
+                return HttpResponseRedirect(reverse("app_cybsen:schedule_survey", args=(int_survey_id)))
 
             # Not sure why we have to create a new form here (but it works)
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
