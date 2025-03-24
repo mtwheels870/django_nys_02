@@ -1,6 +1,6 @@
-import datetime
+#import datetime
 
-from celery.utils import time
+from celery.utils import iso8601
 
 from django.utils.html import format_html
 
@@ -89,6 +89,6 @@ class CeleryTaskTable(tables.Table):
         super().__init__(*args, **kwargs)
 
     def render_eta(self, value, record):
-        dt = datetime.fromisoformat(value)
+        dt = iso8601.parse_8601(value)
         print(f"render_eta(), value = {value}, dt = {dt}")
         return f"{value}"
