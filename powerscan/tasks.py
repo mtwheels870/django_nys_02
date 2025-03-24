@@ -162,7 +162,7 @@ def build_whitelist(self, *args, **kwargs):
     survey.time_whitelist_started = timezone.now()
     survey.save()
 
-    survey_manager = PingSurveyManager(survey_id)
+    survey_manager = PingSurveyManager(survey_id, debug.whitelist)
     num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
 
     if debug.whitelist:
