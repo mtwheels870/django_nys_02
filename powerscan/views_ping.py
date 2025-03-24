@@ -310,10 +310,8 @@ class CeleryTasksView(SingleTableView):
         name = task["request"]["type"]
         survey_id = task["request"]["kwargs"]["survey_id"]
         eta = task["eta"]
-
         dict = {"status" : status, "survey_id", survey_id, "name" : name, "eta" : eta}
         return dict
-    }
 
     def get_queryset(self):
         inspect = celery_app.control.inspect()
