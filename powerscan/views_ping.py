@@ -307,7 +307,10 @@ class CeleryTasksView(SingleTableView):
     }
 
     def _make_task_tuple(self, status, task):
-        name = task["request"]["type"]
+        request = task["request"]
+        print(f"_m_t_t(), request = {request}")
+        name = request["type"]
+        print(f"_m_t_t(), name = {name}")
         survey_id = task["request"]["kwargs"]["survey_id"]
         eta = task["eta"]
         dict = {"status" : status, "survey_id" : survey_id, "name" : name, "eta" : eta}
