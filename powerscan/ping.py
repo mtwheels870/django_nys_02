@@ -129,9 +129,9 @@ class PingSurveyManager:
         self._configure_whitelist_files()
 
     @staticmethod
-    def find(survey_id_string):
+    def find(survey_id_string, debug):
         survey_id = survey_id_string
-        return PingSurveyManager._find_survey(survey_id)
+        return PingSurveyManager._find_survey(survey_id, debug)
         
     @staticmethod
     def _build_survey_name(survey_id) -> str:
@@ -139,13 +139,13 @@ class PingSurveyManager:
         return folder_snapshot
 
     @staticmethod
-    def _find_survey(survey_id):
+    def _find_survey(survey_id, debug):
         survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, survey_dir_name)
         if not os.path.exists(full_path):
             print(f"PingSurveyManager._find_survey(), could not find path: {full_path}")
             return None
-        psm = PingSurveyManager(survey_id, create_new=False)
+        psm = PingSurveyManager(survey_id, debug, create_new=False)
         return psm
 
     @staticmethod
