@@ -33,7 +33,8 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
-    MmIpRange)
+    MmIpRange, DebugPowerScan
+)
 
 from .ping import PingSurveyManager
 
