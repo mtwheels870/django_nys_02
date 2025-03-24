@@ -35,7 +35,7 @@ class CeleryResultsHandler:
     def set_status(self, new_status, task_result=None):
         self._survey_status = new_status
         if task_result:
-            print(f"CeleryResultsHandler.set_status(), self = {self}, task_result = {task_result.task_id}")
+            #print(f"CeleryResultsHandler.set_status(), self = {self}, task_result = {task_result.task_id}")
             self._pending_task_result[task_result.task_id] = None
 
     def reset(self):

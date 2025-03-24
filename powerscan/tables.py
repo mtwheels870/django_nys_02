@@ -1,3 +1,5 @@
+from celery.utils import time
+
 from django.utils.html import format_html
 
 import django_tables2 as tables
@@ -59,7 +61,8 @@ class IpSurveyTable(tables.Table):
 
     def _render_thousands(self, value):
         thousands = float(value) / 1000.0
-        return f"{thousands:,}"
+        #return f"{thousands:,}"
+        return f"{thousands:.2f}"
 
     def render_num_ranges_responded(self, value, record):
         return self._render_thousands(value)
@@ -84,5 +87,6 @@ class CeleryTaskTable(tables.Table):
         super().__init__(*args, **kwargs)
 
     def render_eta(self, value, record):
-        print(f"render_eta(), value = {value}")
+        dt1 = time.fromutc(value)
+        print(f"render_eta(), value = {value}, dt1 = {dt1}")
         return f"{value}"
