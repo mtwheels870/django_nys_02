@@ -79,20 +79,20 @@ class ConfigurePingView(generic.edit.FormView):
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
-    def _get_tasks(self):
-        inspect = celery_app.control.inspect()
-        tasks_active = inspect.active()
-        if tasks_active:
+#    def _get_tasks(self):
+#        inspect = celery_app.control.inspect()
+#        tasks_active = inspect.active()
+#        if tasks_active:
             #for index, (key, value) in enumerate(tasks_active.items()):
             #    print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
 
             #tasks_scheduled = inspect.scheduled()
             #for index, (key, value) in enumerate(tasks_scheduled.items()):
             #    print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
-            return tasks_active 
-        else:
-            print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
-        return "No tasks (is celery running?)"
+#            return tasks_active 
+#        else:
+#            print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
+#        return "No tasks (is celery running?)"
 
 
     def get_context_data(self, **kwargs):
@@ -344,6 +344,7 @@ class ScheduleSurveyView(generic.edit.FormView):
         field_survey_id.initial = survey_id
         field_survey_name = form.fields[FIELD_SURVEY_NAME]
         field_survey_name.initial = survey.name
+        print(f"SSV.g_c_d(), after setting, form = {form}")
         return context_data
 
     def post(self, request, *args, **kwargs):
