@@ -347,13 +347,10 @@ class ScheduleSurveyView(generic.edit.FormView):
         field_survey_name = form.fields[FIELD_SURVEY_NAME]
         field_survey_name.initial = survey.name
         field_start_time = form.fields[FIELD_START_TIME]
-        field_start_time.initial = "09/23/2025 00:00"
+        field_start_time.initial = timezone.now()
+
         # print(f"SSV.g_c_d(), after setting, form = {form}")
         return context_data
-
-#    def get(self, request, *args, **kwargs):
-#        survey_id = kwargs["pk"]
-#        print(f"SSV.get(), survey_id = {survey_id}")
 
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["survey_id"]
