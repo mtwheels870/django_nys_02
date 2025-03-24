@@ -1,7 +1,10 @@
 # from django.contrib import admin
 from django.contrib.gis import admin
 
-from .models import County, CensusTract, MmIpRange
+from .models import (
+    County, CensusTract,
+    MmIpRange, DebugPowerScan
+)
 
 # @admin.register(Marker)
 #class MarkerAdmin(admin.GISModelAdmin):
