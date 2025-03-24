@@ -57,6 +57,8 @@ FIELD_SURVEY_STATUS = "survey_status"
 FIELD_TASKS = "tasks" 
 FIELD_SURVEY_ID = "field_survey_id"
 FIELD_SURVEY_NAME = "field_survey_name"
+FIELD_START_TIME = "field_start_time"
+FIELD_RECURRING = "field_recurring"
 
 
 ESTIMATED_RANGES_MIN = 4500
@@ -344,6 +346,8 @@ class ScheduleSurveyView(generic.edit.FormView):
         field_survey_id.initial = survey_id
         field_survey_name = form.fields[FIELD_SURVEY_NAME]
         field_survey_name.initial = survey.name
+        field_start_time = form.fields[FIELD_START_TIME]
+        field_start_time.initial = "09/23/2025 00:00"
         print(f"SSV.g_c_d(), after setting, form = {form}")
         return context_data
 
