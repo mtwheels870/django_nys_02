@@ -205,7 +205,7 @@ class DebugPowerScan(models.Model):
 
     def __str__(self):
         first = f"profile[{self.profile_name}, whitelist = {self.whitelist}, zmap = {self.zmap}, "
-        second = f"     tally_results = {tally_results}, calculate_baseline = {calculate_baseline}"
+        second = f"     tally_results = {self.tally_results}, calculate_baseline = {self.calculate_baseline}"
         return first + second
 
 #class WorkerLock(models.Model):
