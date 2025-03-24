@@ -223,10 +223,8 @@ class ConfigurePingView(generic.edit.FormView):
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
 
-        <button type="submit" name="" {% if survey_status.value == 3 %} enabled  {%else%} disabled {% endif %}>
             if 'schedule_survey' in request.POST:
-                print(f"CPV.post(), schedule_survey, survey_id = {survey_id}")
-                celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.NULL)
+                print(f"CPV.post(), schedule_survey, survey_id = {survey_id}, NO LOGIC HERE")
 
             # Not sure why we have to create a new form here (but it works)
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
