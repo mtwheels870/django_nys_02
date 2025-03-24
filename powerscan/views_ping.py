@@ -321,14 +321,17 @@ class CeleryTasksView(SingleTableView):
         tasks_active = inspect.active()
         data = []
         if tasks_active:
+            # I think each of these (active, scheduled) is a list of tasks (so there will be one item).
             for index, (key, value) in enumerate(tasks_active.items()):
                 print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
-                tuple = self._make_task_tuple("active", value)
-                data.append(tuple)
+                for task in value:
+                    tuple = self._make_task_tuple("active", task)
+                    data.append(tuple)
 
             tasks_scheduled = inspect.scheduled()
             for index, (key, value) in enumerate(tasks_scheduled.items()):
                 print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
-                tuple = self._make_task_tuple("scheduled", value)
-                data.append(tuple)
+                for task in value:
+                    tuple = self._make_task_tuple("scheduled", task)
+                    data.append(tuple)
         return data
