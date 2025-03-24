@@ -301,7 +301,7 @@ class CeleryTasksView(SingleTableView):
     ]
     table_class = NonModelTable 
     # table = NonModelTable(data, {"alpha" : 23})
-    table = NonModelTable(data)
+    # table = NonModelTable(data)
     #table_class = NonModelTable
     template_name = "powerscan/tasks_table.html"
     table_pagination = {
@@ -309,7 +309,19 @@ class CeleryTasksView(SingleTableView):
     }
 
     def get_queryset(self):
-        return self.data
+        inspect = celery_app.control.inspect()
+        tasks_active = inspect.active()
+        if tasks_active:
+            for index, (key, value) in enumerate(tasks_active.items()):
+                print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
 
-    def get_table_kwargs(self):
-        return {'user': self.request.user}
+            tasks_scheduled = inspect.scheduled()
+            for index, (key, value) in enumerate(tasks_scheduled.items()):
+                print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
+            data = [
+                {"name": "John", "surname": "Doe", "address": "123 Main St"},
+                {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
+            ]
+        else:
+            data = []
+        return data
