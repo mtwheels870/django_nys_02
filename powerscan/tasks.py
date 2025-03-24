@@ -147,7 +147,7 @@ def send_task_result(data):
 
 @shared_task(bind=True)
 def build_whitelist(self, *args, **kwargs):
-    debug = DebugPowerScan.objects.get(DEBUG_ID)
+    debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
     # print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
@@ -211,7 +211,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 
 @shared_task(bind=True)
 def zmap_from_file(self, *args, **kwargs):
-    debug = DebugPowerScan.objects.get(DEBUG_ID)
+    debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     # print(f"zmap_from_file(), survey_id = {survey_id_string}")
@@ -275,7 +275,7 @@ def tally_results(self, *args, **kwargs):
         survey.time_tally_started = now
         survey.save()
 
-        debug = DebugPowerScan.objects.get(DEBUG_ID)
+        debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
         debug_tally = debug.tally_results 
 
         survey_manager = PingSurveyManager.find(survey_id, debug_tally)
