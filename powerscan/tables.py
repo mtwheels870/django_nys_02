@@ -80,7 +80,7 @@ class CeleryTaskTable(tables.Table):
         inspect = celery_app.control.inspect()
         tasks_active = inspect.active()
         tasks_scheduled = inspect.scheduled()
-        print(f"CeleryTaskTable.__init__(), args = {args}, kwargs = {kwargs}")
+        # print(f"CeleryTaskTable.__init__(), args = {args}, kwargs = {kwargs}")
         super().__init__(*args, **kwargs)
 
     def render_eta(self, value, record):

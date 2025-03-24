@@ -15,11 +15,6 @@ from django_celery_results.models import TaskResult
 from celery import shared_task
 from celery.app import control 
 
-# @receiver(post_save, sender=django_celery_results.models.TaskResult)
-# from celery.signals import task_postrun
-
-# from  django_tables2.config import RequestConfig
-
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
@@ -85,22 +80,17 @@ class ConfigurePingView(generic.edit.FormView):
         inspect = celery_app.control.inspect()
         tasks_active = inspect.active()
         if tasks_active:
-            for index, (key, value) in enumerate(tasks_active.items()):
-                print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+            #for index, (key, value) in enumerate(tasks_active.items()):
+            #    print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
 
-            tasks_scheduled = inspect.scheduled()
-            for index, (key, value) in enumerate(tasks_scheduled.items()):
-                print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
+            #tasks_scheduled = inspect.scheduled()
+            #for index, (key, value) in enumerate(tasks_scheduled.items()):
+            #    print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
             return tasks_active 
         else:
             print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
         return "No tasks (is celery running?)"
 
-        #f = lambda task: task.name
-        #active_task_names = [f(x) for x in inspect.active()]
-        #index = 0
-        #for task in tasks_active:
-        #    print(f"CPV.g_tasks(), active task[{index}] = {task}, {type(task)}")
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -115,7 +105,7 @@ class ConfigurePingView(generic.edit.FormView):
         survey_status = celery_results_handler.reset()
         context_data[FIELD_SURVEY_STATUS] = survey_status 
         context_data[FIELD_TASKS] = self._get_tasks()
-        print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
+        # print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
 
         #context_data[FIELD_SURVEY_ID] = self._survey_id
 
@@ -308,10 +298,10 @@ class CeleryTasksView(SingleTableView):
 
     def _make_task_tuple(self, status, task):
         request = task["request"]
-        print(f"_m_t_t(), request = {request}")
+        # print(f"_m_t_t(), request = {request}")
         name = request["type"]
-        print(f"_m_t_t(), name = {name}")
-        survey_id = task["request"]["kwargs"]["survey_id"]
+        # print(f"_m_t_t(), name = {name}")
+        survey_id = request["kwargs"]["survey_id"]
         eta = task["eta"]
         dict = {"status" : status, "survey_id" : survey_id, "name" : name, "eta" : eta}
         return dict
@@ -323,14 +313,14 @@ class CeleryTasksView(SingleTableView):
         if tasks_active:
             # I think each of these (active, scheduled) is a list of tasks (so there will be one item).
             for index, (key, value) in enumerate(tasks_active.items()):
-                print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+                # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
                 for task in value:
                     tuple = self._make_task_tuple("active", task)
                     data.append(tuple)
 
             tasks_scheduled = inspect.scheduled()
             for index, (key, value) in enumerate(tasks_scheduled.items()):
-                print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
+                # print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
                 for task in value:
                     tuple = self._make_task_tuple("scheduled", task)
                     data.append(tuple)

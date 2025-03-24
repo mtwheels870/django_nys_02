@@ -307,7 +307,7 @@ class PingSurveyManager:
         index_chunk = 0
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
             column_names = chunk.columns.tolist()
-            print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {df.shape[0]}, column = {column_names}")
+            print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {chunk.shape[0]}, column = {column_names}")
             #print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
             for index, row in chunk.iterrows():
                 saddr = row['saddr']
