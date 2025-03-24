@@ -39,3 +39,7 @@ class MmIpRangeAdmin(admin.GISModelAdmin):
         ("Geography", {"fields": ["mpoint"], 
             "classes": ["collapse"]}),
     ]
+
+
+class DebugPowerScanAdmin(admin.ModelAdmin):
+    model = DebugPowerScan
