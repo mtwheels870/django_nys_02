@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from django.forms.widgets import SplitDateTimectWidget
+from django.forms.widgets import SplitDateTimeWidget
 
 from .models import CountTract, IpRangePing, UsState
 
