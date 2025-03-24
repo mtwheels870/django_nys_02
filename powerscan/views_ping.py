@@ -55,8 +55,8 @@ FIELD_STATUS = "status_message"
 #FIELD_SURVEY_ID = "survey_id" 
 FIELD_SURVEY_STATUS = "survey_status" 
 FIELD_TASKS = "tasks" 
-FIELD_SURVEY_ID = "survey_id"
-FIELD_SURVEY_NAME = "survey_name"
+FIELD_SURVEY_ID = "field_survey_id"
+FIELD_SURVEY_NAME = "field_survey_name"
 
 
 ESTIMATED_RANGES_MIN = 4500
@@ -338,7 +338,7 @@ class ScheduleSurveyView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         form = context_data['form']
         survey_id = self.kwargs.get('pk')
-        print(f"SSV.g_c_d(), survey_id = {survey_id}")
+        print(f"SSV.g_c_d(), survey_id = {survey_id}, form = {form}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         field_survey_id = form.fields[FIELD_SURVEY_ID]
         field_survey_id.initial = survey_id
