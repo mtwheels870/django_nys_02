@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm
+from django.forms.widgets import SplitDateTimectWidget
 
 from .models import CountTract, IpRangePing, UsState
 
@@ -35,7 +36,7 @@ class PingStrategyForm(forms.Form):
 class ScheduleSurveyForm(forms.Form):
     field_survey_id = forms.IntegerField(label="Survey ID:")
     field_survey_name = forms.CharField(label="States:")
-    field_start_time = forms.DateTimeField(label="Start Time (first ping):")
+    field_start_time = forms.DateTimeField(label="Start Time (first ping):", widget=SplitDateTimectWidget)
     field_recurring = forms.DurationField(label="Recurring (amount)")
 
     def __init__(self, *args, **kwargs):
