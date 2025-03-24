@@ -281,6 +281,7 @@ class RecentSurveyView(SingleTableView):
             file_id = selected_pks[0]
             if 'edit' in request.POST:
                 print(f"TFDV.post(), editing page")
+                # This is a copy/paste error (from kg_train - never changed)
                 return HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(folder_id, file_id,)))
             elif 'label' in request.POST:
                 return self.label_page(request, folder_id, file_id)
@@ -356,9 +357,20 @@ class ScheduleSurveyView(generic.edit.FormView):
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["pk"]
         print(f"SSV.post(), survey_id = {survey_id}")
-        if 'submit' in request.POST:
-            print(f"SSV.post(), submitting")
-
         if 'discard' in request.POST:
             print(f"SSV.post(), discarding")
 
+        if 'submit' in request.POST:
+            print(f"SSV.post(), submitting")
+            if not form.is_valid():
+                print(f"SSV.post(), form is INVALID, creating empty")
+                # Clear the form and stay here
+                new_form = ScheduleSurveyForm(field_survey_id=form.field_survey_id,
+                        field_survey_name=form.field_survey_name)
+                context = {"form" : new_form}
+                return render(request, self.template_name, context)
+            else:
+                start_time = form.cleaned_data[FIELD_START_TIME]
+                recurring = form.cleaned_data[FIELD_RECURRING]
+                print(f"SSV.post(), survey_id = {survey_id}, start_time = {start_time}, recurring = {recurring}")
+        return HttpResponseRedirect(reverse("app_cybsen:survey_table"))
