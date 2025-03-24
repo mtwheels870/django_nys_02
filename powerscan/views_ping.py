@@ -340,7 +340,7 @@ class ScheduleSurveyView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         form = context_data['form']
         survey_id = self.kwargs.get('pk')
-        print(f"SSV.g_c_d(), survey_id = {survey_id}, form = {form}")
+        print(f"SSV.g_c_d(), survey_id = {survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         field_survey_id = form.fields[FIELD_SURVEY_ID]
         field_survey_id.initial = survey_id
@@ -348,8 +348,12 @@ class ScheduleSurveyView(generic.edit.FormView):
         field_survey_name.initial = survey.name
         field_start_time = form.fields[FIELD_START_TIME]
         field_start_time.initial = "09/23/2025 00:00"
-        print(f"SSV.g_c_d(), after setting, form = {form}")
+        # print(f"SSV.g_c_d(), after setting, form = {form}")
         return context_data
+
+    def get(self, request, *args, **kwargs):
+        survey_id = kwargs["survey_id"]
+        print(f"SSV.get(), survey_id = {survey_id}")
 
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["survey_id"]
