@@ -36,7 +36,8 @@ from .models import (
     IpSurveyState
 )
 
-from .forms import PingStrategyForm
+from .forms import PingStrategyForm, ScheduleSurveyForm
+
 from .consumers import celery_results_handler, CeleryResultsHandler
 
 from .tables import IpSurveyTable, CeleryTaskTable
