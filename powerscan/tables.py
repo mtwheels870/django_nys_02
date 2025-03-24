@@ -87,6 +87,6 @@ class CeleryTaskTable(tables.Table):
         super().__init__(*args, **kwargs)
 
     def render_eta(self, value, record):
-        dt1 = time.fromutc(value)
-        print(f"render_eta(), value = {value}, dt1 = {dt1}")
+        dt = datetime.fromisoformat(value)
+        print(f"render_eta(), value = {value}, dt = {dt}")
         return f"{value}"
