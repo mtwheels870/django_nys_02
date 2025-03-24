@@ -338,7 +338,7 @@ class ScheduleSurveyView(generic.edit.FormView):
         context_data = super().get_context_data(**kwargs)
         form = context_data['form']
         survey_id = self.kwargs.get('pk')
-        context_data['file_id'] = file_id
+        print(f"SSV.g_c_d(), survey_id = {survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         field_survey_id = form.fields[FIELD_SURVEY_ID]
         field_survey_id.initial = survey_id
@@ -348,6 +348,7 @@ class ScheduleSurveyView(generic.edit.FormView):
 
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["survey_id"]
+        print(f"SSV.post(), survey_id = {survey_id}")
         if 'submit' in request.POST:
             print(f"SSV.post(), submitting")
 
