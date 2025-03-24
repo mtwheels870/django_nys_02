@@ -32,7 +32,7 @@ class PingStrategyForm(forms.Form):
     # field_survey_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
     field_survey_id = forms.CharField(label="Survey Id (if created)", initial="0")
 
-class ScheduleSurveyForm(ModelForm):
+class ScheduleSurveyForm(forms.Form):
     field_survey_id = forms.IntegerField(label="Survey ID:")
     field_survey_name = forms.CharField(label="States:")
     field_start_time = forms.DateTimeField(label="Start Time (first ping):")
