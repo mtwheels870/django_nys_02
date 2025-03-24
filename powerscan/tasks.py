@@ -54,6 +54,8 @@ TALLY_DELAY_SECS = TALLY_DELAY_MINS * 60
 
 TIME_FORMAT_STRING = "%H:%M:%S"
 
+DEBUG_ID = 1
+
 def start_tracts(self, *args, **kwargs):
 
     # Main method
@@ -144,6 +146,7 @@ def send_task_result(data):
 
 @shared_task(bind=True)
 def build_whitelist(self, *args, **kwargs):
+    debug = DebugPowerScan.objects.get(DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
     # print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
@@ -161,7 +164,8 @@ def build_whitelist(self, *args, **kwargs):
     survey_manager = PingSurveyManager(survey_id)
     num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
 
-    message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
+    if debug.whitelist:
+        message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
     survey.num_total_ranges = num_ranges
     survey.save()
@@ -206,6 +210,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 
 @shared_task(bind=True)
 def zmap_from_file(self, *args, **kwargs):
+    debug = DebugPowerScan.objects.get(DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     # print(f"zmap_from_file(), survey_id = {survey_id_string}")
@@ -220,8 +225,10 @@ def zmap_from_file(self, *args, **kwargs):
     survey.time_ping_started = timezone.now()
     survey.save()
 
+
+    debug_zmap = debug.zmap
     #print(f"build_whitelist(), source_id = {ip_source_id}")
-    survey_manager = PingSurveyManager.find(survey_id)
+    survey_manager = PingSurveyManager.find(survey_id, debug_zmap)
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
     # Run Zmap command here. We'll process the output file when the zmap is done running
@@ -267,7 +274,10 @@ def tally_results(self, *args, **kwargs):
         survey.time_tally_started = now
         survey.save()
 
-        survey_manager = PingSurveyManager.find(survey_id)
+        debug = DebugPowerScan.objects.get(DEBUG_ID)
+        debug_tally = debug.tally_results 
+
+        survey_manager = PingSurveyManager.find(survey_id, debug_tally)
         pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
         if pings_to_db == 0:
             delta = timedelta(seconds=TALLY_DELAY_SECS)

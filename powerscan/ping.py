@@ -115,8 +115,9 @@ class PingSurveyManager:
             if error:
                 self._error_count = self._error_count + 1
 
-    def __init__(self, survey_id, create_new=True, linked_survey_id=None):
+    def __init__(self, survey_id, debug, create_new=True, linked_survey_id=None):
         self._survey_id = survey_id
+        self._debug = debug
         if create_new:
             self._create_directory()
         else:
@@ -183,7 +184,8 @@ class PingSurveyManager:
         state_abbrevs = [s.us_state.state_abbrev for s in selected_survey_states]
         # debugger.print_array("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
 
-        print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
+        if self._debug:
+            print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
 
         state_ids = []
         for survey_state in selected_survey_states :
@@ -219,9 +221,10 @@ class PingSurveyManager:
         num_states = len(state_ids)
         num_counties = len(county_ids)
         num_tracts = len(tract_ids)
-        first = "PSM._traverse_geography(), created (s/c/t/r) = "
-        second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}"
-        print(first + second)
+        if self._debug:
+            first = "PSM._traverse_geography(), created (s/c/t/r) = "
+            second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}"
+            print(first + second)
         return num_states, num_counties, num_tracts, total_ranges
 
     def _tract_ranges_whitelist(self, tract):
@@ -307,7 +310,8 @@ class PingSurveyManager:
         index_chunk = 0
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
             column_names = chunk.columns.tolist()
-            print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {chunk.shape[0]}, column = {column_names}")
+            if self._debug:
+                print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {chunk.shape[0]}, column = {column_names}")
             #print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
             for index, row in chunk.iterrows():
                 saddr = row['saddr']
