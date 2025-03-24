@@ -197,7 +197,7 @@ class MilitaryBase(models.Model):
         return {self.name.county_fp}
 
 class DebugPowerScan(models.Model):
-    profile_name =  models.CharField(max_length=30)
+    profile_name =  models.CharField(max_length=30, default="Stuff")
     whitelist = models.BooleanField(default=False)
     zmap = models.BooleanField(default=False)
     tally_results = models.BooleanField(default=False)
