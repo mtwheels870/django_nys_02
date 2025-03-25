@@ -4,6 +4,10 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .tasks_periodic import periodic_task_to_do
 
+@celery_app.task
+def blah_de_blah(arg1, arg2):
+    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
+
 # I think this name becomes the leading prefix on the database table names, etc.
 class PowerScanConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
