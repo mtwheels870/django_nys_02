@@ -17,9 +17,10 @@ class PowerScanConfig(AppConfig):
         print(f"PowerScanConfig.app.ready()")
 
         # 'task': 'periodic_task_to_do',
+                #'task': 'powerscan.tasks_periodic.periodic_task_to_do',
         celery_app.conf.beat_schedule = {
             'add-every-minute': {
-                'task': 'powerscan.tasks_periodic.periodic_task_to_do',
+                'task': 'blah_de_blah',
                 'schedule': 10.0,   # This runs the task every minute.  MTW, why does 10.0 = every minute?
                 'args': (23, 37),   
             },
