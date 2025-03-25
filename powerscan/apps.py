@@ -20,7 +20,7 @@ class PowerScanConfig(AppConfig):
         now = timezone.now()
         one_hour = timedelta(hours=1)
         now_plus_one = now + one_hour
-        upcoming_surveys = IpRangeSurvey.object.filter(
+        upcoming_surveys = IpRangeSurvey.objects.filter(
                 time_tally_stopped__isnull=True).filter(time_scheduled__ge=now).filter(time_scheduled__lt=now_plus_one)
         f = lambda survey: survey.id
         survey_ids = [f(x) for x in upcoming_surveys]
