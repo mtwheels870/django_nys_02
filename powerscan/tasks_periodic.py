@@ -20,5 +20,5 @@ class SurveyScheduler(Task):
 
     @celery_app.task(name='blah_de_blah', bind=True)
     def periodic_task_to_do(self, arg1, arg2):
-        print(f"periodic_task_to_do(), self: {self.stuff}, arg1 = {arg1}, arg2 = {arg2}")
+        print(f"periodic_task_to_do(), self: {self}, arg1 = {arg1}, arg2 = {arg2}")
 
