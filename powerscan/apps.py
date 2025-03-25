@@ -4,9 +4,9 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .tasks_periodic import periodic_task_to_do
 
-@celery_app.task(name='blah_de_blah')
-def blah_de_blah(arg1, arg2):
-    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
+#@celery_app.task(name='blah_de_blah')
+#def blah_de_blah(arg1, arg2):
+#    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
 
 # I think this name becomes the leading prefix on the database table names, etc.
 class PowerScanConfig(AppConfig):
@@ -19,6 +19,7 @@ class PowerScanConfig(AppConfig):
 
         # Post-initialization tasks here
         print(f"PowerScanConfig.app.ready()")
+        survey_scheduler = SurveyScheduler()
 
         # 'task': 'periodic_task_to_do',
                 #'task': 'powerscan.tasks_periodic.periodic_task_to_do',
