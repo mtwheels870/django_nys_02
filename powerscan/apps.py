@@ -21,15 +21,15 @@ class PowerScanConfig(AppConfig):
         }
 
         # Create the schedule object
-        schedule, created = IntervalSchedule.objects.get_or_create(
-            every=10,
-            period=IntervalSchedule.SECONDS,
-        )
+#        schedule, created = IntervalSchedule.objects.get_or_create(
+#            every=10,
+#            period=IntervalSchedule.SECONDS,
+#        )
 
         # Create the Periodic task
-        periodic_task = PeriodicTask.objects.create(
-            interval=schedule,                  # we created this above.
-            name='Importing contacts',          # simply describes this periodic task.
-            task='proj.tasks.import_contacts',  # name of task.
-        )
+#        periodic_task = PeriodicTask.objects.create(
+#            interval=schedule,                  # we created this above.
+#            name='Importing contacts',          # simply describes this periodic task.
+#            task='proj.tasks.import_contacts',  # name of task.
+#        )
 
