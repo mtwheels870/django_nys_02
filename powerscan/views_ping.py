@@ -338,6 +338,14 @@ class ScheduleSurveyView(generic.edit.FormView):
         # print(f"SSV.g_c_d(), after setting, form = {form}")
         return context_data
 
+    def _copy_form(self, form):
+        survey_id = form.fields[FIELD_SURVEY_ID]
+        survey_name = form.fields[FIELD_SURVEY_NAME]
+        new_form = ScheduleSurveyForm()
+        new_form.field_survey_id.initial = survey_id
+        new_form.field_survey_name.initial = survey_name
+        return new_form
+
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["pk"]
         print(f"SSV.post(), survey_id = {survey_id}")
@@ -349,9 +357,8 @@ class ScheduleSurveyView(generic.edit.FormView):
             print(f"SSV.post(), submitting, form = {form}")
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
+                new_form = self._copy_form(form)
                 # Clear the form and stay here
-                new_form = ScheduleSurveyForm()
-                new_form.field_survey_id = survey_id
                 context = {"form" : new_form}
                 return render(request, self.template_name, context)
             else:
