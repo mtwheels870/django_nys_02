@@ -13,20 +13,30 @@ class PowerScanConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'powerscan'
 
+    def _add_surveys_to_queues(self):
+        print(f"PowerScanConfig._add_surveys_to_queues()")
+        now = timezone.now()
+        one_hour = timedelta(hours=1)
+        now_plus_one = now + one_hour
+        upcoming_surveys = IpRangeSurvey.object.filter(time_tally_stopped__isnull=True).
+            filter(time_scheduled__ge=now).filter(time_scheduled__lt=now_plus_one)
+        f = lambda survey: survey.id
+        survey_ids = [f(x) for x in upcoming_surveys]
+        print(f"PSC._as2qs(), survey_id = {survey_ids}")
+
     def ready(self):
         # Can't put this at the top-level (apps aren't ready yet)
         from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
         # Post-initialization tasks here
-        print(f"PowerScanConfig.app.ready()")
-        survey_scheduler = SurveyScheduler()
+        self._add_surveys_to_queues()
 
         # 'task': 'periodic_task_to_do',
                 #'task': 'powerscan.tasks_periodic.periodic_task_to_do',
         celery_app.conf.beat_schedule = {
             'add-every-minute': {
-                'task': 'blah_de_blah',
-                'schedule': 10.0,   # This runs the task every minute.  MTW, why does 10.0 = every minute?
+                'task': 'check_new_surveys',
+                'schedule': 180.0,   
                 'args': (23, 37),   
             },
         }
