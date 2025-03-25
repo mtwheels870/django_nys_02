@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.apps import AppConfig
 from django.utils import timezone
 
