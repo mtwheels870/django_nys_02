@@ -338,14 +338,6 @@ class ScheduleSurveyView(generic.edit.FormView):
         # print(f"SSV.g_c_d(), after setting, form = {form}")
         return context_data
 
-    def _copy_form(self, form):
-        survey_id = form.fields[FIELD_SURVEY_ID]
-        survey_name = form.fields[FIELD_SURVEY_NAME]
-        new_form = ScheduleSurveyForm()
-        new_form.field_survey_id.initial = survey_id
-        new_form.field_survey_name.initial = survey_name
-        return new_form
-
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["pk"]
         print(f"SSV.post(), survey_id = {survey_id}")
@@ -354,12 +346,12 @@ class ScheduleSurveyView(generic.edit.FormView):
 
         if 'submit' in request.POST:
             form = ScheduleSurveyForm(request.POST)
-            print(f"SSV.post(), submitting, form = {form}")
+            print(f"SSV.post(), submitting")
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
-                #new_form = self._copy_form(form)
                 # Clear the form and stay here
                 context = {"form" : form}
+                # We re-reneder the same form, but the errors will now be displayed
                 return render(request, self.template_name, context)
             else:
                 start_time = form.cleaned_data[FIELD_START_TIME]
@@ -367,17 +359,3 @@ class ScheduleSurveyView(generic.edit.FormView):
                 print(f"SSV.post(), survey_id = {survey_id}, start_time = {start_time}, recurring = {recurring}")
         return HttpResponseRedirect(reverse("app_cybsen:survey_table"))
 
-#    def _get_tasks(self):
-#        inspect = celery_app.control.inspect()
-#        tasks_active = inspect.active()
-#        if tasks_active:
-            #for index, (key, value) in enumerate(tasks_active.items()):
-            #    print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
-
-            #tasks_scheduled = inspect.scheduled()
-            #for index, (key, value) in enumerate(tasks_scheduled.items()):
-            #    print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
-#            return tasks_active 
-#        else:
-#            print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
-#        return "No tasks (is celery running?)"
