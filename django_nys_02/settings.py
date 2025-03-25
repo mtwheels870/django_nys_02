@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django_prose_editor',
     'django_tables2', 
     'django_celery_results',     
+    'django_celery_beat',     
 ]
 
 MIDDLEWARE = [
