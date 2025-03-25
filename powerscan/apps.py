@@ -1,6 +1,5 @@
 from django.apps import AppConfig
 
-#from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
@@ -10,6 +9,9 @@ class PowerScanConfig(AppConfig):
     name = 'powerscan'
 
     def ready(self):
+        # Can't put this at the top-level (apps aren't ready yet)
+        from django_celery_beat.models import PeriodicTask, IntervalSchedule
+
         # Post-initialization tasks here
         print(f"PowerScanConfig.app.ready()")
 
