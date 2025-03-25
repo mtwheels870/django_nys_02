@@ -32,5 +32,4 @@ class PowerScanConfig(AppConfig):
             name='Importing contacts',          # simply describes this periodic task.
             task='proj.tasks.import_contacts',  # name of task.
         )
-)
 
