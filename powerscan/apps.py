@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks_periodic import periodic_task_to_do
+#from .tasks_periodic import periodic_task_to_do
 
 #@celery_app.task(name='blah_de_blah')
 #def blah_de_blah(arg1, arg2):
