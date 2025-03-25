@@ -37,7 +37,7 @@ class PingStrategyForm(forms.Form):
     # field_survey_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
     field_survey_id = forms.CharField(label="Survey Id (if created)", initial="0")
 
-class CustomDateTimeField(DateTimeField):
+class CustomDateTimeField(forms.DateTimeField):
     def to_python(self, value):
         print(f"CFTF.to_python(), value = {value}")
         if isinstance(value, list):
