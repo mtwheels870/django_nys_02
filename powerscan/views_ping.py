@@ -357,9 +357,9 @@ class ScheduleSurveyView(generic.edit.FormView):
             print(f"SSV.post(), submitting, form = {form}")
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
-                new_form = self._copy_form(form)
+                #new_form = self._copy_form(form)
                 # Clear the form and stay here
-                context = {"form" : new_form}
+                context = {"form" : form}
                 return render(request, self.template_name, context)
             else:
                 start_time = form.cleaned_data[FIELD_START_TIME]
