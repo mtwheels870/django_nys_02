@@ -14,6 +14,8 @@ from celery.app import control
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
+# This could actually be running (although we don't see the print message), but we never declared the test.s() 
+# routing.  Don't think so.  Not set up
 @celery_app.after_finalize.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
     print(f"setup_periodic_tasks(), sender = {sender}, kwargs = {kwargs}")
