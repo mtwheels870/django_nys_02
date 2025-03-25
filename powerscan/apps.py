@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
