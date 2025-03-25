@@ -293,10 +293,10 @@ class RecentSurveyView(SingleTableView):
                 return redirect(request.path)
 
 class CeleryTasksView(SingleTableView):
-    data = [
-        {"name": "John", "surname": "Doe", "address": "123 Main St"},
-        {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
-    ]
+    #data = [
+    #    {"name": "John", "surname": "Doe", "address": "123 Main St"},
+    #    {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
+    #]
     table_class = CeleryTaskTable 
     #table_class = NonModelTable
     template_name = "powerscan/tasks_table.html"
@@ -361,6 +361,7 @@ class ScheduleSurveyView(generic.edit.FormView):
             print(f"SSV.post(), discarding")
 
         if 'submit' in request.POST:
+            form = ScheduleSurveyForm(request.POST)
             print(f"SSV.post(), submitting")
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
