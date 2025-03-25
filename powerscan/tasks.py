@@ -28,7 +28,7 @@ from django.db.models.signals import post_save
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-# Out stuff
+# Our stuff
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .models import (
