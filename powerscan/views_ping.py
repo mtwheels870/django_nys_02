@@ -75,28 +75,12 @@ ESTIMATED_RANGES_MIN = 4500
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
-    template_name = "powerscan/ps_detail.html"
+    template_name = "powerscan/survey_config.html"
     _status_message = ""
     _survey_id = 0
 
     def _get_celery_details(self):
         return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
-
-#    def _get_tasks(self):
-#        inspect = celery_app.control.inspect()
-#        tasks_active = inspect.active()
-#        if tasks_active:
-            #for index, (key, value) in enumerate(tasks_active.items()):
-            #    print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
-
-            #tasks_scheduled = inspect.scheduled()
-            #for index, (key, value) in enumerate(tasks_scheduled.items()):
-            #    print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
-#            return tasks_active 
-#        else:
-#            print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
-#        return "No tasks (is celery running?)"
-
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -375,3 +359,18 @@ class ScheduleSurveyView(generic.edit.FormView):
                 recurring = form.cleaned_data[FIELD_RECURRING]
                 print(f"SSV.post(), survey_id = {survey_id}, start_time = {start_time}, recurring = {recurring}")
         return HttpResponseRedirect(reverse("app_cybsen:survey_table"))
+
+#    def _get_tasks(self):
+#        inspect = celery_app.control.inspect()
+#        tasks_active = inspect.active()
+#        if tasks_active:
+            #for index, (key, value) in enumerate(tasks_active.items()):
+            #    print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+
+            #tasks_scheduled = inspect.scheduled()
+            #for index, (key, value) in enumerate(tasks_scheduled.items()):
+            #    print(f"CPV.g_tasks(), scheduled[{index}]: {key} = {value}")
+#            return tasks_active 
+#        else:
+#            print(f"CPV.g_tasks(), no active tasks! (celery not running?)")
+#        return "No tasks (is celery running?)"
