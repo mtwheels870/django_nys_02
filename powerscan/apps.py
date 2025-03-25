@@ -5,6 +5,12 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
+from .models import (
+    UsState,
+    IpRangeSurvey,
+    IpSurveyState
+)
+
 #@celery_app.task(name='blah_de_blah')
 #def blah_de_blah(arg1, arg2):
 #    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
