@@ -350,8 +350,7 @@ class ScheduleSurveyView(generic.edit.FormView):
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
                 # Clear the form and stay here
-                new_form = ScheduleSurveyForm(field_survey_id=form.field_survey_id,
-                        field_survey_name=form.field_survey_name)
+                new_form = ScheduleSurveyForm(field_survey_id=survey_id)
                 context = {"form" : new_form}
                 return render(request, self.template_name, context)
             else:
