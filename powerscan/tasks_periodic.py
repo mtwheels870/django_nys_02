@@ -14,6 +14,10 @@ from celery.app import control
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
+@celery_app.task
+def periodic_task_to_do(arg1, arg2):
+    print(f"periodic_task_to_do(), arg1 = {arg1}, arg2 = {arg2}")
+
 # This could actually be running (although we don't see the print message), but we never declared the test.s() 
 # routing.  Don't think so.  Not set up
 #@celery_app.after_finalize.connect
