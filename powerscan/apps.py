@@ -4,3 +4,8 @@ from django.apps import AppConfig
 class PowerScanConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'powerscan'
+
+    def ready(self):
+        # Post-initialization tasks here
+        print(f"PowerScanConfig.app.ready()")
+
