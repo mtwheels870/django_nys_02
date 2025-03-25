@@ -188,7 +188,7 @@ class ConfigurePingView(generic.edit.FormView):
             survey_id = form.cleaned_data['field_survey_id']
 
             if 'return_to_map' in request.POST:
-                return HttpResponseRedirect(reverse("app_cybsen:map_viewer"))
+                return HttpResponseRedirect(reverse("app_powerscan:map_viewer"))
 
             if 'configure_survey' in request.POST:
                 abbrevs, survey_id = self._configure_survey(selected_states)
@@ -216,7 +216,7 @@ class ConfigurePingView(generic.edit.FormView):
             if 'schedule_survey' in request.POST:
                 print(f"CPV.post(), schedule_survey, survey_id = {survey_id}, NO LOGIC HERE")
                 int_survey_id = int(survey_id)
-                return HttpResponseRedirect(reverse("app_cybsen:schedule_survey", args=(int_survey_id,)))
+                return HttpResponseRedirect(reverse("app_powerscan:schedule_survey", args=(int_survey_id,)))
 
             # Not sure why we have to create a new form here (but it works)
             initial_data = {"field_survey_id" : survey_id, "field_states" : selected_states }
@@ -354,8 +354,14 @@ class ScheduleSurveyView(generic.edit.FormView):
                 # We re-reneder the same form, but the errors will now be displayed
                 return render(request, self.template_name, context)
             else:
+                # Form is valid
                 start_time = form.cleaned_data[FIELD_START_TIME]
                 recurring = form.cleaned_data[FIELD_RECURRING]
                 print(f"SSV.post(), survey_id = {survey_id}, start_time = {start_time}, recurring = {recurring}")
-        return HttpResponseRedirect(reverse("app_cybsen:survey_table"))
+                survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+                survey.time_scheduled = start_time
+                survey.save()
+                if recurring:
+                    print(f"SSV.post(), recurring = {recurring}, not scheduling that (yet)")
+        return HttpResponseRedirect(reverse("app_powerscan:survey_table"))
 

@@ -173,7 +173,7 @@ class MapNavigationView(generic.edit.FormView):
                 {'form': form, 'table': table, 'map_bbox' : map_bbox});
         else:
             print(f"MNV.post(), form is INVALID")
-            return HttpResponseRedirect(reverse("app_cybsen:map_viewer",), {'form': form});
+            return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
 
     # These labels are in static/cb_layer.js
     def build_table(self, agg_type, id):
