@@ -346,7 +346,7 @@ class ScheduleSurveyView(generic.edit.FormView):
 
         if 'submit' in request.POST:
             form = ScheduleSurveyForm(request.POST)
-            print(f"SSV.post(), submitting")
+            print(f"SSV.post(), submitting, form = {form}")
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
                 # Clear the form and stay here
