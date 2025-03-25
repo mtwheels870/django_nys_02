@@ -2,8 +2,6 @@ from django.apps import AppConfig
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks_periodic import SurveyScheduler
-
 #@celery_app.task(name='blah_de_blah')
 #def blah_de_blah(arg1, arg2):
 #    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
