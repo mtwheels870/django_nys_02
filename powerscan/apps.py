@@ -5,12 +5,6 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .models import (
-    UsState,
-    IpRangeSurvey,
-    IpSurveyState
-)
-
 #@celery_app.task(name='blah_de_blah')
 #def blah_de_blah(arg1, arg2):
 #    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
@@ -21,6 +15,7 @@ class PowerScanConfig(AppConfig):
     name = 'powerscan'
 
     def _add_surveys_to_queues(self):
+        from .models import IpRangeSurvey
         print(f"PowerScanConfig._add_surveys_to_queues()")
         now = timezone.now()
         one_hour = timedelta(hours=1)
