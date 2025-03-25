@@ -200,22 +200,22 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "WARNING",
+        "level": "ERROR",
     },
     'loggers': {
         # We don't use django.channels.worker (b/c we use celery)
         'django.channels.worker': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,
         },
         'powerscan.consumers': {  # Add logger for your consumers
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,
         },
         'daphne': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,
         },
