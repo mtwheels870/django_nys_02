@@ -16,8 +16,8 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 @celery_app.task(name='blah_de_blah', bind=True)
 class SurveyScheduler(Task):
-    def __init__(self, args, kwargs):
-        print(f"SS.__init__(), args = {args}, kwargs = {kwargs}")
+    def __init__(self):
+        print(f"SS.__init__()")
         self.stuff = "Yellow"
 
     def run(self, arg1, arg2):
