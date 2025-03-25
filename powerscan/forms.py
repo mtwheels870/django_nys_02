@@ -52,7 +52,7 @@ class CustomDateTimeField(forms.DateTimeField):
 class ScheduleSurveyForm(forms.Form):
     field_survey_id = forms.IntegerField(label="Survey ID:")
     field_survey_name = forms.CharField(label="States:")
-    field_start_time = forms.CustomDateTimeField(label="Start Time (first ping):", widget=SplitDateTimeWidget)
+    field_start_time = CustomDateTimeField(label="Start Time (first ping):", widget=SplitDateTimeWidget)
     # field_start_time = forms.DateTimeField(label="Start Time (first ping):", widget=SplitDateTimeWidget)
     field_recurring = forms.DurationField(label="Recurring (amount)", required=False)
 
