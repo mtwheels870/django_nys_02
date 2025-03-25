@@ -1,7 +1,8 @@
 from django.apps import AppConfig
 
-
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
+
+from .tasks_periodic import periodic_task_to_do
 
 # I think this name becomes the leading prefix on the database table names, etc.
 class PowerScanConfig(AppConfig):
@@ -18,7 +19,7 @@ class PowerScanConfig(AppConfig):
         # 'task': 'periodic_task_to_do',
         celery_app.conf.beat_schedule = {
             'add-every-minute': {
-                'task': 'powerscan.tasks_periodic.periodic_task_to_do',
+                'task': 'periodic_task_to_do',
                 'schedule': 10.0,   # This runs the task every minute.  MTW, why does 10.0 = every minute?
                 'args': (23, 37),   
             },
