@@ -21,7 +21,7 @@ class PowerScanConfig(AppConfig):
         one_hour = timedelta(hours=1)
         now_plus_one = now + one_hour
         upcoming_surveys = IpRangeSurvey.objects.filter(
-                time_tally_stopped__isnull=True).filter(time_scheduled__ge=now).filter(time_scheduled__lt=now_plus_one)
+                time_tally_stopped__isnull=True).filter(time_scheduled__gte=now).filter(time_scheduled__lte=now_plus_one)
         f = lambda survey: survey.id
         survey_ids = [f(x) for x in upcoming_surveys]
         print(f"PSC._as2qs(), survey_id = {survey_ids}")
