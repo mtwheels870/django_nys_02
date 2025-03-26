@@ -7,6 +7,9 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .tasks_periodic import check_new_surveys
 
+PERIODIC_MINS = 2
+PERIODIC_SECS = PERIODIC_MINS * 60
+
 @celery_app.task(name='blah_de_blah')
 def blah_de_blah(arg1, arg2):
     print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
@@ -27,7 +30,7 @@ class PowerScanConfig(AppConfig):
         celery_app.conf.beat_schedule = {
             'add-every-minute': {
                 'task': 'check_new_surveys',
-                'schedule': 30.0,   
+                'schedule': PERIODIC_SECS,
                 'args': (23, 37),   
             },
         }
