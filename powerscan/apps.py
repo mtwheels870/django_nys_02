@@ -24,13 +24,13 @@ class PowerScanConfig(AppConfig):
 
         # 'task': 'periodic_task_to_do',
                 #'task': 'powerscan.tasks_periodic.periodic_task_to_do',
-#        celery_app.conf.beat_schedule = {
-#            'add-every-minute': {
-#                'task': 'blah_de_blah',
-#                'schedule': 180.0,   
-#                'args': (23, 37),   
-#            },
-#        }
+        celery_app.conf.beat_schedule = {
+            'add-every-minute': {
+                'task': 'blah_de_blah',
+                'schedule': 180.0,   
+                'args': (23, 37),   
+            },
+        }
 
         # Create the schedule object
 #        schedule, created = IntervalSchedule.objects.get_or_create(
