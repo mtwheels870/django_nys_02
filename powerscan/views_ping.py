@@ -67,15 +67,6 @@ FIELD_START_TIME = "field_start_time"
 FIELD_RECURRING = "field_recurring"
 
 
-# For our test case, we just use 15s
-# PING_RESULTS_DELAY = 15
-#PING_RESULTS_MINS = 60
-#PING_RESULTS_SECS = PING_RESULTS_MINS * 60
-
-#task_consumer = TaskConsumer()
-#channel_name = task_consumer.get_channel_name()
-#print(f"After TaskConsumer() create, channel name = {channel_name}")
-
 class ConfigurePingView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
@@ -94,14 +85,9 @@ class ConfigurePingView(generic.edit.FormView):
 
         # There's an unbound, empty form in context_data...
         # File stuff
-        #context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
         context_data[FIELD_STATUS] = self._status_message
         survey_status = celery_results_handler.reset()
         context_data[FIELD_SURVEY_STATUS] = survey_status 
-        #context_data[FIELD_TASKS] = self._get_tasks()
-        # print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
-
-        #context_data[FIELD_SURVEY_ID] = self._survey_id
 
         return context_data
 
@@ -293,8 +279,6 @@ class ScheduleSurveyView(generic.edit.FormView):
         field_survey_name.initial = survey.name
         field_start_time = form.fields[FIELD_START_TIME]
         field_start_time.initial = timezone.now()
-
-        # print(f"SSV.g_c_d(), after setting, form = {form}")
         return context_data
 
     def post(self, request, *args, **kwargs):
@@ -324,3 +308,8 @@ class ScheduleSurveyView(generic.edit.FormView):
                     print(f"SSV.post(), recurring = {recurring}, not scheduling that (yet)")
         return HttpResponseRedirect(reverse("app_powerscan:survey_table"))
 
+        #context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
+        #context_data[FIELD_TASKS] = self._get_tasks()
+        # print(f"CPV.get_context_data(), kwargs = {kwargs}, survey_status = {survey_status}")
+
+        #context_data[FIELD_SURVEY_ID] = self._survey_id
