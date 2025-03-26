@@ -127,7 +127,7 @@ def _schedule_surveys(upcoming_surveys):
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
             print(f"    need to calculate delay here!")
             delay_secs = 0
-            start_ping(survey.id, delay_secs):
+            start_ping(survey.id, delay_secs)
         index = index + 1
 
     f = lambda survey: survey.id
