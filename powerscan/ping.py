@@ -227,6 +227,68 @@ class PingSurveyManager:
             print(first + second)
         return num_states, num_counties, num_tracts, total_ranges
 
+    @staticmethod
+    def _delete_surveys(survey_ids):
+        for survey_id in survey_ids:
+            print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
+            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+            print(f"PSM._traverse_geography(), deleting state: {survey.us_state.name}")
+            for state in survey.ipsurveystate_set:
+                class IpSurveyCounty(models.Model):
+
+            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+            
+            survey = IpRangeSurvey.objects.get(pk=self._survey_id)
+        #print(f"PSM._traverse_geography(), survey = {survey}")
+        
+        selected_survey_states = IpSurveyState.objects.filter(survey_id=self._survey_id)
+
+        state_abbrevs = [s.us_state.state_abbrev for s in selected_survey_states]
+        # debugger.print_array("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
+
+        if self._debug:
+            print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
+
+        state_ids = []
+        for survey_state in selected_survey_states :
+            state_ids.append(survey_state.us_state.id)
+
+        # debugger.print_array("PSM._traverse_geography(), state_ids:", state_ids)
+
+        county_ids = []
+
+        # Could also do:
+        # counties = state.county_set.all()
+        counties_in_state = County.objects.filter(us_state__id__in=state_ids)
+        for county in counties_in_state:
+            county_ids.append(county.id)
+            survey_county = IpSurveyCounty(survey=survey, county=county)
+            survey_county.save()
+        #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
+        # debugger.print_array("PSM._traverse_geography(), county_ids:", county_ids)
+
+        total_ranges = 0
+        tract_ids = []
+        tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
+        for tract in tracts_in_counties:
+            tract_ids.append(tract.id)
+            survey_tract = IpSurveyTract(survey=survey, tract=tract)
+            survey_tract.save()
+            ranges_added = self._tract_ranges_whitelist(tract)
+            total_ranges = total_ranges + ranges_added
+        # debugger.print_array("PSM._traverse_geography(), tract_ids:", tract_ids)
+
+        # file_name = debugger.get_file()
+        # debugger.close()
+        num_states = len(state_ids)
+        num_counties = len(county_ids)
+        num_tracts = len(tract_ids)
+        if self._debug:
+            first = "PSM._traverse_geography(), created (s/c/t/r) = "
+            second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}"
+            print(first + second)
+        return num_states, num_counties, num_tracts, total_ranges
+
     def _tract_ranges_whitelist(self, tract):
         # Use the set() notation
         ip_ranges = tract.mmiprange_set.all()
