@@ -215,6 +215,29 @@ class RecentSurveyView(SingleTableView):
         folder_id = kwargs["folder_id"]
         selected_pks = request.POST.getlist('selection')
         num_selected = len(selected_pks)
+
+        if 'edit' in request.POST:
+            if num_selected == 1:
+                print(f"RSV.post(), editing page")
+                # This is a copy/paste error (from kg_train - never changed)
+                return HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(folder_id, file_id,)))
+            else:
+                print(f"RSV.post(), num_selected: {num_selected}")
+
+        elif 'label' in request.POST:
+            return self.label_page(request, folder_id, file_id)
+        else:
+            print(f"TFDV.post(), unrecognized button:")
+            for i, key in enumerate(request.POST):
+                value = request.POST[key]
+                print(f"          [{i}]: {key} = {value}")
+            return redirect(request.path)
+
+
+###
+        <button type="submit" name="edit">Edit</button>
+        <button type="submit" name="delete">Delete</button>
+
         if num_selected  == 0:
             print(f"TFDV.post(), no selected rows")
             return redirect(request.path)
@@ -224,18 +247,6 @@ class RecentSurveyView(SingleTableView):
         else:
             # Check which button we're in: edit or label
             file_id = selected_pks[0]
-            if 'edit' in request.POST:
-                print(f"TFDV.post(), editing page")
-                # This is a copy/paste error (from kg_train - never changed)
-                return HttpResponseRedirect(reverse("app_kg_train:file_edit", args=(folder_id, file_id,)))
-            elif 'label' in request.POST:
-                return self.label_page(request, folder_id, file_id)
-            else:
-                print(f"TFDV.post(), unrecognized button:")
-                for i, key in enumerate(request.POST):
-                    value = request.POST[key]
-                    print(f"          [{i}]: {key} = {value}")
-                return redirect(request.path)
 
 class CeleryTasksView(SingleTableView):
     #data = [
