@@ -21,6 +21,8 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 TIME_FORMAT2 = "%H:%M:%S"
 
 def _add_surveys_to_queues():
+    from .models import IpRangeSurvey
+
     now = timezone.now()
     now_string = now.strftime(TIME_FORMAT2 )
     print(f"TasksPeriodic._add_surveys_to_queues(), now = {now_string}")
