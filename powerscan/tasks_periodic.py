@@ -78,7 +78,7 @@ def _add_surveys_to_queues():
     window_end = now + forward_two_periods 
     end_string = window_end.strftime(TIME_FORMAT2 )
 
-    now_p1_string = now_plus_one.strftime(TIME_FORMAT2)
+    # now_p1_string = now_plus_one.strftime(TIME_FORMAT2)
     print(f"TasksPeriodic._add_surveys_to_queues(), now = {now_string} window = [{begin_string},{end_string}]")
     upcoming_surveys = IpRangeSurvey.objects.filter(
             time_tally_stopped__isnull=True).filter(
