@@ -30,6 +30,10 @@ from .tasks import (
     TIME_FORMAT_STRING
 )
 
+from .tasks_periodic import (
+    _start_ping, _estimate_zmap_time, _start_tally
+)
+
 from .models import (
     UsState,
     IpRangeSurvey,
@@ -137,47 +141,6 @@ class ConfigurePingView(generic.edit.FormView):
         #celery_results_handler.save_pending(async_result)
         return async_result
 
-    def _start_ping(self, survey_id):
-        #print(f"CPV.post(), start_ping...")
-        async_result = zmap_from_file.apply_async(
-            kwargs={"survey_id" : survey_id},
-                #"ip_source_id": IP_RANGE_SOURCE },
-            queue=QUEUE_NAME,
-            routing_key='ping.tasks.zmap_from_file')
-        return async_result
-
-    def _estimate_zmap_time(self, survey_id):
-        total_ranges = 0
-        #print(f"_estimate_zmap_time(), survey_id = {survey_id}")
-        for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
-            state = survey_state.us_state
-            estimated_ranges = state.estimated_ranges
-            #print(f"       state: {state.state_abbrev}, count = {estimated_ranges:,}")
-            total_ranges = total_ranges + estimated_ranges
-        estimated_mins = total_ranges / ESTIMATED_RANGES_MIN 
-        estimated_secs = estimated_mins * 60
-        #first = "_estimate_zmap_time(), total_ranges = "
-        #second = f"{total_ranges}, estimated m/s = {estimated_mins:.1f}/{estimated_secs:.0f}"
-        #print(first + second)
-        return estimated_mins, estimated_secs
-
-    def _start_tally(self, survey_id, metadata_file, delay_mins, delay_secs):
-        now = timezone.now()
-        formatted_now = now.strftime(TIME_FORMAT_STRING)
-        delta = timedelta(seconds=delay_secs)
-        tally_start = now + delta
-        formatted_tally_start = tally_start.strftime(TIME_FORMAT_STRING)
-        first = "CPV._start_tally(), calling tally_results (delayed), delay: "
-        second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
-        print(first + second)
-        async_result2 = tally_results.apply_async(
-            countdown=delay_secs,
-            #"ip_source_id": IP_RANGE_SOURCE,
-            kwargs={"survey_id": survey_id,
-                "metadata_file": metadata_file} )
-        #celery_results_handler.save_pending(async_result2)
-        return async_result2
-
     def post(self, request, *args, **kwargs):
         form = PingStrategyForm(request.POST)
         if not form.is_valid():
@@ -204,12 +167,12 @@ class ConfigurePingView(generic.edit.FormView):
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.BUILT_WL, async_result)
 
             if 'start_ping' in request.POST:
-                async_result = self._start_ping(survey_id)
+                async_result = _start_ping(survey_id)
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
-                delay_mins, delay_secs = self._estimate_zmap_time(survey_id)
-                async_result2 = self._start_tally(survey_id, metadata_file, delay_mins, delay_secs )
+                delay_mins, delay_secs = _estimate_zmap_time(survey_id)
+                async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
 
