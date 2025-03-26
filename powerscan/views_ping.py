@@ -212,10 +212,8 @@ class RecentSurveyView(SingleTableView):
         return queryset 
 
     def post(self, request, *args, **kwargs):
-        folder_id = kwargs["folder_id"]
         selected_pks = request.POST.getlist('selection')
         num_selected = len(selected_pks)
-
         if 'edit' in request.POST:
             if num_selected == 1:
                 survey_id = selected_pks[0]

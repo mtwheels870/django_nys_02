@@ -98,7 +98,8 @@ def _add_surveys_to_queues():
         index = index + 1
     f = lambda survey: survey.id
     survey_ids = [f(x) for x in upcoming_surveys]
-    print(f"TasksPeriodic._as2qs(), survey_id = {survey_ids}")
+    if len(survey_ids) > 0:
+        print(f"TasksPeriodic._as2qs(), survey_id = {survey_ids}")
 
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
