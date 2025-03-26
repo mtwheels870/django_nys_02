@@ -90,11 +90,12 @@ def _scheduled_active_surveys():
     running_survey_ids = ()
     inspect = celery_app.control.inspect()
     tasks_active = inspect.active()
-    for task in inspect.active():
+    # tasks_active is a dict!
+    for task in inspect.active().values():
         survey_id = _get_task_survey_id(task)
         running_surveys.append(survey_id)
         
-    for task in inspect.scheduled():
+    for task in inspect.scheduled().values():
         survey_id = _get_task_survey_id(task)
         running_surveys.append(survey_id)
     return running_surveys
