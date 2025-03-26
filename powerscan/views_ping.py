@@ -160,6 +160,8 @@ class CreateNewSurveyView(generic.edit.FormView):
                 async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
+                # Jump to the survey table
+                return HttpResponseRedirect(reverse("app_powerscan:survey_table"))
 
             if 'schedule_survey' in request.POST:
                 print(f"CPV.post(), schedule_survey, survey_id = {survey_id}, NO LOGIC HERE")
