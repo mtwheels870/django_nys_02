@@ -137,9 +137,6 @@ class CreateNewSurveyView(generic.edit.FormView):
             selected_states = form.cleaned_data['field_states']
             survey_id = form.cleaned_data['field_survey_id']
 
-            if 'return_to_map' in request.POST:
-                return HttpResponseRedirect(reverse("app_powerscan:map_viewer"))
-
             if 'configure_survey' in request.POST:
                 abbrevs, survey_id = self._configure_survey(selected_states)
                 abbrevs_string = ", ".join(abbrevs)
@@ -158,6 +155,7 @@ class CreateNewSurveyView(generic.edit.FormView):
                 metadata_file = async_result.get()
                 print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
 
+                # Should move the start tally logic into tasks_periodic (don't care about the details in the view)
                 delay_mins, delay_secs = _estimate_zmap_time(survey_id)
                 async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
                 self._status_message = f"Started tally, async_result2 = {async_result2}"
@@ -173,10 +171,12 @@ class CreateNewSurveyView(generic.edit.FormView):
             new_form = PingStrategyForm(initial=initial_data)
 
         # FIELD_CELERY_DETAILS : self._get_celery_details(),
+        status = celery_results_handler.get_status()
+        print(f"CPV.post(), new status = {status}")
+            #FIELD_TASKS : self._get_tasks(),
         context = {"form" : new_form,
             FIELD_STATUS : self._status_message,
-            FIELD_SURVEY_STATUS : celery_results_handler.get_status()
-            #FIELD_TASKS : self._get_tasks(),
+            FIELD_SURVEY_STATUS : status
         }
         return render(request, self.template_name, context)
 
