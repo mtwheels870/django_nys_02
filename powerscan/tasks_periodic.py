@@ -12,6 +12,8 @@ import celery
 from celery import shared_task, Task, group, chain
 from celery.app import control 
 
+from django.utils import timezone
+
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 #from .models import IpRangeSurvey
