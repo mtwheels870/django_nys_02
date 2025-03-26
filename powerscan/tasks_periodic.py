@@ -57,10 +57,10 @@ def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
     from .tasks import tally_results
 
     now = timezone.now()
-    formatted_now = now.strftime(TIME_FORMAT_STRING)
+    formatted_now = now.strftime(TIME_FORMAT2)
     delta = timedelta(seconds=delay_secs)
     tally_start = now + delta
-    formatted_tally_start = tally_start.strftime(TIME_FORMAT_STRING)
+    formatted_tally_start = tally_start.strftime(TIME_FORMAT2)
     first = "CPV._start_tally(), calling tally_results (delayed), delay: "
     second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
     print(first + second)
