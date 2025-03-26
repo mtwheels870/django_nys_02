@@ -67,21 +67,28 @@ FIELD_START_TIME = "field_start_time"
 FIELD_RECURRING = "field_recurring"
 
 
-class ConfigurePingView(generic.edit.FormView):
+class CreateNewSurveyView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
     template_name = "powerscan/survey_config.html"
     _status_message = ""
     _survey_id = 0
 
-    def _get_celery_details(self):
-        return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
+#    def _get_celery_details(self):
+#        return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        if "survey_id" in self.kwargs:
+            survey_id_string = self.kwargs.get('survey_id')
+            int
+            print(f"CPV.g_c_d(), survey_id = {survey_id}")
+            field_survey_id.initial = survey_id
+        else:
+            field_survey_id.initial = "0"
+
         form = context_data['form']
         field_survey_id = form.fields['field_survey_id']
-        field_survey_id.initial = "0"
 
         # There's an unbound, empty form in context_data...
         # File stuff
