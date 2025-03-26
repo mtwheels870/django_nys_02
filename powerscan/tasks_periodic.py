@@ -100,10 +100,9 @@ def _scheduled_active_surveys():
     return running_surveys
 
 def _schedule_surveys(upcoming_surveys):
-    print(f"TasksPeriodic._schedule_surveys(), now = {now_string} window = [{begin_string},{end_string}]")
     index = 0
     running_survey_ids = _scheduled_active_surveys()
-    print(f"          running_survey_ids = {running_survey_ids}")
+    print(f"_schedule_surveys(), running_survey_ids = {running_survey_ids}")
     for survey in upcoming_surveys:
         print(f"survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
         index = index + 1
@@ -134,6 +133,7 @@ def _add_surveys_to_queues():
             time_scheduled__lte=window_end)
     num_surveys = len(upcoming_surveys)
     if num_surveys > 0:
+        print(f"TasksPeriodic._schedule_surveys(), now = {now_string} window = [{begin_string},{end_string}]")
         _schedule_surveys(upcoming_surveys)
 
 @celery_app.task(name='check_new_surveys', bind=True)
