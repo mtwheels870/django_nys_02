@@ -81,6 +81,7 @@ def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
     return async_result2
 
 def _get_task_survey_id(task):
+    print(f"get_task_survey_id(), task = {task}")
     request = task["request"]
     survey_id = request["kwargs"]["survey_id"]
     return survey_id
