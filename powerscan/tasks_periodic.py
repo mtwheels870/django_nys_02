@@ -25,7 +25,7 @@ TIME_FORMAT2 = "%H:%M:%S"
 
 ESTIMATED_RANGES_MIN = 4500
 
-def _start_ping(survey_id):
+def start_ping(survey_id):
     from .tasks import zmap_from_file
 
     #print(f"CPV.post(), start_ping...")
@@ -34,6 +34,14 @@ def _start_ping(survey_id):
             #"ip_source_id": IP_RANGE_SOURCE },
         queue=QUEUE_NAME,
         routing_key='ping.tasks.zmap_from_file')
+
+    metadata_file = async_result.get()
+
+    # Should move the start tally logic into tasks_periodic (don't care about the details in the view)
+    delay_mins, delay_secs = _estimate_zmap_time(survey_id)
+    print(f"TasksPeriodic.start_ping(), async_result.metadata_file = {metadata_file}, (tally) delay_mins = {delay_mins:.1f}m")
+    async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
+
     return async_result
 
 def _estimate_zmap_time(survey_id):
@@ -61,7 +69,7 @@ def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
     delta = timedelta(seconds=delay_secs)
     tally_start = now + delta
     formatted_tally_start = tally_start.strftime(TIME_FORMAT2)
-    first = "CPV._start_tally(), calling tally_results (delayed), delay: "
+    first = "TasksPeriodic._start_tally(), calling tally_results (delayed), delay: "
     second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
     print(first + second)
     async_result2 = tally_results.apply_async(

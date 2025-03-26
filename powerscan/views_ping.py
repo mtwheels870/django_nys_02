@@ -29,11 +29,7 @@ from .tasks import (
     CELERY_FIELD_SURVEY_ID, 
     TIME_FORMAT_STRING
 )
-
-from .tasks_periodic import (
-    _start_ping, _estimate_zmap_time, _start_tally
-)
-
+from .tasks_periodic import start_ping
 from .models import (
     UsState,
     IpRangeSurvey,
@@ -41,11 +37,8 @@ from .models import (
 )
 
 from .forms import PingStrategyForm, ScheduleSurveyForm
-
 from .consumers import celery_results_handler, CeleryResultsHandler
-
 from .tables import IpSurveyTable, CeleryTaskTable
-
 from .ping import PingSurveyManager
 
 # Import our neighbors
@@ -151,14 +144,8 @@ class CreateNewSurveyView(generic.edit.FormView):
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.BUILT_WL, async_result)
 
             if 'start_ping' in request.POST:
-                async_result = _start_ping(survey_id)
-                metadata_file = async_result.get()
-                print(f"CPV.post(), async_result.metadata_file = {metadata_file}")
-
-                # Should move the start tally logic into tasks_periodic (don't care about the details in the view)
-                delay_mins, delay_secs = _estimate_zmap_time(survey_id)
-                async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
-                self._status_message = f"Started tally, async_result2 = {async_result2}"
+                async_result = start_ping(survey_id)
+                self._status_message = f"Started tally, async_result = {async_result}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
                 # Jump to the survey table
                 return HttpResponseRedirect(reverse("app_powerscan:survey_table"))
