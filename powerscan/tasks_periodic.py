@@ -16,6 +16,12 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
+from .tasks import (
+    build_whitelist, zmap_from_file, tally_results,
+    CELERY_FIELD_SURVEY_ID, 
+    TIME_FORMAT_STRING
+)
+
 #from .models import IpRangeSurvey
 
 PERIODIC_MINS = 2
