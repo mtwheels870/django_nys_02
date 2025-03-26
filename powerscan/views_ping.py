@@ -46,6 +46,8 @@ from .consumers import celery_results_handler, CeleryResultsHandler
 
 from .tables import IpSurveyTable, CeleryTaskTable
 
+from .ping import PingSurveyManager
+
 # Import our neighbors
 
 KEY_ID = "id"
