@@ -194,16 +194,16 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
             "--probe-module=icmp_echoscan"]
         full_command = " ".join(list_command)
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
-        print(f"_ping_single_range(), calling subprocess.Popen(), full_command = {full_command}")
+        print(f"_execute_subprocess(), calling subprocess.Popen(), full_command = {full_command}")
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
-        print(f"\n_ping_single_range(), tracking metadata file: {metadata_file} (non-zero)")
+        print(f"\n_execute_subprocess(), tracking metadata file: {metadata_file} (non-zero)")
         # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
         #stdout, stderr = process.communicate(timeout=10)
         ret_val = process.returncode
         if ret_val:
-            print(f"_ping_single_range(), subprocess.Popen(), bad return code = {ret_val}, stdout:")
+            print(f"_execute_subproces(), subprocess.Popen(), bad return code = {ret_val}, stdout:")
             stdout, stderr = process.communicate(timeout=10)
             print(f"{stdout}\nstderr:\n{stderr}")
     except Exception as e:

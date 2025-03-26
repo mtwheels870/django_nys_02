@@ -80,6 +80,39 @@ def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
     #celery_results_handler.save_pending(async_result2)
     return async_result2
 
+def _get_task_survey_id(task):
+    request = task["request"]
+    survey_id = request["kwargs"]["survey_id"]
+    return survey_id
+
+def _scheduled_active_surveys():
+    running_surveys = []
+    running_survey_ids = ()
+    inspect = celery_app.control.inspect()
+    tasks_active = inspect.active()
+    for task in inspect.active():
+        survey_id = _get_task_survey_id(task)
+        running_surveys.append(survey_id)
+        
+    for task in inspect.scheduled():
+        survey_id = _get_task_survey_id(task)
+        running_surveys.append(survey_id)
+    return running_surveys
+
+def _schedule_surveys(upcoming_surveys):
+    print(f"TasksPeriodic._schedule_surveys(), now = {now_string} window = [{begin_string},{end_string}]")
+    index = 0
+    running_survey_ids = _scheduled_active_surveys()
+    print(f"          running_survey_ids = {running_survey_ids}"
+    for survey in upcoming_surveys:
+        print(f"survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
+        index = index + 1
+
+    f = lambda survey: survey.id
+    survey_ids = [f(x) for x in upcoming_surveys]
+    if len(survey_ids) > 0:
+        print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
+
 def _add_surveys_to_queues():
     from .models import IpRangeSurvey
 
@@ -95,19 +128,13 @@ def _add_surveys_to_queues():
     end_string = window_end.strftime(TIME_FORMAT2 )
 
     # now_p1_string = now_plus_one.strftime(TIME_FORMAT2)
-    print(f"TasksPeriodic._add_surveys_to_queues(), now = {now_string} window = [{begin_string},{end_string}]")
     upcoming_surveys = IpRangeSurvey.objects.filter(
             time_tally_stopped__isnull=True).filter(
             time_scheduled__gte=window_begin).filter(
             time_scheduled__lte=window_end)
-    index = 0
-    for survey in upcoming_surveys:
-        print(f"survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
-        index = index + 1
-    f = lambda survey: survey.id
-    survey_ids = [f(x) for x in upcoming_surveys]
-    if len(survey_ids) > 0:
-        print(f"TasksPeriodic._as2qs(), survey_id = {survey_ids}")
+    num_surveys = len(upcoming_surveys)
+    if num_surveys > 0:
+        _schedule_surveys(upcoming_surveys)
 
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
