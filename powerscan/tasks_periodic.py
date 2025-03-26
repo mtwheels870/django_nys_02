@@ -16,12 +16,6 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .tasks import (
-    build_whitelist, zmap_from_file, tally_results,
-    CELERY_FIELD_SURVEY_ID, 
-    TIME_FORMAT_STRING
-)
-
 #from .models import IpRangeSurvey
 
 PERIODIC_MINS = 2
@@ -30,6 +24,8 @@ PERIODIC_SECS = PERIODIC_MINS * 60
 TIME_FORMAT2 = "%H:%M:%S"
 
 def _start_ping(survey_id):
+    from .tasks import zmap_from_file
+
     #print(f"CPV.post(), start_ping...")
     async_result = zmap_from_file.apply_async(
         kwargs={"survey_id" : survey_id},
@@ -39,6 +35,8 @@ def _start_ping(survey_id):
     return async_result
 
 def _estimate_zmap_time(survey_id):
+    from .models import IpSurveyState
+
     total_ranges = 0
     #print(f"_estimate_zmap_time(), survey_id = {survey_id}")
     for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
@@ -54,6 +52,8 @@ def _estimate_zmap_time(survey_id):
     return estimated_mins, estimated_secs
 
 def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
+    from .tasks import tally_start
+
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
     delta = timedelta(seconds=delay_secs)
