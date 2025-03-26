@@ -82,9 +82,15 @@ def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
 
 def _get_task_survey_id(task):
     print(f"get_task_survey_id(), task = {task}")
-    survey_id = task["kwargs"]["survey_id"]
-    print(f"      survey_id = {survey_id}")
-    return survey_id
+    kwargs = task["kwargs"]
+    if "survey_id" in kwargs:
+        survey_id = kwargs["survey_id"]
+        print(f"      survey_id = {survey_id}")
+        return survey_id
+    else:
+        type = task["type"]
+        print(f"      task = {type}, no kwargs")
+        return None:
 
 def _scheduled_active_surveys():
     running_surveys = []
@@ -97,14 +103,16 @@ def _scheduled_active_surveys():
         # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
         for task in value:
             survey_id = _get_task_survey_id(task)
-            running_surveys.append(survey_id)
+            if survey_id:
+                running_surveys.append(survey_id)
 
     tasks_scheduled = inspect.scheduled()
     for index, (key, value) in enumerate(tasks_scheduled.items()):
         # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
         for task in value:
             survey_id = _get_task_survey_id(task)
-            running_surveys.append(survey_id)
+            if survey_id:
+                running_surveys.append(survey_id)
     return running_surveys
 
 def _schedule_surveys(upcoming_surveys):
