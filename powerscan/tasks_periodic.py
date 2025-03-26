@@ -25,11 +25,12 @@ TIME_FORMAT2 = "%H:%M:%S"
 
 ESTIMATED_RANGES_MIN = 4500
 
-def start_ping(survey_id):
+def start_ping(survey_id, delay_secs):
     from .tasks import zmap_from_file
 
-    #print(f"CPV.post(), start_ping...")
+    print(f"CPV.post(), start_ping, survey_id = {survey_id}, delay_secs = {delay_secs}")
     async_result = zmap_from_file.apply_async(
+        countdown=delay_secs,
         kwargs={"survey_id" : survey_id},
             #"ip_source_id": IP_RANGE_SOURCE },
         queue=QUEUE_NAME,
@@ -120,7 +121,13 @@ def _schedule_surveys(upcoming_surveys):
     running_survey_ids = _scheduled_active_surveys()
     print(f"_schedule_surveys(), running_survey_ids = {running_survey_ids}")
     for survey in upcoming_surveys:
-        print(f"survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
+        if survey.id in running_survey_ids:
+            print(f"survey[{index}]: {survey.id} already scheduled!")
+        else:
+            print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
+            print(f"    need to calculate delay here!")
+            delay_secs = 0
+            start_ping(survey.id, delay_secs):
         index = index + 1
 
     f = lambda survey: survey.id
