@@ -399,6 +399,7 @@ class Loader():
             state_string = ",".join(abbrevs)
             print(f"      name = {state_string}")
             survey.name = state_string
+            print(f"SURVEY SAVE, 3")
             survey.save()
             index = index + 1
 

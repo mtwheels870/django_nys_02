@@ -91,6 +91,7 @@ class CreateNewSurveyView(generic.edit.FormView):
     # the pre-saved states from the database
     def _configure_survey(self, selected_states):
         survey = IpRangeSurvey()
+        print(f"SURVEY SAVE, 11")
         survey.save()
         abbrevs = []
         print(f"CPV._configure_survey(), selected_states (fp) = {selected_states}")
@@ -101,6 +102,7 @@ class CreateNewSurveyView(generic.edit.FormView):
         self._survey_id = survey.id
         abbrev_string = ",".join(abbrevs)
         survey.name = abbrev_string
+        print(f"SURVEY SAVE, 2") 
         survey.save()
         return abbrevs, survey.id
 
@@ -121,6 +123,7 @@ class CreateNewSurveyView(generic.edit.FormView):
         #celery_results_handler.save_pending(async_result)
         return async_result
 
+    # CreateNewSurveyView
     def post(self, request, *args, **kwargs):
         form = PingStrategyForm(request.POST)
         if not form.is_valid():
@@ -151,7 +154,6 @@ class CreateNewSurveyView(generic.edit.FormView):
                 return HttpResponseRedirect(reverse("app_powerscan:survey_table"))
 
             if 'schedule_survey' in request.POST:
-                print(f"CPV.post(), schedule_survey, survey_id = {survey_id}, NO LOGIC HERE")
                 int_survey_id = int(survey_id)
                 return HttpResponseRedirect(reverse("app_powerscan:schedule_survey", args=(int_survey_id,)))
 
@@ -293,6 +295,7 @@ class ScheduleSurveyView(generic.edit.FormView):
                 print(f"SSV.post(), survey_id = {survey_id}, start_time = {start_time}, recurring = {recurring}")
                 survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
                 survey.time_scheduled = start_time
+                print(f"SURVEY SAVE, 1") 
                 survey.save()
                 if recurring:
                     print(f"SSV.post(), recurring = {recurring}, not scheduling that (yet)")

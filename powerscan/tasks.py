@@ -65,6 +65,7 @@ def start_tracts(self, *args, **kwargs):
 
     survey = IpRangeSurvey()
     survey.time_started = timezone.now()
+    print(f"SURVEY SAVE, 4")
     survey.save()
     # Use the minus to be descending
     count_range_tracts = CountTract.objects.order_by("-range_count")
@@ -161,6 +162,7 @@ def build_whitelist(self, *args, **kwargs):
         return 0
     # Save that we started the process, that's our (worker) lock
     survey.time_whitelist_started = timezone.now()
+    print(f"SURVEY SAVE, 5")
     survey.save()
 
     survey_manager = PingSurveyManager(survey_id, debug.whitelist)
@@ -170,6 +172,7 @@ def build_whitelist(self, *args, **kwargs):
         message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
     survey.num_total_ranges = num_ranges
+    print(f"SURVEY SAVE, 6")
     survey.save()
 
     # Django channels back to the caller
@@ -225,6 +228,7 @@ def zmap_from_file(self, *args, **kwargs):
         return 0
     # Save that we started the process, that's our (worker) lock
     survey.time_ping_started = timezone.now()
+    print(f"SURVEY SAVE, 6")
     survey.save()
 
 
@@ -251,6 +255,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 
     # Calculate zmap time
     survey.time_ping_stopped = now
+    print(f"SURVEY SAVE, 7")
     survey.save()
     if not survey.time_ping_stopped:
         print(f"_process_zmap_results(), time_ping_stopped = {survey.time_ping_stopped}")
@@ -281,6 +286,7 @@ def tally_results(self, *args, **kwargs):
             return 0
         # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
         survey.time_tally_started = now
+        print(f"SURVEY SAVE, 8")
         survey.save()
 
         debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
@@ -301,11 +307,13 @@ def tally_results(self, *args, **kwargs):
                 kwargs={"survey_id": survey_id_string,
                     "metadata_file": metadata_file} )
             survey.time_tally_started = None
+            print(f"SURVEY SAVE, 9")
             survey.save()
             return 0
 
         survey.time_tally_stopped = timezone.now()
         survey.num_ranges_responded = pings_to_db
+        print(f"SURVEY SAVE, 10")
         survey.save()
         print(f"Task.tally_results(), survey: {survey_id}, saved {pings_to_db} to db")
     except Exception as e:
