@@ -219,10 +219,11 @@ class RecentSurveyView(SingleTableView):
         if 'edit' in request.POST:
             if num_selected == 1:
                 survey_id = selected_pks[0]
-                print(f"RSV.post(), editing page")
+                print(f"RSV.post()[edit], editing page")
                 # This is a copy/paste error (from kg_train - never changed)
                 return HttpResponseRedirect(reverse("app_powerscan:ping_strat_index", args=(survey_id, )))
             else:
+                print(f"RSV.post()[edit], num_selected = {num_selected}")
         elif 'delete' in request.POST:
             result = PingSurveyManager._delete_surveys(selected_pks)
         else:
