@@ -1,5 +1,6 @@
 from django.urls import path, include
 from django.views.generic import TemplateView
+from django.shortcuts import redirect
 
 from . import views, views_ping, api
 
