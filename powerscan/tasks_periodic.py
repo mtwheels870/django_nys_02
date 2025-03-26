@@ -90,7 +90,7 @@ def _get_task_survey_id(task):
     else:
         type = task["type"]
         print(f"      task = {type}, no kwargs")
-        return None:
+        return None
 
 def _scheduled_active_surveys():
     running_surveys = []
