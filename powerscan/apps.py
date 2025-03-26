@@ -7,9 +7,9 @@ from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
 from .tasks_periodic import check_new_surveys
 
-#@celery_app.task(name='blah_de_blah')
-#def blah_de_blah(arg1, arg2):
-#    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
+@celery_app.task(name='blah_de_blah')
+def blah_de_blah(arg1, arg2):
+    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
 
 TIME_FORMAT2 = "%H:%M:%S"
 
@@ -45,7 +45,7 @@ class PowerScanConfig(AppConfig):
                 #'task': 'powerscan.tasks_periodic.periodic_task_to_do',
         celery_app.conf.beat_schedule = {
             'add-every-minute': {
-                'task': 'check_new_surveys',
+                'task': 'blah_de_blah',
                 'schedule': 180.0,   
                 'args': (23, 37),   
             },
