@@ -79,16 +79,10 @@ class CreateNewSurveyView(generic.edit.FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        if "survey_id" in self.kwargs:
-            survey_id_string = self.kwargs.get('survey_id')
-            int
-            print(f"CPV.g_c_d(), survey_id = {survey_id}")
-            field_survey_id.initial = survey_id
-        else:
-            field_survey_id.initial = "0"
 
         form = context_data['form']
         field_survey_id = form.fields['field_survey_id']
+        field_survey_id.initial = "0"
 
         # There's an unbound, empty form in context_data...
         # File stuff
