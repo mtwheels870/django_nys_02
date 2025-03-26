@@ -27,7 +27,7 @@ class PowerScanConfig(AppConfig):
         celery_app.conf.beat_schedule = {
             'add-every-minute': {
                 'task': 'blah_de_blah',
-                'schedule': 180.0,   
+                'schedule': 30.0,   
                 'args': (23, 37),   
             },
         }
