@@ -82,8 +82,8 @@ def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
 
 def _get_task_survey_id(task):
     print(f"get_task_survey_id(), task = {task}")
-    request = task["request"]
-    survey_id = request["kwargs"]["survey_id"]
+    survey_id = task["kwargs"]["survey_id"]
+    print(f"      survey_id = {survey_id}")
     return survey_id
 
 def _scheduled_active_surveys():
