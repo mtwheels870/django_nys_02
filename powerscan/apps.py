@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-# from .tasks_periodic import check_new_surveys
+from .tasks_periodic import check_new_surveys
 
 @celery_app.task(name='blah_de_blah')
 def blah_de_blah(arg1, arg2):
