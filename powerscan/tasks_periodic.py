@@ -14,7 +14,7 @@ from celery.app import control
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .models import IpRangeSurvey
+#from .models import IpRangeSurvey
 
 TIME_FORMAT2 = "%H:%M:%S"
 
