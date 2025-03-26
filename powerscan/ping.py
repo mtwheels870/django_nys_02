@@ -234,13 +234,13 @@ class PingSurveyManager:
         for survey_id in survey_ids:
             print(f"   deleting survey = {survey_id}")
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
-            for tract in survey.ipsurveytract_set:
+            for tract in survey.ipsurveytract_set.all():
                 print(f"      deleting tract = {tract}")
                 tract.delete()
-            for county in survey.ipsurveycounty_set:
+            for county in survey.ipsurveycounty_set.all():
                 print(f"      deleting county = {county}")
                 county.delete()
-            for state in survey.ipsurveystate_set:
+            for state in survey.ipsurveystate_set.all():
                 print(f"      deleting state = {state}")
                 state.delete()
         return True
