@@ -311,6 +311,7 @@ def tally_results(self, *args, **kwargs):
     except Exception as e:
         print(f"Task.tally_results(), survey_id: {survey_id_string}, exception: {e}")
         exc_type, exc_value, exc_traceback = sys.exc_info()
+        print(f"    exc_traceback = {dir(exc_traceback)}")
         exc_traceback.print_exc()
         pings_to_db = -1
     return pings_to_db 
