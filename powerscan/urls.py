@@ -13,7 +13,7 @@ app_name = "app_powerscan"
 
 urlpatterns = [
     path("map/", views.MapNavigationView.as_view(), name="map_viewer"),
-    path("ping/", RedirectView.as_view("ping/0", permanent=True)),
+    path("ping/", RedirectView.as_view(url="ping/0", permanent=True)),
     path("ping/<int:survey_id>", views_ping.ConfigurePingView.as_view(), name="ping_strat_index"),
     path("surveys/", views_ping.RecentSurveyView.as_view(), name="survey_table"),
     path("tasks/", views_ping.CeleryTasksView.as_view(), name="task_table"),
