@@ -23,6 +23,8 @@ PERIODIC_SECS = PERIODIC_MINS * 60
 
 TIME_FORMAT2 = "%H:%M:%S"
 
+ESTIMATED_RANGES_MIN = 4500
+
 def _start_ping(survey_id):
     from .tasks import zmap_from_file
 

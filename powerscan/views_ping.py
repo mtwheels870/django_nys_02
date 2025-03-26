@@ -65,8 +65,6 @@ FIELD_START_TIME = "field_start_time"
 FIELD_RECURRING = "field_recurring"
 
 
-ESTIMATED_RANGES_MIN = 4500
-
 # For our test case, we just use 15s
 # PING_RESULTS_DELAY = 15
 #PING_RESULTS_MINS = 60
