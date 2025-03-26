@@ -54,7 +54,7 @@ def _estimate_zmap_time(survey_id):
     return estimated_mins, estimated_secs
 
 def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
-    from .tasks import tally_start
+    from .tasks import tally_results
 
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
