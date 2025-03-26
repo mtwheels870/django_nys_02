@@ -11,7 +11,25 @@ from .tasks_periodic import check_new_surveys
 #def blah_de_blah(arg1, arg2):
 #    print(f"blah_de_blah(), arg1 = {arg1}, arg2 = {arg2}")
 
+TIME_FORMAT2 = "%H:%M:%S"
+
+def _add_surveys_to_queues():
+    now = timezone.now()
+    now_string = now.strftime(TIME_FORMAT2 )
+    print(f"TasksPeriodic._add_surveys_to_queues(), now = {now_string}")
+    one_hour = timedelta(hours=1)
+    now_plus_one = now + one_hour
+    upcoming_surveys = IpRangeSurvey.objects.filter(
+            time_tally_stopped__isnull=True).filter(time_scheduled__gte=now).filter(time_scheduled__lte=now_plus_one)
+    f = lambda survey: survey.id
+    survey_ids = [f(x) for x in upcoming_surveys]
+    print(f"TasksPeriodic._as2qs(), survey_id = {survey_ids}")
+
+@celery_app.task(name='check_new_surveys', bind=True)
+def check_new_surveys(self, arg1, arg2):
+    _add_surveys_to_queues()
 # I think this name becomes the leading prefix on the database table names, etc.
+
 class PowerScanConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'powerscan'
