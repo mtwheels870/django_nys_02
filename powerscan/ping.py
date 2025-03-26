@@ -234,15 +234,20 @@ class PingSurveyManager:
         for survey_id in survey_ids:
             print(f"   deleting survey = {survey_id}")
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
-            for tract in survey.ipsurveytract_set.all():
-                print(f"      deleting tract = {tract}")
+            tract_set = survey.ipsurveytract_set.all()
+            for tract in tract_set:
                 tract.delete()
-            for county in survey.ipsurveycounty_set.all():
-                print(f"      deleting county = {county}")
+            county_set = survey.ipsurveycounty_set.all()
+            for county in county_set:
                 county.delete()
-            for state in survey.ipsurveystate_set.all():
-                print(f"      deleting state = {state}")
+            state_set = survey.ipsurveystate_set.all()
+            for state in state_set:
                 state.delete()
+            num_tracts = tract_set.count()
+            num_counties = county_set.count()
+            num_states = state_set.count()
+            print(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
+            survey.delete()
         return True
 
     def _tract_ranges_whitelist(self, tract):
