@@ -37,7 +37,7 @@ def start_ping(self, *args, **kwargs):
 
     # I'm already in a separate task, do I need to be async?
     async_result = (zmap_from_file.s(survey_id).set(countdown=delay_secs) |
-            _start_tally.s(survey_id, delay_mins, delay_secs)).apply_async()
+            _start_tally.s(survey_id, delay_mins, delay_secs))
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
 
