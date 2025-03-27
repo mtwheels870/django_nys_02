@@ -38,7 +38,7 @@ def start_ping(survey_id, delay_secs):
                 #"ip_source_id": IP_RANGE_SOURCE },
             queue=QUEUE_NAME,
             routing_key='ping.tasks.zmap_from_file'), link=_start_tally.s(
-        survey_id, delay_mins, delay_secs ))
+        survey_id, delay_mins, delay_secs )
 
             
 
