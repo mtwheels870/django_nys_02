@@ -97,8 +97,7 @@ def _get_task_survey_id(task):
                 kwargs = request["kwargs"]
                 if "survey_id" in kwargs:
                     survey_id = kwargs["survey_id"]
-                    type = task["type"]
-                    print(f"task[request][kwargs][survey_id]: {survey_id} = {type}")
+                    print(f"task[request][kwargs][survey_id]: {survey_id}")
                     return survey_id
         print(f"      no kwargs in task = {task}")
         return None
