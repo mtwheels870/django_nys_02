@@ -139,9 +139,12 @@ def _schedule_surveys(upcoming_surveys):
     running_survey_ids = _scheduled_active_surveys()
     print(f"_schedule_surveys(), running_survey_ids = {running_survey_ids}")
     for survey in upcoming_surveys:
-        if survey.id in running_survey_ids:
-            print(f"survey[{index}]: {survey.id} already scheduled!")
+        survey_id = survey.id
+        if survey_id in running_survey_ids:
+            print(f"survey[{index}]: {survey_id} already has a task!")
         else:
+            # Check the database
+
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
             print(f"    need to calculate delay here!")
             # We're not an apply_async here, so the calling signature is different
@@ -172,8 +175,9 @@ def _add_surveys_to_queues(debug_scheduler):
     end_string = window_end.strftime(TIME_FORMAT2 )
 
     # now_p1_string = now_plus_one.strftime(TIME_FORMAT2)
+    # Take surveys whose ping has not been started and whose time_scheduled is in our window
     upcoming_surveys = IpRangeSurvey.objects.filter(
-            time_tally_stopped__isnull=True).filter(
+            time_ping_started__isnull=True).filter(
             time_scheduled__gte=window_begin).filter(
             time_scheduled__lte=window_end)
     num_surveys = len(upcoming_surveys)
