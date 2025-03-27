@@ -30,15 +30,15 @@ def start_ping(self, *args, **kwargs):
     from .tasks import zmap_from_file
 
     survey_id = kwargs["survey_id"]
-    delay_secs = int(kwargs["delay_secs"])
-    print(f"CPV.post(), start_ping, survey_id = {survey_id}, delay_secs = {delay_secs}")
+    zmap_delay_secs = int(kwargs["delay_secs"])
+    print(f"CPV.post(), start_ping, survey_id = {survey_id}, zmap_delay_secs = {zmap_delay_secs}")
 
-    delay_mins, delay_secs = _estimate_zmap_time(survey_id)
+    tally_delay_mins, tally_delay_secs = _estimate_zmap_time(survey_id)
 
-    print(f"CPV.post(), after estimate, delay m/s = {delay_mins}/{delay_secs}")
+    print(f"CPV.post(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs.0f}")
     # I'm already in a separate task, do I need to be async?
-    async_result = (zmap_from_file.s(survey_id).set(countdown=delay_secs) |
-            _start_tally.s(survey_id, delay_mins, delay_secs))
+    async_result = (zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs) |
+            _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
 
