@@ -284,13 +284,13 @@ class ScheduleSurveyView(generic.edit.FormView):
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         survey.time_scheduled = start_time
         survey.save()
-        if recurring and num_occurences > 1:
+        if recurring and num_occurrences > 1:
             if not recurring:
-                print(f"SSV._schedule_surveys(), num_occurrences = {num_occurences}, but recurring = {recurring}")
+                print(f"SSV._schedule_surveys(), num_occurrences = {num_occurrences}, but recurring = {recurring}")
                 return
             td = recurring.to_python()
             print(f"      td = {td}")
-            for index in range(num_occurences + 1):
+            for index in range(num_occurrences + 1):
                 start_time = start_time + td
                 start_string = start_time.strftime(TIME_FORMAT_STRING)
                 print(f"    iteration[{index}]: {start_string}")
