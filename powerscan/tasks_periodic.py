@@ -50,13 +50,6 @@ def start_ping(self, *args, **kwargs):
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
     print(f"start_ping(), async_result = {async_result}")
-
-#    metadata_file = async_result.get()
-
-    # Should move the start tally logic into tasks_periodic (don't care about the details in the view)
-#    print(f"TasksPeriodic.start_ping(), async_result.metadata_file = {metadata_file}, (tally) delay_mins = {delay_mins:.1f}m")
-#    async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
-
     return async_result
 
 def _estimate_zmap_time(survey_id):
@@ -141,8 +134,9 @@ def _schedule_surveys(upcoming_surveys):
         else:
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
             print(f"    need to calculate delay here!")
+            # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
-                kwargs={"survey_id" : survey.id, "delay_secs" : 0},
+                {"survey_id" : survey.id, "delay_secs" : 0},
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.start_ping')
             print(f"    async_result = {async_result}")
@@ -180,4 +174,10 @@ def _add_surveys_to_queues():
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
     _add_surveys_to_queues()
+
 # I think this name becomes the leading prefix on the database table names, etc.
+#    metadata_file = async_result.get()
+
+    # Should move the start tally logic into tasks_periodic (don't care about the details in the view)
+#    print(f"TasksPeriodic.start_ping(), async_result.metadata_file = {metadata_file}, (tally) delay_mins = {delay_mins:.1f}m")
+#    async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
