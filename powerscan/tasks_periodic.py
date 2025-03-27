@@ -39,7 +39,7 @@ def start_ping(self, *args, **kwargs):
     # I'm already in a separate task, do I need to be async?
     # _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
     chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
-            _start_tally.s((kwargs={"flavor" : "chocolate"})))
+            _start_tally.s())
     async_result = chain01.run()
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
