@@ -278,6 +278,11 @@ class ScheduleSurveyView(generic.edit.FormView):
         field_start_time.initial = timezone.now()
         return context_data
 
+    def _clone_survey(self, survey, start_time):
+        new_survey = IpRangeSurvey(name=survey.name, time_whitelist_created=survey.time_whitelist_created,
+            parent_survey_id=survey.id)
+        return new_survey
+
     def _schedule_surveys(self, survey_id, start_time, recurring, num_occurrences):
         print(f"SSV._schedule_surveys(), survey_id = {survey_id}, start_time = {start_time}")
         print(f"      recurring = {recurring}, num_occurrences = {num_occurrences}")
@@ -290,9 +295,12 @@ class ScheduleSurveyView(generic.edit.FormView):
                 return
             td = recurring
             print(f"      td = {td}")
-            for index in range(num_occurrences + 1):
+            # The first occurrence was created (above), hence the -1 in here
+            for index in range(num_occurrences - 1):
                 start_time = start_time + td
                 start_string = start_time.strftime(TIME_FORMAT_STRING)
+                new_survey = self._clone_survey(survey, start_time)
+                new_survey.save()
                 print(f"    iteration[{index}]: {start_string}")
         # print(f"SURVEY SAVE, 1") 
 
