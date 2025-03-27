@@ -176,6 +176,7 @@ def _add_surveys_to_queues(debug_scheduler):
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
     from .models import DebugPowerScan
+    from .tasks import DEBUG_ID
 
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     scheduler = models.BooleanField(default=False)
