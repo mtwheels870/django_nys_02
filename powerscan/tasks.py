@@ -226,7 +226,7 @@ def zmap_from_file(self, survey_id_string):
 def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
     if metadata_file_job != metadata_file_survey:
-        print(f"_process_zmap_results(), metadata1 = {metadata_file_job}, metadata2 = {metadata_file_survey}")
+        print(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
         return 0
 
     # See whether the metadata file has values
