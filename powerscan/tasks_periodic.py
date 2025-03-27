@@ -26,9 +26,11 @@ TIME_FORMAT2 = "%H:%M:%S"
 ESTIMATED_RANGES_MIN = 4500
 
 @shared_task(bind=True)
-def start_ping(self, survey_id, delay_secs):
+def start_ping(self, *args, **kwargs):
     from .tasks import zmap_from_file
 
+    survey_id = kwargs["survey_id"]
+    delay_secs = int(kwargs["delay_secs"])
     print(f"CPV.post(), start_ping, survey_id = {survey_id}, delay_secs = {delay_secs}")
 
     delay_mins, delay_secs = _estimate_zmap_time(survey_id)
