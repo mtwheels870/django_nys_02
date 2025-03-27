@@ -284,9 +284,9 @@ class ScheduleSurveyView(generic.edit.FormView):
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         survey.time_scheduled = start_time
         survey.save()
-        td = recurring.to_python()
-        print(f"      td = {td}")
         if recurring and num_occurences > 1:
+            td = recurring.to_python()
+            print(f"      td = {td}")
             for index in range(num_occurences + 1):
                 start_time = start_time + td
                 start_string = start_time.strftime(TIME_FORMAT_STRING)
