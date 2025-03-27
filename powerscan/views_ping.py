@@ -280,7 +280,7 @@ class ScheduleSurveyView(generic.edit.FormView):
 
     def _schedule_surveys(self, survey_id, start_time, recurring, num_occurrences):
         print(f"SSV._schedule_surveys(), survey_id = {survey_id}, start_time = {start_time}")
-        print(f"      recurring = {recurring}, num_occurrences = {num_occurences}")
+        print(f"      recurring = {recurring}, num_occurrences = {num_occurrences}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         survey.time_scheduled = start_time
         print(f"SURVEY SAVE, 1") 
