@@ -90,7 +90,9 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     return async_result2
 
 def _get_task_survey_id(task):
-    print(f"get_task_survey_id(), task = {task}")
+    if not "kwargs" in task:
+        print(f"      no kwargs in task = {task}")
+        return None
     kwargs = task["kwargs"]
     if "survey_id" in kwargs:
         survey_id = kwargs["survey_id"]
