@@ -289,7 +289,7 @@ class ScheduleSurveyView(generic.edit.FormView):
             for index in range(num_occurences + 1):
                 start_time = start_time + td
                 start_string = start_time.strftime(TIME_FORMAT_STRING)
-                print(f"    iteration[{index}]: {start_string}"
+                print(f"    iteration[{index}]: {start_string}")
         # print(f"SURVEY SAVE, 1") 
 
     def post(self, request, *args, **kwargs):
