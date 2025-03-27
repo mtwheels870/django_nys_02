@@ -16,6 +16,8 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
+from .models import DebugPowerScan
+
 #from .models import IpRangeSurvey
 
 PERIODIC_MINS = 2
@@ -149,7 +151,7 @@ def _schedule_surveys(upcoming_surveys):
     if len(survey_ids) > 0:
         print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
 
-def _add_surveys_to_queues():
+def _add_surveys_to_queues(debug_scheduler):
     from .models import IpRangeSurvey
 
     now = timezone.now()
@@ -169,13 +171,15 @@ def _add_surveys_to_queues():
             time_scheduled__gte=window_begin).filter(
             time_scheduled__lte=window_end)
     num_surveys = len(upcoming_surveys)
-    if num_surveys > 0:
+    if num_surveys > 0 or debug_scheduler:
         print(f"TasksPeriodic._schedule_surveys(), now = {now_string} window = [{begin_string},{end_string}]")
         _schedule_surveys(upcoming_surveys)
 
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
-    _add_surveys_to_queues()
+    debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
+    scheduler = models.BooleanField(default=False)
+    _add_surveys_to_queues(debug.scheduler)
 
 # I think this name becomes the leading prefix on the database table names, etc.
 #    metadata_file = async_result.get()

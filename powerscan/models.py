@@ -201,12 +201,14 @@ class DebugPowerScan(models.Model):
     whitelist = models.BooleanField(default=False)
     zmap = models.BooleanField(default=False)
     tally_results = models.BooleanField(default=False)
+    scheduler = models.BooleanField(default=False)
     calculate_baseline = models.BooleanField(default=False)
 
     def __str__(self):
         first = f"profile[{self.profile_name}, whitelist = {self.whitelist}, zmap = {self.zmap}, "
-        second = f"     tally_results = {self.tally_results}, calculate_baseline = {self.calculate_baseline}"
-        return first + second
+        second = f"     tally_results = {self.tally_results}, scheduler = {self.scheduler}\n"
+        third = f"calculate_baseline = {self.calculate_baseline}"
+        return first + second + third
 
 #class WorkerLock(models.Model):
 #    purpose = models.CharField(max_length=12)

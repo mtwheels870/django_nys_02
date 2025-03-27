@@ -58,14 +58,14 @@ TIME_FORMAT_STRING = "%H:%M:%S"
 
 DEBUG_ID = 1
 
-def start_tracts(self, *args, **kwargs):
+def unused_start_tracts(self, *args, **kwargs):
 
     # Main method
-    print(f"start_tracts(), self = {self}, kwargs = {kwargs}, creating survey")
+    #print(f"start_tracts(), self = {self}, kwargs = {kwargs}, creating survey")
 
     survey = IpRangeSurvey()
     survey.time_started = timezone.now()
-    print(f"SURVEY SAVE, 4")
+    #print(f"SURVEY SAVE, 4")
     survey.save()
     # Use the minus to be descending
     count_range_tracts = CountTract.objects.order_by("-range_count")
@@ -74,11 +74,11 @@ def start_tracts(self, *args, **kwargs):
     ending_task = finish_survey.s(survey.id)
 
     chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
-    print(f"start_tracts(), chained_task = {chained_task}")
+    #print(f"start_tracts(), chained_task = {chained_task}")
     result = chained_task.apply_async(
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.start_tracts')
-    print(f"start_tracts(), after apply_async(), result = {result}")
+    #print(f"start_tracts(), after apply_async(), result = {result}")
     return result
 
     # Break into batches of 10 tracts, right now
@@ -129,24 +129,6 @@ def _ping_single_range(survey, tract, ip_range, dir_path, debug):
         time_pinged=timezone.now())
     range_ping.save()
 
-# Maybe we need to be a task to get the channel layer
-@shared_task
-def send_task_result(data):
-    try:
-        channel_layer = get_channel_layer()
-        print(f"send_task_result(), channel_layer = {channel_layer}")
-            #"background_tasks",
-        result = async_to_sync(channel_layer.send) (
-            "background_tasks",
-            {
-                "type": "background_task",
-                "task_name": "example_task",
-            })
-    except Exception as e:
-        print(f"send_task_result(), exception {e}")
-        result = None
-    print(f"    result = {result}")
-
 @shared_task(bind=True)
 def build_whitelist(self, *args, **kwargs):
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
@@ -176,7 +158,6 @@ def build_whitelist(self, *args, **kwargs):
     survey.save()
 
     # Django channels back to the caller
-    # send_task_result(message)
     return num_states, num_counties, num_tracts, num_ranges
 
 def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
@@ -324,9 +305,3 @@ def tally_results(metadata_file, survey_id):
         pings_to_db = -1
     return pings_to_db 
 
-# def tally_results(self, *args, **kwargs):
-#    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
-#    metadata_file = kwargs["metadata_file"]
-#    survey_id = int(survey_id_string)
-# @shared_task(bind=True)
-    # print(f"tally_results(), metadata = {metadata_file}, args = {args}, kwargs = {kwargs}")
