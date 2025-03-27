@@ -34,7 +34,7 @@ def start_ping(self, survey_id, delay_secs):
     delay_mins, delay_secs = _estimate_zmap_time(survey_id)
 
     async_result = (zmap_from_file.s(kwargs={"survey_id" : survey_id}).set(countdown=delay_secs) |
-            _start_tally.s(survey_id).set(countdown=delay_secs))
+            _start_tally.s(survey_id).set(countdown=delay_secs)).apply_async()
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
 
