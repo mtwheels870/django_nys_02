@@ -276,7 +276,8 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 #    metadata_file = kwargs["metadata_file"]
 #    survey_id = int(survey_id_string)
 @shared_task(bind=True)
-def tally_results(metadata_file, survey_id):
+def tally_results(self, metadata_file, args, kwargs):
+    print(f"tally_results(), self = {self}, metadata = {metadata_file}, args = {args}, kwargs = {kwargs}")
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
