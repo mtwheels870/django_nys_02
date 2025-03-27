@@ -97,18 +97,20 @@ def _get_task_survey_id(task):
                 kwargs = request["kwargs"]
                 if "survey_id" in kwargs:
                     survey_id = kwargs["survey_id"]
-                    print(f"task[request][kwargs][survey_id] = {survey_id}")
+                    type = task["type"]
+                    print(f"task[request][kwargs][survey_id]: {survey_id} = {type}")
                     return survey_id
         print(f"      no kwargs in task = {task}")
         return None
     kwargs = task["kwargs"]
     if "survey_id" in kwargs:
         survey_id = kwargs["survey_id"]
-        print(f"      survey_id = {survey_id}")
+        type = task["type"]
+        print(f"      task[kwargs][survey_id]: {survey_id} = {type}")
         return survey_id
     else:
-        type = task["type"]
-        print(f"      task = {type}, no kwargs")
+        # type = task["type"]
+        # print(f"      task = {type}, no kwargs")
         return None
 
 def _scheduled_active_surveys():

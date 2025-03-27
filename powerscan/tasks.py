@@ -144,7 +144,7 @@ def build_whitelist(self, *args, **kwargs):
         return 0
     # Save that we started the process, that's our (worker) lock
     survey.time_whitelist_started = timezone.now()
-    print(f"SURVEY SAVE, 5")
+    # print(f"SURVEY SAVE, 5")
     survey.save()
 
     survey_manager = PingSurveyManager(survey_id, debug.whitelist)
@@ -237,7 +237,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 
     # Calculate zmap time
     survey.time_ping_stopped = now
-    print(f"SURVEY SAVE, 7")
+    # print(f"SURVEY SAVE, 7")
     survey.save()
     if not survey.time_ping_stopped:
         print(f"_process_zmap_results(), time_ping_stopped = {survey.time_ping_stopped}")
@@ -254,20 +254,20 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 
 @celery_app.task
 def tally_results(metadata_file, survey_id):
-    print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
+    # print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
-    print(f"tally_results(), now: {formatted_now}")
+    # print(f"tally_results(), now: {formatted_now}")
     try:
         int_survey_id = int(survey_id)
         survey = IpRangeSurvey.objects.get(pk=int_survey_id)
         if survey.time_tally_started:
-            print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
+            print(f"tally_results(), survey = {int_survey_id}, tally_started { survey.time_tally_started}, another worker grabbed it")
             return 0
         # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
         survey.time_tally_started = now
-        print(f"SURVEY SAVE, 8")
+        # print(f"SURVEY SAVE, 8")
         survey.save()
 
         debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
@@ -279,7 +279,7 @@ def tally_results(metadata_file, survey_id):
             delta = timedelta(seconds=TALLY_DELAY_SECS)
             tally_start = now + delta
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
-            first = "Task.tally_results(), empty_zmap_file, delay:"
+            first = "Task.tally_results(), survey = {int_survey_id}, empty_zmap_file, delay:"
             second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}"
             print(first + second)
             async_result2 = tally_results.apply_async(
@@ -288,13 +288,13 @@ def tally_results(metadata_file, survey_id):
                 kwargs={"survey_id": survey_id,
                     "metadata_file": metadata_file} )
             survey.time_tally_started = None
-            print(f"SURVEY SAVE, 9")
+            # print(f"SURVEY SAVE, 9")
             survey.save()
             return 0
 
         survey.time_tally_stopped = timezone.now()
         survey.num_ranges_responded = pings_to_db
-        print(f"SURVEY SAVE, 10")
+        # print(f"SURVEY SAVE, 10")
         survey.save()
         print(f"Task.tally_results(), survey: {survey_id}, saved {pings_to_db} to db")
     except Exception as e:

@@ -392,14 +392,14 @@ class Loader():
     def fix_names(self, verbose=True):
         index = 0
         for survey in IpRangeSurvey.objects.all():
-            print(f"fix_name(), survey[{index}] = {survey.id}")
+            # print(f"fix_name(), survey[{index}] = {survey.id}")
             states = survey.ipsurveystate_set.all()
             f = lambda state_survey: state_survey.us_state.state_abbrev
             abbrevs = [f(x) for x in states]
             state_string = ",".join(abbrevs)
-            print(f"      name = {state_string}")
+            # print(f"      name = {state_string}")
             survey.name = state_string
-            print(f"SURVEY SAVE, 3")
+            # print(f"SURVEY SAVE, 3")
             survey.save()
             index = index + 1
 

@@ -92,7 +92,7 @@ class CreateNewSurveyView(generic.edit.FormView):
     # the pre-saved states from the database
     def _configure_survey(self, selected_states):
         survey = IpRangeSurvey()
-        print(f"SURVEY SAVE, 11")
+        # print(f"SURVEY SAVE, 11")
         survey.save()
         abbrevs = []
         print(f"CPV._configure_survey(), selected_states (fp) = {selected_states}")
@@ -103,7 +103,7 @@ class CreateNewSurveyView(generic.edit.FormView):
         self._survey_id = survey.id
         abbrev_string = ",".join(abbrevs)
         survey.name = abbrev_string
-        print(f"SURVEY SAVE, 2") 
+        # print(f"SURVEY SAVE, 2") 
         survey.save()
         return abbrevs, survey.id
 
@@ -283,10 +283,14 @@ class ScheduleSurveyView(generic.edit.FormView):
         print(f"      recurring = {recurring}, num_occurrences = {num_occurrences}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         survey.time_scheduled = start_time
-        print(f"SURVEY SAVE, 1") 
         survey.save()
-        if recurring:
-            print(f"SSV.post(), recurring = {recurring}, need to schedule here!")
+        td = timedelta(recurring)
+        if recurring and num_occurences > 1:
+            for index in range(num_occurences + 1):
+                start_time = start_time + td
+                start_string = start_time.strftime(TIME_FORMAT_STRING)
+                print(f"    iteration[{index}: {start_string}]"
+        # print(f"SURVEY SAVE, 1") 
 
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["pk"]
