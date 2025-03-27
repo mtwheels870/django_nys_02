@@ -23,7 +23,8 @@ PERIODIC_SECS = PERIODIC_MINS * 60
 
 TIME_FORMAT2 = "%H:%M:%S"
 
-ESTIMATED_RANGES_MIN = 4500
+ESTIMATED_BASE_MIN = 2.0
+ESTIMATED_RANGES_PER_MIN = 4500
 
 #
 # This needs to be a shared_task b/c it can be called from the views_ping (ping immediately) or 
@@ -43,8 +44,6 @@ def start_ping(self, *args, **kwargs):
     tally_delay_mins, tally_delay_secs = _estimate_zmap_time(survey_id)
 
     print(f"Task.start_ping(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
-    # I'm already in a separate task, do I need to be async?
-    # _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
     chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
             _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
     async_result = chain01.run()
@@ -63,7 +62,7 @@ def _estimate_zmap_time(survey_id):
         estimated_ranges = state.estimated_ranges
         #print(f"       state: {state.state_abbrev}, count = {estimated_ranges:,}")
         total_ranges = total_ranges + estimated_ranges
-    estimated_mins = total_ranges / ESTIMATED_RANGES_MIN 
+    estimated_mins = ESTIMATED_BASE_MIN + (total_ranges / ESTIMATED_RANGES_PER_MIN)
     estimated_secs = estimated_mins * 60
     #first = "_estimate_zmap_time(), total_ranges = "
     #second = f"{total_ranges}, estimated m/s = {estimated_mins:.1f}/{estimated_secs:.0f}"

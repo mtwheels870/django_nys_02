@@ -58,7 +58,7 @@ FIELD_SURVEY_ID = "field_survey_id"
 FIELD_SURVEY_NAME = "field_survey_name"
 FIELD_START_TIME = "field_start_time"
 FIELD_RECURRING = "field_recurring"
-FIELD_NUM_OCCURENCES = "field_num_occurences"
+FIELD_NUM_OCCURRENCES = "field_num_occurrences"
 
 
 class CreateNewSurveyView(generic.edit.FormView):
@@ -315,8 +315,8 @@ class ScheduleSurveyView(generic.edit.FormView):
                 # Form is valid
                 start_time = form.cleaned_data[FIELD_START_TIME]
                 recurring = form.cleaned_data[FIELD_RECURRING]
-                num_occurrences = form.cleaned_data[FIELD_NUM_OCCURENCES]
-                self._schedule_surveys(survey_id, start_time, recurring, num_occurrences)
+                num_occurrences = form.cleaned_data[FIELD_NUM_OCCURRENCES]
+                self._schedule_surveys(survey_id, start_time, recurring, num_occurrences) 
         return HttpResponseRedirect(reverse("app_powerscan:survey_table"))
 
         #context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
