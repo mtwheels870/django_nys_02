@@ -71,7 +71,7 @@ def _estimate_zmap_time(survey_id):
 def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     from .tasks import tally_results
 
-    first = "TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
+    print(f"TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT2)
     delta = timedelta(seconds=delay_secs)
