@@ -41,7 +41,7 @@ def start_ping(self, *args, **kwargs):
             _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
-
+    print(f"async_result = {async_result}")
 
 #    metadata_file = async_result.get()
 
