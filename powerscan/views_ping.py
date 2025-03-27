@@ -285,6 +285,9 @@ class ScheduleSurveyView(generic.edit.FormView):
         survey.time_scheduled = start_time
         survey.save()
         if recurring and num_occurences > 1:
+            if not recurring:
+                print(f"SSV._schedule_surveys(), num_occurrences = {num_occurences}, but recurring = {recurring}")
+                return
             td = recurring.to_python()
             print(f"      td = {td}")
             for index in range(num_occurences + 1):

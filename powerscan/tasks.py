@@ -111,12 +111,12 @@ def _prep_file_range(ip_range, dir_path):
 def _count_output_lines(file_path):
     return sum(1 for _ in open(file_path))
 
-def _ping_single_range(survey, tract, ip_range, dir_path, debug):
+def _unused_ping_single_range(survey, tract, ip_range, dir_path, debug):
     file_path, ip_network = _prep_file_range(ip_range, dir_path)
     file_path_string = str(file_path)
     ip_net_string = str(ip_network)
     if debug:
-        print(f"_ping_single_range(), ip_start = {ip_range.ip_range_start}, ")
+        print(f"_unused_ping_single_range(), ip_start = {ip_range.ip_range_start}, ")
         print(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
 
     # Start the subprocess
@@ -182,7 +182,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
-        print(f"\n_execute_subprocess(), tracking metadata file: {metadata_file} (non-zero)")
+        #print(f"\n_execute_subprocess(), tracking metadata file: {metadata_file} (non-zero)")
         # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
         #stdout, stderr = process.communicate(timeout=10)
         ret_val = process.returncode
@@ -211,9 +211,11 @@ def zmap_from_file(self, survey_id_string):
         return 0
     # Save that we started the process, that's our (worker) lock
     survey.time_ping_started = timezone.now()
-    print(f"SURVEY SAVE, 6")
+    formatted_start = survey.time_ping_started.strftime(TIME_FORMAT_STRING)
+    print(f"SURVEY SAVE, 6, survey = {survey_id_string}, ping started: {formatted_start}")
     survey.save()
 
+    # Check our debug flag
     debug_zmap = debug.zmap
     #print(f"build_whitelist(), source_id = {ip_source_id}")
     survey_manager = PingSurveyManager.find(survey_id, debug_zmap)
@@ -263,7 +265,9 @@ def tally_results(metadata_file, survey_id):
         int_survey_id = int(survey_id)
         survey = IpRangeSurvey.objects.get(pk=int_survey_id)
         if survey.time_tally_started:
-            print(f"tally_results(), survey = {int_survey_id}, tally_started { survey.time_tally_started}, another worker grabbed it")
+            first = f"tally_results(), survey = {int_survey_id}, tally_started { survey.time_tally_started}, "
+            second = f"another worker grabbed it"
+            print(first + second)
             return 0
         # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
         survey.time_tally_started = now
@@ -279,8 +283,8 @@ def tally_results(metadata_file, survey_id):
             delta = timedelta(seconds=TALLY_DELAY_SECS)
             tally_start = now + delta
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
-            first = "Task.tally_results(), survey = {int_survey_id}, empty_zmap_file, delay:"
-            second = f"{TALLY_DELAY_MINS}m, now: {formatted_now}, start: {formatted_start}"
+            first = f"Task.tally_results(), survey = {int_survey_id}, empty_zmap_file, delay:"
+            second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, ({formatted_now})"
             print(first + second)
             async_result2 = tally_results.apply_async(
                 countdown=TALLY_DELAY_SECS, 

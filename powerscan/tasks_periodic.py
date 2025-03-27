@@ -35,6 +35,7 @@ def start_ping(self, *args, **kwargs):
 
     if "survey_id" not in kwargs:
         print(f"start_ping(), args = {args}, kwargs = {kwargs}")
+        return
     survey_id = kwargs["survey_id"]
     zmap_delay_secs = int(kwargs["delay_secs"])
     print(f"Task.start_ping(), start_ping, survey_id = {survey_id}, zmap_delay_secs = {zmap_delay_secs}")
@@ -49,7 +50,7 @@ def start_ping(self, *args, **kwargs):
     async_result = chain01.run()
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
-    print(f"start_ping(), async_result = {async_result}")
+    #print(f"start_ping(), async_result = {async_result}")
     return async_result
 
 def _estimate_zmap_time(survey_id):
