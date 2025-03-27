@@ -277,7 +277,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 #    survey_id = int(survey_id_string)
 # @shared_task(bind=True)
 @celery_app.task
-def tally_results(self, metadata_file, args, kwargs):
+def tally_results(self, survey_id, delay_mins, delay_secs, metadata_file, args, kwargs):
     print(f"tally_results(), self = {self}, metadata = {metadata_file}, args = {args}, kwargs = {kwargs}")
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
