@@ -29,19 +29,25 @@ def start_ping(survey_id, delay_secs):
     from .tasks import zmap_from_file
 
     print(f"CPV.post(), start_ping, survey_id = {survey_id}, delay_secs = {delay_secs}")
-    async_result = zmap_from_file.apply_async(
-        countdown=delay_secs,
-        kwargs={"survey_id" : survey_id},
-            #"ip_source_id": IP_RANGE_SOURCE },
-        queue=QUEUE_NAME,
-        routing_key='ping.tasks.zmap_from_file')
 
-    metadata_file = async_result.get()
+    delay_mins, delay_secs = _estimate_zmap_time(survey_id)
+
+    async_result = zmap_from_file.apply_async(
+            countdown=delay_secs,
+            kwargs={"survey_id" : survey_id},
+                #"ip_source_id": IP_RANGE_SOURCE },
+            queue=QUEUE_NAME,
+            routing_key='ping.tasks.zmap_from_file'),
+        link=_start_tally.s(survey_id, delay_mins, delay_secs ))
+
+            
+
+
+#    metadata_file = async_result.get()
 
     # Should move the start tally logic into tasks_periodic (don't care about the details in the view)
-    delay_mins, delay_secs = _estimate_zmap_time(survey_id)
-    print(f"TasksPeriodic.start_ping(), async_result.metadata_file = {metadata_file}, (tally) delay_mins = {delay_mins:.1f}m")
-    async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
+#    print(f"TasksPeriodic.start_ping(), async_result.metadata_file = {metadata_file}, (tally) delay_mins = {delay_mins:.1f}m")
+#    async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
 
     return async_result
 
@@ -62,9 +68,10 @@ def _estimate_zmap_time(survey_id):
     #print(first + second)
     return estimated_mins, estimated_secs
 
-def _start_tally(survey_id, metadata_file, delay_mins, delay_secs):
+def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     from .tasks import tally_results
 
+    first = "TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT2)
     delta = timedelta(seconds=delay_secs)
