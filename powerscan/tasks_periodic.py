@@ -179,7 +179,6 @@ def check_new_surveys(self):
     from .tasks import DEBUG_ID
 
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
-    scheduler = models.BooleanField(default=False)
     _add_surveys_to_queues(debug.scheduler)
 
 # I think this name becomes the leading prefix on the database table names, etc.
