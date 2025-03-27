@@ -16,8 +16,6 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
-from .models import DebugPowerScan
-
 #from .models import IpRangeSurvey
 
 PERIODIC_MINS = 2
@@ -177,6 +175,8 @@ def _add_surveys_to_queues(debug_scheduler):
 
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
+    from .models import DebugPowerScan
+
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     scheduler = models.BooleanField(default=False)
     _add_surveys_to_queues(debug.scheduler)
