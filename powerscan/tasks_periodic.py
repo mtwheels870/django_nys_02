@@ -142,7 +142,7 @@ def _schedule_surveys(upcoming_surveys):
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
             print(f"    need to calculate delay here!")
             async_result = start_ping(
-                kwargs={"survey_id" : survey_id, "delay_secs" : 0},
+                kwargs={"survey_id" : survey.id, "delay_secs" : 0},
                 queue=QUEUE_NAME,
                 routing_key='ping.tasks.start_ping')
             print(f"    async_result = {async_result}")
