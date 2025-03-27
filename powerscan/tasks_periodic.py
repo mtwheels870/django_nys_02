@@ -25,10 +25,16 @@ TIME_FORMAT2 = "%H:%M:%S"
 
 ESTIMATED_RANGES_MIN = 4500
 
+#
+# This needs to be a shared_task b/c it can be called from the views_ping (ping immediately) or 
+# from the scheduler (celery beat)
+#
 @shared_task(bind=True)
 def start_ping(self, *args, **kwargs):
     from .tasks import zmap_from_file
 
+    if "survey_id" not in kwargs:
+        print(f"start_ping(), args = {args}, kwargs = {kwargs}")
     survey_id = kwargs["survey_id"]
     zmap_delay_secs = int(kwargs["delay_secs"])
     print(f"Task.start_ping(), start_ping, survey_id = {survey_id}, zmap_delay_secs = {zmap_delay_secs}")
@@ -135,8 +141,11 @@ def _schedule_surveys(upcoming_surveys):
         else:
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
             print(f"    need to calculate delay here!")
-            delay_secs = 0
-            start_ping(survey.id, delay_secs)
+            async_result = start_ping(
+                kwargs={"survey_id" : survey_id, "delay_secs" : 0},
+                queue=QUEUE_NAME,
+                routing_key='ping.tasks.start_ping')
+            print(f"    async_result = {async_result}")
         index = index + 1
 
     f = lambda survey: survey.id

@@ -151,7 +151,7 @@ class CreateNewSurveyView(generic.edit.FormView):
                 async_result = start_ping.apply_async(
                     kwargs={"survey_id" : survey_id, "delay_secs" : 0},
                     queue=QUEUE_NAME,
-                    routing_key='ping.tasks.build_whitelist')
+                    routing_key='ping.tasks.start_ping')
                 self._status_message = f"Started tally, async_result = {async_result}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
                 # Jump to the survey table
