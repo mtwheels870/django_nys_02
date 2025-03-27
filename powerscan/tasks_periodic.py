@@ -31,18 +31,18 @@ def start_ping(self, *args, **kwargs):
 
     survey_id = kwargs["survey_id"]
     zmap_delay_secs = int(kwargs["delay_secs"])
-    print(f"CPV.post(), start_ping, survey_id = {survey_id}, zmap_delay_secs = {zmap_delay_secs}")
+    print(f"Task.start_ping(), start_ping, survey_id = {survey_id}, zmap_delay_secs = {zmap_delay_secs}")
 
     tally_delay_mins, tally_delay_secs = _estimate_zmap_time(survey_id)
 
-    print(f"CPV.post(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
+    print(f"Task.start_ping(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
     # I'm already in a separate task, do I need to be async?
     chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
             _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
     async_result = chain01.run()
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
-    print(f"async_result = {async_result}")
+    print(f"start_ping(), async_result = {async_result}")
 
 #    metadata_file = async_result.get()
 

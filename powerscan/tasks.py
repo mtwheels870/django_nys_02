@@ -219,7 +219,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 def zmap_from_file(self, survey_id):
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
-    print(f"zmap_from_file(), survey_id = {survey_id_string}")
+    print(f"zmap_from_file(), survey_id = {survey_id}")
     #ip_source_id = kwargs["ip_source_id"]
     #survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
