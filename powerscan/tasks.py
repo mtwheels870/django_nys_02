@@ -271,20 +271,15 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     print(f"_process_zmap_results(), now {formatted_now}, zmap time = {timedelta_mins:.1f} mins")
     return survey_manager.process_results(survey)
 
-# def tally_results(self, *args, **kwargs):
-#    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
-#    metadata_file = kwargs["metadata_file"]
-#    survey_id = int(survey_id_string)
-# @shared_task(bind=True)
 @celery_app.task
-def tally_results(metadata_file, survey_id):
-    # print(f"tally_results(), metadata = {metadata_file}, args = {args}, kwargs = {kwargs}")
-    print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
+def tally_results(metadata_file, survey_id_string):
+    print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id_string}")
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
     print(f"tally_results(), now: {formatted_now}")
     try:
+        survey_id = int(survey_id_string)
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         if survey.time_tally_started:
             print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
@@ -329,3 +324,9 @@ def tally_results(metadata_file, survey_id):
         pings_to_db = -1
     return pings_to_db 
 
+# def tally_results(self, *args, **kwargs):
+#    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
+#    metadata_file = kwargs["metadata_file"]
+#    survey_id = int(survey_id_string)
+# @shared_task(bind=True)
+    # print(f"tally_results(), metadata = {metadata_file}, args = {args}, kwargs = {kwargs}")
