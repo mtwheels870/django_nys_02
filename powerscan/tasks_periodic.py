@@ -64,7 +64,7 @@ def _estimate_zmap_time(survey_id):
     #print(first + second)
     return estimated_mins, estimated_secs
 
-@app.task
+@celery_app.task
 def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     from .tasks import tally_results
 
