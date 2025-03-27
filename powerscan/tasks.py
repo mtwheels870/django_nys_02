@@ -213,14 +213,15 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         raise Exception(f"_execute_subprocess(), Exception {e}, Popen command: {full_command}")
     return ret_val
 
+# def zmap_from_file(self, *args, **kwargs):
+#    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
 @shared_task(bind=True)
-def zmap_from_file(self, *args, **kwargs):
+def zmap_from_file(survey_id):
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
-    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     # print(f"zmap_from_file(), survey_id = {survey_id_string}")
     #ip_source_id = kwargs["ip_source_id"]
-    survey_id = int(survey_id_string)
+    #survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
 
     if survey.time_ping_started:
@@ -230,7 +231,6 @@ def zmap_from_file(self, *args, **kwargs):
     survey.time_ping_started = timezone.now()
     print(f"SURVEY SAVE, 6")
     survey.save()
-
 
     debug_zmap = debug.zmap
     #print(f"build_whitelist(), source_id = {ip_source_id}")
@@ -270,15 +270,16 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     print(f"_process_zmap_results(), now {formatted_now}, zmap time = {timedelta_mins:.1f} mins")
     return survey_manager.process_results(survey)
 
-@shared_task(bind=True)
-def tally_results(self, *args, **kwargs):
+# def tally_results(self, *args, **kwargs):
+#@shared_task(bind=True)
+#    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
+#    metadata_file = kwargs["metadata_file"]
+#    survey_id = int(survey_id_string)
+def tally_results(metadata_file, survey_id):
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
-    # print(f"tally_results(), now: {formatted_now}")
-    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
-    metadata_file = kwargs["metadata_file"]
-    survey_id = int(survey_id_string)
+    print(f"tally_results(), now: {formatted_now}")
     try:
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         if survey.time_tally_started:

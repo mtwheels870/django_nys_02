@@ -25,6 +25,7 @@ TIME_FORMAT2 = "%H:%M:%S"
 
 ESTIMATED_RANGES_MIN = 4500
 
+@shared_task(bind=True)
 def start_ping(survey_id, delay_secs):
     from .tasks import zmap_from_file
 
@@ -32,13 +33,11 @@ def start_ping(survey_id, delay_secs):
 
     delay_mins, delay_secs = _estimate_zmap_time(survey_id)
 
-    async_result = zmap_from_file.apply_async((countdown=delay_secs,
-            kwargs={"survey_id" : survey_id},
-                #"ip_source_id": IP_RANGE_SOURCE },
-            queue=QUEUE_NAME,
-            routing_key='ping.tasks.zmap_from_file'), link=_start_tally.s(survey_id, delay_mins, delay_secs ))
+    async_result = (zmap_from_file.s(kwargs={"survey_id" : survey_id}).set(countdown=delay_secs) |
+            _start_tally.s(survey_id).set(countdown=delay_secs))
+                      | _start_tally.s(survey_id).
 
-            
+                # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
 
 
 #    metadata_file = async_result.get()
@@ -66,7 +65,7 @@ def _estimate_zmap_time(survey_id):
     #print(first + second)
     return estimated_mins, estimated_secs
 
-@task
+@app.task
 def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     from .tasks import tally_results
 
