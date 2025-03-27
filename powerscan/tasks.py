@@ -216,12 +216,13 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 # def zmap_from_file(self, *args, **kwargs):
 #    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
 @shared_task(bind=True)
-def zmap_from_file(self, survey_id):
+def zmap_from_file(self, survey_id_string):
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
-    print(f"zmap_from_file(), survey_id = {survey_id}")
+    print(f"zmap_from_file(), survey_id = {survey_id_string}")
     #ip_source_id = kwargs["ip_source_id"]
     #survey_id = int(survey_id_string)
+    survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
 
     if survey.time_ping_started:
