@@ -154,7 +154,7 @@ def build_whitelist(self, *args, **kwargs):
         message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
     survey.num_total_ranges = num_ranges
-    print(f"SURVEY SAVE, 6")
+    print(f"SURVEY SAVE, 5")
     survey.save()
 
     # Django channels back to the caller
@@ -278,6 +278,9 @@ def tally_results(metadata_file, survey_id):
         debug_tally = debug.tally_results 
 
         survey_manager = PingSurveyManager.find(int_survey_id, debug_tally)
+        if not survey_manager:
+            print(f"Task.tally_results(), no survey manager for survey_id: {int_survey_id}")
+            return 0
         pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
         if pings_to_db == 0:
             delta = timedelta(seconds=TALLY_DELAY_SECS)
@@ -302,7 +305,7 @@ def tally_results(metadata_file, survey_id):
         survey.save()
         print(f"Task.tally_results(), survey: {survey_id}, saved {pings_to_db} to db")
     except Exception as e:
-        print(f"Task.tally_results(), survey_id: {survey_id_string}, exception: {e}")
+        print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print(f"    exc_traceback = {dir(exc_traceback)}")
         exc_traceback.print_exc()
