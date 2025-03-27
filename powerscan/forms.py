@@ -54,7 +54,8 @@ class ScheduleSurveyForm(forms.Form):
     field_survey_name = forms.CharField(label="States:")
     field_start_time = CustomDateTimeField(label="Start Time (first ping):", widget=SplitDateTimeWidget)
     # field_start_time = forms.DateTimeField(label="Start Time (first ping):", widget=SplitDateTimeWidget)
-    field_recurring = forms.DurationField(label="Recurring (amount)", required=False)
+    field_recurring = forms.DurationField(label="Recurring (time amount)", required=False)
+    field_num_occurences = forms.IntegerField(label="Num Occurrences:", initial=0)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

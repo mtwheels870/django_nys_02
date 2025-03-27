@@ -58,6 +58,7 @@ FIELD_SURVEY_ID = "field_survey_id"
 FIELD_SURVEY_NAME = "field_survey_name"
 FIELD_START_TIME = "field_start_time"
 FIELD_RECURRING = "field_recurring"
+FIELD_NUM_OCCURENCES = "field_num_occurences"
 
 
 class CreateNewSurveyView(generic.edit.FormView):
@@ -277,6 +278,16 @@ class ScheduleSurveyView(generic.edit.FormView):
         field_start_time.initial = timezone.now()
         return context_data
 
+    def _schedule_surveys(self, survey_id, start_time, recurring, num_occurrences):
+        print(f"SSV._schedule_surveys(), survey_id = {survey_id}, start_time = {start_time}")
+        print(f"      recurring = {recurring}, num_occurrences = {num_occurences}")
+        survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+        survey.time_scheduled = start_time
+        print(f"SURVEY SAVE, 1") 
+        survey.save()
+        if recurring:
+            print(f"SSV.post(), recurring = {recurring}, need to schedule here!")
+
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["pk"]
         print(f"SSV.post(), survey_id = {survey_id}")
@@ -296,13 +307,8 @@ class ScheduleSurveyView(generic.edit.FormView):
                 # Form is valid
                 start_time = form.cleaned_data[FIELD_START_TIME]
                 recurring = form.cleaned_data[FIELD_RECURRING]
-                print(f"SSV.post(), survey_id = {survey_id}, start_time = {start_time}, recurring = {recurring}")
-                survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
-                survey.time_scheduled = start_time
-                print(f"SURVEY SAVE, 1") 
-                survey.save()
-                if recurring:
-                    print(f"SSV.post(), recurring = {recurring}, not scheduling that (yet)")
+                num_occurrences = form.cleaned_data[FIELD_NUM_OCCURENCES]
+                self._schedule_surveys(survey_id, start_time, recurring, num_occurrences)
         return HttpResponseRedirect(reverse("app_powerscan:survey_table"))
 
         #context_data[FIELD_CELERY_DETAILS] = self._get_celery_details()
