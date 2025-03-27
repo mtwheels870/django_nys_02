@@ -272,15 +272,15 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     return survey_manager.process_results(survey)
 
 @celery_app.task
-def tally_results(metadata_file, survey_id_string):
-    print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id_string}")
+def tally_results(metadata_file, survey_id):
+    print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
     print(f"tally_results(), now: {formatted_now}")
     try:
-        survey_id = int(survey_id_string)
-        survey = IpRangeSurvey.objects.get(pk=survey_id)
+        int_survey_id = int(survey_id)
+        survey = IpRangeSurvey.objects.get(pk=int_survey_id)
         if survey.time_tally_started:
             print(f"tally_results(), survey.time_tally_started { survey.time_tally_started}, another worker grabbed it")
             return 0
@@ -292,7 +292,7 @@ def tally_results(metadata_file, survey_id_string):
         debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
         debug_tally = debug.tally_results 
 
-        survey_manager = PingSurveyManager.find(survey_id, debug_tally)
+        survey_manager = PingSurveyManager.find(int_survey_id, debug_tally)
         pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
         if pings_to_db == 0:
             delta = timedelta(seconds=TALLY_DELAY_SECS)
@@ -304,7 +304,7 @@ def tally_results(metadata_file, survey_id_string):
             async_result2 = tally_results.apply_async(
                 countdown=TALLY_DELAY_SECS, 
                 #"ip_source_id": IP_RANGE_SOURCE,
-                kwargs={"survey_id": survey_id_string,
+                kwargs={"survey_id": survey_id,
                     "metadata_file": metadata_file} )
             survey.time_tally_started = None
             print(f"SURVEY SAVE, 9")
