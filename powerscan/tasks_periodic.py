@@ -16,6 +16,8 @@ from django.utils import timezone
 
 from django_nys_02.celery import app as celery_app, QUEUE_NAME
 
+from .survey_util import SurveyUtil
+
 #from .models import IpRangeSurvey
 
 PERIODIC_MINS = 2
@@ -26,6 +28,15 @@ TIME_FORMAT2 = "%H:%M:%S"
 ESTIMATED_BASE_MIN = 2.0
 ESTIMATED_RANGES_PER_MIN = 4500
 
+
+@celery_app.task
+def _build_clone_details(survey_id, parent_survey_id):
+    # Clone all of the database stuff
+    SurveyUtil.copy_geography(survey_id, parent_survey_id)
+
+    # Set up the file structure
+    SurveyUtil.link_file_string(survey_id, parent_survey_id)
+
 #
 # This needs to be a shared_task b/c it can be called from the views_ping (ping immediately) or 
 # from the scheduler (celery beat)
@@ -33,6 +44,7 @@ ESTIMATED_RANGES_PER_MIN = 4500
 @shared_task(bind=True)
 def start_ping(self, *args, **kwargs):
     from .tasks import zmap_from_file
+    from .models import IpRangeSurvey
 
     if "survey_id" not in kwargs:
         print(f"start_ping(), args = {args}, kwargs = {kwargs}")
@@ -41,12 +53,21 @@ def start_ping(self, *args, **kwargs):
     zmap_delay_secs = int(kwargs["delay_secs"])
     print(f"Task.start_ping(), start_ping, survey_id = {survey_id}, zmap_delay_secs = {zmap_delay_secs}")
 
+    # We can use these estimates in either case (it's just a clone)
     tally_delay_mins, tally_delay_secs = _estimate_zmap_time(survey_id)
 
-    print(f"Task.start_ping(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
-    chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
-            _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
-    async_result = chain01.run()
+    survey = IpRangeSurvey.objects.get(pk=survey_id)
+    parent_survey_id = survey.parent_survey_id
+    if not parent_survey_id:
+        print(f"Task.start_ping(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
+        chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
+                _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
+        async_result = chain01.run()
+    else:
+        chain02 = chain(_build_clone_details.s(survey_id, parent_survey_id),
+                zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
+                _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
+        async_result = chain02.run()
 
                 # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
     #print(f"start_ping(), async_result = {async_result}")

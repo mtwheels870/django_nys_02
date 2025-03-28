@@ -280,7 +280,7 @@ class ScheduleSurveyView(generic.edit.FormView):
 
     def _clone_survey(self, survey, start_time):
         new_survey = IpRangeSurvey(name=survey.name, time_whitelist_created=survey.time_whitelist_created,
-            parent_survey_id=survey.id)
+            parent_survey_id=survey.id, time_scheduled=start_time)
         return new_survey
 
     def _schedule_surveys(self, survey_id, start_time, recurring, num_occurrences):

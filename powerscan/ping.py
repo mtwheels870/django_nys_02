@@ -150,6 +150,12 @@ class PingSurveyManager:
         return psm
 
     @staticmethod
+    def _link_survey(survey_id, parent_survey_id):
+        parent_psm = self._find_survey(parent_survey_id, False)
+        print(f"PSM._link_survey(), parent_psm = {parent_psm}")
+        return None
+
+    @staticmethod
     def _unused_load_all_surveys():
         most_recent_dir = None
         with os.scandir(TEMP_DIRECTORY) as entries:
@@ -227,28 +233,6 @@ class PingSurveyManager:
             second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}"
             print(first + second)
         return num_states, num_counties, num_tracts, total_ranges
-
-    @staticmethod
-    def _delete_surveys(survey_ids):
-        print(f"PSM._delete_surveys(), surveys: {survey_ids}")
-        for survey_id in survey_ids:
-            print(f"   deleting survey = {survey_id}")
-            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
-            tract_set = survey.ipsurveytract_set.all()
-            for tract in tract_set:
-                tract.delete()
-            county_set = survey.ipsurveycounty_set.all()
-            for county in county_set:
-                county.delete()
-            state_set = survey.ipsurveystate_set.all()
-            for state in state_set:
-                state.delete()
-            num_tracts = tract_set.count()
-            num_counties = county_set.count()
-            num_states = state_set.count()
-            print(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
-            survey.delete()
-        return True
 
     def _tract_ranges_whitelist(self, tract):
         # Use the set() notation
