@@ -116,7 +116,7 @@ class PingSurveyManager:
             os.link(parent_psm.path_range_ip, child_psm.path_range_ip)
             links_created = links_created + 1
         if os.path.exists(child_psm.path_whitelist):
-            print(f"PSM.link_survey(), RangeIp path {child_psm.path_whitelist)} already exists!")
+            print(f"PSM.link_survey(), RangeIp path {child_psm.path_whitelist} already exists!")
         else:
             os.link(parent_psm.path_whitelist, child_psm.path_whitelist)
             links_created = links_created + 1
