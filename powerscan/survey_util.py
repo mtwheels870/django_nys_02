@@ -16,7 +16,7 @@ class SurveyUtil:
 
         county_set = parent_survey.ipsurveycounty_set.all()
         for parent_county in county_set:
-            new_survey_county = IpSurveyCounty(survey=survery, county=parent_county.county)
+            new_survey_county = IpSurveyCounty(survey=survey, county=parent_county.county)
             new_survey_county.save()
 
         tract_set = parent_survey.ipsurveytract_set.all()
