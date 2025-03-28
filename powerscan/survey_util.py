@@ -1,7 +1,5 @@
 from django.shortcuts import get_object_or_404
 
-from .ping import PingSurveyManager
-
 class SurveyUtil:
     @staticmethod
     def copy_geography(survey_id, parent_survey_id):
@@ -60,4 +58,6 @@ class SurveyUtil:
 
     @staticmethod
     def link_file_string(survey_id, parent_survey_id):
+        from .ping import PingSurveyManager
+
         return PingSurveyManager._link_survey(survey_id, int(parent_survey_id))
