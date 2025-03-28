@@ -176,6 +176,8 @@ class PingSurveyManager:
         # Could also do:
         # counties = state.county_set.all()
         counties_in_state = County.objects.filter(us_state__id__in=state_ids)
+        if self._debug:
+            print(f"PSM._traverse_geography(), getting counties...")
         for county in counties_in_state:
             county_ids.append(county.id)
             survey_county = IpSurveyCounty(survey=survey, county=county)
@@ -185,11 +187,15 @@ class PingSurveyManager:
 
         total_ranges = 0
         tract_ids = []
+        if self._debug:
+            print(f"PSM._traverse_geography(), getting ceneus tracts...")
         tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
         for tract in tracts_in_counties:
             tract_ids.append(tract.id)
             survey_tract = IpSurveyTract(survey=survey, tract=tract)
             survey_tract.save()
+            if self._debug:
+                print(f"  tract[{survey_tract.tract.name}], getting ranges")
             ranges_added = self._tract_ranges_whitelist(tract)
             total_ranges = total_ranges + ranges_added
         # debugger.print_array("PSM._traverse_geography(), tract_ids:", tract_ids)
@@ -201,7 +207,7 @@ class PingSurveyManager:
         num_tracts = len(tract_ids)
         if self._debug:
             first = "PSM._traverse_geography(), created (s/c/t/r) = "
-            second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges}"
+            second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges:,}"
             print(first + second)
         return num_states, num_counties, num_tracts, total_ranges
 
