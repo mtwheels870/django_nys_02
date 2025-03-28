@@ -60,4 +60,4 @@ class SurveyUtil:
     def link_file_string(survey_id, parent_survey_id):
         from .ping import PingSurveyManager
 
-        return PingSurveyManager._link_survey(survey_id, int(parent_survey_id))
+        return PingSurveyManager.link_survey(survey_id, int(parent_survey_id))

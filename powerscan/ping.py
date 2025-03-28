@@ -71,51 +71,6 @@ class TrieWrapper:
         return trie.traverse(ip_network)
 
 class PingSurveyManager:
-    class FileDebugger:
-        def __init__(self, directory, name):
-            self._error_count = 0
-            self._full_path = os.path.join(directory, FILE_DEBUG_ZMAP)
-            self._writer = open(self._full_path, "w+")
-
-        def close(self):
-            if self._error_count > 0:
-                self._writer.write(f"FileDebugger.close(), {self._error_count} errors\n")
-            else:
-                self._writer.write(f"FileDebugger.close(), matched all replies\n")
-            self._writer.close()
-
-        def get_file(self):
-            return self._full_path
-
-        def print_array_line(self, sub_array):
-            sub_array_strings = map(str, sub_array)
-            array_string = ", ".join(sub_array_strings)
-            self._writer.write(array_string + "\n")
-
-        def print_array(self, description, array_output):
-            array_len = len(array_output)
-            print(f"FileDebugger.print(), description = {description}, array_len = {array_len}")
-            self._writer.write(description + "\n")
-            index = 0
-            while array_len > 0:
-                end = index + 15
-                sub_array = array_output[index:end]
-                sub_array_len = len(sub_array)
-                # print(f"FileDebugger.print(), array_len = {array_len}, querying [{index},{end}],
-                #      sub_array_len = {sub_array_len}")
-                if sub_array_len == 0:
-                    # Shouldn't get here
-                    break
-                self.print_array_line(sub_array)
-                # Print subarray here
-                index = end
-                array_len = array_len - sub_array_len
-
-        def print_error(self, string1, error=False):
-            self._writer.write(string1+ "\n")
-            if error:
-                self._error_count = self._error_count + 1
-
     def __init__(self, survey_id, debug, create_new=True, linked_survey_id=None):
         self._survey_id = survey_id
         self._debug = debug
@@ -150,10 +105,13 @@ class PingSurveyManager:
         return psm
 
     @staticmethod
-    def _link_survey(survey_id, parent_survey_id):
+    def link_survey(survey_id, parent_survey_id):
         parent_psm = self._find_survey(parent_survey_id, False)
-        print(f"PSM._link_survey(), parent_psm = {parent_psm}")
-        return None
+        print(f"PSM.link_survey(), parent_psm = {parent_psm}")
+        child_psm = PingSurveyManager(survey_id, False, create_new=True, linked_survey_id=parent_survey_id)
+        os.link(parent_psm.path_range_ip, child_psm.path_range_ip)
+        os.link(parent_psm.path_whitelist, child_psm.path_whitelist)
+        print(f"PSM.link_survey(), created links...")
 
     @staticmethod
     def _unused_load_all_surveys():
@@ -383,4 +341,50 @@ class PingSurveyManager:
 
         if self.writer_log:
             self.writer_log.close()
+
+    # Embedded class: PingSurveyManager.FileDebugger
+    class FileDebugger:
+        def __init__(self, directory, name):
+            self._error_count = 0
+            self._full_path = os.path.join(directory, FILE_DEBUG_ZMAP)
+            self._writer = open(self._full_path, "w+")
+
+        def close(self):
+            if self._error_count > 0:
+                self._writer.write(f"FileDebugger.close(), {self._error_count} errors\n")
+            else:
+                self._writer.write(f"FileDebugger.close(), matched all replies\n")
+            self._writer.close()
+
+        def get_file(self):
+            return self._full_path
+
+        def print_array_line(self, sub_array):
+            sub_array_strings = map(str, sub_array)
+            array_string = ", ".join(sub_array_strings)
+            self._writer.write(array_string + "\n")
+
+        def print_array(self, description, array_output):
+            array_len = len(array_output)
+            print(f"FileDebugger.print(), description = {description}, array_len = {array_len}")
+            self._writer.write(description + "\n")
+            index = 0
+            while array_len > 0:
+                end = index + 15
+                sub_array = array_output[index:end]
+                sub_array_len = len(sub_array)
+                # print(f"FileDebugger.print(), array_len = {array_len}, querying [{index},{end}],
+                #      sub_array_len = {sub_array_len}")
+                if sub_array_len == 0:
+                    # Shouldn't get here
+                    break
+                self.print_array_line(sub_array)
+                # Print subarray here
+                index = end
+                array_len = array_len - sub_array_len
+
+        def print_error(self, string1, error=False):
+            self._writer.write(string1+ "\n")
+            if error:
+                self._error_count = self._error_count + 1
 
