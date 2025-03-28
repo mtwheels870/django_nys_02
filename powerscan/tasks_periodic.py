@@ -144,23 +144,25 @@ def _scheduled_active_surveys():
     running_surveys = []
     running_survey_ids = ()
     inspect = celery_app.control.inspect()
-    tasks_active = inspect.active()
 
-    # tasks_active is a dict!
-    for index, (key, value) in enumerate(tasks_active.items()):
-        # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
-        for task in value:
-            survey_id = _get_task_survey_id(task)
-            if survey_id:
-                running_surveys.append(survey_id)
+    tasks_active = inspect.active()
+    if tasks_active:
+        # tasks_active is a dict!
+        for index, (key, value) in enumerate(tasks_active.items()):
+            # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+            for task in value:
+                survey_id = _get_task_survey_id(task)
+                if survey_id:
+                    running_surveys.append(survey_id)
 
     tasks_scheduled = inspect.scheduled()
-    for index, (key, value) in enumerate(tasks_scheduled.items()):
-        # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
-        for task in value:
-            survey_id = _get_task_survey_id(task)
-            if survey_id:
-                running_surveys.append(survey_id)
+    if tasks_scheduled:
+        for index, (key, value) in enumerate(tasks_scheduled.items()):
+            # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
+            for task in value:
+                survey_id = _get_task_survey_id(task)
+                if survey_id:
+                    running_surveys.append(survey_id)
     return running_surveys
 
 def _schedule_surveys_tasks(upcoming_surveys):
