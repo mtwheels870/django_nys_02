@@ -106,7 +106,7 @@ class PingSurveyManager:
 
     @staticmethod
     def link_survey(survey_id, parent_survey_id):
-        parent_psm = self._find_survey(parent_survey_id, False)
+        parent_psm = PingSurveyManager._find_survey(parent_survey_id, False)
         print(f"PSM.link_survey(), parent_psm = {parent_psm}")
         child_psm = PingSurveyManager(survey_id, False, create_new=True, linked_survey_id=parent_survey_id)
         os.link(parent_psm.path_range_ip, child_psm.path_range_ip)
