@@ -210,7 +210,7 @@ class RecentSurveyView(SingleTableView):
         elif 'delete' in request.POST:
             result = PingSurveyManager._delete_surveys(selected_pks)
         elif 'new' in request.POST:
-            return HttpResponseRedirect(reverse("app_powerscan:schedule_survey", args=(0, )))
+            return HttpResponseRedirect(reverse("app_powerscan:ping_strat_index"))
         else:
             print(f"RSV.post(), unrecognized post request:")
             for i, key in enumerate(request.POST):
