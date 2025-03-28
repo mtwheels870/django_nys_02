@@ -209,6 +209,8 @@ class RecentSurveyView(SingleTableView):
                 print(f"RSV.post()[edit], num_selected = {num_selected} (must be one (1) only)")
         elif 'delete' in request.POST:
             result = PingSurveyManager._delete_surveys(selected_pks)
+        elif 'new' in request.POST:
+            return HttpResponseRedirect(reverse("app_powerscan:schedule_survey", args=(0, )))
         else:
             print(f"RSV.post(), unrecognized post request:")
             for i, key in enumerate(request.POST):
