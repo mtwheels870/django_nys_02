@@ -75,7 +75,7 @@ class PingSurveyManager:
         self._survey_id = survey_id
         self._debug = debug
         if create_new:
-            self._create_directory()
+            self._create_directory(linked_survey_id)
         else:
             # This is duplicative (with the find() call below)
             survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
@@ -106,12 +106,21 @@ class PingSurveyManager:
 
     @staticmethod
     def link_survey(survey_id, parent_survey_id):
+        links_created = 0
         parent_psm = PingSurveyManager._find_survey(parent_survey_id, False)
         print(f"PSM.link_survey(), parent_psm = {parent_psm}")
         child_psm = PingSurveyManager(survey_id, False, create_new=True, linked_survey_id=parent_survey_id)
-        os.link(parent_psm.path_range_ip, child_psm.path_range_ip)
-        os.link(parent_psm.path_whitelist, child_psm.path_whitelist)
-        print(f"PSM.link_survey(), created links...")
+        if os.path.exists(child_psm.path_range_ip):
+            print(f"PSM.link_survey(), RangeIp path {child_psm.path_range_ip} already exists!")
+        else:
+            os.link(parent_psm.path_range_ip, child_psm.path_range_ip)
+            links_created = links_created + 1
+        if os.path.exists(child_psm.path_whitelist):
+            print(f"PSM.link_survey(), RangeIp path {child_psm.path_whitelist)} already exists!")
+        else:
+            os.link(parent_psm.path_whitelist, child_psm.path_whitelist)
+            links_created = links_created + 1
+        print(f"PSM.link_survey(), created {links_created} links...")
 
     @staticmethod
     def _unused_load_all_surveys():
@@ -129,7 +138,7 @@ class PingSurveyManager:
         print(f"_load_latest(), using most_recent_dir {most_recent_dir.name}")
         self.directory = most_recent_dir.path
 
-    def _create_directory(self):
+    def _create_directory(self, linked_survey_id):
         # now = datetime.datetime.now()
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
         # folder_snapshot = f"Survey_{self._survey_id:05d}"
@@ -138,6 +147,8 @@ class PingSurveyManager:
         #print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
             os.makedirs(full_path)
+        elif linked_survey_id:
+            print(f"PSM._create_directory(), directory already exists!")
         self.directory = full_path
 
     def _traverse_geography(self):
