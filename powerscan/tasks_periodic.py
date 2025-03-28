@@ -65,6 +65,7 @@ def start_ping(self, *args, **kwargs):
         chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
                 _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
         async_result = chain01.run()
+        print(f"Task.start_ping(), chain01 = {chain01}, async_result = {async_result}")
     else:
         print(f"Task.start_ping(), derivative survey, need to clone here")
         # Zmap gets passed the two args from the build_clone_details
