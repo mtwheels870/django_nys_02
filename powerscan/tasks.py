@@ -219,6 +219,10 @@ def zmap_from_file(self, survey_id_string):
     debug_zmap = debug.zmap
     #print(f"build_whitelist(), source_id = {ip_source_id}")
     survey_manager = PingSurveyManager.find(survey_id, debug_zmap)
+    if not survey_manager:
+        print(f"zmap_from_file(), no directory, quitting")
+        return None
+
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
     # Run Zmap command here. We'll process the output file when the zmap is done running

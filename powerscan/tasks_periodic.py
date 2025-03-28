@@ -99,6 +99,9 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     from .tasks import tally_results
 
     print(f"TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
+    if not metadata_file:
+        print(f"TasksPeriodic._start_tally(), no metadata_file, bailing...")
+        return None
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT2)
     delta = timedelta(seconds=delay_secs)
