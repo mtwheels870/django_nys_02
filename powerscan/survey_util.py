@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 class SurveyUtil:
     @staticmethod
     def copy_geography(survey_id, parent_survey_id):
-        from .models import (IpRangeSurvey, IpSurveyCounty, IpSurveyTract)
+        from .models import (IpRangeSurvey, IpSurveyState, IpSurveyCounty, IpSurveyTract)
 
         print(f"SurveyUtil.copy_geography(), survey_id = {survey_id}, parent_survey_id = {parent_survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
