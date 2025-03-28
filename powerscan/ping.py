@@ -109,6 +109,8 @@ class PingSurveyManager:
         links_created = 0
         parent_psm = PingSurveyManager._find_survey(parent_survey_id, False)
         print(f"PSM.link_survey(), parent_psm = {parent_psm}")
+        if not parent_psm:
+            return
         child_psm = PingSurveyManager(survey_id, False, create_new=True, linked_survey_id=parent_survey_id)
         if os.path.exists(child_psm.path_range_ip):
             print(f"PSM.link_survey(), RangeIp path {child_psm.path_range_ip} already exists!")
