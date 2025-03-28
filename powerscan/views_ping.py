@@ -39,7 +39,8 @@ from .models import (
 from .forms import PingStrategyForm, ScheduleSurveyForm
 from .consumers import celery_results_handler, CeleryResultsHandler
 from .tables import IpSurveyTable, CeleryTaskTable
-from .ping import PingSurveyManager
+# from .ping import PingSurveyManager
+from .survey_util import SurveyUtil
 
 # Import our neighbors
 
@@ -209,7 +210,7 @@ class RecentSurveyView(SingleTableView):
             else:
                 print(f"RSV.post()[edit], num_selected = {num_selected} (must be one (1) only)")
         elif 'delete' in request.POST:
-            result = PingSurveyManager._delete_surveys(selected_pks)
+            result = SurveyUtil._delete_surveys(selected_pks)
         elif 'new' in request.POST:
             return HttpResponseRedirect(reverse("app_powerscan:ping_strat_index"))
         else:
