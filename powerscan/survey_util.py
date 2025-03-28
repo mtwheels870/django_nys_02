@@ -1,15 +1,12 @@
 from django.shortcuts import get_object_or_404
 
-from .models import (
-    IpRangeSurvey,
-    IpSurveyCounty,
-    IpSurveyTract)
-
 from .ping import PingSurveyManager
 
 class SurveyUtil:
     @staticmethod
     def copy_geography(survey_id, parent_survey_id):
+        from .models import (IpRangeSurvey, IpSurveyCounty, IpSurveyTract)
+
         print(f"SurveyUtil.copy_geography(), survey_id = {survey_id}, parent_survey_id = {parent_survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         parent_survey = get_object_or_404(IpRangeSurvey, pk=parent_survey_id)
@@ -31,6 +28,8 @@ class SurveyUtil:
 
     @staticmethod
     def _delete_surveys(survey_ids):
+        from .models import (IpRangeSurvey, IpSurveyCounty, IpSurveyTract)
+
         print(f"PSM._delete_surveys(), surveys: {survey_ids}")
         for survey_id in survey_ids:
             print(f"   deleting survey = {survey_id}")
