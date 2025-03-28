@@ -36,6 +36,7 @@ def _build_clone_details(survey_id, parent_survey_id):
 
     # Set up the file structure
     SurveyUtil.link_file_string(survey_id, parent_survey_id)
+    return survey_id
 
 #
 # This needs to be a shared_task b/c it can be called from the views_ping (ping immediately) or 
@@ -61,7 +62,7 @@ def start_ping(self, *args, **kwargs):
     if not parent_survey_id:
         print(f"Task.start_ping(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
         parent_survey_id_string = "0"
-        chain01 = chain(zmap_from_file.s(survey_id, parent_survey_id_string).set(countdown=zmap_delay_secs),
+        chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
                 _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
         async_result = chain01.run()
     else:
