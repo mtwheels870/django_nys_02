@@ -77,7 +77,7 @@ def unused_start_tracts(self, *args, **kwargs):
     chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
     #print(f"start_tracts(), chained_task = {chained_task}")
     result = chained_task.apply_async(
-                queue=QUEUE_NAME,
+                queue=CELERY_QUEUE,
                 routing_key='ping.tasks.start_tracts')
     #print(f"start_tracts(), after apply_async(), result = {result}")
     return result
