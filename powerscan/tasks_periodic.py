@@ -171,16 +171,19 @@ def _scheduled_active_surveys():
 def _schedule_surveys_tasks(upcoming_surveys):
     index = 0
     running_survey_ids = _scheduled_active_surveys()
+    now = timezone.now()
     print(f"_schedule_surveys_tasks(), running_survey_ids = {running_survey_ids}")
     for survey in upcoming_surveys:
         survey_id = survey.id
         if survey_id in running_survey_ids:
             print(f"survey[{index}]: {survey_id} already has a task!")
         else:
-            # Check the database
+            time_difference = survey.time_scheduled - now
 
+            print(f"CALC: {survey.time_scheduled} - {now} = {time_difference.seconds}")
+            delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
-            print(f"    need to calculate delay here!")
+            print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs}")
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
                 survey_id=survey.id, delay_secs=0,
@@ -227,9 +230,3 @@ def check_new_surveys(self):
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     _add_surveys_to_queues(debug.scheduler)
 
-# I think this name becomes the leading prefix on the database table names, etc.
-#    metadata_file = async_result.get()
-
-    # Should move the start tally logic into tasks_periodic (don't care about the details in the view)
-#    print(f"TasksPeriodic.start_ping(), async_result.metadata_file = {metadata_file}, (tally) delay_mins = {delay_mins:.1f}m")
-#    async_result2 = _start_tally(survey_id, metadata_file, delay_mins, delay_secs )
