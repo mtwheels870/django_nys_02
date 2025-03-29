@@ -30,6 +30,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 # Our stuff
+from django_nys_02.settings import CELERY_QUEUE
 from django_nys_02.celery import app as celery_app
 QUEUE_NAME = "unused"
 
