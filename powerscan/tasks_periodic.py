@@ -14,7 +14,8 @@ from celery.app import control
 
 from django.utils import timezone
 
-from django_nys_02.celery import app as celery_app, QUEUE_NAME
+from django_nys_02.settings import CELERY_QUEUE
+from django_nys_02.celery import app as celery_app
 
 from .survey_util import SurveyUtil
 
@@ -47,6 +48,7 @@ def start_ping(self, *args, **kwargs):
     from .tasks import zmap_from_file
     from .models import IpRangeSurvey
 
+    print(f"start_ping(), args = {args}, kwargs = {kwargs}")
     if "survey_id" not in kwargs:
         print(f"start_ping(), args = {args}, kwargs = {kwargs}")
         return
@@ -182,7 +184,7 @@ def _schedule_surveys_tasks(upcoming_surveys):
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
                 survey_id=survey.id, delay_secs=0,
-                queue=QUEUE_NAME,
+                queue=CELERY_QUEUE,
                 routing_key='ping.tasks.start_ping')
             print(f"    async_result = {async_result}")
         index = index + 1

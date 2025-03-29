@@ -30,7 +30,8 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 # Our stuff
-from django_nys_02.celery import app as celery_app, QUEUE_NAME
+from django_nys_02.celery import app as celery_app
+QUEUE_NAME = "unused"
 
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
@@ -315,7 +316,8 @@ def tally_results(metadata_file, survey_id):
         print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print(f"    exc_traceback = {dir(exc_traceback)}")
-        exc_traceback.print_exc()
+        #exc_traceback.print_exc()
+        exc_traceback.print_exception(*sys.exc_info())
         pings_to_db = -1
     return pings_to_db 
 

@@ -12,10 +12,6 @@ from  django_tables2.config import RequestConfig
 from rest_framework import viewsets
 from rest_framework_gis import filters
 
-#from django_nys_02.celery import app as celery_app, QUEUE_NAME
-
-#from .tasks import build_whitelist, zmap_from_file, tally_results, CELERY_FIELD_SURVEY_ID
-
 from .models import (
     UsState,
     County,
@@ -108,18 +104,6 @@ class CountTractViewSet(
     queryset = CountTract.objects.all()
     serializer_class = CountTractSerializer
     
-#class PingStrategyIndexView(generic.ListView):
-#    template_name = "powerscan/ps_index.html"
-#    context_object_name = "latest_strategy_list"
-
-#    def get_queryset(self):
-#        """ Return the last five published IP surveys."""
-#        return IpRangeSurvey.objects.filter(time_created__lte=timezone.now()).order_by("-time_created")[:5]
-
-#class PingStrategyResultsView(generic.DetailView):
-#    model = IpRangeSurvey
-#    template_name = "powerscan/ps_results.html"
-
 # Reverse mapping from clicking on a index, detail
 def approve_ping(request, id):
     # print(f"Views.approve_ping(), {id}")

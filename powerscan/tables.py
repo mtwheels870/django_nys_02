@@ -6,7 +6,7 @@ from django.utils.html import format_html
 
 import django_tables2 as tables
 
-from django_nys_02.celery import app as celery_app, QUEUE_NAME
+from django_nys_02.celery import app as celery_app
 
 from .models import MmIpRange, IpRangeSurvey
 

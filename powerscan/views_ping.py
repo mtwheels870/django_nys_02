@@ -21,7 +21,8 @@ from rest_framework_gis import filters
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from django_nys_02.celery import app as celery_app, QUEUE_NAME
+from django_nys_02.settings import CELERY_QUEUE
+from django_nys_02.celery import app as celery_app
 from django_nys_02.asgi import application
 
 from .tasks import (
@@ -39,7 +40,6 @@ from .models import (
 from .forms import PingStrategyForm, ScheduleSurveyForm
 from .consumers import celery_results_handler, CeleryResultsHandler
 from .tables import IpSurveyTable, CeleryTaskTable
-# from .ping import PingSurveyManager
 from .survey_util import SurveyUtil
 
 # Import our neighbors
@@ -68,9 +68,6 @@ class CreateNewSurveyView(generic.edit.FormView):
     template_name = "powerscan/survey_config.html"
     _status_message = ""
     _survey_id = 0
-
-#    def _get_celery_details(self):
-#        return f"App name: '{celery_app.main}', queue = '{QUEUE_NAME}'"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -153,7 +150,7 @@ class CreateNewSurveyView(generic.edit.FormView):
                 # async_result = start_ping(args=(survey_id, 0))
                 async_result = start_ping.apply_async(
                     kwargs={"survey_id" : survey_id, "delay_secs" : 0},
-                    queue=QUEUE_NAME,
+                    queue=CELERY_QUEUE,
                     routing_key='ping.tasks.start_ping')
                 self._status_message = f"Started tally, async_result = {async_result}"
                 celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)

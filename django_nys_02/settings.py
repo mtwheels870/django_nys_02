@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "18.208.200.162", 
     "127.0.0.1",
-    "www.example.com"
+    "www.pinp01nt.com"
 ]
 
 
@@ -106,6 +106,8 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 
 # 0 for production, 1 for development
 PRODUCTION_MODE = False
+DIR_NAME = 'production' if PRODUCTION_MODE else 'development',
+CELERY_QUEUE = "cb_production" if PRODUCTION_MODE else 'cb_development',
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 DATABASES = {
