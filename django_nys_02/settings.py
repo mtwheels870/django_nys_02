@@ -104,11 +104,14 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
+# 0 for production, 1 for development
+PRODUCTION_MODE = False
+
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'compassblue01',
+        'NAME': 'cb_production' if PRODUCTION_MODE else 'compassblue01',
         'USER': 'cb_admin',
         'PASSWORD': 'Ch0c0late!',
         'HOST': 'localhost',
