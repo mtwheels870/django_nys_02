@@ -99,7 +99,7 @@ class PingSurveyManager:
     @staticmethod
     def _find_survey(survey_id, debug):
         survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
-        full_path = os.path.join(TEMP_DIRECTORY, survey_dir_name)
+        full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
         if not os.path.exists(full_path):
             print(f"PingSurveyManager._find_survey(), could not find path: {full_path}")
             return None
@@ -178,8 +178,6 @@ class PingSurveyManager:
         # Could also do:
         # counties = state.county_set.all()
         counties_in_state = County.objects.filter(us_state__id__in=state_ids)
-        if self._debug:
-            print(f"PSM._traverse_geography(), getting counties...")
         for county in counties_in_state:
             county_ids.append(county.id)
             survey_county = IpSurveyCounty(survey=survey, county=county)
@@ -189,15 +187,11 @@ class PingSurveyManager:
 
         total_ranges = 0
         tract_ids = []
-        if self._debug:
-            print(f"PSM._traverse_geography(), getting ceneus tracts...")
         tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
         for tract in tracts_in_counties:
             tract_ids.append(tract.id)
             survey_tract = IpSurveyTract(survey=survey, tract=tract)
             survey_tract.save()
-            if self._debug:
-                print(f"  tract[{survey_tract.tract.name}], getting ranges")
             ranges_added = self._tract_ranges_whitelist(tract)
             total_ranges = total_ranges + ranges_added
         # debugger.print_array("PSM._traverse_geography(), tract_ids:", tract_ids)
