@@ -118,7 +118,7 @@ class CreateNewSurveyView(generic.edit.FormView):
         print(f"CPV.build_whitelist(), apply_async()")
         async_result = build_whitelist.apply_async(
             kwargs={"survey_id" : survey_id},
-            queue=QUEUE_NAME,
+            queue=CELERY_QUEUE,
             routing_key='ping.tasks.build_whitelist')
         #celery_results_handler.save_pending(async_result)
         return async_result

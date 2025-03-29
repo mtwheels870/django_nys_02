@@ -9,6 +9,8 @@ import netaddr
 #import cidr_trie.cidr_util
 import pytricia
 
+from django_nys_02.settings import DIR_ZMAP_NAME
+
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
@@ -79,7 +81,7 @@ class PingSurveyManager:
         else:
             # This is duplicative (with the find() call below)
             survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
-            full_path = os.path.join(TEMP_DIRECTORY, survey_dir_name)
+            full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
             self.directory = full_path
         # In either init() [create or read existing], we want to configure the files
         self._configure_whitelist_files()

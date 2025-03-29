@@ -99,14 +99,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
 # 0 for production, 1 for development
 PRODUCTION_MODE = False
-DIR_NAME = 'production' if PRODUCTION_MODE else 'development',
+DIR_ZMAP_NAME = 'production' if PRODUCTION_MODE else 'development',
 CELERY_QUEUE = "cb_production" if PRODUCTION_MODE else 'cb_development',
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
