@@ -178,8 +178,8 @@ def _schedule_surveys_tasks(upcoming_surveys):
         if survey_id in running_survey_ids:
             print(f"survey[{index}]: {survey_id} already has a task!")
         else:
-            time_difference = survey.time_scheduled - now
-            time_diff_secs = time_difference_micro.seconds / 1000.0
+            time_difference = survey.time_scheduled - now       # time diff in microseconds
+            time_diff_secs = time_difference.seconds / 1000.0
             print(f"CALC: {survey.time_scheduled} - {now} = {time_diff_secs:.1f}")
             delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
