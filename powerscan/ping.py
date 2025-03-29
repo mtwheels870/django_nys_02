@@ -82,6 +82,7 @@ class PingSurveyManager:
             # This is duplicative (with the find() call below)
             survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
             full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
+            print(f"PSM.__init__(), full_path = {str(full_path)}")
             self.directory = full_path
         # In either init() [create or read existing], we want to configure the files
         self._configure_whitelist_files()
@@ -100,6 +101,7 @@ class PingSurveyManager:
     def _find_survey(survey_id, debug):
         survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
+        print(f"PSM._find_survey(), full_path = {str(full_path)}")
         if not os.path.exists(full_path):
             print(f"PingSurveyManager._find_survey(), could not find path: {full_path}")
             return None
@@ -147,8 +149,8 @@ class PingSurveyManager:
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
         # folder_snapshot = f"Survey_{self._survey_id:05d}"
         folder_snapshot = PingSurveyManager._build_survey_name(self._survey_id)
-        full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot)
-        #print(f"PSM.create_directory(), directory = {str(full_path)}")
+        full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, folder_snapshot)
+        print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
             os.makedirs(full_path)
         elif linked_survey_id:
