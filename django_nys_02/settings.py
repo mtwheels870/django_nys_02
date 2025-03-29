@@ -105,8 +105,8 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 
 # 0 for production, 1 for development
 PRODUCTION_MODE = False
-DIR_ZMAP_NAME = 'production' if PRODUCTION_MODE else 'development',
-CELERY_QUEUE = "cb_production" if PRODUCTION_MODE else 'cb_development',
+DIR_ZMAP_NAME = 'production' if PRODUCTION_MODE else 'development'
+CELERY_QUEUE = "cb_production" if PRODUCTION_MODE else 'cb_development'
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 DATABASES = {
