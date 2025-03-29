@@ -115,7 +115,7 @@ class CreateNewSurveyView(generic.edit.FormView):
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_whitelist_created = timezone.now()
         # MaxM ranges
-        print(f"CPV.build_whitelist(), apply_async()")
+        print(f"CPV.build_whitelist(), apply_async(), queue: {CELERY_QUEYE}")
         async_result = build_whitelist.apply_async(
             kwargs={"survey_id" : survey_id},
             queue=CELERY_QUEUE,
