@@ -82,7 +82,7 @@ class PingSurveyManager:
             # This is duplicative (with the find() call below)
             survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
             full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
-            print(f"PSM.__init__(), full_path = {str(full_path)}")
+            #print(f"PSM.__init__(), full_path = {str(full_path)}")
             self.directory = full_path
         # In either init() [create or read existing], we want to configure the files
         self._configure_whitelist_files()
@@ -101,7 +101,7 @@ class PingSurveyManager:
     def _find_survey(survey_id, debug):
         survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
-        print(f"PSM._find_survey(), full_path = {str(full_path)}")
+        #print(f"PSM._find_survey(), full_path = {str(full_path)}")
         if not os.path.exists(full_path):
             print(f"PingSurveyManager._find_survey(), could not find path: {full_path}")
             return None

@@ -48,7 +48,7 @@ def start_ping(self, *args, **kwargs):
     from .tasks import zmap_from_file
     from .models import IpRangeSurvey
 
-    print(f"start_ping(), args = {args}, kwargs = {kwargs}")
+    #print(f"start_ping(), args = {args}, kwargs = {kwargs}")
     if "survey_id" not in kwargs:
         print(f"start_ping(), args = {args}, kwargs = {kwargs}")
         return
@@ -67,9 +67,9 @@ def start_ping(self, *args, **kwargs):
         chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
                 _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
         async_result = chain01.run()
-        print(f"Task.start_ping(), chain01 = {chain01}, async_result = {async_result}")
+        #print(f"Task.start_ping(), chain01 = {chain01}, async_result = {async_result}")
     else:
-        print(f"Task.start_ping(), derivative survey, need to clone here")
+        #print(f"Task.start_ping(), derivative survey, need to clone here")
         # Zmap gets passed the two args from the build_clone_details
         chain02 = chain(_build_clone_details.s(survey_id, parent_survey_id),
                 zmap_from_file.s().set(countdown=zmap_delay_secs),
@@ -101,7 +101,7 @@ def _estimate_zmap_time(survey_id):
 def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     from .tasks import tally_results
 
-    print(f"TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
+    #print(f"TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
     if not metadata_file:
         print(f"TasksPeriodic._start_tally(), no metadata_file, bailing...")
         return None
@@ -172,24 +172,24 @@ def _schedule_surveys_tasks(upcoming_surveys):
     index = 0
     running_survey_ids = _scheduled_active_surveys()
     now = timezone.now()
-    print(f"_schedule_surveys_tasks(), running_survey_ids = {running_survey_ids}")
+    #print(f"_schedule_surveys_tasks(), running_survey_ids = {running_survey_ids}")
     for survey in upcoming_surveys:
         survey_id = survey.id
         if survey_id in running_survey_ids:
             print(f"survey[{index}]: {survey_id} already has a task!")
         else:
-            time_difference = survey.time_scheduled - now
-
-            print(f"CALC: {survey.time_scheduled} - {now} = {time_difference.seconds}")
+            time_difference = scheduled - now
+            time_diff_secs = time_difference_micro.seconds / 1000.0
+            print(f"CALC: {survey.time_scheduled} - {now} = {time_diff_secs:.1f}")
             delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
-            print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs}")
+            print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
                 survey_id=survey.id, delay_secs=0,
                 queue=CELERY_QUEUE,
                 routing_key='ping.tasks.start_ping')
-            print(f"    async_result = {async_result}")
+            #print(f"    async_result = {async_result}")
         index = index + 1
 
     f = lambda survey: survey.id
