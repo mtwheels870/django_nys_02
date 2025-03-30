@@ -60,7 +60,7 @@ FIELD_SURVEY_NAME = "field_survey_name"
 FIELD_START_TIME = "field_start_time"
 FIELD_RECURRING = "field_recurring"
 FIELD_NUM_OCCURRENCES = "field_num_occurrences"
-
+FIELD_CURRENT_TIME = "current_time"
 
 class CreateNewSurveyView(generic.edit.FormView):
     # model = TextFile
@@ -185,6 +185,8 @@ class RecentSurveyView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        now_fmt = timezone.now().strftime(TIME_FORMAT_STRING)
+        context[FIELD_CURRENT_TIME] = now_fmt
         return context
 
     def get_queryset(self):
@@ -223,8 +225,12 @@ class RecentSurveyView(SingleTableView):
             for i, key in enumerate(request.POST):
                 value = request.POST[key]
                 print(f"          [{i}]: {key} = {value}")
+        now_fmt = timezone.now().strftime(TIME_FORMAT_STRING)
+        context = {
+            FIELD_CURRENT_TIME : now_fmt,
+        }
         # Stay on the same page
-        return redirect(request.path)
+        return redirect(request.path, context)
 
 
 class CeleryTasksView(SingleTableView):

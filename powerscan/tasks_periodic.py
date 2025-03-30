@@ -199,11 +199,11 @@ def _schedule_surveys_tasks(upcoming_surveys):
             print(f"survey[{index}]: {survey_id} already has a task!")
         else:
             time_difference = survey.time_scheduled - now       # time diff in microseconds
+            t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             now_f = now.strftime(TIME_FORMAT2)
             time_diff_secs = time_difference.seconds / 1000.0
-            print(f"CALC: {survey.time_scheduled} - {now} = {time_diff_secs:.1f}")
+            # print(f"CALC: {t_s} - {now_f} = {time_diff_secs:.1f}")
             delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
-            t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
             print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
@@ -216,8 +216,8 @@ def _schedule_surveys_tasks(upcoming_surveys):
 
     f = lambda survey: survey.id
     survey_ids = [f(x) for x in upcoming_surveys]
-    if len(survey_ids) > 0:
-        print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
+    #if len(survey_ids) > 0:
+    #    print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
 
 def _add_surveys_to_queues(debug_scheduler):
     from .models import IpRangeSurvey
