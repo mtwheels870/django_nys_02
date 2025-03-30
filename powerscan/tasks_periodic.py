@@ -110,7 +110,7 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     delta = timedelta(seconds=delay_secs)
     tally_start = now + delta
     formatted_tally_start = tally_start.strftime(TIME_FORMAT2)
-    first = "TasksPeriodic._start_tally(), delaying {survey_id}, delay: "
+    first = f"TasksPeriodic._start_tally(), delaying {survey_id}, delay: "
     second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
     print(first + second)
     # Because this is a subtask, we'll have pre-pended args?
@@ -121,19 +121,19 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     return async_result2
 
 def _task_check_args(task, task_name, args, index):
-    length = index + 1
-    if len(args) < length:
+    required_length = index + 1
+    if len(args) < required_length:
         print(f"_task_check_args(), task = {task_name}, index = {index}, args = {args}")
         print(f"          task = {task}")
         return None
     survey_id = args[index]
-    print(f"_task_check_args(), task = {task_name}, args[{index}] = {survey_id}")
+    # print(f"_task_check_args(), task = {task_name}, args[{index}] = {survey_id}")
     return survey_id 
 
 def _task_check_kwargs(task_name, kwargs):
     if "survey_id" in kwargs:
         survey_id = kwargs["survey_id"]
-        print(f"_task_check_kwargs(), task = {task_name}, survey_id = {survey_id}")
+        # print(f"_task_check_kwargs(), task = {task_name}, survey_id = {survey_id}")
         return survey_id
     return None
 
@@ -208,17 +208,15 @@ def _schedule_surveys_tasks(upcoming_surveys):
             t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             now_f = now.strftime(TIME_FORMAT2)
             if survey.time_scheduled < now:
-                td_microsecs = 0
                 # print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
                 delay_secs = 0
             else:
                 time_difference = survey.time_scheduled - now       # time diff in microseconds
-                td_microsecs = time_difference.seconds 
-                delay_secs = td_microsecs / 1000.0
+                delay_secs = time_difference.seconds 
             # print(f"CALC: {t_s} - {now_f} = {time_diff_secs:.1f}")
             # delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
-            print(f"    queue = {CELERY_QUEUE}, diff = {td_microsecs:.1f}, delay_secs = {delay_secs:.1f}")
+            print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
                 survey_id=survey.id, delay_secs=delay_secs,

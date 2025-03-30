@@ -62,6 +62,10 @@ FIELD_RECURRING = "field_recurring"
 FIELD_NUM_OCCURRENCES = "field_num_occurrences"
 FIELD_CURRENT_TIME = "current_time"
 
+def _get_current_time():
+    now_fmt = timezone.now().strftime(TIME_FORMAT_STRING)
+    return now_fmt
+
 class CreateNewSurveyView(generic.edit.FormView):
     # model = TextFile
     form_class = PingStrategyForm
@@ -81,6 +85,7 @@ class CreateNewSurveyView(generic.edit.FormView):
         context_data[FIELD_STATUS] = self._status_message
         survey_status = celery_results_handler.reset()
         context_data[FIELD_SURVEY_STATUS] = survey_status 
+        context_data[FIELD_CURRENT_TIME] = _get_current_time()
 
         return context_data
 
@@ -171,7 +176,8 @@ class CreateNewSurveyView(generic.edit.FormView):
             #FIELD_TASKS : self._get_tasks(),
         context = {"form" : new_form,
             FIELD_STATUS : self._status_message,
-            FIELD_SURVEY_STATUS : status
+            FIELD_SURVEY_STATUS : status,
+            FIELD_CURRENT_TIME : _get_current_time(),
         }
         return render(request, self.template_name, context)
 
@@ -185,8 +191,7 @@ class RecentSurveyView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        now_fmt = timezone.now().strftime(TIME_FORMAT_STRING)
-        context[FIELD_CURRENT_TIME] = now_fmt
+        context[FIELD_CURRENT_TIME] = _get_current_time
         return context
 
     def get_queryset(self):
@@ -225,12 +230,8 @@ class RecentSurveyView(SingleTableView):
             for i, key in enumerate(request.POST):
                 value = request.POST[key]
                 print(f"          [{i}]: {key} = {value}")
-        now_fmt = timezone.now().strftime(TIME_FORMAT_STRING)
-        context = {
-            FIELD_CURRENT_TIME : now_fmt,
-        }
         # Stay on the same page
-        return redirect(request.path, context)
+        return redirect(request.path, { FIELD_CURRENT_TIME : _get_current_time })
 
 
 class CeleryTasksView(SingleTableView):
@@ -299,8 +300,8 @@ class ScheduleSurveyView(generic.edit.FormView):
         return new_survey
 
     def _schedule_surveys(self, survey_id, start_time, recurring, num_occurrences):
-        print(f"SSV._schedule_surveys(), survey_id = {survey_id}, start_time = {start_time}")
-        print(f"      recurring = {recurring}, num_occurrences = {num_occurrences}")
+        #print(f"SSV._schedule_surveys(), survey_id = {survey_id}, start_time = {start_time}")
+        #print(f"      recurring = {recurring}, num_occurrences = {num_occurrences}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         survey.time_scheduled = start_time
         survey.save()
@@ -309,25 +310,25 @@ class ScheduleSurveyView(generic.edit.FormView):
                 print(f"SSV._schedule_surveys(), num_occurrences = {num_occurrences}, but recurring = {recurring}")
                 return
             td = recurring
-            print(f"      td = {td}")
+            #print(f"      td = {td}")
             # The first occurrence was created (above), hence the -1 in here
             for index in range(num_occurrences - 1):
                 start_time = start_time + td
                 start_string = start_time.strftime(TIME_FORMAT_STRING)
                 new_survey = self._clone_survey(survey, start_time)
                 new_survey.save()
-                print(f"    iteration[{index}]: {start_string}")
+                # print(f"    iteration[{index}]: {start_string}")
         # print(f"SURVEY SAVE, 1") 
 
     def post(self, request, *args, **kwargs):
         survey_id = kwargs["pk"]
-        print(f"SSV.post(), survey_id = {survey_id}")
+        # print(f"SSV.post(), survey_id = {survey_id}")
         if 'discard' in request.POST:
             print(f"SSV.post(), discarding")
 
         if 'submit' in request.POST:
             form = ScheduleSurveyForm(request.POST)
-            print(f"SSV.post(), submitting")
+            # print(f"SSV.post(), submitting")
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
                 # Clear the form and stay here

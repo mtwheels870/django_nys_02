@@ -39,7 +39,7 @@ class PingStrategyForm(forms.Form):
 
 class CustomDateTimeField(forms.DateTimeField):
     def to_python(self, value):
-        print(f"CFTF.to_python(), value = {value}")
+        # print(f"CFTF.to_python(), value = {value}")
         if isinstance(value, list):
             if all(v is None for v in value):
                 return None
