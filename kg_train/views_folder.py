@@ -15,7 +15,9 @@ from django_tables2 import SingleTableView
 
 from celery import Task
 from celery import signals
-from django_nys_02.celery import app as celery_app, QUEUE_NAME
+
+from django_nys_02.celery import app as celery_app
+from django_nys_02.settings import CELERY_QUEUE
 
 from .models import TextFileStatus, TextFile, TextFolder
 from .forms import UploadFolderForm
@@ -124,7 +126,7 @@ class TextFolderDetailView(SingleTableView):
         #async_result = prodigy_ner_manual.apply_async(
         async_result = prodigy_rel_manual.apply_async(
             kwargs={'file_id': file_id},
-            queue=QUEUE_NAME,
+            queue=CELERY_QUEUE,
             routing_key='prodigy.tasks.rel_manual')
 
         # Update the time (start labeling)
