@@ -122,7 +122,7 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
 
 def _task_check_args(task, task_name, args, index):
     length = index + 1
-    if len(args) <= length:
+    if len(args) < length:
         print(f"_task_check_args(), task = {task_name}, index = {index}, args = {args}")
         print(f"          task = {task}")
         return None
@@ -199,12 +199,16 @@ def _schedule_surveys_tasks(upcoming_surveys):
         if survey_id in running_survey_ids:
             print(f"survey[{index}]: {survey_id} already has a task!")
         else:
-            time_difference = survey.time_scheduled - now       # time diff in microseconds
             t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             now_f = now.strftime(TIME_FORMAT2)
-            time_diff_secs = time_difference.seconds / 1000.0
+            if survey.time_scheduled < now:
+                # print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
+                delay_secs = 0
+            else:
+                time_difference = survey.time_scheduled - now       # time diff in microseconds
+                delay_secs = time_difference.seconds / 1000.0
             # print(f"CALC: {t_s} - {now_f} = {time_diff_secs:.1f}")
-            delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
+            # delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
             print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
