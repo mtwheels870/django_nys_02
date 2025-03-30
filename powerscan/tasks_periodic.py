@@ -208,6 +208,7 @@ def _schedule_surveys_tasks(upcoming_surveys):
             t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             now_f = now.strftime(TIME_FORMAT2)
             if survey.time_scheduled < now:
+                time_difference = 0
                 # print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
                 delay_secs = 0
             else:
