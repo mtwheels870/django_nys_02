@@ -1,0 +1,13 @@
+# Absolute or relative path to the 'celery' command:
+CELERY_BIN="/opt/bitnami/python/bin/celery"
+
+# App instance to use
+# comment out this line if you don't use an app
+CELERY_APP="django_nys_02"
+
+# Where to chdir at start.
+# CELERYBEAT_CHDIR="/opt/Myproject/"
+CELERYBEAT_CHDIR="/home/bitnami/cb_production/"
+
+# Extra arguments to celerybeat
+CELERYBEAT_OPTS="--schedule=/var/run/celery/celerybeat-schedule"
