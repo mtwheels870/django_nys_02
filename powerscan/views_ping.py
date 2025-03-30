@@ -30,7 +30,7 @@ from .tasks import (
     CELERY_FIELD_SURVEY_ID, 
     TIME_FORMAT_STRING
 )
-from .tasks_periodic import start_ping
+from .tasks_periodic import start_ping, _get_task_survey_id
 from .models import (
     UsState,
     IpRangeSurvey,
@@ -246,14 +246,20 @@ class CeleryTasksView(SingleTableView):
         "per_page": 10
     }
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[FIELD_CURRENT_TIME] = _get_current_time
+        return context
+
     def _make_task_tuple(self, status, task):
-        request = task["request"]
+        survey_id, task_name = _get_task_survey_id(task)
+        #request = task["request"]
         # print(f"_m_t_t(), request = {request}")
-        name = request["type"]
+        #name = request["type"]
         # print(f"_m_t_t(), name = {name}")
-        survey_id = request["kwargs"]["survey_id"]
+        #survey_id = request["kwargs"]["survey_id"]
         eta = task["eta"]
-        dict = {"status" : status, "survey_id" : survey_id, "name" : name, "eta" : eta}
+        dict = {"status" : status, "survey_id" : survey_id, "name" : task_name, "eta" : eta}
         return dict
 
     def get_queryset(self):
