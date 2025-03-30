@@ -208,16 +208,17 @@ def _schedule_surveys_tasks(upcoming_surveys):
             t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             now_f = now.strftime(TIME_FORMAT2)
             if survey.time_scheduled < now:
-                time_difference = 0
+                td_microsecs = 0
                 # print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
                 delay_secs = 0
             else:
                 time_difference = survey.time_scheduled - now       # time diff in microseconds
-                delay_secs = time_difference.seconds / 1000.0
+                td_microsecs = time_difference.seconds 
+                delay_secs = td_microsecs / 1000.0
             # print(f"CALC: {t_s} - {now_f} = {time_diff_secs:.1f}")
             # delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
-            print(f"    queue = {CELERY_QUEUE}, diff = {time_difference:.1f}, delay_secs = {delay_secs:.1f}")
+            print(f"    queue = {CELERY_QUEUE}, diff = {td_microsecs:.1f}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
                 survey_id=survey.id, delay_secs=delay_secs,
