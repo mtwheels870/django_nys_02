@@ -182,7 +182,7 @@ def _get_task_survey_id(task):
         # print(f"      task = {type}, no kwargs")
         return None, None
 
-def _scheduled_active_surveys():
+def _scheduled_active_surveys(debug_tasks_queues):
     running_surveys = {}
     # running_survey_ids = ()
     inspect = celery_app.control.inspect()
@@ -196,6 +196,8 @@ def _scheduled_active_surveys():
                 survey_id, task = _get_task_survey_id(task)
                 if survey_id:
                     running_surveys[survey_id] = task
+                if debug_tasks_queues:
+                    print(f"_s_a_s(active), task = {task}, survey_id = {survey_id}")
                     # .append(survey_id)
 
     tasks_scheduled = inspect.scheduled()
@@ -207,15 +209,19 @@ def _scheduled_active_surveys():
                 if survey_id:
                     running_surveys[survey_id] = task
                     # running_surveys.append(survey_id)
+                if debug_tasks_queues:
+                    print(f"_s_a_s(scheduled), task = {task}, survey_id = {survey_id}")
     return running_surveys
 
-def _schedule_surveys_tasks(upcoming_surveys):
+def _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues):
     index = 0
-    running_survey_ids = _scheduled_active_surveys()
+    running_survey_ids = _scheduled_active_surveys(debug_tasks_queues)
     now = timezone.now()
     #print(f"_schedule_surveys_tasks(), running_survey_ids = {running_survey_ids}")
     for survey in upcoming_surveys:
         survey_id = survey.id
+        if debug_tasks_queues:
+            print(f"survey[{index}]: checking {survey_id}...")
         if survey_id in running_survey_ids:
             task = running_survey_ids[survey_id]
             print(f"survey[{index}]: {survey_id} already has a task: {task}")
@@ -245,7 +251,7 @@ def _schedule_surveys_tasks(upcoming_surveys):
     #if len(survey_ids) > 0:
     #    print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
 
-def _add_surveys_to_queues(debug_scheduler):
+def _add_surveys_to_queues(debug_scheduler, debug_tasks_queues):
     from .models import IpRangeSurvey
 
     now = timezone.now()
@@ -268,7 +274,7 @@ def _add_surveys_to_queues(debug_scheduler):
     num_surveys = len(upcoming_surveys)
     if num_surveys > 0 or debug_scheduler:
         print(f"TasksPeriodic.add_to_q(), [{begin_string}...{now_string}...{end_string}]")
-        _schedule_surveys_tasks(upcoming_surveys)
+        _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues)
 
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
@@ -276,5 +282,5 @@ def check_new_surveys(self):
     from .tasks import DEBUG_ID
 
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
-    _add_surveys_to_queues(debug.scheduler)
+    _add_surveys_to_queues(debug.scheduler, debug.task_queues)
 

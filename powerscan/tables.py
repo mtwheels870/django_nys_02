@@ -73,6 +73,7 @@ class IpSurveyTable(tables.Table):
         return self._render_thousands(value)
 
 class CeleryTaskTable(tables.Table):
+    uuid = tables.Column()
     status = tables.Column()
     survey_id = tables.Column()
     name = tables.Column()
@@ -82,9 +83,9 @@ class CeleryTaskTable(tables.Table):
         template_name = "django_tables2/bootstrap4.html"
 
     def __init__(self, *args, **kwargs):
-        inspect = celery_app.control.inspect()
-        tasks_active = inspect.active()
-        tasks_scheduled = inspect.scheduled()
+        #inspect = celery_app.control.inspect()
+        #tasks_active = inspect.active()
+        #tasks_scheduled = inspect.scheduled()
         # print(f"CeleryTaskTable.__init__(), args = {args}, kwargs = {kwargs}")
         super().__init__(*args, **kwargs)
 

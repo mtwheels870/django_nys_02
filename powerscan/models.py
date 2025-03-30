@@ -203,6 +203,7 @@ class DebugPowerScan(models.Model):
     zmap = models.BooleanField(default=False)
     tally_results = models.BooleanField(default=False)
     scheduler = models.BooleanField(default=False)
+    task_queues = models.BooleanField(default=False)
     calculate_baseline = models.BooleanField(default=False)
 
     def __str__(self):
