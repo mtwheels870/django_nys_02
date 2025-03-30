@@ -206,7 +206,7 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 def zmap_from_file(self, survey_id_string):
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
-    print(f"zmap_from_file(), survey_id = {survey_id_string}")
+    # print(f"zmap_from_file(), survey_id = {survey_id_string}")
     #ip_source_id = kwargs["ip_source_id"]
     #survey_id = int(survey_id_string)
     survey_id = int(survey_id_string)
@@ -261,7 +261,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
         timedelta_secs = survey.time_ping_stopped - survey.time_ping_started
     timedelta_mins = timedelta_secs.total_seconds() / 60
     formatted_now = now.strftime(TIME_FORMAT_STRING)
-    print(f"_process_zmap_results(), now {formatted_now}, zmap time = {timedelta_mins:.1f} mins")
+    # print(f"_process_zmap_results(), now {formatted_now}, zmap time = {timedelta_mins:.1f} mins")
     return survey_manager.process_results(survey)
 
 @celery_app.task
@@ -313,7 +313,7 @@ def tally_results(metadata_file, survey_id):
         survey.num_ranges_responded = pings_to_db
         # print(f"SURVEY SAVE, 10")
         survey.save()
-        print(f"Task.tally_results(), survey: {survey_id}, saved {pings_to_db} to db")
+        print(f"Task.tally_results({survey_id}), saved {pings_to_db} to db")
     except Exception as e:
         print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
         exc_type, exc_value, exc_traceback = sys.exc_info()

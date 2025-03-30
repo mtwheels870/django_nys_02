@@ -31,17 +31,6 @@ ALLOWED_HOSTS = [
     "www.pinp01nt.com"
 ]
 
-
-# Application definition
-#    'tutorial.apps.TutorialConfig',
-#    'world.apps.WorldConfig',
-#    'admin_appmenu',
-#    'django_celery_beat',
-#    'schedule',
-#    'mycalendar.apps.MyCalendarConfig',
-#    'file_picker',
-#    'daphne',
-#    'daphne.apps.DaphneConfig',
 INSTALLED_APPS = [
     'channels',
     'daphne',
@@ -107,6 +96,7 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 PRODUCTION_MODE = False
 DIR_ZMAP_NAME = 'production' if PRODUCTION_MODE else 'development'
 CELERY_QUEUE = "cb_production" if PRODUCTION_MODE else 'cb_development'
+PRODIGY_PORT = 8081 if PRODUCTION_MODE else 8080
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 DATABASES = {

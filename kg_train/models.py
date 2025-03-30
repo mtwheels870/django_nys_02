@@ -7,12 +7,12 @@ from js_asset import JS
 
 from colorfield.fields import ColorField
 
+from django_nys_02.settings import PRODIGY_PORT
+
 # from prose.models import Document
 from django_prose_editor.fields import ProseEditorField
 
-# PRODUCTION CHANGE /8080/8081/
 # Here, so we don't get circular imports
-PRODIGY_PORT = 8080
 PRODIGY_URL_BASE = "http://18.208.200.162:" + str(PRODIGY_PORT)
 
 

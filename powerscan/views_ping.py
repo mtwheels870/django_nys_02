@@ -116,11 +116,11 @@ class CreateNewSurveyView(generic.edit.FormView):
             print(f"CPV.build_whitelist(), survey not configured! (should be extracted from the form)")
             return None
 
-        print(f"CPV.build_whitelist(), survey: {survey_id}")
+        # print(f"CPV.build_whitelist(), survey: {survey_id}")
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_whitelist_created = timezone.now()
         # MaxM ranges
-        print(f"CPV.build_whitelist(), apply_async(), queue: {CELERY_QUEUE}")
+        # print(f"CPV.build_whitelist(), apply_async(), queue: {CELERY_QUEUE}")
         async_result = build_whitelist.apply_async(
             kwargs={"survey_id" : survey_id},
             queue=CELERY_QUEUE,
@@ -172,7 +172,7 @@ class CreateNewSurveyView(generic.edit.FormView):
 
         # FIELD_CELERY_DETAILS : self._get_celery_details(),
         status = celery_results_handler.get_status()
-        print(f"CPV.post(), new status = {status}")
+        # print(f"CPV.post(), new status = {status}")
             #FIELD_TASKS : self._get_tasks(),
         context = {"form" : new_form,
             FIELD_STATUS : self._status_message,
@@ -216,7 +216,7 @@ class RecentSurveyView(SingleTableView):
         elif 'delete' in request.POST:
             result = SurveyUtil._delete_surveys(selected_pks)
         elif 'ping_now' in request.POST:
-            print(f"RSV.post(), ping_now(), calling start_ping.async()") 
+            # print(f"RSV.post(), ping_now(), calling start_ping.async()") 
             async_result = start_ping.apply_async(
                 kwargs={"survey_id" : survey_id, "delay_secs" : 0},
                 queue=CELERY_QUEUE,
@@ -282,9 +282,10 @@ class ScheduleSurveyView(generic.edit.FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
+        context_data[FIELD_CURRENT_TIME] = _get_current_time()
         form = context_data['form']
         survey_id = self.kwargs.get('pk')
-        print(f"SSV.g_c_d(), survey_id = {survey_id}")
+        # print(f"SSV.g_c_d(), survey_id = {survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         field_survey_id = form.fields[FIELD_SURVEY_ID]
         field_survey_id.initial = survey_id
@@ -332,7 +333,8 @@ class ScheduleSurveyView(generic.edit.FormView):
             if not form.is_valid():
                 print(f"SSV.post(), form is INVALID, creating empty")
                 # Clear the form and stay here
-                context = {"form" : form}
+                context = {"form" : form, 
+                    FIELD_CURRENT_TIME : _get_current_time() }
                 # We re-reneder the same form, but the errors will now be displayed
                 return render(request, self.template_name, context)
             else:

@@ -54,7 +54,7 @@ def start_ping(self, *args, **kwargs):
         return
     survey_id = kwargs["survey_id"]
     zmap_delay_secs = int(kwargs["delay_secs"])
-    print(f"Task.start_ping(), start_ping, survey_id = {survey_id}, zmap_delay_secs = {zmap_delay_secs}")
+    print(f"Task.start_ping({survey_id}), zmap_delay_secs = {zmap_delay_secs}")
 
     # We can use these estimates in either case (it's just a clone)
     tally_delay_mins, tally_delay_secs = _estimate_zmap_time(survey_id)
@@ -62,7 +62,7 @@ def start_ping(self, *args, **kwargs):
     survey = IpRangeSurvey.objects.get(pk=survey_id)
     parent_survey_id = survey.parent_survey_id
     if not parent_survey_id:
-        print(f"Task.start_ping(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
+        # print(f"Task.start_ping(), after estimate, tally_delay m/s = {tally_delay_mins:.1f}/{tally_delay_secs:.0f}")
         parent_survey_id_string = "0"
         chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
                 _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
@@ -145,34 +145,46 @@ def _get_task_survey_id(task):
                 task_name = request["name"]
                 match task_name:
                     case "powerscan.tasks.zmap_from_file":
-                        return _task_check_args(task, task_name, request["args"], 0)
+                        survey_id = _task_check_args(task, task_name, request["args"], 0)
+                        if survey_id:
+                            return survey_id, "zmap_from_file"
+                        else:
+                            return None, None
                     case "powerscan.tasks.tally_results":
                         # This is messed up.  We can get tally_results with args[] or with kwargs[] (probably b/c of 
                         # the ping immediately logic (shared task) and the delay stuff
                         args = request["args"]
                         if len(args) > 0:
-                            return _task_check_args(task, task_name, request["args"], 1)
+                            survey_id = _task_check_args(task, task_name, request["args"], 1)
                         else:
-                            return _task_check_kwargs(task_name, request["kwargs"])
+                            survey_id = _task_check_kwargs(task_name, request["kwargs"])
+                        if survey_id:
+                            return survey_id, "tally_results"
+                        else:
+                            return None, None
                     case "powerscan.tasks_periodic.start_ping":
-                        return _task_check_kwargs(task_name, request["kwargs"])
+                        survey_id = _task_check_kwargs(task_name, request["kwargs"])
+                        if survey_id:
+                            return survey_id, "start_ping"
+                        else:
+                            return None, None
                     case _:
-                        return None
-        return None
+                        return None, None
+        return None, None
     kwargs = task["kwargs"]
     if "survey_id" in kwargs:
         survey_id = kwargs["survey_id"]
         type = task["type"]
         print(f"      task[kwargs][survey_id]: {survey_id} = {type}")
-        return survey_id
+        return survey_id, "task_here"
     else:
         # type = task["type"]
         # print(f"      task = {type}, no kwargs")
-        return None
+        return None, None
 
 def _scheduled_active_surveys():
-    running_surveys = []
-    running_survey_ids = ()
+    running_surveys = {}
+    # running_survey_ids = ()
     inspect = celery_app.control.inspect()
 
     tasks_active = inspect.active()
@@ -181,18 +193,20 @@ def _scheduled_active_surveys():
         for index, (key, value) in enumerate(tasks_active.items()):
             # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
             for task in value:
-                survey_id = _get_task_survey_id(task)
+                survey_id, task = _get_task_survey_id(task)
                 if survey_id:
-                    running_surveys.append(survey_id)
+                    running_surveys[survey_id] = task
+                    # .append(survey_id)
 
     tasks_scheduled = inspect.scheduled()
     if tasks_scheduled:
         for index, (key, value) in enumerate(tasks_scheduled.items()):
             # print(f"CPV.g_tasks(), active[{index}]: {key} = {value}")
             for task in value:
-                survey_id = _get_task_survey_id(task)
+                survey_id, task = _get_task_survey_id(task)
                 if survey_id:
-                    running_surveys.append(survey_id)
+                    running_surveys[survey_id] = task
+                    # running_surveys.append(survey_id)
     return running_surveys
 
 def _schedule_surveys_tasks(upcoming_surveys):
@@ -203,7 +217,8 @@ def _schedule_surveys_tasks(upcoming_surveys):
     for survey in upcoming_surveys:
         survey_id = survey.id
         if survey_id in running_survey_ids:
-            print(f"survey[{index}]: {survey_id} already has a task!")
+            task = running_survey_ids[survey_id]
+            print(f"survey[{index}]: {survey_id} already has a task: {task}")
         else:
             t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             now_f = now.strftime(TIME_FORMAT2)

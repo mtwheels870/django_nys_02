@@ -128,7 +128,7 @@ class MmIpRange(models.Model):
 # Classes to work with celery workers and do a scan
 #
 class IpRangeSurvey(models.Model):
-    time_created = models.DateTimeField(auto_now_add=True, verbose_name="Created (EDT)")
+    time_created = models.DateTimeField(auto_now_add=True, verbose_name="Created (UTC)")
     name = models.CharField(max_length=40, null=True)
 
     time_scheduled = models.DateTimeField(null=True, verbose_name="Scheduled")
