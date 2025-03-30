@@ -260,7 +260,7 @@ class CeleryTasksView(SingleTableView):
         #survey_id = request["kwargs"]["survey_id"]
         eta = task["eta"]
         print(f"_m_t_t(), task = {task}")
-        task_id = "23a8"
+        uuid_8 = "23a8"
 
         dict = {"uuid" : uuid_8, "status" : status, "survey_id" : survey_id, "name" : task_name, "eta" : eta}
         return dict
