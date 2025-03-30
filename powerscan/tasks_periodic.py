@@ -130,7 +130,6 @@ def _task_check_args(task_name, args, index):
     return survey_id 
 
 def _task_check_kwargs(task_name, kwargs):
-    result = kwargs[
     if "survey_id" in kwargs:
         survey_id = kwargs["survey_id"]
         print(f"_task_check_kwargs(), task = {task_name}, survey_id = {survey_id}")
