@@ -120,10 +120,11 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     #celery_results_handler.save_pending(async_result2)
     return async_result2
 
-def _task_check_args(task_name, args, index):
+def _task_check_args(task, task_name, args, index):
     length = index + 1
     if len(args) <= length:
-        print(f"_task_check_args(), task = {task_name}, len = {len(args)}, index = {index}")
+        print(f"_task_check_args(), task = {task_name}, index = {index}, args = {args}")
+        print(f"          task = {task}")
         return None
     survey_id = args[index]
     print(f"_task_check_args(), task = {task_name}, args[{index}] = {survey_id}")
@@ -144,9 +145,9 @@ def _get_task_survey_id(task):
                 task_name = request["name"]
                 match task_name:
                     case "powerscan.tasks.zmap_from_file":
-                        return _task_check_args(task_name, request["args"], 0)
+                        return _task_check_args(task, task_name, request["args"], 0)
                     case "powerscan.tasks.tally_results":
-                        return _task_check_args(task_name, request["args"], 1)
+                        return _task_check_args(task, task_name, request["args"], 1)
                     case "powerscan.tasks_periodic.start_ping":
                         return _task_check_kwargs(task_name, request["kwargs"])
                     case _:
