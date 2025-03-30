@@ -144,8 +144,8 @@ def build_whitelist(self, *args, **kwargs):
         second = "another worker grabbed it, exiting"
         print(first + second)
         return 0
-    else:
-        print(f"build_whitelist(), we're taking ownership")
+    #else:
+    #    print(f"build_whitelist(), we're taking ownership")
 
     # Save that we started the process, that's our (worker) lock
     survey.time_whitelist_started = timezone.now()
@@ -159,7 +159,7 @@ def build_whitelist(self, *args, **kwargs):
         message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
     survey.num_total_ranges = num_ranges
-    print(f"SURVEY SAVE, 5")
+    # print(f"SURVEY SAVE, 5")
     survey.save()
 
     # Django channels back to the caller

@@ -110,7 +110,7 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     delta = timedelta(seconds=delay_secs)
     tally_start = now + delta
     formatted_tally_start = tally_start.strftime(TIME_FORMAT2)
-    first = "TasksPeriodic._start_tally(), calling tally_results (delayed), delay: "
+    first = "TasksPeriodic._start_tally(), delaying {survey_id}, delay: "
     second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
     print(first + second)
     # Because this is a subtask, we'll have pre-pended args?
@@ -123,7 +123,7 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
 def _task_check_args(task_name, args, index):
     length = index + 1
     if len(args) <= length:
-        print(f"_task_check_args(), task = {task_name}, len = {len(args)}, index = {index}"
+        print(f"_task_check_args(), task = {task_name}, len = {len(args)}, index = {index}")
         return None
     survey_id = args[index]
     print(f"_task_check_args(), task = {task_name}, args[{index}] = {survey_id}")
@@ -199,10 +199,12 @@ def _schedule_surveys_tasks(upcoming_surveys):
             print(f"survey[{index}]: {survey_id} already has a task!")
         else:
             time_difference = survey.time_scheduled - now       # time diff in microseconds
+            now_f = now.strftime(TIME_FORMAT2)
             time_diff_secs = time_difference.seconds / 1000.0
             print(f"CALC: {survey.time_scheduled} - {now} = {time_diff_secs:.1f}")
             delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
-            print(f"Scheduling: survey[{index}]: {survey.id},{survey.name},{survey.time_scheduled}")
+            t_s = survey_time_scheduled.strftime(TIME_FORMAT2 )
+            print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
             print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
