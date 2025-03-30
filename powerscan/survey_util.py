@@ -5,7 +5,7 @@ class SurveyUtil:
     def copy_geography(survey_id, parent_survey_id):
         from .models import (IpRangeSurvey, IpSurveyState, IpSurveyCounty, IpSurveyTract)
 
-        print(f"SurveyUtil.copy_geography(), survey_id = {survey_id}, parent_survey_id = {parent_survey_id}")
+        # print(f"SurveyUtil.copy_geography(), survey_id = {survey_id}, parent_survey_id = {parent_survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         parent_survey = get_object_or_404(IpRangeSurvey, pk=parent_survey_id)
 

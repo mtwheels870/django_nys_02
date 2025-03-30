@@ -208,7 +208,7 @@ def _schedule_surveys_tasks(upcoming_surveys):
             print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
-                survey_id=survey.id, delay_secs=0,
+                survey_id=survey.id, delay_secs=delay_secs,
                 queue=CELERY_QUEUE,
                 routing_key='ping.tasks.start_ping')
             #print(f"    async_result = {async_result}")
