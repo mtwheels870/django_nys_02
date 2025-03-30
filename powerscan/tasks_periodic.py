@@ -150,6 +150,7 @@ def _get_task_survey_id(task):
                     case "powerscan.tasks_periodic.start_ping":
                         return _task_check_kwargs(task_name, request["kwargs"])
                     case _:
+                        return None
         return None
     kwargs = task["kwargs"]
     if "survey_id" in kwargs:
