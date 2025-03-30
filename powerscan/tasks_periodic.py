@@ -120,17 +120,37 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     #celery_results_handler.save_pending(async_result2)
     return async_result2
 
+def _task_check_args(task_name, args, index):
+    length = index + 1
+    if len(args) <= length:
+        print(f"_task_check_args(), task = {task_name}, len = {len(args)}, index = {index}"
+        return None
+    survey_id = args[index]
+    print(f"_task_check_args(), task = {task_name}, args[{index}] = {survey_id}")
+    return survey_id 
+
+def _task_check_kwargs(task_name, kwargs):
+    result = kwargs[
+    if "survey_id" in kwargs:
+        survey_id = kwargs["survey_id"]
+        print(f"_task_check_kwargs(), task = {task_name}, survey_id = {survey_id}")
+        return survey_id
+    return None
+
 def _get_task_survey_id(task):
     if not "kwargs" in task:
         if "request" in task:
             request = task["request"]
-            if "kwargs" in request:
-                kwargs = request["kwargs"]
-                if "survey_id" in kwargs:
-                    survey_id = kwargs["survey_id"]
-                    print(f"task[request][kwargs][survey_id]: {survey_id}")
-                    return survey_id
-        print(f"      no kwargs in task = {task}")
+            if "name" in request:
+                task_name = request["name"]
+                match task_name:
+                    case "powerscan.tasks.zmap_from_file":
+                        return _task_check_args(task_name, request["args"], 0)
+                    case "powerscan.tasks.tally_results":
+                        return _task_check_args(task_name, request["args"], 1)
+                    case "powerscan.tasks_periodic.start_ping":
+                        return _task_check_kwargs(task_name, request["kwargs"])
+                    case _:
         return None
     kwargs = task["kwargs"]
     if "survey_id" in kwargs:

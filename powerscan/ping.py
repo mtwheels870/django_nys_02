@@ -112,7 +112,7 @@ class PingSurveyManager:
     def link_survey(survey_id, parent_survey_id):
         links_created = 0
         parent_psm = PingSurveyManager._find_survey(parent_survey_id, False)
-        print(f"PSM.link_survey(), parent_psm = {parent_psm}")
+        # print(f"PSM.link_survey(), parent_psm = {parent_psm}")
         if not parent_psm:
             return
         child_psm = PingSurveyManager(survey_id, False, create_new=True, linked_survey_id=parent_survey_id)
@@ -126,7 +126,7 @@ class PingSurveyManager:
         else:
             os.link(parent_psm.path_whitelist, child_psm.path_whitelist)
             links_created = links_created + 1
-        print(f"PSM.link_survey(), created {links_created} links...")
+        # print(f"PSM.link_survey(), created {links_created} links...")
 
     @staticmethod
     def _unused_load_all_surveys():
@@ -150,7 +150,7 @@ class PingSurveyManager:
         # folder_snapshot = f"Survey_{self._survey_id:05d}"
         folder_snapshot = PingSurveyManager._build_survey_name(self._survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, folder_snapshot)
-        print(f"PSM.create_directory(), directory = {str(full_path)}")
+        # print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
             os.makedirs(full_path)
         elif linked_survey_id:

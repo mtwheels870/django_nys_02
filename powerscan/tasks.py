@@ -183,7 +183,8 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
             "--probe-module=icmp_echoscan"]
         full_command = " ".join(list_command)
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
-        print(f"_execute_subprocess(), calling subprocess.Popen(), full_command = {full_command}")
+        first_100 = full_command[:100]
+        print(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
@@ -217,7 +218,7 @@ def zmap_from_file(self, survey_id_string):
     # Save that we started the process, that's our (worker) lock
     survey.time_ping_started = timezone.now()
     formatted_start = survey.time_ping_started.strftime(TIME_FORMAT_STRING)
-    print(f"SURVEY SAVE, 6, survey = {survey_id_string}, ping started: {formatted_start}")
+    # print(f"SURVEY SAVE, 6, survey = {survey_id_string}, ping started: {formatted_start}")
     survey.save()
 
     # Check our debug flag
