@@ -147,7 +147,13 @@ def _get_task_survey_id(task):
                     case "powerscan.tasks.zmap_from_file":
                         return _task_check_args(task, task_name, request["args"], 0)
                     case "powerscan.tasks.tally_results":
-                        return _task_check_args(task, task_name, request["args"], 1)
+                        # This is messed up.  We can get tally_results with args[] or with kwargs[] (probably b/c of 
+                        # the ping immediately logic (shared task) and the delay stuff
+                        args = request["args"]
+                        if len(args) > 0:
+                            return _task_check_args(task, task_name, request["args"], 1)
+                        else:
+                            return _task_check_kwargs(task_name, request["kwargs"])
                     case "powerscan.tasks_periodic.start_ping":
                         return _task_check_kwargs(task_name, request["kwargs"])
                     case _:
@@ -210,7 +216,7 @@ def _schedule_surveys_tasks(upcoming_surveys):
             # print(f"CALC: {t_s} - {now_f} = {time_diff_secs:.1f}")
             # delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
-            print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
+            print(f"    queue = {CELERY_QUEUE}, diff = {time_difference:.1f}, delay_secs = {delay_secs:.1f}")
             # We're not an apply_async here, so the calling signature is different
             async_result = start_ping(
                 survey_id=survey.id, delay_secs=delay_secs,
@@ -246,7 +252,7 @@ def _add_surveys_to_queues(debug_scheduler):
             time_scheduled__lte=window_end)
     num_surveys = len(upcoming_surveys)
     if num_surveys > 0 or debug_scheduler:
-        print(f"TasksPeriodic._schedule_surveys_tasks(), now = {now_string} window = [{begin_string},{end_string}]")
+        print(f"TasksPeriodic.add_to_q(), [{begin_string}...{now_string}...{end_string}]")
         _schedule_surveys_tasks(upcoming_surveys)
 
 @celery_app.task(name='check_new_surveys', bind=True)
