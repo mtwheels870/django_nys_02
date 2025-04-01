@@ -56,6 +56,8 @@ RESULTS_RANGES = "ranges"
 TALLY_DELAY_MINS = 5
 TALLY_DELAY_SECS = TALLY_DELAY_MINS * 60
 
+MAX_TALLY_RETRY_COUNT = 8
+
 TIME_FORMAT_STRING = "%H:%M:%S"
 
 DEBUG_ID = 1
@@ -298,7 +300,8 @@ def tally_results(metadata_file, survey_id, retry_count):
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
             retry_count = retry_count + 1
             if retry_count > MAX_TALLY_RETRY_COUNT:
-                AQUI
+                print(f"Task.tally_results(), max retries = {MAX_TALLY_RETRY_COUNT}, exceeded, aborting")
+                return
             first = f"Task.tally_results(), survey = {int_survey_id}, empty_zmap_file, delay:"
             second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, retry_count: {retry_count}"
             print(first + second)
