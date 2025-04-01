@@ -113,8 +113,9 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     first = f"TasksPeriodic._start_tally(), delaying {survey_id}, delay: "
     second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
     print(first + second)
+    retry_count = 0
     # Because this is a subtask, we'll have pre-pended args?
-    async_result2 = tally_results.apply_async([metadata_file, survey_id], countdown=delay_secs)
+    async_result2 = tally_results.apply_async([metadata_file, survey_id, retry_count], countdown=delay_secs)
 #        kwargs={"survey_id": survey_id,
 #            "metadata_file": metadata_file} )
     #celery_results_handler.save_pending(async_result2)

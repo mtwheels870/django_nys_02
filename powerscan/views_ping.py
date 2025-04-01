@@ -233,7 +233,6 @@ class RecentSurveyView(SingleTableView):
         # Stay on the same page
         return redirect(request.path, { FIELD_CURRENT_TIME : _get_current_time })
 
-
 class CeleryTasksView(SingleTableView):
     #data = [
     #    {"name": "John", "surname": "Doe", "address": "123 Main St"},
@@ -260,9 +259,11 @@ class CeleryTasksView(SingleTableView):
         #survey_id = request["kwargs"]["survey_id"]
         eta = task["eta"]
         print(f"_m_t_t(), task = {task}")
-        uuid_8 = "23a8"
-
-        dict = {"uuid" : uuid_8, "status" : status, "survey_id" : survey_id, "name" : task_name, "eta" : eta}
+        request = task["request"]
+        task_id = request["id"]
+        uuid_8 = task_id[:8]
+        uuid_11 = uuid_8 + "..."
+        dict = {"uuid" : uuid_11, "status" : status, "survey_id" : survey_id, "name" : task_name, "eta" : eta}
         return dict
 
     def get_queryset(self):
@@ -284,6 +285,30 @@ class CeleryTasksView(SingleTableView):
                     tuple = self._make_task_tuple("scheduled", task)
                     data.append(tuple)
         return data
+
+    def post(self, request, *args, **kwargs):
+        selected_uuids = request.POST.getlist('selection')
+        print(f"CTV.post(), selected_uuids = {selected_uuids}")
+        if 'details' in request.POST:
+            if num_selected == 1:
+                task_uuid = selected_uuids[0]
+                print(f"CTV.post()[details], task_uuid = {task_uuid}")
+            else:
+                first = f"CTV.post()[details], task_uuid = {task_uuid}, "
+                second = f"num_selected = {num_selected} (must be one (1) only)"
+                print(first + second)
+        elif 'cancel' in request.POST:
+            index = 0
+            for task_uuid in selected_uuids:
+                print(f"CTV.post(cancel), task[{index}] = {task_uuid}")
+                index = index + 1
+        else:
+            print(f"CTV.post(), unrecognized post request:")
+            for i, key in enumerate(request.POST):
+                value = request.POST[key]
+                print(f"          [{i}]: {key} = {value}")
+        # Stay on the same page
+        return redirect(request.path, { FIELD_CURRENT_TIME : _get_current_time })
 
 class ScheduleSurveyView(generic.edit.FormView):
     form_class = ScheduleSurveyForm

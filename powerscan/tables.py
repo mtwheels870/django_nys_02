@@ -73,6 +73,7 @@ class IpSurveyTable(tables.Table):
         return self._render_thousands(value)
 
 class CeleryTaskTable(tables.Table):
+    selection = tables.CheckBoxColumn(accessor="uuid")
     uuid = tables.Column()
     status = tables.Column()
     survey_id = tables.Column()

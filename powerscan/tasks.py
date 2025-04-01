@@ -265,7 +265,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     return survey_manager.process_results(survey)
 
 @celery_app.task
-def tally_results(metadata_file, survey_id):
+def tally_results(metadata_file, survey_id, retry_count):
     # print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
@@ -296,14 +296,18 @@ def tally_results(metadata_file, survey_id):
             delta = timedelta(seconds=TALLY_DELAY_SECS)
             tally_start = now + delta
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
+            retry_count = retry_count + 1
+            if retry_count > MAX_TALLY_RETRY_COUNT:
+                AQUI
             first = f"Task.tally_results(), survey = {int_survey_id}, empty_zmap_file, delay:"
-            second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, ({formatted_now})"
+            second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, retry_count: {retry_count}"
             print(first + second)
             async_result2 = tally_results.apply_async(
                 countdown=TALLY_DELAY_SECS, 
                 #"ip_source_id": IP_RANGE_SOURCE,
                 kwargs={"survey_id": survey_id,
-                    "metadata_file": metadata_file} )
+                    "metadata_file": metadata_file,
+                    "retry_count": retry_count} )
             survey.time_tally_started = None
             # print(f"SURVEY SAVE, 9")
             survey.save()
