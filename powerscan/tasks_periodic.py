@@ -110,8 +110,8 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     delta = timedelta(seconds=delay_secs)
     tally_start = now + delta
     formatted_tally_start = tally_start.strftime(TIME_FORMAT2)
-    first = f"TasksPeriodic._start_tally(), delaying {survey_id}, delay: "
-    second = f"{delay_mins:.1f}m, now: {formatted_now}, tally_start: {formatted_tally_start}"
+    first = f"TasksPeriodic._start_tally({survey_id}), "
+    second = f"+{delay_mins:.1f}m, new tally_start: {formatted_tally_start}"
     print(first + second)
     retry_count = 0
     # Because this is a subtask, we'll have pre-pended args?

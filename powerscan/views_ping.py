@@ -251,6 +251,7 @@ class CeleryTasksView(SingleTableView):
         return context
 
     def _make_task_tuple(self, status, task):
+        print(f"_make_task_tuple(), task = {task}")
         survey_id, task_name = _get_task_survey_id(task)
         #request = task["request"]
         # print(f"_m_t_t(), request = {request}")
@@ -262,8 +263,11 @@ class CeleryTasksView(SingleTableView):
         else:
             eta = None
         print(f"_m_t_t(), task = {task}")
-        request = task["request"]
-        task_id = request["id"]
+        if "request" in task:
+            request = task["request"]
+            task_id = request["id"]
+        else:
+            task_id = None
         dict = {"uuid" : task_id, "status" : status, "survey_id" : survey_id, "name" : task_name, "eta" : eta}
         return dict
 
@@ -289,7 +293,8 @@ class CeleryTasksView(SingleTableView):
 
     def post(self, request, *args, **kwargs):
         selected_uuids = request.POST.getlist('selection')
-        print(f"CTV.post(), selected_uuids = {selected_uuids}")
+        num_selected = len(selected_uuids)
+        print(f"CTV.post(), selected_uuids({num_selected}) = {selected_uuids}")
         if 'details' in request.POST:
             if num_selected == 1:
                 task_uuid = selected_uuids[0]
