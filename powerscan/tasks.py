@@ -323,10 +323,10 @@ def tally_results(metadata_file, survey_id, retry_count):
         print(f"Task.tally_results({survey_id}), saved {pings_to_db} to db")
     except Exception as e:
         print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        print(f"    exc_traceback = {dir(exc_traceback)}")
+        #exc_type, exc_value, exc_traceback = sys.exc_info()
+        #print(f"    exc_traceback = {dir(exc_traceback)}")
         #exc_traceback.print_exc()
-        exc_traceback.print_exception(*sys.exc_info())
+        #exc_traceback.print_exception(*sys.exc_info())
         pings_to_db = -1
     return pings_to_db 
 
