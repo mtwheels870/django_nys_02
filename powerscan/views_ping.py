@@ -257,13 +257,14 @@ class CeleryTasksView(SingleTableView):
         #name = request["type"]
         # print(f"_m_t_t(), name = {name}")
         #survey_id = request["kwargs"]["survey_id"]
-        eta = task["eta"]
+        if "eta" in task:
+            eta = task["eta"]
+        else:
+            eta = None
         print(f"_m_t_t(), task = {task}")
         request = task["request"]
         task_id = request["id"]
-        uuid_8 = task_id[:8]
-        uuid_11 = uuid_8 + "..."
-        dict = {"uuid" : uuid_11, "status" : status, "survey_id" : survey_id, "name" : task_name, "eta" : eta}
+        dict = {"uuid" : task_id, "status" : status, "survey_id" : survey_id, "name" : task_name, "eta" : eta}
         return dict
 
     def get_queryset(self):
