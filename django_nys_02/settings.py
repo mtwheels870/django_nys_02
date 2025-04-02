@@ -205,7 +205,7 @@ LOGGING = {
         '': {           # root logger
             'handlers': ['console'],
             'level': 'WARNING',
-            'propagate': True,
+            'propagate': False,
         },
         'powerscan.survey_util': {
             # 'handlers': ['console'],
