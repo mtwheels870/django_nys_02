@@ -80,7 +80,6 @@ class SurveyUtil:
         state_set = survey.ipsurveystate_set.all()
         for state in state_set:
             us_state = state.us_state
-            logger.info(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
             mpoly = us_state.mpoly
             for poly in mpoly:
                 mpoly_combined.append(poly)
