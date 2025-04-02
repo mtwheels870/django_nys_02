@@ -195,12 +195,20 @@ class RecentSurveyView(SingleTableView):
         return context
 
     def get_queryset(self):
-        #self.folder_id = self.kwargs.get('folder_id')
-        # print(f"TFDV.get_queryset(), doing query")
-        # We get the last 20 (so that's two pages worth)
-        #queryset = IpRangeSurvey.objects.order_by("-time_created")[:20]
         queryset = IpRangeSurvey.objects.order_by("-id")
         return queryset 
+
+    def _calculate_map_extent(self, survey_id):
+        bbox = SurveyUtil.calculate_bbox(survey_id)
+        print(f"_calculate_map_extent(), survey_id = {survey_id}, bbox = {bbox}")
+    def _calculate_map_extent(self, survey_id):
+    def _calculate_map_extent(self, survey_id):
+    mpoly = models.MultiPolygonField()
+        state_set = parent_survey.ipsurveystate_set.all()
+        for parent_state in state_set:
+            new_survey_state = IpSurveyState(survey=survey,us_state=parent_state.us_state)
+            new_survey_state.save()
+AQUI
 
     def post(self, request, *args, **kwargs):
         selected_pks = request.POST.getlist('selection')
@@ -225,6 +233,12 @@ class RecentSurveyView(SingleTableView):
             celery_results_handler.set_status(CeleryResultsHandler.SurveyStatus.PING_STARTED)
         elif 'new' in request.POST:
             return HttpResponseRedirect(reverse("app_powerscan:ping_strat_index"))
+        elif 'show_map' in request.POST:
+            if num_selected == 1:
+                survey_id = selected_pks[0]
+                return _calculate_map_extent(survey_id)
+            else:
+                logger.warning("RSV.post(), 'show_map', num_selected = {num_selected}"
         else:
             print(f"RSV.post(), unrecognized post request:")
             for i, key in enumerate(request.POST):

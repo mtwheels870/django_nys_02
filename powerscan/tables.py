@@ -1,5 +1,7 @@
 #import datetime
 
+from datetime import timedelta
+
 from celery.utils import iso8601
 
 from django.utils.html import format_html
@@ -59,7 +61,10 @@ class IpSurveyTable(tables.Table):
         return self._render_time(value)
 
     def render_time_tally_stopped(self, value, record):
-        return self._render_time(value)
+        time_string = self._render_time(value)
+        timedelta_secs = value - survey.time_ping_started
+        timedelta_mins = timedelta_secs.total_seconds() / 60
+        return f"{time_string} {timedelta_mins:.1f}m"
 
     def _render_thousands(self, value):
         thousands = float(value) / 1000.0
