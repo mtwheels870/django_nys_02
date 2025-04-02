@@ -2,6 +2,8 @@ import logging
 
 from django.shortcuts import get_object_or_404
 
+from django.contrib.gis.geos import MultiPolygon
+
 logger = logging.getLogger(__name__)
 
 class SurveyUtil:

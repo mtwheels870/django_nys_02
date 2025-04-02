@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.contrib import admin
 from django.contrib.gis.db import models
 
-
 #
 # Straight Geo, right from US Census
 #
