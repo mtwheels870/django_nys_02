@@ -196,47 +196,15 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
+        # "level": "ERROR",
         "console": {
-            "level": "ERROR",
             "class": "logging.StreamHandler",
         },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "ERROR",
     },
     'loggers': {
         '': {           # root logger
             'handlers': ['console'],
             'level': 'INFO',
-            'propagate': True,
-        },
-        'powerscan.survey_util': {
-            # 'handlers': ['console'],
-            'level': 'INFO',
-            "class": "logging.StreamHandler",
-            'propagate': False,
-        },
-        'powerscan.views_ping': {
-            # 'handlers': ['console'],
-            'level': 'INFO',
-            "class": "logging.StreamHandler",
-            'propagate': False,
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'django.channels.worker': {
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'powerscan.consumers': {  # Add logger for your consumers
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
         },
     },
 }
