@@ -234,7 +234,7 @@ class RecentSurveyView(SingleTableView):
                 survey_id = selected_pks[0]
                 return _calculate_map_extent(survey_id)
             else:
-                logger.warning("RSV.post(), 'show_map', num_selected = {num_selected}"
+                logger.warning("RSV.post(), 'show_map', num_selected = {num_selected}")
         else:
             print(f"RSV.post(), unrecognized post request:")
             for i, key in enumerate(request.POST):
