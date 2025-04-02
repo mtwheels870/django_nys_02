@@ -201,14 +201,10 @@ class RecentSurveyView(SingleTableView):
     def _calculate_map_extent(self, survey_id):
         bbox = SurveyUtil.calculate_bbox(survey_id)
         print(f"_calculate_map_extent(), survey_id = {survey_id}, bbox = {bbox}")
-    def _calculate_map_extent(self, survey_id):
-    def _calculate_map_extent(self, survey_id):
-    mpoly = models.MultiPolygonField()
-        state_set = parent_survey.ipsurveystate_set.all()
-        for parent_state in state_set:
-            new_survey_state = IpSurveyState(survey=survey,us_state=parent_state.us_state)
-            new_survey_state.save()
-AQUI
+        base_url = reverse("app_powerscan:map_viewer")
+        query_params = {'q': 'django', 'page' : 2}
+        url = f"{base_url}?{urlencode(query_params)}"
+        return HttpResponseRedirect(url)
 
     def post(self, request, *args, **kwargs):
         selected_pks = request.POST.getlist('selection')
