@@ -197,8 +197,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "console": {
-            # "level": "ERROR",
-            "level": "INFO",
+            "level": "ERROR",
             "class": "logging.StreamHandler",
         },
     },
@@ -213,8 +212,9 @@ LOGGING = {
             'propagate': True,
         },
         'powerscan.*': {
-            'handlers': ['console'],
+            # 'handlers': ['console'],
             'level': 'INFO',
+            "class": "logging.StreamHandler",
             'propagate': False,
         },
         'django.request': {
