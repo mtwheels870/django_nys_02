@@ -232,7 +232,7 @@ class RecentSurveyView(SingleTableView):
         elif 'show_map' in request.POST:
             if num_selected == 1:
                 survey_id = selected_pks[0]
-                return _calculate_map_extent(survey_id)
+                return self._calculate_map_extent(survey_id)
             else:
                 logger.warning("RSV.post(), 'show_map', num_selected = {num_selected}")
         else:
