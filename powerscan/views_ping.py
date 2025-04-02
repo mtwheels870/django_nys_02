@@ -205,7 +205,7 @@ class RecentSurveyView(SingleTableView):
     def _calculate_map_extent(self, survey_id):
         bbox = SurveyUtil.calculate_bbox(survey_id)
         print(f"(PRINT) _calculate_map_extent(), logger = {logger}")
-        logger.info(f"(PRINT) _calculate_map_extent(), survey_id = {survey_id}, bbox = {bbox}")
+        logger.info(f"(LOGGER) _calculate_map_extent(), survey_id = {survey_id}, bbox = {bbox}")
         base_url = reverse("app_powerscan:map_viewer")
         query_params = {'q': 'django', 'page' : 2}
         url = f"{base_url}?{urlencode(query_params)}"
