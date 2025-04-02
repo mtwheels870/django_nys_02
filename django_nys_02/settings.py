@@ -213,7 +213,7 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'powerscan.survey_util': {
+        'powerscan.*': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
