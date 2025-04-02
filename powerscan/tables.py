@@ -65,7 +65,8 @@ class IpSurveyTable(tables.Table):
         if value and record.time_ping_started:
             timedelta_secs = value - record.time_ping_started
             timedelta_mins = timedelta_secs.total_seconds() / 60
-            return f"{time_string} {timedelta_mins:.1f}m"
+            return f"{time_string} ({timedelta_mins:.1f}m)"
+
         else:
             return time_string
 
