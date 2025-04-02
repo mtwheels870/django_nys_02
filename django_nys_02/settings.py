@@ -211,7 +211,13 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'powerscan.survey_util', 'powerscan.views_ping': {
+        'powerscan.survey_util': {
+            # 'handlers': ['console'],
+            'level': 'INFO',
+            "class": "logging.StreamHandler",
+            'propagate': False,
+        },
+        'powerscan.views_ping': {
             # 'handlers': ['console'],
             'level': 'INFO',
             "class": "logging.StreamHandler",
