@@ -76,14 +76,14 @@ class SurveyUtil:
 
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         # print(f"SurveyUtil.calculate_bbox about to call logger.info()")
-        logger.info(f"(LOGGER) calculate_bbox(), create empty")
+        # logger.info(f"(LOGGER) calculate_bbox(), create empty")
         mpoly_combined = MultiPolygon()
 
         state_set = survey.ipsurveystate_set.all()
-        num_states = state_set.count()
-        if num_states > 1:
-            logger.warn(f"(LOGGER) calculate_bbox(), for now, just taking the first state!")
-        first_state = state_set[0]
+#        num_states = state_set.count()
+#        if num_states > 1:
+#            logger.warn(f"(LOGGER) calculate_bbox(), for now, just taking the first state!")
+#        first_state = state_set[0]
         for state in state_set:
             us_state = state.us_state
             mpoly = us_state.mpoly
