@@ -131,16 +131,18 @@ class MapNavigationView(generic.edit.FormView):
         context_data['map_title'] = "Map Title Here"
         form = context_data['form']
         map_bbox = form.fields[KEY_MAP_BBOX]
-        #print(f"g_c_d(), map_bbox = {map_bbox}")
+        query_parms = self.request.GET
+        print(f"g_c_d(), map_bbox (from field) = {map_bbox}")
+        print(f"       query_parms = {query_parms}")
         # We need this, so it's in the Django templates (for the search parms)
         context_data['map_bbox'] = map_bbox
         table = self.create_table(MmIpRange.objects.none())
         context_data['table'] = table
         return context_data
 
-    def get(self, request, *args, **kwargs):
-        print(f"MNV.get(), request = {request}")
-        return self.render_to_response(self.get_context_data())
+#    def get(self, request, *args, **kwargs):
+#        print(f"MNV.get(), request = {request}")
+#        return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
