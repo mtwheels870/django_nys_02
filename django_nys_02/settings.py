@@ -206,7 +206,12 @@ LOGGING = {
         "level": "ERROR",
     },
     'loggers': {
-        '': {
+        '': {           # root logger
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'powerscan.*': {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
