@@ -25,6 +25,6 @@ urlpatterns = [
     path("kg_admin/", include("kg_admin.urls")),
     path("kg_train/", include("kg_train.urls")),
     path("kg_viz/", include("kg_viz.urls")),
-    path('^admin/statuscheck/', include('celerybeat_status.urls'))
+    path('admin/statuscheck/', include('celerybeat_status.urls'))
 ]
 #print(f"project.urlpatterns = {urlpatterns}")
