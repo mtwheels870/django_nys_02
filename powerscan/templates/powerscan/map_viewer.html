@@ -31,7 +31,11 @@
             <p style="color:green;font-style:italic">{{ powerscan_version }}</p>
             <h2>Aggregated Map</h2>
             <div id="map"></div>
-            <script type='module' defer src="{% static 'map.js' %}?{{ map_bbox }}"></script>
+            {% if %map_bbox %}
+                <script type='module' defer src="{% static 'map.js' %}?{{ map_bbox }}"></script>
+            {% else %}
+                <script type='module' defer src="{% static 'map.js' %}"></script>
+            {% endif %}
         </div>
         <div class="right-side">
             <h2>Visible Geospatial Entities</h2>

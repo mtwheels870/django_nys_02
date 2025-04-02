@@ -114,7 +114,7 @@ def approve_ping(request, id):
 
 class MapNavigationView(generic.edit.FormView):
     # model = TextFile
-    form_class = SelectedCensusTractForm
+    form_class = SelectedAggregationForm
     table_class = MmIpRangeTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
@@ -129,13 +129,16 @@ class MapNavigationView(generic.edit.FormView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
-        form = context_data['form']
-        map_bbox = form.fields[KEY_MAP_BBOX]
+        # form = context_data['form']
+        # map_bbox = form.fields[KEY_MAP_BBOX]
         query_parms = self.request.GET
-        print(f"g_c_d(), map_bbox (from field) = {map_bbox}")
-        print(f"       query_parms = {query_parms}")
+        if "in_bbox" in query_parms:
+            in_bbox = query_parms["in_bbox"]
+            print(f"g_c_d(), query_parms = {query_parms},in_bbox = {in_bbox}")
+            context_data['map_bbox'] = in_bbox  
+        else:
+            context_data['map_bbox'] = None
         # We need this, so it's in the Django templates (for the search parms)
-        context_data['map_bbox'] = map_bbox
         table = self.create_table(MmIpRange.objects.none())
         context_data['table'] = table
         return context_data

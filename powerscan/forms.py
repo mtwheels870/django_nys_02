@@ -9,14 +9,14 @@ from django.utils.dateparse import parse_datetime
 from .models import CountTract, IpRangePing, UsState
 
 # widget=forms.HiddenInput())
-class SelectedCensusTractForm(forms.Form):
+class SelectedAggregationForm(forms.Form):
     #agg_type = forms.CharField(initial="SomeType")
     #id = forms.IntegerField(initial=23)
     #map_bbox = forms.CharField(initial="a=b")
     agg_type = forms.CharField()
     id = forms.IntegerField(label="Db ID")
     range_count = forms.IntegerField(label="Total IP Ranges")
-    map_bbox = forms.CharField(widget=forms.HiddenInput())
+    # map_bbox = forms.CharField(widget=forms.HiddenInput())
 
     # Range count doesn't work for IP ranges (looks like a single range, really many)
 
