@@ -71,6 +71,7 @@ class SurveyUtil:
 
     @staticmethod
     def calculate_bbox(survey_id):
+        survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         logger.info(f"calculate_bbox(), create empty")
         mpoly_combined = MultiPolygon()
 
