@@ -200,11 +200,6 @@ LOGGING = {
             "level": "ERROR",
             "class": "logging.StreamHandler",
         },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': 'myproject.log',
-            'formatter': 'simple'
-        },
     },
     "root": {
         "handlers": ["console"],
