@@ -197,13 +197,15 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "console": {
-            "level": "ERROR",
+            # "level": "ERROR",
+            "level": "INFO",
             "class": "logging.StreamHandler",
         },
     },
     "root": {
         "handlers": ["console"],
-        "level": "ERROR",
+        # "level": "ERROR",
+        "level": "INFO",
     },
     'loggers': {
         '': {           # root logger
