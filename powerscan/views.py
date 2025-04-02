@@ -35,7 +35,7 @@ from .serializers import (
     CountStateSerializer,
 )
 
-from .forms import SelectedCensusTractForm, PingStrategyForm
+from .forms import SelectedAggregationForm, PingStrategyForm
 from .tables import MmIpRangeTable
 
 # Import our neighbors
