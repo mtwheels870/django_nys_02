@@ -64,6 +64,8 @@ FIELD_RECURRING = "field_recurring"
 FIELD_NUM_OCCURRENCES = "field_num_occurrences"
 FIELD_CURRENT_TIME = "current_time"
 
+logger = logging.getLogger(__name__)
+
 def _get_current_time():
     now_fmt = timezone.now().strftime(TIME_FORMAT_STRING)
     return now_fmt
