@@ -28,7 +28,7 @@
   <body>
     <div class="split-container">
         <div class="left-side">
-            <h3 style="forground-color:green;">{{ powerscan_version }}</h3>
+            <p style="color:green;font-style:italic">{{ powerscan_version }}</p>
             <h2>Aggregated Map</h2>
             <div id="map"></div>
             <script type='module' defer src="{% static 'map.js' %}?{{ map_bbox }}"></script>

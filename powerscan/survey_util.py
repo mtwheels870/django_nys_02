@@ -89,7 +89,7 @@ class SurveyUtil:
             mpoly = us_state.mpoly
             for poly in mpoly:
                 mpoly_combined.append(poly)
-        # bbox = mpoly_combined.envelope
+        bbox = mpoly_combined.extent
         logger.info(f"(LOGGER)  calculate_bbox(), final extent: {bbox}")
         return bbox
 

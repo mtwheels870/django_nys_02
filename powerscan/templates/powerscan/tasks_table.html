@@ -9,6 +9,7 @@
     <!-- script type='module' defer src="{% static 'kg_train/folder_detail.js'%}" crossorigin=""> </script -->
   </head>
   <body>
+    <p style="color:green;font-style:italic">{{ powerscan_version }}</p>
     <h3>Current Celery Tasks:</h3>
     <p>Current Time (UTC): <b>{{ current_time }}</b></p>
     <form method="post" enctype="multipart/form-data">
