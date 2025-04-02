@@ -80,12 +80,16 @@ class SurveyUtil:
         mpoly_combined = MultiPolygon()
 
         state_set = survey.ipsurveystate_set.all()
+        num_states = state_set.count()
+        if num_states > 1:
+            logger.warn(f"(LOGGER) calculate_bbox(), for now, just taking the first state!")
+        first_state = state_set[0]
         for state in state_set:
             us_state = state.us_state
             mpoly = us_state.mpoly
             for poly in mpoly:
                 mpoly_combined.append(poly)
-        bbox = mpoly_combined.envelope
+        # bbox = mpoly_combined.envelope
         logger.info(f"(LOGGER)  calculate_bbox(), final extent: {bbox}")
         return bbox
 

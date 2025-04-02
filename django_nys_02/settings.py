@@ -99,11 +99,13 @@ if PRODUCTION_MODE:
     CELERY_APP_NAME = "celery_django_prod"
     CELERY_QUEUE = "cb_production"
     PRODIGY_PORT = 8081 
+    POWERSCAN_VERSION = "Production"
 else:
     DIR_ZMAP_NAME = 'development'
     CELERY_APP_NAME = "celery_django_dev"
     CELERY_QUEUE = 'cb_development'
     PRODIGY_PORT = 8080 
+    POWERSCAN_VERSION = "Development"
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 DATABASES = {

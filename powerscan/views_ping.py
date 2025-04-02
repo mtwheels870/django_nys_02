@@ -23,7 +23,7 @@ from rest_framework_gis import filters
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from django_nys_02.settings import CELERY_QUEUE
+from django_nys_02.settings import CELERY_QUEUE, POWERSCAN_VERSION 
 from django_nys_02.celery import app as celery_app
 from django_nys_02.asgi import application
 
@@ -53,16 +53,17 @@ KEY_LEAFLET_MAP = "leaflet_map"
 
 # These fields are used in the templates
 #FIELD_CELERY_DETAILS = "celery_stuff"
-FIELD_STATUS = "status_message" 
+TEMPLATE_VAR_STATUS = "status_message" 
 #FIELD_SURVEY_ID = "survey_id" 
-FIELD_SURVEY_STATUS = "survey_status" 
-FIELD_TASKS = "tasks" 
+TEMPLATE_VAR_SURVEY_STATUS = "survey_status" 
+TEMPLATE_VAR_CURRENT_TIME = "current_time"
+TEMPLATE_VAR_POWERSCAN_VERSION = "powerscan_version"
+
 FIELD_SURVEY_ID = "field_survey_id"
 FIELD_SURVEY_NAME = "field_survey_name"
 FIELD_START_TIME = "field_start_time"
 FIELD_RECURRING = "field_recurring"
 FIELD_NUM_OCCURRENCES = "field_num_occurrences"
-FIELD_CURRENT_TIME = "current_time"
 
 logger = logging.getLogger(__name__)
 
@@ -86,10 +87,11 @@ class CreateNewSurveyView(generic.edit.FormView):
 
         # There's an unbound, empty form in context_data...
         # File stuff
-        context_data[FIELD_STATUS] = self._status_message
+        context_data[TEMPLATE_VAR_STATUS] = self._status_message
         survey_status = celery_results_handler.reset()
-        context_data[FIELD_SURVEY_STATUS] = survey_status 
-        context_data[FIELD_CURRENT_TIME] = _get_current_time()
+        context_data[TEMPLATE_VAR_SURVEY_STATUS] = survey_status 
+        context_data[TEMPLATE_VAR_CURRENT_TIME] = _get_current_time()
+        context_data[TEMPLATE_VAR_POWERSCAN_VERSION] = POWERSCAN_VERSION
 
         return context_data
 
@@ -179,9 +181,10 @@ class CreateNewSurveyView(generic.edit.FormView):
         # print(f"CPV.post(), new status = {status}")
             #FIELD_TASKS : self._get_tasks(),
         context = {"form" : new_form,
-            FIELD_STATUS : self._status_message,
-            FIELD_SURVEY_STATUS : status,
-            FIELD_CURRENT_TIME : _get_current_time(),
+            TEMPLATE_VAR_STATUS : self._status_message,
+            TEMPLATE_VAR_SURVEY_STATUS : status,
+            TEMPLATE_VAR_CURRENT_TIME : _get_current_time(),
+            TEMPLATE_VAR_POWERSCAN_VERSION : POWERSCAN_VERSION,
         }
         return render(request, self.template_name, context)
 
@@ -195,7 +198,8 @@ class RecentSurveyView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context[FIELD_CURRENT_TIME] = _get_current_time
+        context[TEMPLATE_VAR_CURRENT_TIME] = _get_current_time
+        context[TEMPLATE_VAR_POWERSCAN_VERSION ] = POWERSCAN_VERSION
         return context
 
     def get_queryset(self):
@@ -246,7 +250,10 @@ class RecentSurveyView(SingleTableView):
                 value = request.POST[key]
                 print(f"          [{i}]: {key} = {value}")
         # Stay on the same page
-        return redirect(request.path, { FIELD_CURRENT_TIME : _get_current_time })
+        return redirect(request.path, {
+            TEMPLATE_VAR_CURRENT_TIME : _get_current_time,
+            TEMPLATE_VAR_POWERSCAN_VERSION, POWERSCAN_VERSION,
+        })
 
 class CeleryTasksView(SingleTableView):
     #data = [
@@ -262,7 +269,8 @@ class CeleryTasksView(SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context[FIELD_CURRENT_TIME] = _get_current_time
+        context[TEMPLATE_VAR_CURRENT_TIME] = _get_current_time
+        context[TEMPLATE_VAR_POWERSCAN_VERSION ] = POWERSCAN_VERSION
         return context
 
     def _make_task_tuple(self, status, task):
@@ -329,7 +337,10 @@ class CeleryTasksView(SingleTableView):
                 value = request.POST[key]
                 print(f"          [{i}]: {key} = {value}")
         # Stay on the same page
-        return redirect(request.path, { FIELD_CURRENT_TIME : _get_current_time })
+        return redirect(request.path, {
+            TEMPLATE_VAR_CURRENT_TIME : _get_current_time,
+            TEMPLATE_VAR_POWERSCAN_VERSION : POWERSCAN_VERSION,
+        })
 
 class ScheduleSurveyView(generic.edit.FormView):
     form_class = ScheduleSurveyForm
@@ -337,7 +348,8 @@ class ScheduleSurveyView(generic.edit.FormView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data[FIELD_CURRENT_TIME] = _get_current_time()
+        context_data[TEMPLATE_VAR_CURRENT_TIME] = _get_current_time()
+        context_data[TEMPLATE_VAR_POWERSCAN_VERSION ] = POWERSCAN_VERSION
         form = context_data['form']
         survey_id = self.kwargs.get('pk')
         # print(f"SSV.g_c_d(), survey_id = {survey_id}")
@@ -389,7 +401,7 @@ class ScheduleSurveyView(generic.edit.FormView):
                 print(f"SSV.post(), form is INVALID, creating empty")
                 # Clear the form and stay here
                 context = {"form" : form, 
-                    FIELD_CURRENT_TIME : _get_current_time() }
+                    TEMPLATE_VAR_CURRENT_TIME : _get_current_time() }
                 # We re-reneder the same form, but the errors will now be displayed
                 return render(request, self.template_name, context)
             else:
