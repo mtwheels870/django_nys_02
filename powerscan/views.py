@@ -138,6 +138,10 @@ class MapNavigationView(generic.edit.FormView):
         context_data['table'] = table
         return context_data
 
+    def get(self, request, *args, **kwargs):
+        print(f"MNV.get(), request = {request}")
+        return self.render_to_response(self.get_context_data()
+
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
         # print(f"MNV.post(), checking form here: {form}")
