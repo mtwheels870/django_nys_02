@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.gis.geos import MultiPolygon
 
 logger = logging.getLogger(__name__)
+print(f"SurveyUtil: name = {__name__}, logger = {logger}")
 
 class SurveyUtil:
     @staticmethod
@@ -74,6 +75,7 @@ class SurveyUtil:
         from .models import (IpRangeSurvey)
 
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+        print(f"SurveyUtil.calculate_bbox about to call logger.info()")
         logger.info(f"calculate_bbox(), create empty")
         mpoly_combined = MultiPolygon()
 
