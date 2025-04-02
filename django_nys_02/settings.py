@@ -205,7 +205,19 @@ LOGGING = {
         '': {           # root logger
             'handlers': ['console'],
             'level': 'WARNING',
-            'propagate': False,
+            'propagate': True,
+        },
+        'powerscan.survey_util': {
+            # 'handlers': ['console'],
+            'level': 'INFO',
+            "class": "logging.StreamHandler",
+            'propagate': True,
+        },
+        'powerscan.views_ping': {
+            # 'handlers': ['console'],
+            'level': 'INFO',
+            "class": "logging.StreamHandler",
+            'propagate': True,
         },
     },
 }
