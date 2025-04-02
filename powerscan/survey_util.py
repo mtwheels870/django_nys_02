@@ -36,9 +36,9 @@ class SurveyUtil:
     def _delete_surveys(survey_ids):
         from .models import (IpRangeSurvey, IpSurveyCounty, IpSurveyTract)
 
-        logger.info(f"PSM._delete_surveys(), surveys: {survey_ids}")
+        logger.warn(f"PSM._delete_surveys(), surveys: {survey_ids}")
         for survey_id in survey_ids:
-            logger.info(f"   deleting survey = {survey_id}")
+            logger.warn(f"   deleting survey = {survey_id}")
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
 
             iprange_set = survey.iprangeping_set.all()
@@ -60,7 +60,7 @@ class SurveyUtil:
             num_tracts = tract_set.count()
             num_counties = county_set.count()
             num_states = state_set.count()
-            logger.info(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
+            logger.warn(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
             survey.delete()
         return True
 

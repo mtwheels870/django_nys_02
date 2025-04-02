@@ -252,7 +252,7 @@ class RecentSurveyView(SingleTableView):
         # Stay on the same page
         return redirect(request.path, {
             TEMPLATE_VAR_CURRENT_TIME : _get_current_time,
-            TEMPLATE_VAR_POWERSCAN_VERSION, POWERSCAN_VERSION,
+            TEMPLATE_VAR_POWERSCAN_VERSION : POWERSCAN_VERSION,
         })
 
 class CeleryTasksView(SingleTableView):
