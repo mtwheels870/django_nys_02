@@ -62,7 +62,7 @@ class IpSurveyTable(tables.Table):
 
     def render_time_tally_stopped(self, value, record):
         time_string = self._render_time(value)
-        timedelta_secs = value - survey.time_ping_started
+        timedelta_secs = value - record.time_ping_started
         timedelta_mins = timedelta_secs.total_seconds() / 60
         return f"{time_string} {timedelta_mins:.1f}m"
 
