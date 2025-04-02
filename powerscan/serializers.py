@@ -1,8 +1,12 @@
+import logging
+
 from rest_framework_gis import serializers, fields
 # from rest_framework_gis.serializers import fields
 # from rest_framework_gis.serializers import SerializerMethodField
 
 from .models import CensusTract, County, MmIpRange, CountTract, CountCounty, CountState, UsState
+
+logger = logging.getLogger(__name__)
 
 class UsStateSerializer(
     serializers.GeoFeatureModelSerializer):
@@ -43,8 +47,6 @@ class CountStateSerializer(
         model = CountState
 
     def get_model_b_field(self, obj):
-        # print(f"get_model_b_count(), self = {self}, obj = {obj}")
-        # return self.us_state.state_name
         return obj.us_state.state_name
 
 class CountCountySerializer(

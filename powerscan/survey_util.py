@@ -1,11 +1,14 @@
+import logging
+
 from django.shortcuts import get_object_or_404
+
+logger = logging.getLogger(__name__)
 
 class SurveyUtil:
     @staticmethod
     def copy_geography(survey_id, parent_survey_id):
         from .models import (IpRangeSurvey, IpSurveyState, IpSurveyCounty, IpSurveyTract)
 
-        # print(f"SurveyUtil.copy_geography(), survey_id = {survey_id}, parent_survey_id = {parent_survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         parent_survey = get_object_or_404(IpRangeSurvey, pk=parent_survey_id)
 
@@ -24,13 +27,15 @@ class SurveyUtil:
             new_survey_tract = IpSurveyTract(survey=survey,tract=parent_tract.tract)
             new_survey_tract.save()
 
+        survey.num_total_ranges = parent_survey.num_total_ranges
+
     @staticmethod
     def _delete_surveys(survey_ids):
         from .models import (IpRangeSurvey, IpSurveyCounty, IpSurveyTract)
 
-        print(f"PSM._delete_surveys(), surveys: {survey_ids}")
+        logger.info(f"PSM._delete_surveys(), surveys: {survey_ids}")
         for survey_id in survey_ids:
-            print(f"   deleting survey = {survey_id}")
+            logger.info(f"   deleting survey = {survey_id}")
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
 
             iprange_set = survey.iprangeping_set.all()
@@ -52,7 +57,7 @@ class SurveyUtil:
             num_tracts = tract_set.count()
             num_counties = county_set.count()
             num_states = state_set.count()
-            print(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
+            logger.info(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
             survey.delete()
         return True
 

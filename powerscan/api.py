@@ -23,4 +23,3 @@ router.register(r"tract_counts", CountTractViewSet)
 router.register(r"ip_ranges", MmIpRangeViewSet)
 
 urlpatterns = router.urls
-# print(f"api.py: urlpatterns = {urlpatterns}")

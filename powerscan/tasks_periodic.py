@@ -114,11 +114,7 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     second = f"+{delay_mins:.1f}m, new tally_start: {formatted_tally_start}"
     print(first + second)
     retry_count = 0
-    # Because this is a subtask, we'll have pre-pended args?
     async_result2 = tally_results.apply_async([metadata_file, survey_id, retry_count], countdown=delay_secs)
-#        kwargs={"survey_id": survey_id,
-#            "metadata_file": metadata_file} )
-    #celery_results_handler.save_pending(async_result2)
     return async_result2
 
 def _task_check_args(task, task_name, args, index):
@@ -128,13 +124,11 @@ def _task_check_args(task, task_name, args, index):
         print(f"          task = {task}")
         return None
     survey_id = args[index]
-    # print(f"_task_check_args(), task = {task_name}, args[{index}] = {survey_id}")
     return survey_id 
 
 def _task_check_kwargs(task_name, kwargs):
     if "survey_id" in kwargs:
         survey_id = kwargs["survey_id"]
-        # print(f"_task_check_kwargs(), task = {task_name}, survey_id = {survey_id}")
         return survey_id
     return None
 
@@ -179,13 +173,10 @@ def _get_task_survey_id(task):
         print(f"      task[kwargs][survey_id]: {survey_id} = {type}")
         return survey_id, "task_here"
     else:
-        # type = task["type"]
-        # print(f"      task = {type}, no kwargs")
         return None, None
 
 def _scheduled_active_surveys(debug_tasks_queues):
     running_surveys = {}
-    # running_survey_ids = ()
     inspect = celery_app.control.inspect()
 
     tasks_active = inspect.active()
@@ -247,8 +238,8 @@ def _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues):
             #print(f"    async_result = {async_result}")
         index = index + 1
 
-    f = lambda survey: survey.id
-    survey_ids = [f(x) for x in upcoming_surveys]
+    # UNUSED: f = lambda survey: survey.id
+    # survey_ids = [f(x) for x in upcoming_surveys]
     #if len(survey_ids) > 0:
     #    print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
 

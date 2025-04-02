@@ -1,3 +1,5 @@
+import logging
+
 from pathlib import Path
 
 from django.utils import timezone
@@ -93,6 +95,8 @@ maxm_config = {
 CHUNK_SIZE = 200000
 SMALL_CHUNK_SIZE = 10000
 
+logger = logging.getLogger(__name__)
+
 class RangeChunker:
     def __init__(self):
         self._range_start = 0
@@ -106,12 +110,12 @@ class RangeChunker:
         if self._last_chunk:
             raise StopIteration
 
-        print(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
+        logger.info(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
         ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
         num_returned = ranges.count()
-        print(f"RangeChunker.__next__(), returned {num_returned} rows")
+        logger.info(f"RangeChunker.__next__(), returned {num_returned} rows")
         if num_returned < SMALL_CHUNK_SIZE:
-            print(f"RangeChunker.__next__(), setting last chunk = True")
+            logger.info(f"RangeChunker.__next__(), setting last chunk = True")
             self._last_chunk = True
         else:
             self._range_start = self._range_end
@@ -130,15 +134,15 @@ class MtwChunker:
 
     def __next__(self):
         if self._last_chunk:
-            print(f"MtwChunker.__next__(), found last chunk, returning StopIteration")
+            logger.info(f"MtwChunker.__next__(), found last chunk, returning StopIteration")
             raise StopIteration
 
-        print(f"MtwChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
+        logger.info(f"MtwChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
         states = UsState.objects.all().order_by("id")[self._range_start:self._range_end]
         num_returned = states.count()
-        print(f"MtwChunker.__next__(), returned {num_returned} rows")
+        logger.info(f"MtwChunker.__next__(), returned {num_returned} rows")
         if num_returned < MTW_CHUNK_SIZE:
-            print(f"MtwChunker.__next__(), setting last chunk = True")
+        logger.info(f"MtwChunker.__next__(), setting last chunk = True")
             self._last_chunk = True
         else:
             self._range_start = self._range_end
@@ -158,15 +162,15 @@ class Loader():
         chunk_count = 0
         for chunk in MtwChunker():
             if chunk:
-                print(f"chunk_state(), getting chunk: {chunk_count}")
+                logger.info(f"chunk_state(), getting chunk: {chunk_count}")
                 for us_state in chunk:
-                    print(f"chunk_state(), [{index}]: {us_state}")
+                    logger.info(f"chunk_state(), [{index}]: {us_state}")
                     index = index + 1
                 chunk_count = chunk_count + 1
 
     def run_state(self, verbose=True):
         state_shp = Path(loc_config["PATH_STATE"])
-        print(f"run_state(), state_shp = {state_shp}, mapping = {mapping_state}")
+        logger.info(f"run_state(), state_shp = {state_shp}, mapping = {mapping_state}")
         self.lm_state = LayerMapping(UsState, state_shp, mapping_state, transform=False)
         self.lm_state.save(strict=True, verbose=verbose)
 
@@ -187,26 +191,26 @@ class Loader():
         self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, mapping_maxm_range, transform=False)
         # Throws exception, should wrap in a try{}
         self.lm_ranges.save(strict=True, verbose=verbose, progress=progress)
-        print(f"ranges saved, now run: map_ranges_census_maxm()")
+        logger.info(f"ranges saved, now run: map_ranges_census_maxm()")
 
     # Build a big hash of census tract(id) to an empty count
     def _create_hash_tract_counts(self):
-        print(f"_create_hash_tract_counts(), creating hash of empty counts")
+        logger.info(f"_create_hash_tract_counts(), creating hash of empty counts")
         self.hash_tracts = {}
         #point = Point(float(range.mm_longitude), float(range.mm_latitude))
         index = 0
         for tract in CensusTract.objects.all().order_by("id"):
             long = tract.interp_long
             if not long:
-                print(f"_create_hash_tract_counts(), tract = {tract.id}, long = {long}")
+                logger.info(f"_create_hash_tract_counts(), tract = {tract.id}, long = {long}")
                 break
             lat = tract.interp_lat
             if not lat:
-                print(f"_create_hash_tract_counts(), tract = {tract.id}, lat = {lat}")
+                logger.info(f"_create_hash_tract_counts(), tract = {tract.id}, lat = {lat}")
                 break
             mpoint = MultiPoint(Point(float(long), float(lat)))
             if index % 1000 == 0:
-                print(f"_create_hash_tract_counts(), [{index}], creating count from {tract}")
+                logger.info(f"_create_hash_tract_counts(), [{index}], creating count from {tract}")
             new_counter = CountTract(census_tract=tract, mpoint=mpoint)
             self.hash_tracts[tract.id] = new_counter 
             index = index + 1
@@ -215,24 +219,24 @@ class Loader():
         print(f"_save_hash_tract_counts(), iterating through dictionary...")
         for tract_id, new_counter in self.hash_tracts.items():
             if new_counter.range_count > 0:
-                print(f"_save_hash_tract_counts(), tract_id[{tract_id}] = {new_counter.range_count}")
+                logger.info(f"_save_hash_tract_counts(), tract_id[{tract_id}] = {new_counter.range_count}")
                 new_counter.save()
 
     def aggregate_tracts_maxm(self, verbose=False):
         # Create empty counts
         self._create_hash_tract_counts()
         index = 0
-        print(f"aggregate_tracts_maxm(), starting iteration...")
+        logger.info(f"aggregate_tracts_maxm(), starting iteration...")
         for chunk in RangeChunker():
             for range in chunk:
                 if not range.census_tract.id in self.hash_tracts:
                     first = "aggregate_tracts_maxm(), could not find census_tract.id = "
                     second = f"{range.census_tract.id} in hash table (ignoring!)"
-                    print(first + second)
+                    logger.info(first + second)
                     continue
                 count = self.hash_tracts[range.census_tract.id]
                 if index % 1000 == 0:
-                    print(f"range[{index}] = ip: {range}, tract(counter): {count}")
+                    logger.info(f"range[{index}] = ip: {range}, tract(counter): {count}")
                 if not count:
                     raise Exception(f"aggregate_tracts_maxm(), could not find census_tract.id = {range.census_tract.id}")
                 count.range_count = count.range_count + 1
@@ -257,7 +261,7 @@ class Loader():
         return county_counter
 
     def aggregate_counties(self, verbose=False):
-        print(f"aggregate_counties()")
+        logger.info(f"aggregate_counties()")
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_counties = {}
         
@@ -267,7 +271,7 @@ class Loader():
             county = tract_counter.census_tract.county
             geoid = county.geoid 
             if index_tract % 100 == 0:
-                print(f"tract[{index_tract}], id: {tract_counter.census_tract.tract_id}, Looking up county: {geoid}")
+                logger.info(f"tract[{index_tract}], id: {tract_counter.census_tract.tract_id}, Looking up county: {geoid}")
             try:
                 if geoid in self.hash_counties:
                     county_counter = self.hash_counties[geoid]
@@ -276,12 +280,12 @@ class Loader():
                 # +1 here counts the number of tracts, we want the number of IP ranges
                 county_counter.range_count = county_counter.range_count + tract_counter.range_count
             except PowerScanValueException as e:
-                print(f"aggregate_counties(), e: {e}")
+                logger.error(f"aggregate_counties(), e: {e}")
             index_tract = index_tract + 1
         # Should save here
         index_county = 0
         for geoid, county_counter in self.hash_counties.items():
-            print(f"county[{index_county}], save[{geoid}]: count = {county_counter.range_count}")
+            logger.info(f"county[{index_county}], save[{geoid}]: count = {county_counter.range_count}")
             county_counter.save()
             index_county = index_county + 1
 
@@ -294,14 +298,13 @@ class Loader():
         lat = us_state.interp_lat
         if not lat:
             raise PowerScanValueException(f"_create_state_counter(), state = {us_state.state_name}, lat = {lat}")
-        # mpoint = MultiPoint(Point(float(long), float(lat)))
         point = Point(float(long), float(lat))
         state_counter.centroid = point
         self.hash_states[us_state.state_fp] = state_counter
         return state_counter
 
     def aggregate_states(self, verbose=False):
-        print(f"aggregate_states()")
+        logger.info(f"aggregate_states()")
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_states = {}
         
@@ -312,7 +315,7 @@ class Loader():
             state = county.us_state
             state_fp = state.state_fp 
             if index_county % 100 == 0:
-                print(f"county[{index_county}], id: {county.geoid}, Looking up state: {state_fp}")
+                logger.info(f"county[{index_county}], id: {county.geoid}, Looking up state: {state_fp}")
             try:
                 if state_fp in self.hash_states:
                     state_counter = self.hash_states[state_fp]
@@ -321,11 +324,11 @@ class Loader():
                 # +1 here counts the number of tracts, we want the number of IP ranges
                 state_counter.range_count = state_counter.range_count + county_counter.range_count
             except PowerScanValueException as e:
-                print(f"aggregate_states(), e: {e}")
+                logger.error(f"aggregate_states(), e: {e}")
             index_county = index_county + 1
         # Should save here
         for _, state_counter in self.hash_states.items():
-            print(f"Saving state: {state_counter.us_state.state_name}, {state_counter.range_count}")
+            logger.info(f"Saving state: {state_counter.us_state.state_name}, {state_counter.range_count}")
             state_counter.save()
 
     def load_state_counts(self, verbose=False):
@@ -344,13 +347,13 @@ class Loader():
         for count in counts:
             state_fp = count[0]
             estimated_count = count[1]
-            print(f"load_state_counts(), looking for state = {state_fp}")
+            logger.info(f"load_state_counts(), looking for state = {state_fp}")
             us_state = UsState.objects.get(state_fp=state_fp)
             state_counter = CountState.objects.get(us_state=us_state)
             state_counter.estimated_ranges = estimated_count
             state_counter.save()
 
-            print(f"load_state_counts(), found state_counter = {state_counter.id}, setting to {estimated_count}")
+            logger.info(f"load_state_counts(), found state_counter = {state_counter.id}, setting to {estimated_count}")
         
 
     # Try and get the Django channels stuff working (works w/ a Django worker, but not with celery.
@@ -358,7 +361,7 @@ class Loader():
     def ping_c(self):
         try:
             channel_layer = get_channel_layer()
-            print(f"ping_c(), channel_layer = {channel_layer}")
+            logger.info(f"ping_c(), channel_layer = {channel_layer}")
                 #"background_tasks",
             # This should probably use a group_send (to be consistent)
             #result = async_to_sync(channel_layer.send) (
@@ -370,8 +373,8 @@ class Loader():
                     "task_result_data": "some sample data here",
                 })
         except Exception as e:
-            print(f"ping_c(), exception {e}")
-        print(f"    result = {result}")
+            logger.error(f"ping_c(), exception {e}")
+        logger.info(f"   result = {result}")
 
 
     def mil_state(self, verbose=False):

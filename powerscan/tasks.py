@@ -12,6 +12,7 @@ import shutil
 import ipaddress
 import netaddr
 import traceback
+import logging
 
 # Celery / Django
 import celery
@@ -32,7 +33,6 @@ from asgiref.sync import async_to_sync
 # Our stuff
 from django_nys_02.settings import CELERY_QUEUE
 from django_nys_02.celery import app as celery_app
-QUEUE_NAME = "unused"
 
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
@@ -41,10 +41,8 @@ from .models import (
 
 from .ping import PingSurveyManager
 
-SMALL_CHUNK_SIZE = 10000
-TOTAL_OBJECTS = 22000
-
-TEMP_DIRECTORY = "/tmp/exec_zmap/"
+#SMALL_CHUNK_SIZE = 10000
+#TOTAL_OBJECTS = 22000
 
 CELERY_FIELD_SURVEY_ID = "survey_id"
 
@@ -62,14 +60,11 @@ TIME_FORMAT_STRING = "%H:%M:%S"
 
 DEBUG_ID = 1
 
+logger = logging.getLogger(__name__)
+
 def unused_start_tracts(self, *args, **kwargs):
-
-    # Main method
-    #print(f"start_tracts(), self = {self}, kwargs = {kwargs}, creating survey")
-
     survey = IpRangeSurvey()
     survey.time_started = timezone.now()
-    #print(f"SURVEY SAVE, 4")
     survey.save()
     # Use the minus to be descending
     count_range_tracts = CountTract.objects.order_by("-range_count")
@@ -78,27 +73,26 @@ def unused_start_tracts(self, *args, **kwargs):
     ending_task = finish_survey.s(survey.id)
 
     chained_task = chain(ping_tracts.s(survey.id, batch_one), ending_task)
-    #print(f"start_tracts(), chained_task = {chained_task}")
     result = chained_task.apply_async(
                 queue=CELERY_QUEUE,
                 routing_key='ping.tasks.start_tracts')
-    #print(f"start_tracts(), after apply_async(), result = {result}")
     return result
 
     # Break into batches of 10 tracts, right now
     
-def make_temp_dir(tract_id):
+def unused_make_temp_dir(tract_id):
+    TEMP_DIRECTORY = "/tmp/exec_zmap/"
     now = datetime.datetime.now()
     #cleanup_temp_dir(temp_directory_port)
     folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
     full_path = os.path.join(TEMP_DIRECTORY, folder_snapshot, str(tract_id))
-    print(f"make_temp_dir(), full_path = {full_path}")
+    # print(f"make_temp_dir(), full_path = {full_path}")
     if not os.path.exists(full_path):
         os.makedirs(full_path)
     # print(f"tasks.py:make_temp_dir(), full_path = {full_path}")
     return full_path
 
-def _prep_file_range(ip_range, dir_path):
+def _unused_prep_file_range(ip_range, dir_path):
     # Create the CSV file
     ip_start = ip_range.ip_range_start
     ip_end = ip_range.ip_range_end
@@ -107,9 +101,7 @@ def _prep_file_range(ip_range, dir_path):
     file_path_text = os.path.join(dir_path, output_file_name)
     cidrs = netaddr.iprange_to_cidrs(ip_start, ip_end)
     ip_network = cidrs[0]
-    print(f"prep_file_range(), ip_start = {ip_start}, ip_end = {ip_end}, ip_network = {ip_network}")
-    #network = ipaddress.ip_network(str(cidrs), strict=False)
-    #num_potential = cidrs.size
+    # print(f"prep_file_range(), ip_start = {ip_start}, ip_end = {ip_end}, ip_network = {ip_network}")
     return file_path_text, ip_network 
 
 def _count_output_lines(file_path):
@@ -120,8 +112,8 @@ def _unused_ping_single_range(survey, tract, ip_range, dir_path, debug):
     file_path_string = str(file_path)
     ip_net_string = str(ip_network)
     if debug:
-        print(f"_unused_ping_single_range(), ip_start = {ip_range.ip_range_start}, ")
-        print(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
+        logger.info(f"_unused_ping_single_range(), ip_start = {ip_range.ip_range_start}, ")
+        logger.info(f"     file_path = {file_path_string}, ip_net_string = {ip_net_string}")
 
     # Start the subprocess
     _execute_subprocess2(ip_net_string, file_path_string, debug)
@@ -144,14 +136,11 @@ def build_whitelist(self, *args, **kwargs):
     if survey.time_whitelist_started:
         first = f"build_whitelist(), survey.time_whitelist_started : {survey.time_whitelist_started},"
         second = "another worker grabbed it, exiting"
-        print(first + second)
+        logger.info(first + second)
         return 0
-    #else:
-    #    print(f"build_whitelist(), we're taking ownership")
 
     # Save that we started the process, that's our (worker) lock
     survey.time_whitelist_started = timezone.now()
-    # print(f"SURVEY SAVE, 5")
     survey.save()
 
     survey_manager = PingSurveyManager(survey_id, debug.whitelist)
@@ -161,7 +150,6 @@ def build_whitelist(self, *args, **kwargs):
         message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
     survey.num_total_ranges = num_ranges
-    # print(f"SURVEY SAVE, 5")
     survey.save()
 
     # Django channels back to the caller
@@ -186,16 +174,15 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         full_command = " ".join(list_command)
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
         first_100 = full_command[:100]
-        print(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
+        logger.info(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
-        #print(f"\n_execute_subprocess(), tracking metadata file: {metadata_file} (non-zero)")
         # We need this here for now, else we don't have an output file and there are no lines to count (for responses)
         #stdout, stderr = process.communicate(timeout=10)
         ret_val = process.returncode
         if ret_val:
-            print(f"_execute_subproces(), subprocess.Popen(), bad return code = {ret_val}, stdout:")
+            logger.warning(f"_execute_subproces(), subprocess.Popen(), bad return code = {ret_val}, stdout:")
             stdout, stderr = process.communicate(timeout=10)
             print(f"{stdout}\nstderr:\n{stderr}")
     except Exception as e:
@@ -208,27 +195,26 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 def zmap_from_file(self, survey_id_string):
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
-    # print(f"zmap_from_file(), survey_id = {survey_id_string}")
     #ip_source_id = kwargs["ip_source_id"]
     #survey_id = int(survey_id_string)
     survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
 
     if survey.time_ping_started:
-        print(f"zmap_from_file(), survey.time_ping_started: {survey.time_ping_started}, another worker grabbed it, exiting")
+        first = f"zmap_from_file(), survey.time_ping_started: {survey.time_ping_started}," 
+        second = "another worker grabbed it, exiting"
+        logger.info(first + second)
         return 0
     # Save that we started the process, that's our (worker) lock
     survey.time_ping_started = timezone.now()
     formatted_start = survey.time_ping_started.strftime(TIME_FORMAT_STRING)
-    # print(f"SURVEY SAVE, 6, survey = {survey_id_string}, ping started: {formatted_start}")
     survey.save()
 
     # Check our debug flag
     debug_zmap = debug.zmap
-    #print(f"build_whitelist(), source_id = {ip_source_id}")
     survey_manager = PingSurveyManager.find(survey_id, debug_zmap)
     if not survey_manager:
-        print(f"zmap_from_file(), no directory, quitting")
+        logger.warning(f"zmap_from_file({survey_id}), no directory, quitting")
         return None
 
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
@@ -240,7 +226,7 @@ def zmap_from_file(self, survey_id_string):
 def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
     if metadata_file_job != metadata_file_survey:
-        print(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
+        logger.info(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
         return 0
 
     # See whether the metadata file has values
@@ -268,11 +254,9 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 
 @celery_app.task
 def tally_results(metadata_file, survey_id, retry_count):
-    # print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
     # Ensure another worker hasn't grabbed the survey, yet
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
-    # print(f"tally_results(), now: {formatted_now}")
     try:
         int_survey_id = int(survey_id)
         survey = IpRangeSurvey.objects.get(pk=int_survey_id)
@@ -283,7 +267,6 @@ def tally_results(metadata_file, survey_id, retry_count):
             return 0
         # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
         survey.time_tally_started = now
-        # print(f"SURVEY SAVE, 8")
         survey.save()
 
         debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
@@ -307,12 +290,10 @@ def tally_results(metadata_file, survey_id, retry_count):
             print(first + second)
             async_result2 = tally_results.apply_async(
                 countdown=TALLY_DELAY_SECS, 
-                #"ip_source_id": IP_RANGE_SOURCE,
                 kwargs={"survey_id": survey_id,
                     "metadata_file": metadata_file,
                     "retry_count": retry_count} )
             survey.time_tally_started = None
-            # print(f"SURVEY SAVE, 9")
             survey.save()
             return 0
 
@@ -323,10 +304,17 @@ def tally_results(metadata_file, survey_id, retry_count):
         print(f"Task.tally_results({survey_id}), saved {pings_to_db} to db")
     except Exception as e:
         print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
+        pings_to_db = -1
+    return pings_to_db 
+
+    #network = ipaddress.ip_network(str(cidrs), strict=False)
+    #num_potential = cidrs.size
         #exc_type, exc_value, exc_traceback = sys.exc_info()
         #print(f"    exc_traceback = {dir(exc_traceback)}")
         #exc_traceback.print_exc()
         #exc_traceback.print_exception(*sys.exc_info())
-        pings_to_db = -1
-    return pings_to_db 
-
+                #"ip_source_id": IP_RANGE_SOURCE,
+            # print(f"SURVEY SAVE, 9")
+        # print(f"SURVEY SAVE, 8")
+    # print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
+    # print(f"tally_results(), now: {formatted_now}")

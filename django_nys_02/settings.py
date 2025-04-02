@@ -200,24 +200,33 @@ LOGGING = {
             "level": "ERROR",
             "class": "logging.StreamHandler",
         },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'myproject.log',
+            'formatter': 'simple'
+        },
     },
     "root": {
         "handlers": ["console"],
         "level": "ERROR",
     },
     'loggers': {
-        # We don't use django.channels.worker (b/c we use celery)
+        '': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
         'django.channels.worker': {
             'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,
         },
         'powerscan.consumers': {  # Add logger for your consumers
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'daphne': {
             'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,

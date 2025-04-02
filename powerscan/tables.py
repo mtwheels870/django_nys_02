@@ -84,13 +84,8 @@ class CeleryTaskTable(tables.Table):
         template_name = "django_tables2/bootstrap4.html"
 
     def __init__(self, *args, **kwargs):
-        #inspect = celery_app.control.inspect()
-        #tasks_active = inspect.active()
-        #tasks_scheduled = inspect.scheduled()
-        # print(f"CeleryTaskTable.__init__(), args = {args}, kwargs = {kwargs}")
         super().__init__(*args, **kwargs)
 
     def render_eta(self, value, record):
         dt = iso8601.parse_iso8601(value)
-        # print(f"render_eta(), value = {value}, dt = {dt}")
         return dt.strftime(DATE_TIME_FORMAT)

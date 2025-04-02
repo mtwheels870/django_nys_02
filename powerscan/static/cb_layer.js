@@ -70,8 +70,10 @@ class LayerTractCounts extends LayerCircle {
     layer.setStyle(copiedStyle)
     var id = feature["id"]
     var censusTract = feature.properties["census_tract"]
-    layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
-            range_count + "<br>Database ID: " + id + "</b>")
+    layer.bindPopup("<b>(Circle) Census Tract: ${censusTract}<br>IP Range Count: " + 
+            "${range_count.toLocaleString()}<br>Database ID: ${id}</b>")
+    /* layer.bindPopup("<b>(Circle) Census Tract: " + censusTract + "<br>IP Range Count: " + 
+            range_count + "<br>Database ID: " + id + "</b>") */
     let context = { agg_type: "CountRangeTract", id: id, range_count : range_count };
     layer.on('click', handleCircleClick.bind(null, context));
   }
@@ -112,7 +114,9 @@ class LayerCountyCounts extends LayerCircle {
     layer.setStyle(copiedStyle)
     var countyCode = feature.properties["county_code"]
     var id = feature["id"]
-    layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
+    // layer.bindPopup("<b>County: " + countyCode + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
+    layer.bindPopup("<b>County: ${countyCode}<br>IP Range Count: ${range_count.toLocaleString()}" + 
+        "<br>ID: ${id}</b>")
     let context = { agg_type: "CountRangeCounty", id: id, range_count: range_count };
     layer.on('click', handleCircleClick.bind(null, context));
   } 
@@ -152,7 +156,9 @@ class LayerStateCounts extends LayerCircle {
     var countyCode = feature.properties["county_code"]
     var model_b_field = feature.properties["model_b_field"]
     var id = feature["id"]
-    layer.bindPopup("<b>State: " + model_b_field + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
+    // layer.bindPopup("<b>State: " + model_b_field + "<br>IP Range Count: " + range_count + "<br>ID: " + id + "</b>")
+    layer.bindPopup("<b>State: ${model_b_field}<br>IP Range Count: ${range_count.toLocaleString()}<br>" +
+        "ID: ${id}</b>")
     let context = { agg_type: "CountRangeState", id: id, range_count: range_count };
     layer.on('click', handleCircleClick.bind(null, context));
   } 
