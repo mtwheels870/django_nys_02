@@ -146,7 +146,7 @@ class MapNavigationView(generic.edit.FormView):
     def get_queryset(self):
         # For now, just hard-code with 'PR'
         survey_id = 450
-        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30):
+        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
 
 #    def get(self, request, *args, **kwargs):
 #        print(f"MNV.get(), request = {request}")
