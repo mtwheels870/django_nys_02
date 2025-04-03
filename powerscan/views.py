@@ -36,7 +36,7 @@ from .serializers import (
 )
 
 from .forms import SelectedAggregationForm, PingStrategyForm
-from .tables import MmIpRangeTable
+from .tables import AggregationHistoryTable
 
 # Import our neighbors
 
@@ -115,7 +115,7 @@ def approve_ping(request, id):
 class MapNavigationView(generic.edit.FormView):
     # model = TextFile
     form_class = SelectedAggregationForm
-    table_class = MmIpRangeTable
+    table_class = AggregationHistoryTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
         "per_page": 10
@@ -142,6 +142,11 @@ class MapNavigationView(generic.edit.FormView):
         table = self.create_table(MmIpRange.objects.none())
         context_data['table'] = table
         return context_data
+
+    def get_queryset(self):
+        # For now, just hard-code with 'PR'
+        survey_id = 450
+        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30):
 
 #    def get(self, request, *args, **kwargs):
 #        print(f"MNV.get(), request = {request}")

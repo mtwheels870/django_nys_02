@@ -16,21 +16,36 @@ DATE_TIME_FORMAT = "%m/%d %H:%M:%S"
 TIME_FORMAT = "%H:%M:%S"
 
 MAX_STRING_LENGTH = 15
-class MmIpRangeTable(tables.Table):
+class AggregationHistoryTable(tables.Table):
+    selection = tables.CheckBoxColumn(accessor="survey_id")
+    survey_id = tables.Column(verbose_name="Survey_Id")
+    ping_time = tables.Column(verbose_name="Ping Time (UTC)")
+    ranges_returned = tables.Column(verbose_name="Returns(K)")
+    ranges_total = tables.Column(verbose_name="Total(K)")
+    percentage = tables.Column(verbose_name="% Returned")
+
     class Meta:
-        model = MmIpRange
-        template_name = "django_tables2/bootstrap-responsive.html"
-        empty_text = "(No IP ranges selected yet)"
+        template_name = "django_tables2/bootstrap4.html"
+        # model = MmIpRange
+        empty_text = "(No geography selected yet)"
         # template_name = "django_tables2/bootstrap.html"
-        fields = ["ip_range_start", "company_name", "naics_code", "organization"]
+        fields = "__all__"
 
-    def render_company_name(self, value, record):
-        abbreviated_string = value[:MAX_STRING_LENGTH]
-        return format_html("{}", abbreviated_string)
+    def render_ping_time(self, value, record):
+        return value.strftime(TIME_FORMAT)
 
-    def render_organization(self, value, record):
-        abbreviated_string = value[:MAX_STRING_LENGTH]
-        return format_html("{}", abbreviated_string)
+    def _render_thousands(value):
+        thousands = value / 1000.0
+        return f"{thousands:.2f}"
+
+    def render_ranges_returned(self, value, record):
+        return self._render_thousands(value)
+
+    def render_ranges_total(self, value, record):
+        return self._render_thousands(value)
+
+    def render_percentage(self, value, record):
+        return f"{value:.2f}"
 
 class IpSurveyTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")

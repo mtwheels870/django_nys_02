@@ -73,7 +73,7 @@ class CensusTract(models.Model):
 #
 class CountState(models.Model):
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
-    range_count = models.IntegerField(default=0)
+    hosts_potential = models.IntegerField(default=0)
     centroid = models.PointField(null=True)
 
     class Meta:
@@ -87,7 +87,7 @@ class CountState(models.Model):
 class CountCounty(models.Model):
     # Should be county_ref or something (it's not an actual code)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
-    range_count = models.IntegerField(default=0)
+    hosts_potential = models.IntegerField(default=0)
     centroid = models.PointField(null=True)
 
     class Meta:
@@ -100,7 +100,7 @@ class CountCounty(models.Model):
 
 class CountTract(models.Model):
     census_tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
-    range_count = models.IntegerField(default=0)
+    hosts_potential = models.IntegerField(default=0)
     mpoint = models.MultiPointField(null=True)
 
     class Meta:

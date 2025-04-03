@@ -93,3 +93,17 @@ class SurveyUtil:
         logger.info(f"(LOGGER)  calculate_bbox(), final extent: {bbox}")
         return bbox
 
+    @staticmethod
+    def last_n_surveys_state(survey_id, limit):
+        survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+        state_set = survey.ipsurveystate_set.all()
+        num_states = state_set.count()
+        if num_states > 1:
+            logger.warn(f"(LOGGER) calculate_bbox(), for now, just taking the first state!")
+        first_state = state_set[0]
+
+class CountState(models.Model):
+    us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
+    range_count = models.IntegerField(default=0)
+    centroid = models.PointField(null=True)
+
