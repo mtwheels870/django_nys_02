@@ -15,7 +15,7 @@ class SelectedAggregationForm(forms.Form):
     #map_bbox = forms.CharField(initial="a=b")
     agg_type = forms.CharField()
     id = forms.IntegerField(label="Db ID")
-    range_count = forms.IntegerField(label="Total IP Ranges")
+    name = forms.CharField(label="Aggregation Name")
     # map_bbox = forms.CharField(widget=forms.HiddenInput())
 
     # Range count doesn't work for IP ranges (looks like a single range, really many)
@@ -24,8 +24,8 @@ class SelectedAggregationForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['agg_type'].widget.attrs['readonly'] = True
         self.fields['id'].widget.attrs['readonly'] = True
-        self.fields['range_count'].widget.attrs['readonly'] = True
-        self.fields['map_bbox'].widget.attrs['readonly'] = True
+        self.fields['name'].widget.attrs['readonly'] = True
+        # self.fields['map_bbox'].widget.attrs['readonly'] = True
 
 class PingStrategyForm(forms.Form):
     choices = []
