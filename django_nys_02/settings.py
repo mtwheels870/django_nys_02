@@ -201,7 +201,6 @@ LOGGING = {
         # "level": "ERROR",
         "console": {
             "class": "logging.StreamHandler",
-            'propagate': False,
         },
     },
     'loggers': {
