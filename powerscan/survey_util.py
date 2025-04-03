@@ -99,11 +99,7 @@ class SurveyUtil:
         state_set = survey.ipsurveystate_set.all()
         num_states = state_set.count()
         if num_states > 1:
-            logger.warn(f"(LOGGER) calculate_bbox(), for now, just taking the first state!")
+            logger.warn(f"(LOGGER) last_n_surveys_state(), for now, just taking the first state!")
         first_state = state_set[0]
-
-class CountState(models.Model):
-    us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
-    range_count = models.IntegerField(default=0)
-    centroid = models.PointField(null=True)
+        logger.info(f"(LOGGER) last_n_surveys_state(), first_state = {first_state}")
 
