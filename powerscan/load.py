@@ -493,9 +493,9 @@ class Loader():
                     print(f"_update_county_counts(), could not find county {county}, bailing!")
                     return
                 county_counter = self._county_mapper[county]
-                county_counter.num_ranges_pinged = county_counter.num_ranges_pinged + 
+                county_counter.num_ranges_pinged = county_counter.num_ranges_pinged + \
                     tract_counter.num_ranges_pinged 
-                county_counter.num_ranges_responded = county_counter.num_ranges_responded + 
+                county_counter.num_ranges_responded = county_counter.num_ranges_responded + \
                     tract_counter.num_ranges_responded 
 
         zero_counties = 0
