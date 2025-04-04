@@ -463,7 +463,7 @@ class Loader():
                     total_ranges_responded = total_ranges_responded + 1
             index_chunk = index_chunk + 1
         thousands = total_ranges_responded / 1000.0
-        print(f"update_geo_counts(), num_ranges with non-zero = {thousands:.1f}")
+        print(f"update_geo_counts(), num_ranges with non-zero = {thousands:.2f}")
 
         # Now, iterate through the hash table and save everything with counts
         total_hosts_responded = 0
