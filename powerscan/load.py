@@ -464,7 +464,7 @@ class Loader():
         for i, key in enumerate(tract_mapper):
             value = tract_mapper[key]
             num_ranges_responded = value.num_ranges_responded
-            if num_ranges_responded = 0:
+            if num_ranges_responded == 0:
                 total_zero_tracts = total_zero_tracts + 1
             else:
                 total_hosts_responded = total_hosts_responded + num_ranges_responded
