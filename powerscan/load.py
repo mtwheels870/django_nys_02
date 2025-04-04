@@ -442,7 +442,7 @@ class Loader():
         for tract_counter in CountTract.objects.filter(survey__id=survey_id):
             ranges_pinged = tract_counter.num_ranges_pinged
             if ranges_pinged != 0:
-                print(f"update_geo_counts(), ranges_pinged = {ranges_pinged}! (aborting)"
+                print(f"update_geo_counts(), ranges_pinged = {ranges_pinged}! (aborting)")
                 return
             # Build the hash table
             tract_mapper[tract_counter.tract] = tract_counter
