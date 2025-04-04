@@ -142,7 +142,7 @@ class MtwChunker:
         num_returned = states.count()
         logger.info(f"MtwChunker.__next__(), returned {num_returned} rows")
         if num_returned < MTW_CHUNK_SIZE:
-        logger.info(f"MtwChunker.__next__(), setting last chunk = True")
+            logger.info(f"MtwChunker.__next__(), setting last chunk = True")
             self._last_chunk = True
         else:
             self._range_start = self._range_end
