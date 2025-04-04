@@ -67,6 +67,9 @@ class CensusTract(models.Model):
     # Returns the string representation of the model.
     def __str__(self):
         return self.name
+    
+    def __hash__(self):
+        return int(self.tract_id)
 
 #
 # Power Scan, IP ranges (and aggregations)

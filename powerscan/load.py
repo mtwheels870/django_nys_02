@@ -149,6 +149,32 @@ class MtwChunker:
             self._range_end = self._range_start + MTW_CHUNK_SIZE
         return states
 
+class GeometryRangeChunker:
+    def __init__(self,survey_id=0):
+        self._range_start = 0
+        self._range_end = self._range_start + SMALL_CHUNK_SIZE
+        self._last_chunk = False
+        self._survey_id = survey_id
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._last_chunk:
+            raise StopIteration
+
+        logger.info(f"GeometryRangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
+        ranges = MmIpRange.objects.all().filter(survey_id=self._survey_id).order_by("id")[self._range_start:self._range_end]
+        num_returned = ranges.count()
+        logger.info(f"GeometryRangeChunker.__next__(), returned {num_returned} rows")
+        if num_returned < SMALL_CHUNK_SIZE:
+            logger.info(f"GeometryRangeChunker.__next__(), setting last chunk = True")
+            self._last_chunk = True
+        else:
+            self._range_start = self._range_end
+            self._range_end = self._range_start + SMALL_CHUNK_SIZE
+        return ranges
+
 class PowerScanValueException(Exception):
     pass
 
@@ -409,4 +435,44 @@ class Loader():
     def create_debug(self):
         debug_power = DebugPowerScan(profile_name="Primary")
         debug_power.save()
+
+    def update_geo_counts(self, verbose=True):
+        survey_id = 450
+        tract_mapper = {}
+        for tract_counter = CountTract.objects.filter(survey__id=survey_id)
+            ranges_pinged = tract_counter.num_ranges_pinged
+            if ranges_pinged != 0:
+                print(f"update_geo_counts(), ranges_pinged = {ranges_pinged}! (aborting)"
+                return
+            # Build the hash table
+            tract_mapper[tract_counter.tract] = tract_counter
+            
+        index_chunk = 0
+        for chunk in GeometryRangeChunker(survey_id=survey_id):
+            print(f"update_geo_counts(), processing chunk[index_chunk]")
+            for range in chunk:
+                tract = range.census_tract
+                if tract in tract_mapper:
+                    counter = tract_mapper[tract]
+                    counter.num_ranges_pinged = counter.num_ranges_pinged + range.num_ranges_pinged
+                    counter.num_ranges_responded = counter.num_ranges_responded + range.num_ranges_responded
+            index_chunk = index_chunk + 1
+
+        # Now, iterate through the hash table and save everything with counts
+        total_hosts_responded = 0
+        total_zero_tracts = 0
+        for i, key in enumerate(tract_mapper)
+            value = tract_mapper[key]
+            num_ranges_responded = value.num_ranges_responded
+            if num_ranges_responded = 0:
+                total_zero_tracts = total_zero_tracts + 1
+            else:
+                total_hosts_responded = total_hosts_responded + num_ranges_responded
+        thousands = total_hosts_responded / 1000.0
+        print(f"update_geo_counts(), total_hosts = {thousands:.1f}, zero tracts = {total_zero_tracts}")
+
+
+            
+
+        
 
