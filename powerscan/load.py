@@ -461,7 +461,7 @@ class Loader():
         # Now, iterate through the hash table and save everything with counts
         total_hosts_responded = 0
         total_zero_tracts = 0
-        for i, key in enumerate(tract_mapper)
+        for i, key in enumerate(tract_mapper):
             value = tract_mapper[key]
             num_ranges_responded = value.num_ranges_responded
             if num_ranges_responded = 0:
