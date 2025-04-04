@@ -439,7 +439,7 @@ class Loader():
     def update_geo_counts(self, verbose=True):
         survey_id = 450
         tract_mapper = {}
-        for tract_counter in CountTract.objects.filter(survey__id=survey_id):
+        for tract_counter in IpSurveyTract.objects.filter(survey__id=survey_id):
             ranges_pinged = tract_counter.num_ranges_pinged
             if ranges_pinged != 0:
                 print(f"update_geo_counts(), ranges_pinged = {ranges_pinged}! (aborting)")
