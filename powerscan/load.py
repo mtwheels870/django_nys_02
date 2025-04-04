@@ -19,7 +19,8 @@ from .models import (
     UsState, County, CensusTract,
     CountTract, CountCounty, CountState,
     IpRangeSurvey, IpRangePing,
-    MmIpRange, DebugPowerScan
+    MmIpRange, DebugPowerScan,
+    IpSurveyTract
 )
 
 mapping_state = {
