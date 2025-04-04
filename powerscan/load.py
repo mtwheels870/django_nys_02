@@ -449,15 +449,21 @@ class Loader():
             tract_mapper[tract_counter.tract] = tract_counter
             
         index_chunk = 0
+        total_ranges_responded = 0
         for chunk in GeometryRangeChunker(survey_id=survey_id):
-            print(f"update_geo_counts(), processing chunk[index_chunk]")
+            print(f"update_geo_counts(), processing chunk[{index_chunk}]")
             for range_ping in chunk:
-                tract = range_ping.ip_range.census_tract
-                if tract in tract_mapper:
-                    counter = tract_mapper[tract]
-                    counter.num_ranges_pinged = counter.num_ranges_pinged + range_ping.num_ranges_pinged
-                    counter.num_ranges_responded = counter.num_ranges_responded + range_ping.num_ranges_responded
+                num_ranges_responded = range_ping.num_ranges_responded
+                if num_ranges_responded > 0:
+                    tract = range_ping.ip_range.census_tract
+                    if tract in tract_mapper:
+                        counter = tract_mapper[tract]
+                        counter.num_ranges_pinged = counter.num_ranges_pinged + range_ping.num_ranges_pinged
+                        counter.num_ranges_responded = counter.num_ranges_responded + range_ping.num_ranges_responded
+                    total_ranges_responded = total_ranges_responded + 1
             index_chunk = index_chunk + 1
+        thousands = total_ranges_responded / 1000.0
+        print(f"update_geo_counts(), num_ranges with non-zero = {thousands:.1f}")
 
         # Now, iterate through the hash table and save everything with counts
         total_hosts_responded = 0
