@@ -437,46 +437,93 @@ class Loader():
         debug_power = DebugPowerScan(profile_name="Primary")
         debug_power.save()
 
-    def update_geo_counts(self, verbose=True):
-        survey_id = 450
-        tract_mapper = {}
-        for tract_counter in IpSurveyTract.objects.filter(survey__id=survey_id):
+    def _update_tract_counts(self):
+        for tract_counter in IpSurveyTract.objects.filter(survey__id=self._survey_id):
             ranges_pinged = tract_counter.num_ranges_pinged
             if ranges_pinged != 0:
-                print(f"update_geo_counts(), ranges_pinged = {ranges_pinged}! (aborting)")
+                print(f"_update_tract_counts(), ranges_pinged = {ranges_pinged}! (aborting)")
                 return
             # Build the hash table
             tract_mapper[tract_counter.tract] = tract_counter
             
         index_chunk = 0
         total_ranges_responded = 0
-        for chunk in GeometryRangeChunker(survey_id=survey_id):
-            print(f"update_geo_counts(), processing chunk[{index_chunk}]")
+        for chunk in GeometryRangeChunker(survey_id=self._survey_id):
+            print(f"_update_tract_counts(), processing chunk[{index_chunk}]")
             for range_ping in chunk:
                 num_ranges_responded = range_ping.num_ranges_responded
                 if num_ranges_responded > 0:
                     tract = range_ping.ip_range.census_tract
                     if tract in tract_mapper:
-                        counter = tract_mapper[tract]
+                        counter = self._tract_mapper[tract]
                         counter.num_ranges_pinged = counter.num_ranges_pinged + range_ping.num_ranges_pinged
                         counter.num_ranges_responded = counter.num_ranges_responded + range_ping.num_ranges_responded
                     total_ranges_responded = total_ranges_responded + 1
             index_chunk = index_chunk + 1
         thousands = total_ranges_responded / 1000.0
-        print(f"update_geo_counts(), num_ranges with non-zero = {thousands:.2f}")
+        print(f"_update_tract_counts(), num_ranges with non-zero = {thousands:.2f}")
 
         # Now, iterate through the hash table and save everything with counts
         total_hosts_responded = 0
         total_zero_tracts = 0
-        for i, key in enumerate(tract_mapper):
-            value = tract_mapper[key]
-            num_ranges_responded = value.num_ranges_responded
+        for i, tract in enumerate(self._tract_mapper):
+            counter = tract_mapper[tract]
+            num_ranges_responded = counter.num_ranges_responded
             if num_ranges_responded == 0:
                 total_zero_tracts = total_zero_tracts + 1
             else:
+                num_ranges_pinged = models.IntegerField(default=0)
                 total_hosts_responded = total_hosts_responded + num_ranges_responded
         thousands = total_hosts_responded / 1000.0
-        print(f"update_geo_counts(), total_hosts = {thousands:.1f}, zero tracts = {total_zero_tracts}")
+        print(f"_update_tract_counts(), total_hosts = {thousands:.1f}, zero tracts = {total_zero_tracts}")
+
+    def _update_county_counts(self):
+        tract_mapper[tract_counter.tract] = tract_counter
+
+        # Map the counties to the count objects
+        for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
+            self._county_mapper[county_counter.county] = county_counter
+
+        for i, tract in enumerate(self._tract_mapper):
+            tract_counter = tract_mapper[tract]
+            num_ranges_responded = tract_counter.num_ranges_responded
+            if num_ranges_responded > 0:
+                county = county_counter.county
+                if county not in self._county_mapper:
+                    print(f"_update_county_counts(), could not find county {county}, bailing!")
+                    return
+                county_counter = self._county_mapper[county]
+                county_counter.num_ranges_pinged = county_counter.num_ranges_pinged + 
+                    tract_counter.num_ranges_pinged 
+                county_counter.num_ranges_responded = county_counter.num_ranges_responded + 
+                    tract_counter.num_ranges_responded 
+
+        zero_counties = 0
+        index_county = 0
+        for i, county in self._county_mapper.enumerate(self._county_mapper):
+            counter = self._county_mapper[county]
+            num_ranges_responded = counter.num_ranges_responded
+            if num_ranges_responded == 0:
+                zero_counties = zero_counties + 1
+            else:
+                num_ranges_pinged = counter.num_ranges_pinged
+                responded_k = num_ranges_responded / 1000.0
+                pinged_k = num_ranges_pinged
+                print(f"_update_county_counts(), county[{index_county}], {responded_k:.1f}/{pinged_k:.1f}")
+                index_county = index_county + 1
+        if zero_counties > 0:
+            print(f"_update_county_counts(), {zero_counties} zero counties")
+
+    def update_geo_counts(self, verbose=True):
+        self._survey_id = 450
+        self._exec_db = False
+
+        self._tract_mapper = {}
+        self._update_tract_counts()
+
+        self._county_mapper = {}
+        self._update_county_counts()
+
 
 
             

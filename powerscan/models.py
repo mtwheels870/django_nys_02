@@ -53,6 +53,9 @@ class County(models.Model):
     def __str__(self):
         return self.county_name
 
+    def __hash__(self):
+        return int(self.geoid)
+
 class CensusTract(models.Model):
     county = models.ForeignKey(County, on_delete=models.CASCADE)
     tract_id = models.CharField(max_length=6)
