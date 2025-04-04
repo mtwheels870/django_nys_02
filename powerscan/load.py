@@ -478,8 +478,6 @@ class Loader():
         print(f"_update_tract_counts(), total_hosts = {thousands:.1f}, zero tracts = {total_zero_tracts}")
 
     def _update_county_counts(self):
-        tract_mapper[tract_counter.tract] = tract_counter
-
         # Map the counties to the count objects
         for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
             self._county_mapper[county_counter.county] = county_counter
