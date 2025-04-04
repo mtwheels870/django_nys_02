@@ -444,7 +444,7 @@ class Loader():
                 print(f"_update_tract_counts(), ranges_pinged = {ranges_pinged}! (aborting)")
                 return
             # Build the hash table
-            tract_mapper[tract_counter.tract] = tract_counter
+            self._tract_mapper[tract_counter.tract] = tract_counter
             
         index_chunk = 0
         total_ranges_responded = 0
@@ -454,7 +454,7 @@ class Loader():
                 num_ranges_responded = range_ping.num_ranges_responded
                 if num_ranges_responded > 0:
                     tract = range_ping.ip_range.census_tract
-                    if tract in tract_mapper:
+                    if tract in self._tract_mapper:
                         counter = self._tract_mapper[tract]
                         counter.num_ranges_pinged = counter.num_ranges_pinged + range_ping.num_ranges_pinged
                         counter.num_ranges_responded = counter.num_ranges_responded + range_ping.num_ranges_responded
