@@ -165,7 +165,7 @@ class GeometryRangeChunker:
             raise StopIteration
 
         logger.info(f"GeometryRangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
-        ranges = MmIpRange.objects.all().filter(survey_id=self._survey_id).order_by("id")[self._range_start:self._range_end]
+        ranges = MmIpRange.objects.all().filter(survey__id=self._survey_id).order_by("id")[self._range_start:self._range_end]
         num_returned = ranges.count()
         logger.info(f"GeometryRangeChunker.__next__(), returned {num_returned} rows")
         if num_returned < SMALL_CHUNK_SIZE:
