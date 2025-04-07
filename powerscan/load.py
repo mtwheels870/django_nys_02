@@ -484,10 +484,10 @@ class Loader():
         for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
             county = county_counter.county
             hash = county.__hash__()
-            print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
+            # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
             self._county_mapper[county_counter.county] = county_counter
             county_count = county_count + 1
-        print(f"_update_county_counts(), county_count = {county_count}")
+        # print(f"_update_county_counts(), county_count = {county_count}")
         county_counter = None
 
         # Walk through all of the tracts and update the corresponding counties
@@ -498,9 +498,9 @@ class Loader():
                 county = tract.county
                 thousands = num_ranges_responded / 1000.0
                 #county02 = county_counter.county
-                first = f"_u_c_c(), tract {tract.name}, county = {county.county_name}"
-                second = f", ranges_reponded = {thousands:.1f}"
-                print(first + second)
+                #first = f"_u_c_c(), tract {tract.name}, county = {county.county_name}"
+                #second = f", ranges_reponded = {thousands:.1f}"
+                #print(first + second)
                 if county not in self._county_mapper:
                     print(f"_update_county_counts(), could not find county {county}, bailing!")
                     return
@@ -510,11 +510,12 @@ class Loader():
                 county_counter.num_ranges_responded = county_counter.num_ranges_responded + \
                     tract_counter.num_ranges_responded 
 
+        # This would be our database save stage
         zero_counties = 0
         index_county = 0
         for i, county in enumerate(self._county_mapper):
             county_counter = self._county_mapper[county]
-            print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
+            # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
             num_ranges_responded = county_counter.num_ranges_responded
             if num_ranges_responded == 0:
                 zero_counties = zero_counties + 1
