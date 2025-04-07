@@ -480,8 +480,11 @@ class Loader():
 
     def _update_county_counts(self):
         # Map the counties to the count objects
+        county_count = 0
         for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
             self._county_mapper[county_counter.county] = county_counter
+            county_count = county_count + 1
+        print(f"_update_county_counts(), county_count = {county_count}")
 
         for i, tract in enumerate(self._tract_mapper):
             tract_counter = self._tract_mapper[tract]
