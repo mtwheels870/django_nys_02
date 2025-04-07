@@ -29,7 +29,9 @@ class AggregationHistoryTable(tables.Table):
         # model = MmIpRange
         empty_text = "(No geography selected yet)"
         # template_name = "django_tables2/bootstrap.html"
-        fields = ["__all__"]
+        # This only works with models
+        # fields = "__all__"
+        fields = ["selection", "survey_id", "ping_time", "ranges_returned", "ranges_total", "percentage"]
 
     def render_ping_time(self, value, record):
         return value.strftime(TIME_FORMAT)
