@@ -157,7 +157,29 @@ class PingSurveyManager:
             print(f"PSM._create_directory(), directory already exists!")
         self.directory = full_path
 
+    def _debug_directory(self, county):
+        print(f"Found debug county = {county.id},{county.county_name}")
+        cleaned_name = county.county_name.replace(" ","_")
+        directory_name = f"{county.id:04}_{cleaned_name}")
+        self._debug_dir = os.path.join(self.directory, DIR_ZMAP_NAME, folder_snapshot)
+        if not os.path.exists(self._debug_dir)
+            print(f"_debug_directory(), creating directory: {str(self._debug_dir)}")
+            os.makedirs(self._debug_dir)
+
+        whitelist_file = os.path.join(self._debug_dir, FILE_WHITELIST)
+        self._debug_writer = open(whitelist_file, "w+")
+
+    def _debug_add_range(self, range1, string1):
+        self._debug_writer.write(string1)
+
+    def _debug_close_files(self):
+        print(f"_debug_close_files()")
+        self._debug_writer.close()
+
     def _traverse_geography(self):
+        debug_county_id = 1175
+        self._debug_county = None
+
         survey = IpRangeSurvey.objects.get(pk=self._survey_id)
         #print(f"PSM._traverse_geography(), survey = {survey}")
         
@@ -184,6 +206,9 @@ class PingSurveyManager:
             county_ids.append(county.id)
             survey_county = IpSurveyCounty(survey=survey, county=county)
             survey_county.save()
+            if county.id == debug_county_id:
+                self._debug_directory(self, county)
+                self._debug_county = county
         #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
         # debugger.print_array("PSM._traverse_geography(), county_ids:", county_ids)
 
@@ -192,9 +217,14 @@ class PingSurveyManager:
         tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
         for tract in tracts_in_counties:
             tract_ids.append(tract.id)
+            if tract.county = self._debug_county:
+                # self._debug_tracts.append(tract.id)
+                add_to_debug = True
+            else:
+                add_to_debug = False
             survey_tract = IpSurveyTract(survey=survey, tract=tract)
             survey_tract.save()
-            ranges_added = self._tract_ranges_whitelist(tract)
+            ranges_added = self._tract_ranges_whitelist(tract, add_to_debug)
             total_ranges = total_ranges + ranges_added
         # debugger.print_array("PSM._traverse_geography(), tract_ids:", tract_ids)
 
@@ -207,15 +237,20 @@ class PingSurveyManager:
             first = "PSM._traverse_geography(), created (s/c/t/r) = "
             second = f"{num_states}/{num_counties}/{num_tracts}/{total_ranges:,}"
             print(first + second)
+        if self._debug_county:
+            self._debug_close_files()
         return num_states, num_counties, num_tracts, total_ranges
 
-    def _tract_ranges_whitelist(self, tract):
+    def _tract_ranges_whitelist(self, tract, add_to_debug):
         # Use the set() notation
         ip_ranges = tract.mmiprange_set.all()
-        for range in ip_ranges:
-            string1 = f"{range.id},{range.ip_network}\n"
+        for range1 in ip_ranges:
+            string1 = f"{range1.id},{range1.ip_network}\n"
             self.writer_range_ip.write(string1)
-            self.writer_whitelist.write(f"{range.ip_network}\n")
+            whitelist_string = f"{range1.ip_network}\n"
+            self.writer_whitelist.write(whitelist_string)
+            if add_to_debug:
+                _debug_add_range(range1, whitelist_string)
         ranges_added = ip_ranges.count()
         return ranges_added
 
