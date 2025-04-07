@@ -301,7 +301,7 @@ def tally_results(metadata_file, survey_id, retry_count):
         survey.num_ranges_responded = pings_to_db
         # print(f"SURVEY SAVE, 10")
         survey.save()
-        print(f"Task.tally_results({survey_id}), saved {pings_to_db} to db")
+        print(f"Task.tally_results({survey_id}), saved {pings_to_db:,} ranges to db")
     except Exception as e:
         print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
         pings_to_db = -1
