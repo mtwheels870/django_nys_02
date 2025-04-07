@@ -160,7 +160,7 @@ class PingSurveyManager:
     def _debug_directory(self, county):
         print(f"Found debug county = {county.id},{county.county_name}")
         cleaned_name = county.county_name.replace(" ","_")
-        directory_name = f"{county.id:04}_{cleaned_name}")
+        directory_name = f"{county.id:04}_{cleaned_name}"
         self._debug_dir = os.path.join(self.directory, DIR_ZMAP_NAME, folder_snapshot)
         if not os.path.exists(self._debug_dir)
             print(f"_debug_directory(), creating directory: {str(self._debug_dir)}")
