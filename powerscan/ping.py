@@ -217,7 +217,7 @@ class PingSurveyManager:
         tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
         for tract in tracts_in_counties:
             tract_ids.append(tract.id)
-            if tract.county = self._debug_county:
+            if tract.county == self._debug_county:
                 # self._debug_tracts.append(tract.id)
                 add_to_debug = True
             else:
