@@ -492,6 +492,9 @@ class Loader():
         for i, tract in enumerate(self._tract_mapper):
             tract_counter = self._tract_mapper[tract]
             num_ranges_responded = tract_counter.num_ranges_responded
+            county = tract.county
+            thousands = num_ranges_responded / 1000.0
+            print(f"_u_c_c(), tract {tract.name}, county = {county.name}, ranges_reponded = {thousands:.1f}")
             if num_ranges_responded > 0:
                 county = county_counter.county
                 if county not in self._county_mapper:
@@ -513,8 +516,8 @@ class Loader():
             else:
                 num_ranges_pinged = counter.num_ranges_pinged
                 responded_k = num_ranges_responded / 1000.0
-                pinged_k = num_ranges_pinged
-                print(f"_update_county_counts(), county[{index_county}], {responded_k:.1f}/{pinged_k:.1f}")
+                pinged_k = num_ranges_pinged / 1000.0
+                print(f"_update_county_counts(), county[{index_county}], {responded_k:.1f}/{pinged_k:.1f} ranges (responded/pinged}")
                 index_county = index_county + 1
         if zero_counties > 0:
             print(f"_update_county_counts(), {zero_counties} zero counties")
