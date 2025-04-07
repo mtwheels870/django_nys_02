@@ -250,7 +250,7 @@ class PingSurveyManager:
             whitelist_string = f"{range1.ip_network}\n"
             self.writer_whitelist.write(whitelist_string)
             if add_to_debug:
-                _debug_add_range(range1, whitelist_string)
+                self._debug_add_range(range1, whitelist_string)
         ranges_added = ip_ranges.count()
         return ranges_added
 
