@@ -522,9 +522,3 @@ class Loader():
         self._county_mapper = {}
         self._update_county_counts()
 
-
-
-            
-
-        
-
