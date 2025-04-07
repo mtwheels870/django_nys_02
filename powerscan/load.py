@@ -462,7 +462,7 @@ class Loader():
                     total_ranges_responded = total_ranges_responded + 1
             index_chunk = index_chunk + 1
         thousands = total_ranges_responded / 1000.0
-        print(f"_update_tract_counts(), num_ranges with non-zero = {thousands:.2f}")
+        print(f"_update_tract_counts(), num_ranges with non-zero = {thousands:.2f}, num_tracts = {len(self._tract_mapper)}")
 
         # Now, iterate through the hash table and save everything with counts
         total_hosts_responded = 0
@@ -515,6 +515,7 @@ class Loader():
 
     def update_geo_counts(self, verbose=True):
         self._survey_id = 450
+        print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
         self._exec_db = False
 
         self._tract_mapper = {}
