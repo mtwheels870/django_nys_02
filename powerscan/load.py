@@ -488,7 +488,9 @@ class Loader():
             self._county_mapper[county_counter.county] = county_counter
             county_count = county_count + 1
         print(f"_update_county_counts(), county_count = {county_count}")
+        county_counter = None
 
+        # Walk through all of the tracts and update the corresponding counties
         for i, tract in enumerate(self._tract_mapper):
             tract_counter = self._tract_mapper[tract]
             num_ranges_responded = tract_counter.num_ranges_responded
@@ -496,7 +498,9 @@ class Loader():
                 county = tract.county
                 thousands = num_ranges_responded / 1000.0
                 county02 = county_counter.county
-                print(f"_u_c_c(), tract {tract.name}, county = {county.county_name},{county02.county_name}, ranges_reponded = {thousands:.1f}")
+                first = f"_u_c_c(), tract {tract.name}, county = {county.county_name},{county02.county_name}"
+                second = f", ranges_reponded = {thousands:.1f}"
+                print(first + second)
                 if county not in self._county_mapper:
                     print(f"_update_county_counts(), could not find county {county}, bailing!")
                     return
@@ -509,12 +513,13 @@ class Loader():
         zero_counties = 0
         index_county = 0
         for i, county in enumerate(self._county_mapper):
-            counter = self._county_mapper[county]
-            num_ranges_responded = counter.num_ranges_responded
+            county_counter = self._county_mapper[county]
+            print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
+            num_ranges_responded = county_counter.num_ranges_responded
             if num_ranges_responded == 0:
                 zero_counties = zero_counties + 1
             else:
-                num_ranges_pinged = counter.num_ranges_pinged
+                num_ranges_pinged = county_counter.num_ranges_pinged
                 responded_k = num_ranges_responded / 1000.0
                 pinged_k = num_ranges_pinged / 1000.0
                 print(f"_update_county_counts(), county[{index_county}], {responded_k:.1f}/{pinged_k:.1f} ranges (responded/pinged)")
