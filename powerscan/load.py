@@ -525,7 +525,7 @@ class Loader():
                 pinged_k = num_ranges_pinged / 1000.0
                 county = county_counter.county
                 first = f"_u_c_c(), county[{index_county}]: {county.county_name}, "
-                second = f"{responded_k:.1f}/{pinged_k:.1f} ranges (r/)"
+                second = f"{responded_k:.1f}/{pinged_k:.1f} hosts (r/p)"
                 print(first + second)
                 index_county = index_county + 1
         if zero_counties > 0:
