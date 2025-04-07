@@ -484,7 +484,7 @@ class Loader():
             self._county_mapper[county_counter.county] = county_counter
 
         for i, tract in enumerate(self._tract_mapper):
-            tract_counter = tract_mapper[tract]
+            tract_counter = self._tract_mapper[tract]
             num_ranges_responded = tract_counter.num_ranges_responded
             if num_ranges_responded > 0:
                 county = county_counter.county
