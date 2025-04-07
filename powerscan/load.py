@@ -499,7 +499,7 @@ class Loader():
 
         zero_counties = 0
         index_county = 0
-        for i, county in self._county_mapper.enumerate(self._county_mapper):
+        for i, county in enumerate(self._county_mapper):
             counter = self._county_mapper[county]
             num_ranges_responded = counter.num_ranges_responded
             if num_ranges_responded == 0:
