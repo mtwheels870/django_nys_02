@@ -494,7 +494,7 @@ class Loader():
             num_ranges_responded = tract_counter.num_ranges_responded
             county = tract.county
             thousands = num_ranges_responded / 1000.0
-            print(f"_u_c_c(), tract {tract.name}, county = {county.name}, ranges_reponded = {thousands:.1f}")
+            print(f"_u_c_c(), tract {tract.name}, county = {county.county_name}, ranges_reponded = {thousands:.1f}")
             if num_ranges_responded > 0:
                 county = county_counter.county
                 if county not in self._county_mapper:
