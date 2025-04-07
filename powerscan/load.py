@@ -482,6 +482,9 @@ class Loader():
         # Map the counties to the count objects
         county_count = 0
         for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
+            county = county_counter
+            hash = county.__hash__()
+            print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
             self._county_mapper[county_counter.county] = county_counter
             county_count = county_count + 1
         print(f"_update_county_counts(), county_count = {county_count}")
@@ -517,7 +520,7 @@ class Loader():
             print(f"_update_county_counts(), {zero_counties} zero counties")
 
     def update_geo_counts(self, verbose=True):
-        self._survey_id = 451
+        self._survey_id = 450
         print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
         self._exec_db = False
 
