@@ -517,7 +517,7 @@ class Loader():
                 num_ranges_pinged = counter.num_ranges_pinged
                 responded_k = num_ranges_responded / 1000.0
                 pinged_k = num_ranges_pinged / 1000.0
-                print(f"_update_county_counts(), county[{index_county}], {responded_k:.1f}/{pinged_k:.1f} ranges (responded/pinged}")
+                print(f"_update_county_counts(), county[{index_county}], {responded_k:.1f}/{pinged_k:.1f} ranges (responded/pinged)")
                 index_county = index_county + 1
         if zero_counties > 0:
             print(f"_update_county_counts(), {zero_counties} zero counties")
