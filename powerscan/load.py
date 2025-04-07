@@ -482,7 +482,7 @@ class Loader():
         # Map the counties to the count objects
         county_count = 0
         for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
-            county = county_counter
+            county = county_counter.county
             hash = county.__hash__()
             print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
             self._county_mapper[county_counter.county] = county_counter
