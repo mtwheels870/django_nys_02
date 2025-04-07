@@ -207,7 +207,7 @@ class PingSurveyManager:
             survey_county = IpSurveyCounty(survey=survey, county=county)
             survey_county.save()
             if county.id == debug_county_id:
-                self._debug_directory(self, county)
+                self._debug_directory(county)
                 self._debug_county = county
         #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
         # debugger.print_array("PSM._traverse_geography(), county_ids:", county_ids)
