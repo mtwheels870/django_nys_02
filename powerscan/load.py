@@ -561,8 +561,8 @@ class Loader():
 
     def update_geo_counts(self, verbose=True):
         #survey_ids = [459]
-        survey_ids = [456, 451, 450, 449, 448, 447]
-        #survey_ids = [445, 444, 443, 442, 441, 440, 439, 438, 437, 436, 435]
+        #survey_ids = [456, 451, 450, 449, 448, 447]
+        survey_ids = [445, 444, 443, 442, 441, 440, 439, 438, 437, 436, 435]
         for survey_id in survey_ids:
             self._survey_id = survey_id  
             print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
