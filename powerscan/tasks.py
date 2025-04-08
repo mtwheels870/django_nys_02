@@ -60,8 +60,8 @@ TIME_FORMAT_STRING = "%H:%M:%S"
 
 DEBUG_ID = 1
 
-# RATE_PACKETS_SECOND = 10000
-RATE_PACKETS_SECOND = 2000
+RATE_PACKETS_SECOND = 10000
+# RATE_PACKETS_SECOND = 2000
 
 logger = logging.getLogger(__name__)
 
@@ -285,7 +285,7 @@ def tally_results(metadata_file, survey_id, retry_count):
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
             retry_count = retry_count + 1
             if retry_count > MAX_TALLY_RETRY_COUNT:
-                print(f"Task.tally_results(), max retries = {MAX_TALLY_RETRY_COUNT}, exceeded, aborting")
+                print(f"Task.tally_results({int_survey_id}), max retries ({MAX_TALLY_RETRY_COUNT}) exceeded, aborting")
                 return
             first = f"Task.tally_results({int_survey_id}), empty_zmap_file, delay:"
             second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, retry_count: {retry_count}"
