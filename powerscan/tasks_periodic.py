@@ -111,7 +111,7 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     tally_start = now + delta
     formatted_tally_start = tally_start.strftime(TIME_FORMAT2)
     first = f"TasksPeriodic._start_tally({survey_id}), "
-    second = f"+{delay_mins:.1f}m, new tally_start: {formatted_tally_start}"
+    second = f"+{delay_mins:.1f}m, start: {formatted_tally_start}"
     print(first + second)
     retry_count = 0
     async_result2 = tally_results.apply_async([metadata_file, survey_id, retry_count], countdown=delay_secs)

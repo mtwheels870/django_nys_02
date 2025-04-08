@@ -287,7 +287,7 @@ def tally_results(metadata_file, survey_id, retry_count):
             if retry_count > MAX_TALLY_RETRY_COUNT:
                 print(f"Task.tally_results(), max retries = {MAX_TALLY_RETRY_COUNT}, exceeded, aborting")
                 return
-            first = f"Task.tally_results(), survey = {int_survey_id}, empty_zmap_file, delay:"
+            first = f"Task.tally_results({int_survey_id}), empty_zmap_file, delay:"
             second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, retry_count: {retry_count}"
             print(first + second)
             async_result2 = tally_results.apply_async(
@@ -305,7 +305,7 @@ def tally_results(metadata_file, survey_id, retry_count):
         survey.save()
         print(f"Task.tally_results({survey_id}), saved {pings_to_db:,} hosts to db")
     except Exception as e:
-        print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
+        print(f"Task.tally_results({survey_id}), exception: {e}")
         pings_to_db = -1
     return pings_to_db 
 
