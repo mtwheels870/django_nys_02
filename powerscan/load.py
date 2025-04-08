@@ -552,7 +552,7 @@ class Loader():
                 zero_states = zero_states + 1
             else:
                 us_state = county.us_state
-                state_counter = self.state_mapper[us_state]
+                state_counter = self._state_mapper[us_state]
                 state_counter.num_ranges_responded = state_counter.num_ranges_responded + \
                     county_counter.num_ranges_responded 
                 state_counter.num_ranges_pinged = state_counter.num_ranges_pinged + \
