@@ -21,7 +21,8 @@ from .models import (
     IpRangeSurvey, IpRangePing,
     MmIpRange, DebugPowerScan,
     IpSurveyTract,
-    IpSurveyCounty
+    IpSurveyCounty,
+    IpSurveyState
 )
 
 mapping_state = {
@@ -476,14 +477,14 @@ class Loader():
                 num_ranges_pinged = models.IntegerField(default=0)
                 total_hosts_responded = total_hosts_responded + num_ranges_responded
         thousands = total_hosts_responded / 1000.0
-        print(f"_update_tract_counts(), total_hosts = {thousands:.1f}, zero tracts = {total_zero_tracts}")
+        print(f"_update_tract_counts(), total_hosts = {thousands:.1f}k, zero tracts = {total_zero_tracts}")
 
     def _update_county_counts(self):
         # Map the counties to the count objects
         county_count = 0
         for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
             county = county_counter.county
-            hash = county.__hash__()
+            # hash = county.__hash__()
             # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
             self._county_mapper[county_counter.county] = county_counter
             county_count = county_count + 1
@@ -524,21 +525,53 @@ class Loader():
                 responded_k = num_ranges_responded / 1000.0
                 pinged_k = num_ranges_pinged / 1000.0
                 county = county_counter.county
-                first = f"_u_c_c(), county[{index_county}]: {county.county_name}, "
-                second = f"{responded_k:.1f}/{pinged_k:.1f} hosts (r/p)"
-                print(first + second)
+                #first = f"_u_c_c(), county[{index_county}]: {county.county_name}, "
+                #second = f"{responded_k:.1f}/{pinged_k:.1f} hosts (r/p)"
+                #print(first + second)
                 index_county = index_county + 1
         if zero_counties > 0:
             print(f"_update_county_counts(), {zero_counties} zero counties")
 
+    def _update_state_counts(self):
+        # Map the states to the count objects
+        state_count = 0
+        for state_counter in IpSurveyState.objects.filter(survey__id=self._survey_id):
+            us_state = state_counter.us_state 
+            # hash = us_state.__hash__()
+            # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
+            self._state_mapper[state_counter.us_state] = state_counter
+            state_count = state_count + 1
+        # print(f"_update_county_counts(), county_count = {county_count}")
+
+        zero_states = 0
+        for i, county in enumerate(self._county_mapper):
+            county_counter = self._county_mapper[county]
+            # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
+            num_ranges_responded = county_counter.num_ranges_responded
+            if num_ranges_responded == 0:
+                zero_states = zero_states + 1
+            else:
+                us_state = county.us_state
+                state_counter = self.state_mapper[us_state]
+                state_counter.num_ranges_responded = state_counter.num_ranges_responded + \
+                    county_counter.num_ranges_responded 
+                state_counter.num_ranges_pinged = state_counter.num_ranges_pinged + \
+                    county_counter.num_ranges_pinged 
+        if zero_states > 0:
+            print(f"_update_states_counts(), {zero_states} zero states")
+
     def update_geo_counts(self, verbose=True):
-        self._survey_id = 459
-        print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
-        self._exec_db = False
+        survey_ids = [459]
+        for survey_id in survey_ids:
+            self._survey_id = survey_id  
+            print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
+            self._exec_db = False
 
-        self._tract_mapper = {}
-        self._update_tract_counts()
+            self._tract_mapper = {}
+            self._update_tract_counts()
 
-        self._county_mapper = {}
-        self._update_county_counts()
+            self._county_mapper = {}
+            self._update_county_counts()
 
+            self._state_mapper = {}
+            self._update_state_counts()

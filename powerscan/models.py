@@ -27,6 +27,9 @@ class UsState(models.Model):
     def __str__(self):
         return self.state_name
 
+    def __hash__(self):
+        return int(self.state_fp)
+
 #state_fp = models.CharField(max_length=2, db_index=True)
 class County(models.Model):
     geoid = models.CharField(max_length=5, db_index=True)
