@@ -482,7 +482,8 @@ class Loader():
     def _update_county_counts(self):
         # Map the counties to the count objects
         county_count = 0
-        for county_counter in IpSurveyCounty.objects.filter(survey__id=self._survey_id):
+        county_set = IpSurveyCounty.objects.filter(survey__id=self._survey_id)
+        for county_counter in county_set:
             county = county_counter.county
             # hash = county.__hash__()
             # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
@@ -530,12 +531,16 @@ class Loader():
                 #print(first + second)
                 index_county = index_county + 1
         if zero_counties > 0:
-            print(f"_update_county_counts(), {zero_counties} zero counties")
+            print(f"_update_county_counts(), processed {county_set.count()} counties, {zero_counties} zeros")
+        else:
+            print(f"_update_county_counts(), processed {county_set.count() } counties, no zeroes")
+
 
     def _update_state_counts(self):
         # Map the states to the count objects
         state_count = 0
-        for state_counter in IpSurveyState.objects.filter(survey__id=self._survey_id):
+        state_set = IpSurveyState.objects.filter(survey__id=self._survey_id)
+        for state_counter in state_set:
             us_state = state_counter.us_state 
             # hash = us_state.__hash__()
             # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
@@ -558,7 +563,9 @@ class Loader():
                 state_counter.num_ranges_pinged = state_counter.num_ranges_pinged + \
                     county_counter.num_ranges_pinged 
         if zero_states > 0:
-            print(f"_update_states_counts(), {zero_states} zero states")
+            print(f"_update_states_counts(), processed {state_set.count()}, {zero_states} zeroes")
+        else:
+            print(f"_update_states_counts(), processed {state_set.count()}, no zeroes")
 
     def update_geo_counts(self, verbose=True):
         survey_ids = [459]
