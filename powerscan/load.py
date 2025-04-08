@@ -462,8 +462,9 @@ class Loader():
                     counter = self._tract_mapper[tract]
                     counter.num_ranges_pinged = counter.num_ranges_pinged + hosts_pinged
                     counter.num_ranges_responded = counter.num_ranges_responded + hosts_responded
-                    total_hosts_responded = total_hosts_responded + 1
-                total_ranges_responded = total_ranges_responded + 1
+                    total_ranges_responded = total_ranges_responded + 1
+                else:
+                    print(f"_u_t_c(), could not find tract: {tract}")
             index_chunk = index_chunk + 1
         thousands = total_ranges_responded / 1000.0
         print(f"_update_tract_counts(), non-zero ranges: {thousands:.2f}, num_tracts = {len(self._tract_mapper)}")
