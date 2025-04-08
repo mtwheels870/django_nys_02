@@ -479,7 +479,8 @@ class Loader():
             if hosts_responded == 0:
                 zero_tracts = zero_tracts + 1
             total_hosts_responded = total_hosts_responded + hosts_responded
-            print(f"_update_tract_counts(), saving tract {tract.name}")
+            # print(f"_update_tract_counts(), saving tract {tract.name}")
+            counter.save()
         thousands = total_hosts_responded / 1000.0
         print(f"_update_tract_counts(), total_hosts = {thousands:.1f}k, zero tracts = {zero_tracts}")
 
@@ -516,7 +517,8 @@ class Loader():
             if hosts_responded == 0:
                 zero_counties = zero_counties + 1
             # Save to the db
-            print(f"_update_county_counts(), saving county {county.county_name}")
+            # print(f"_update_county_counts(), saving county {county.county_name}")
+            county_counter.save()
             #county_counter.save()
         if zero_counties > 0:
             print(f"_update_county_counts(), processed {county_set.count()} counties, {zero_counties} zeros")
@@ -552,7 +554,8 @@ class Loader():
         # 3. Save to DB
         for i, us_state in enumerate(self._state_mapper):
             state_counter = self._state_mapper[us_state]
-            print(f"_update_state_counts(), saving state: {us_state.state_name}")
+            state_counter.save()
+            # print(f"_update_state_counts(), saving state: {us_state.state_name}")
         print(f"_update_states_counts(), processed {state_set.count()} states")
 
     def update_geo_counts(self, verbose=True):
