@@ -60,6 +60,9 @@ TIME_FORMAT_STRING = "%H:%M:%S"
 
 DEBUG_ID = 1
 
+# RATE_PACKETS_SECOND = 10000
+RATE_PACKETS_SECOND = 2000
+
 logger = logging.getLogger(__name__)
 
 def unused_start_tracts(self, *args, **kwargs):
@@ -159,10 +162,9 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
     try:
         # This seems wrong for a ICMP
         # port = 80
-        rate_packets_second = 10000
         # f"--log-file=${log_file}", NoVa
         list_command = ["zmap",
-            "--quiet", f"-r {rate_packets_second}",
+            "--quiet", f"-r {RATE_PACKETS_SECOND}",
             f"--whitelist-file={whitelist_file}",
             f"--output-file={output_file}",
             "--output-module=csv",
@@ -301,7 +303,7 @@ def tally_results(metadata_file, survey_id, retry_count):
         survey.num_ranges_responded = pings_to_db
         # print(f"SURVEY SAVE, 10")
         survey.save()
-        print(f"Task.tally_results({survey_id}), saved {pings_to_db:,} ranges to db")
+        print(f"Task.tally_results({survey_id}), saved {pings_to_db:,} hosts to db")
     except Exception as e:
         print(f"Task.tally_results(), survey_id: {survey_id}, exception: {e}")
         pings_to_db = -1
