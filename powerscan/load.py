@@ -477,11 +477,11 @@ class Loader():
             hosts_pinged = counter.num_ranges_pinged
             hosts_responded = counter.num_ranges_responded
             if hosts_responded == 0:
-                total_zero_tracts = total_zero_tracts + 1
+                zero_tracts = zero_tracts + 1
             total_hosts_responded = total_hosts_responded + hosts_responded
             print(f"_update_tract_counts(), saving tract {tract.name}")
         thousands = total_hosts_responded / 1000.0
-        print(f"_update_tract_counts(), total_hosts = {thousands:.1f}k, zero tracts = {total_zero_tracts}")
+        print(f"_update_tract_counts(), total_hosts = {thousands:.1f}k, zero tracts = {zero_tracts}")
 
     def _update_county_counts(self):
         # 1: Set up the mapping, Map the counties to the count objects
