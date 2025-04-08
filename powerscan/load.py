@@ -445,7 +445,7 @@ class Loader():
             hosts_pinged = tract_counter.num_ranges_pinged
             if hosts_pinged != 0:
                 print(f"_update_tract_counts(), hosts_pinged = {hosts_pinged}! (aborting, already values)")
-                return
+                return 0
             # Build the hash table
             self._tract_mapper[tract_counter.tract] = tract_counter
             
@@ -483,6 +483,7 @@ class Loader():
             counter.save()
         thousands = total_hosts_responded / 1000.0
         print(f"_update_tract_counts(), total_hosts = {thousands:.1f}k, zero tracts = {zero_tracts}")
+        return total_ranges_responded 
 
     def _update_county_counts(self):
         # 1: Set up the mapping, Map the counties to the count objects
@@ -568,7 +569,9 @@ class Loader():
             self._exec_db = False
 
             self._tract_mapper = {}
-            self._update_tract_counts()
+            ranges_responded = self._update_tract_counts()
+            if ranges_responded == 0:
+                continue
 
             self._county_mapper = {}
             self._update_county_counts()
