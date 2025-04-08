@@ -566,7 +566,7 @@ class Loader():
         for survey_id in survey_ids:
             self._survey_id = survey_id  
             print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
-            self._exec_db = False
+            # self._exec_db = False
 
             self._tract_mapper = {}
             ranges_responded = self._update_tract_counts()

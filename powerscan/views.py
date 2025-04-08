@@ -127,17 +127,21 @@ class MapNavigationView(generic.edit.FormView):
         return table
 
     def get_context_data(self, **kwargs):
+        print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
         # form = context_data['form']
         # map_bbox = form.fields[KEY_MAP_BBOX]
         query_parms = self.request.GET
+        if "survey_id" in query_parms:
+            survey_id = query_parms["survey_id"]
         if "in_bbox" in query_parms:
             in_bbox = query_parms["in_bbox"]
             print(f"g_c_d(), query_parms = {query_parms},in_bbox = {in_bbox}")
             context_data['map_bbox'] = in_bbox  
         else:
             context_data['map_bbox'] = None
+
         # We need this, so it's in the Django templates (for the search parms)
         table = self.create_table(MmIpRange.objects.none())
         context_data['table'] = table
@@ -148,9 +152,9 @@ class MapNavigationView(generic.edit.FormView):
         survey_id = 450
         return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
 
-#    def get(self, request, *args, **kwargs):
-#        print(f"MNV.get(), request = {request}")
-#        return self.render_to_response(self.get_context_data())
+    def get(self, request, *args, **kwargs):
+        print(f"MNV.get(), request = {request}, kwargs = {kwargs}")
+        return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
