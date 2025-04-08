@@ -153,8 +153,17 @@ class MapNavigationView(generic.edit.FormView):
         return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
 
     def get(self, request, *args, **kwargs):
-        print(f"MNV.get(), request = {request}, kwargs = {kwargs}")
-        return self.render_to_response(self.get_context_data())
+        query_params = self.request.GET
+        if "survey_id" in query_parms:
+            survey_id = query_parms["survey_id"]
+            print(f"MNV.get(), read survey_id = {survey_id}")
+            return self.render_to_response(self.get_context_data())
+        else:
+            print(f"MNV.get(), no survey_id")
+            query_parms = {"survey_id": "459"}
+            querystring = urlencode(query_params)
+            url = f"/powerscan/map/?{querystring}"
+            return redirect(url)
 
     def post(self, request, *args, **kwargs):
         form = SelectedCensusTractForm(request.POST)
