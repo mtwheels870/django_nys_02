@@ -501,7 +501,7 @@ class Loader():
             tract_counter = self._tract_mapper[tract]
             hosts_pinged = tract_counter.num_ranges_pinged
             hosts_responded = tract_counter.num_ranges_responded
-            county_counter = self._county_mapper[tract_counter.county]
+            county_counter = self._county_mapper[tract.county]
             county_counter.num_ranges_pinged = county_counter.num_ranges_pinged + \
                     hosts_pinged 
             county_counter.num_ranges_responded = county_counter.num_ranges_responded + \
