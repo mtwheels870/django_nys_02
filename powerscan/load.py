@@ -478,6 +478,7 @@ class Loader():
             if num_ranges_responded == 0:
                 total_zero_tracts = total_zero_tracts + 1
             total_hosts_responded = total_hosts_responded + hosts_responded
+            print(f"_update_tract_counts(), saving tract {tract.name}")
         thousands = total_hosts_responded / 1000.0
         print(f"_update_tract_counts(), total_hosts = {thousands:.1f}k, zero tracts = {total_zero_tracts}")
 
@@ -497,49 +498,25 @@ class Loader():
         # 2: Bubble counts up, Walk through all of the tracts and update the corresponding counties
         for i, tract in enumerate(self._tract_mapper):
             tract_counter = self._tract_mapper[tract]
+            hosts_pinged = tract_counter.num_ranges_pinged
             hosts_responded = tract_counter.num_ranges_responded
-            num_ranges_responded = tract_counter.num_ranges_responded
-            county_counter = self._county_mapper[tract
-                county_counter = self._county_mapper[county]
-                county_counter.num_ranges_pinged = county_counter.num_ranges_pinged + \
-                    tract_counter.num_ranges_pinged 
-                county_counter.num_ranges_responded = county_counter.num_ranges_responded + \
-                    tract_counter.num_ranges_responded 
+            county_counter = self._county_mapper[tract_counter.county]
             county_counter.num_ranges_pinged = county_counter.num_ranges_pinged + \
-                tract_counter.num_ranges_pinged 
+                    hosts_pinged 
             county_counter.num_ranges_responded = county_counter.num_ranges_responded + \
-                tract_counter.num_ranges_responded 
-            if num_ranges_responded > 0:
-                county = tract.county
-                thousands = num_ranges_responded / 1000.0
-                #county02 = county_counter.county
-                #first = f"_u_c_c(), tract {tract.name}, county = {county.county_name}"
-                #second = f", ranges_reponded = {thousands:.1f}"
-                #print(first + second)
-                if county not in self._county_mapper:
-                    print(f"_update_county_counts(), could not find county {county}, bailing!")
-                    return
+                    hosts_responded 
 
         # 3: Go back to counties, save to DB
         zero_counties = 0
-        index_county = 0
         for i, county in enumerate(self._county_mapper):
             county_counter = self._county_mapper[county]
             # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
-            num_ranges_responded = county_counter.num_ranges_responded
-            num_ranges_pinged = county_counter.num_ranges_pinged
-            if num_ranges_responded == 0:
+            hosts_responded = county_counter.num_ranges_responded
+            if hosts_responded == 0:
                 zero_counties = zero_counties + 1
-            else:
-                responded_k = num_ranges_responded / 1000.0
-                pinged_k = num_ranges_pinged / 1000.0
-                county = county_counter.county
-                #first = f"_u_c_c(), county[{index_county}]: {county.county_name}, "
-                #second = f"{responded_k:.1f}/{pinged_k:.1f} hosts (r/p)"
-                #print(first + second)
-                index_county = index_county + 1
             # Save to the db
-            county_counter.save()
+            print(f"_update_county_counts(), saving county {county.county_name}")
+            #county_counter.save()
         if zero_counties > 0:
             print(f"_update_county_counts(), processed {county_set.count()} counties, {zero_counties} zeros")
         else:
@@ -556,7 +533,7 @@ class Loader():
             # hash = us_state.__hash__()
             # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
             self._state_mapper[state_counter.us_state] = state_counter
-            state_count = state_count + 1
+            #state_count = state_count + 1
         # print(f"_update_county_counts(), county_count = {county_count}")
 
         # 2: Bubble counts up, Walk through all of the counties and update the corresponding states
@@ -564,22 +541,18 @@ class Loader():
             county_counter = self._county_mapper[county]
             # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
             state_counter = self._state_mapper[us_state]
-            num_ranges_responded = county_counter.num_ranges_responded
-            num_ranges_pinged = county_counter.num_ranges_pinged 
-            state_counter.num_ranges_responded = state_counter.num_ranges_responded + \
-                county_counter.num_ranges_responded 
+            hosts_pinged = county_counter.num_ranges_pinged 
+            hosts_responded = county_counter.num_ranges_responded
             state_counter.num_ranges_pinged = state_counter.num_ranges_pinged + \
-                county_counter.num_ranges_pinged 
+                hosts_pinged
+            state_counter.num_ranges_responded = state_counter.num_ranges_responded + \
+                hosts_responded
 
-        for i, county in enumerate(self._county_mapper):
-            county_counter = self._county_mapper[county]
-            # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
-            num_ranges_responded = county_counter.num_ranges_responded
-            num_ranges_pinged = county_counter.num_ranges_pinged
-        if zero_states > 0:
-            print(f"_update_states_counts(), processed {state_set.count()}, {zero_states} zeroes")
-        else:
-            print(f"_update_states_counts(), processed {state_set.count()} states, no zeroes")
+        # 3. Save to DB
+        for i, us_state in enumerate(self._state_mapper):
+            state_counter = self._state_mapper[us_state]
+            print(f"_update_state_counts(), saving state: {us_state.state_name}")
+        print(f"_update_states_counts(), processed {state_set.count()} states")
 
     def update_geo_counts(self, verbose=True):
         survey_ids = [459]
