@@ -532,7 +532,7 @@ class Loader():
             print(f"_update_county_counts(), {zero_counties} zero counties")
 
     def update_geo_counts(self, verbose=True):
-        self._survey_id = 450
+        self._survey_id = 459
         print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
         self._exec_db = False
 
