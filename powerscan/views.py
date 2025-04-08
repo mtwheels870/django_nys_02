@@ -154,7 +154,7 @@ class MapNavigationView(generic.edit.FormView):
 
     def get(self, request, *args, **kwargs):
         query_params = self.request.GET
-        if "survey_id" in query_parms:
+        if "survey_id" in query_params:
             survey_id = query_parms["survey_id"]
             print(f"MNV.get(), read survey_id = {survey_id}")
             return self.render_to_response(self.get_context_data())
