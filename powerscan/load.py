@@ -559,7 +559,8 @@ class Loader():
         print(f"_update_states_counts(), processed {state_set.count()} states")
 
     def update_geo_counts(self, verbose=True):
-        survey_ids = [459]
+        #survey_ids = [459]
+        survey_ids = [456, 451, 450, 449, 448, 447]
         for survey_id in survey_ids:
             self._survey_id = survey_id  
             print(f"update_geo_counts(), scanning survey_id: {self._survey_id}")
