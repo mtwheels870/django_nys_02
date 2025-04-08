@@ -476,7 +476,7 @@ class Loader():
             counter = self._tract_mapper[tract]
             hosts_pinged = counter.num_ranges_pinged
             hosts_responded = counter.num_ranges_responded
-            if num_ranges_responded == 0:
+            if hosts_responded == 0:
                 total_zero_tracts = total_zero_tracts + 1
             total_hosts_responded = total_hosts_responded + hosts_responded
             print(f"_update_tract_counts(), saving tract {tract.name}")
