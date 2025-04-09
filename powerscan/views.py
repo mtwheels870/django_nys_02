@@ -175,9 +175,9 @@ class MapNavigationView(generic.edit.FormView):
             match agg_type:
                 case "states":
                     data_rows = self._agg_type_states(survey)
-                case AGG_TYPE_COUNTIES:
+                case "counties":
                     data_rows = self._agg_type_counties(survey)
-                case AGG_TYPE_TRACTS:
+                case "tracts":
                     data_rows = self._agg_type_tracts(survey)
                 case _:
                     print(f"create_table(), unrecognized agg_type = {agg_type}")
