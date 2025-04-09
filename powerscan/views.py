@@ -145,10 +145,10 @@ class MapNavigationView(generic.edit.FormView):
         data_rows = []
         survey_id = survey.id
         ping_time = survey.time_ping_started
-        for counter in IpSurveyCounty.objects.filter(survey__id=survey_id).order_by("id")
+        for counter in IpSurveyCounty.objects.filter(survey__id=survey_id).order_by("id"):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
-            percentage = (float) responded/pinged
+            percentage = float(responded)/pinged
             dict = {"survey_id" : survey_id, "ping_time" : ping_time,
                 "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
@@ -158,10 +158,10 @@ class MapNavigationView(generic.edit.FormView):
         data_rows = []
         survey_id = survey.id
         ping_time = survey.time_ping_started
-        for counter in IpSurveyTract.objects.filter(survey__id=survey_id).order_by("-id")[:20]
+        for counter in IpSurveyTract.objects.filter(survey__id=survey_id).order_by("id"):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
-            percentage = (float) responded/pinged
+            percentage = float(responded)/pinged
             dict = {"survey_id" : survey_id, "ping_time" : ping_time,
                 "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
