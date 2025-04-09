@@ -46,6 +46,11 @@ KEY_AGG_TYPE = "agg_type"
 KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
+AGG_TYPE_STATES = "states"
+AGG_TYPE_COUNTIES = "counties"
+AGG_TYPE_TRACTS = "tracts"
+
+
 class UsStateViewSet(
     viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
@@ -122,8 +127,63 @@ class MapNavigationView(generic.edit.FormView):
         "per_page": 10
     }
 
-    def create_table(self, queryset):
-        table = self.table_class(data=queryset)
+    def _agg_type_states(self, survey):
+        data_rows = []
+        survey_id = survey.id
+        ping_time = survey.time_ping_started
+        for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id")
+            us_state = counter.us_state
+            responded = counter.num_ranges_responded 
+            pinged = counter.num_ranges_pinged 
+            percentage = (float) responded/pinged
+            dict = {"survey_id" : survey_id, "ping_time" : ping_time, "name" : us_state.state_name,
+                "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
+            data_rows.append(dict)
+        return data_rows
+
+    def _agg_type_counties(self, survey_id):
+        data_rows = []
+        survey_id = survey.id
+        ping_time = survey.time_ping_started
+        for counter in IpSurveyCounty.objects.filter(survey__id=survey_id).order_by("id")
+            responded = counter .num_ranges_responded 
+            pinged = counter.num_ranges_pinged 
+            percentage = (float) responded/pinged
+            dict = {"survey_id" : survey_id, "ping_time" : ping_time,
+                "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
+            data_rows.append(dict)
+        return data_rows
+
+    def _agg_type_tracts(self, survey_id):
+        data_rows = []
+        survey_id = survey.id
+        ping_time = survey.time_ping_started
+        for counter in IpSurveyTract.objects.filter(survey__id=survey_id).order_by("-id")[:20]
+            responded = counter .num_ranges_responded 
+            pinged = counter.num_ranges_pinged 
+            percentage = (float) responded/pinged
+            dict = {"survey_id" : survey_id, "ping_time" : ping_time,
+                "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
+            data_rows.append(dict)
+        return data_rows
+
+    def create_table(self, agg_type, survey_id):
+        data_rows = []
+        if agg_type and survey_id:
+            survey = IpRangeSurvey.get
+            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+            match agg_type:
+                case AGG_TYPE_STATES:
+                    data_rows = self._agg_type_states(survey)
+                case AGG_TYPE_COUNTIES:
+                    data_rows = self._agg_type_counties(survey)
+                case AGG_TYPE_TRACTS:
+                    data_rows = self._agg_type_tracts(survey)
+                case _:
+                    print(f"create_table(), unrecognized agg_type = {agg_type}")
+        else:
+            print(f"create_table(), agg_type = {agg_type}, survey_id = {survey_id}")
+        table = self.table_class(data=data_rows)
         RequestConfig(self.request, paginate=self.table_pagination).configure( table)
         return table
 
@@ -136,6 +196,8 @@ class MapNavigationView(generic.edit.FormView):
         query_parms = self.request.GET
         if "survey_id" in query_parms:
             survey_id = query_parms["survey_id"]
+        if "agg_type" in query_params:
+            agg_type = query_parms["agg_type"]
         if "in_bbox" in query_parms:
             in_bbox = query_parms["in_bbox"]
             print(f"g_c_d(), query_parms = {query_parms},in_bbox = {in_bbox}")
@@ -143,8 +205,8 @@ class MapNavigationView(generic.edit.FormView):
         else:
             context_data['map_bbox'] = None
 
-        # We need this, so it's in the Django templates (for the search parms)
-        table = self.create_table(MmIpRange.objects.none())
+        # This is wrong.  Don't want MmIpRange() here.  Only works b/c its none()
+        table = self.create_table(agg_type, survey_id)
         context_data['table'] = table
         return context_data
 
