@@ -211,7 +211,9 @@ class RecentSurveyView(SingleTableView):
         # print(f"(PRINT) _calculate_map_extent(), logger = {logger}")
         logger.info(f"(LOGGER) _calculate_map_extent(), survey_id = {survey_id}, bbox = {bbox}")
         base_url = reverse("app_powerscan:map_viewer")
-        query_params = {'in_bbox': bbox}
+        query_params = {'in_bbox': bbox,
+            'agg_type': 'states',
+            'survey_id' : survey_id}
         url = f"{base_url}?{urlencode(query_params)}"
         return HttpResponseRedirect(url)
 

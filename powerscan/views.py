@@ -157,10 +157,10 @@ class MapNavigationView(generic.edit.FormView):
         query_params = self.request.GET
         if "survey_id" in query_params:
             survey_id = query_params["survey_id"]
-            print(f"MNV.get(), read survey_id = {survey_id}")
+            print(f"MNV.get(), read survey_id = {survey_id},render_to_response()")
             return self.render_to_response(self.get_context_data())
         else:
-            print(f"MNV.get(), no survey_id")
+            print(f"MNV.get(), no survey_id, redirecting")
             new_params = {"survey_id": "459"}
             querystring = urlencode(new_params)
             url = f"/powerscan/map/?{querystring}"
