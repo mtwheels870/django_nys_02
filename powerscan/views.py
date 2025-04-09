@@ -135,7 +135,7 @@ class MapNavigationView(generic.edit.FormView):
             us_state = counter.us_state
             responded = counter.num_ranges_responded 
             pinged = counter.num_ranges_pinged 
-            percentage = ((float) responded)/pinged
+            percentage = float(responded)/pinged
             dict = {"survey_id" : survey_id, "ping_time" : ping_time, "name" : us_state.state_name,
                 "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
