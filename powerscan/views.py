@@ -131,7 +131,7 @@ class MapNavigationView(generic.edit.FormView):
         data_rows = []
         survey_id = survey.id
         ping_time = survey.time_ping_started
-        for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id")
+        for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
             us_state = counter.us_state
             responded = counter.num_ranges_responded 
             pinged = counter.num_ranges_pinged 
