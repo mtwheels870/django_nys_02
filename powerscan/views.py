@@ -196,8 +196,12 @@ class MapNavigationView(generic.edit.FormView):
         query_params = self.request.GET
         if "survey_id" in query_params :
             survey_id = query_params["survey_id"]
+        else:
+            survey_id = None
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
+        else:
+            agg_type = None
         if "in_bbox" in query_params:
             in_bbox = query_params["in_bbox"]
             print(f"g_c_d(), query_params = {query_params},in_bbox = {in_bbox}")
