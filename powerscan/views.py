@@ -173,7 +173,7 @@ class MapNavigationView(generic.edit.FormView):
             survey = IpRangeSurvey.get
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
             match agg_type:
-                case AGG_TYPE_STATES:
+                case "states":
                     data_rows = self._agg_type_states(survey)
                 case AGG_TYPE_COUNTIES:
                     data_rows = self._agg_type_counties(survey)
