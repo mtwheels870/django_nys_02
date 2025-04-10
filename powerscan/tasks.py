@@ -147,7 +147,8 @@ def build_whitelist(self, *args, **kwargs):
     survey.save()
 
     survey_manager = PingSurveyManager(survey_id, debug.whitelist)
-    num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
+    # num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
+    num_states, num_counties, num_ranges = survey_manager.build_whitelist()
 
     if debug.whitelist:
         message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
