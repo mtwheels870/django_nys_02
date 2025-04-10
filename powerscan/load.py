@@ -578,3 +578,14 @@ class Loader():
 
             self._state_mapper = {}
             self._update_state_counts()
+
+    def ranges_counties(self, verbose=True):
+        index_chunk = 0
+        for chunk in RangeChunker():
+            print(f"ranges_counties(), processing chunk[{index_chunk}]")
+            for range_ping in chunk:
+                tract = range_ping.census_tract
+                county = tract.county
+                range_ping.county = county
+                range_ping.save()
+            index_chunk = index_chunk + 1
