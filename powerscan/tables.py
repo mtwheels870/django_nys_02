@@ -37,7 +37,7 @@ class AggregationHistoryTable(tables.Table):
     def render_ping_time(self, value, record):
         return value.strftime(TIME_FORMAT)
 
-    def _render_thousands(value):
+    def _render_thousands(self, value):
         thousands = value / 1000.0
         return f"{thousands:.2f}"
 
