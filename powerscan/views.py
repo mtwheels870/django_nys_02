@@ -181,7 +181,7 @@ class MapNavigationView(SingleTableView):
         return table
 
     def get_queryset(self):
-        print(f"MNV.get_queryset()")
+        print(f"MNV.get_queryset(), self = {self}")
         queryset = IpRangeSurvey.objects.order_by("-id")
         return queryset 
 
