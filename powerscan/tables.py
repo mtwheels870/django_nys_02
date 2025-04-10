@@ -17,7 +17,7 @@ TIME_FORMAT = "%H:%M:%S"
 
 MAX_STRING_LENGTH = 15
 class AggregationHistoryTable(tables.Table):
-    selection = tables.CheckBoxColumn(accessor="survey_id")
+    selection = tables.CheckBoxColumn(accessor="id")
     # survey_id = tables.Column(verbose_name="Survey_Id")
     # ping_time = tables.Column(verbose_name="Ping Time (UTC)")
     name = tables.Column(verbose_name="Name")
@@ -32,7 +32,7 @@ class AggregationHistoryTable(tables.Table):
         # template_name = "django_tables2/bootstrap.html"
         # This only works with models
         # fields = "__all__"
-        fields = ["selection", "name", "hosts_responded", "hosts_pinged", "percentage"]
+        fields = ["selection", "id", "name", "hosts_responded", "hosts_pinged", "percentage"]
 
 #    def render_ping_time(self, value, record):
 #        return value.strftime(TIME_FORMAT)
