@@ -130,7 +130,7 @@ class MapNavigationView(generic.edit.FormView):
             responded = counter.num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"name" : us_state.state_name, "hosts_responded" : responded,
+            dict = {"selection" : False, "name" : us_state.state_name, "hosts_responded" : responded,
                     "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
@@ -141,7 +141,7 @@ class MapNavigationView(generic.edit.FormView):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"name" : counter.county.county_name, "hosts_responded" : responded,
+            dict = {"selection" : False, "name" : counter.county.county_name, "hosts_responded" : responded,
                 "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
@@ -152,7 +152,7 @@ class MapNavigationView(generic.edit.FormView):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"name" : "tract_name_here", "hosts_responded" : responded,
+            dict = {"selection" : False, "name" : "tract_name_here", "hosts_responded" : responded,
                 "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
