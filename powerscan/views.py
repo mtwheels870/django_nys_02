@@ -140,9 +140,11 @@ class MapNavigationView(SingleTableView):
             data_rows.append(dict)
         return data_rows
 
-    def _agg_type_counties(self, survey):
+    def _agg_type_counties(self, survey_state):
+        survey = survey_state.survey
+        us_state = survey_state.us_state 
         data_rows = []
-        for counter in IpSurveyCounty.objects.filter(survey__id=survey_id).order_by("id"):
+        for counter in IpSurveyCounty.objects.filter(survey=survey, county__us_state==us_state).order_by("id"):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
@@ -162,15 +164,17 @@ class MapNavigationView(SingleTableView):
             data_rows.append(dict)
         return data_rows
 
-    def _create_table(self, agg_type, survey):
+    def _create_table(self, agg_type, id1):
         data_rows = []
-        if agg_type and survey:
-            print(f"_create_table(), agg_type = {agg_type}, survey = {survey}")
+        if agg_type and id1:
+            print(f"_create_table(), agg_type = {agg_type}, id1 = {id1}")
             match agg_type:
                 case "states":
+                    survey = get_object_or_404(IpRangeSurvey, pk=id1)
                     data_rows = self._agg_type_states(survey)
                 case "counties":
-                    data_rows = self._agg_type_counties(survey)
+                    survey_state = get_object_or_404(IpRangeSurvey, pk=id1)
+                    data_rows = self._agg_type_counties(survey_state)
                 case _:
                     print(f"create_table(), unrecognized agg_type = {agg_type}")
         else:
@@ -182,18 +186,18 @@ class MapNavigationView(SingleTableView):
     def get_queryset(self):
         query_params = self.request.GET
         print(f"MNV.get_queryset(), self = {self}, query_params = {query_params}")
-        if "survey_id" in query_params :
-            survey_id = query_params["survey_id"]
+        if "id" in query_params :
+            id1 = query_params["id"]
             #field_survey_id = form.fields['survey_id']
             #field_survey_id.initial = survey_id
-            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+            #survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         else:
-            survey = None
+            id1 = None
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
         else:
             agg_type = None
-        queryset = self._create_table( agg_type, survey)
+        queryset = self._create_table( agg_type, id1)
         # queryset = IpRangeSurvey.objects.order_by("-id")
         return queryset 
 
@@ -254,15 +258,18 @@ class MapNavigationView(SingleTableView):
             else:
                 print(f"MNV.post(zoom_map), num_selected = {num_selected}")
             # Pass the form back in
-            return render(request, "powerscan/map_viewer.html",
-                {'form': form, 'table': table, 'map_bbox' : map_bbox});
+            new_params = {"agg_type" : "counties", "id": single_selected}
+            querystring = urlencode(new_params)
+            return redirect(f"/powerscan/map/?{querystring}")
         if 'show_459' in request.POST:
-            new_params = {"agg_type" : "states", "survey_id": "459"}
+            # id in this instance is survey id
+            new_params = {"agg_type" : "states", "id": "459"}
             querystring = urlencode(new_params)
             url = f"/powerscan/map/?{querystring}"
             return redirect(url)
+        # This logic is wrong
         time_pinged = form.cleaned_data[KEY_TIME_PINGED]
-        new_form = SelectedAggregationForm(initial={FIELD_SURVEY_ID : survey_id,
+        new_form = SelectedAggregationForm(initial={"id" : survey_id,
             KEY_AGG_TYPE : agg_type, KEY_TIME_PINGED : time_pinged})
         context = {"form" : new_form}
         return render(request, self.template_name, context)
