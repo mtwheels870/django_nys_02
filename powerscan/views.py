@@ -8,7 +8,8 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 import django.dispatch
 
-from  django_tables2.config import RequestConfig
+from django_tables2.config import RequestConfig
+from django_tables2 import SingleTableView
 
 from rest_framework import viewsets
 from rest_framework_gis import filters
