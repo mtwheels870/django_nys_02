@@ -225,24 +225,6 @@ class MapNavigationView(SingleTableView):
         # print(f"g_c_d(), returning here, context_data = {context_data}")
         return context_data
 
-#    def get_queryset(self):
-        # For now, just hard-code with 'PR'
-#        survey_id = 450
-#        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
-
-#    def get(self, request, *args, **kwargs):
-#        query_params = self.request.GET
-#        if "survey_id" in query_params:
-#            survey_id = query_params["survey_id"]
-#            print(f"MNV.get(), read survey_id = {survey_id},render_to_response()")
-#            return self.render_to_response(self.get_context_data())
-#        else:
-#            print(f"MNV.get(), no survey_id, redirecting")
-#            new_params = {"agg_type" : "states", "survey_id": "459"}
-#            querystring = urlencode(new_params)
-#            url = f"/powerscan/map/?{querystring}"
-#            return redirect(url)
-
     def post(self, request, *args, **kwargs):
         print(f"MNV.post(), request.POST = {request.POST}")
         form = SelectedAggregationForm(request.POST)
@@ -269,6 +251,11 @@ class MapNavigationView(SingleTableView):
             # Pass the form back in
             return render(request, "powerscan/map_viewer.html",
                 {'form': form, 'table': table, 'map_bbox' : map_bbox});
+        if 'show_459' in request.POST:
+            new_params = {"agg_type" : "states", "survey_id": "459"}
+            querystring = urlencode(new_params)
+            url = f"/powerscan/map/?{querystring}"
+            return redirect(url)
         time_pinged = form.cleaned_data[KEY_TIME_PINGED]
         new_form = SelectedAggregationForm(initial={FIELD_SURVEY_ID : survey_id,
             KEY_AGG_TYPE : agg_type, KEY_TIME_PINGED : time_pinged})
@@ -302,3 +289,21 @@ def chat_index(request):
 
 def chat_room(request, room_name):
     return render(request, "powerscan/chat_room.html", {"room_name": room_name})
+
+#    def get_queryset(self):
+        # For now, just hard-code with 'PR'
+#        survey_id = 450
+#        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
+
+#    def get(self, request, *args, **kwargs):
+#        query_params = self.request.GET
+#        if "survey_id" in query_params:
+#            survey_id = query_params["survey_id"]
+#            print(f"MNV.get(), read survey_id = {survey_id},render_to_response()")
+#            return self.render_to_response(self.get_context_data())
+#        else:
+#            print(f"MNV.get(), no survey_id, redirecting")
+#            new_params = {"agg_type" : "states", "survey_id": "459"}
+#            querystring = urlencode(new_params)
+#            url = f"/powerscan/map/?{querystring}"
+#            return redirect(url)
