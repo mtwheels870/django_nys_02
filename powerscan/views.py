@@ -24,7 +24,8 @@ from .models import (
     MmIpRange,
     IpRangePing,
     IpRangeSurvey,
-    IpSurveyState
+    IpSurveyState,
+    IpSurveyCounty
 )
 
 from .serializers import (
