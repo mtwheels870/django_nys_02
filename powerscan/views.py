@@ -180,6 +180,11 @@ class MapNavigationView(SingleTableView):
         RequestConfig(self.request, paginate=self.table_pagination).configure( table)
         return table
 
+    def get_queryset(self):
+        print(f"MNV.get_queryset()")
+        queryset = IpRangeSurvey.objects.order_by("-id")
+        return queryset 
+
     def get_context_data(self, **kwargs):
         #print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
