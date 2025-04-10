@@ -179,7 +179,7 @@ class MapNavigationView(generic.edit.FormView):
         return table
 
     def get_context_data(self, **kwargs):
-        print(f"MNV.g_c_d(), kwargs = {kwargs}")
+        #print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         # context_data['map_title'] = "Map Title Here"
         # form = context_data['form']
@@ -196,7 +196,7 @@ class MapNavigationView(generic.edit.FormView):
             context_data[KEY_TIME_PINGED] = survey.time_ping_started
         else:
             survey = None
-        print(f"MNV.g_c_d(), 1, c_d = {context_data}")
+        #print(f"MNV.g_c_d(), 1, c_d = {context_data}")
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
             context_data[KEY_AGG_TYPE] = agg_type
@@ -206,22 +206,22 @@ class MapNavigationView(generic.edit.FormView):
             agg_type = None
         if "in_bbox" in query_params:
             in_bbox = query_params["in_bbox"]
-            print(f"g_c_d(), query_params = {query_params},in_bbox = {in_bbox}")
+            #print(f"g_c_d(), query_params = {query_params},in_bbox = {in_bbox}")
             context_data['map_bbox'] = in_bbox  
         else:
             context_data['map_bbox'] = None
-        print(f"MNV.g_c_d(), 2")
+        # print(f"MNV.g_c_d(), 2")
 
         # This is wrong.  Don't want MmIpRange() here.  Only works b/c its none()
         table = self.create_table(agg_type, survey)
         context_data['table'] = table
-        print(f"g_c_d(), returning here, context_data = {context_data}")
+        # print(f"g_c_d(), returning here, context_data = {context_data}")
         return context_data
 
-    def get_queryset(self):
+#    def get_queryset(self):
         # For now, just hard-code with 'PR'
-        survey_id = 450
-        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
+#        survey_id = 450
+#        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
 
     def get(self, request, *args, **kwargs):
         query_params = self.request.GET
@@ -237,6 +237,7 @@ class MapNavigationView(generic.edit.FormView):
             return redirect(url)
 
     def post(self, request, *args, **kwargs):
+        print(f"MNV.post(), request.POST = {request.POST}")
         form = SelectedAggregationForm(request.POST)
         if not form.is_valid():
             print(f"MNV.post(), form is INVALID")
