@@ -173,7 +173,7 @@ class MapNavigationView(SingleTableView):
                     survey = get_object_or_404(IpRangeSurvey, pk=id1)
                     data_rows = self._agg_type_states(survey)
                 case "counties":
-                    survey_state = get_object_or_404(IpRangeSurvey, pk=id1)
+                    survey_state = get_object_or_404(IpSurveyState, pk=id1)
                     data_rows = self._agg_type_counties(survey_state)
                 case _:
                     print(f"create_table(), unrecognized agg_type = {agg_type}")
