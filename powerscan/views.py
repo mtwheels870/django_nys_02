@@ -124,40 +124,35 @@ class MapNavigationView(generic.edit.FormView):
 
     def _agg_type_states(self, survey):
         data_rows = []
-        survey_id = survey.id
         for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
             us_state = counter.us_state
             responded = counter.num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"survey_id" : survey_id, "ping_time" : ping_time, "name" : us_state.state_name,
-                "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
+            dict = {"name" : us_state.state_name, "hosts_responded" : responded,
+                    "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
 
-    def _agg_type_counties(self, survey_id):
+    def _agg_type_counties(self, survey):
         data_rows = []
-        survey_id = survey.id
-        ping_time = survey.time_ping_started
         for counter in IpSurveyCounty.objects.filter(survey__id=survey_id).order_by("id"):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"survey_id" : survey_id, "ping_time" : ping_time,
-                "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
+            dict = {"name" : counter.county.county_name, "hosts_responded" : responded,
+                "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
 
-    def _agg_type_tracts(self, survey_id):
+    def _agg_type_tracts(self, survey):
         data_rows = []
-        survey_id = survey.id
-        ping_time = survey.time_ping_started
         for counter in IpSurveyTract.objects.filter(survey__id=survey_id).order_by("id"):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"survey_id" : survey_id, "ping_time" : ping_time,
-                "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
+            dict = {"name" : "tract_name_here", "hosts_responded" : responded,
+                "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
 

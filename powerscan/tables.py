@@ -18,8 +18,8 @@ TIME_FORMAT = "%H:%M:%S"
 MAX_STRING_LENGTH = 15
 class AggregationHistoryTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="survey_id")
-    survey_id = tables.Column(verbose_name="Survey_Id")
-    ping_time = tables.Column(verbose_name="Ping Time (UTC)")
+    # survey_id = tables.Column(verbose_name="Survey_Id")
+    # ping_time = tables.Column(verbose_name="Ping Time (UTC)")
     name = tables.Column(verbose_name="Name")
     hosts_responded = tables.Column(verbose_name="Returns(K)")
     hosts_pinged = tables.Column(verbose_name="Total(K)")
@@ -32,10 +32,10 @@ class AggregationHistoryTable(tables.Table):
         # template_name = "django_tables2/bootstrap.html"
         # This only works with models
         # fields = "__all__"
-        fields = ["selection", "survey_id", "ping_time", "name", "hosts_responded", "hosts_pinged", "percentage"]
+        fields = ["selection", "name", "hosts_responded", "hosts_pinged", "percentage"]
 
-    def render_ping_time(self, value, record):
-        return value.strftime(TIME_FORMAT)
+#    def render_ping_time(self, value, record):
+#        return value.strftime(TIME_FORMAT)
 
     def _render_thousands(self, value):
         thousands = value / 1000.0
