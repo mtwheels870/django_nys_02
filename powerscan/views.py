@@ -125,7 +125,6 @@ class MapNavigationView(generic.edit.FormView):
     def _agg_type_states(self, survey):
         data_rows = []
         survey_id = survey.id
-        ping_time = survey.time_ping_started
         for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
             us_state = counter.us_state
             responded = counter.num_ranges_responded 
@@ -162,10 +161,9 @@ class MapNavigationView(generic.edit.FormView):
             data_rows.append(dict)
         return data_rows
 
-    def create_table(self, agg_type, survey_id):
+    def create_table(self, agg_type, survey):
         data_rows = []
-        if agg_type and survey_id:
-            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+        if agg_type and survey:
             match agg_type:
                 case "states":
                     data_rows = self._agg_type_states(survey)
@@ -192,10 +190,11 @@ class MapNavigationView(generic.edit.FormView):
             survey_id = query_params["survey_id"]
             field_survey_id = form.fields['survey_id']
             field_survey_id.initial = survey_id
+            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
             field_time_pinged = form.fields['time_pinged']
-            field_time_pinged.initial = "time pinged here"
+            field_time_pinged.initial = survey.time_ping_started
         else:
-            survey_id = None
+            survey = None
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
             field_agg_type = form.fields['agg_type']
@@ -210,7 +209,7 @@ class MapNavigationView(generic.edit.FormView):
             context_data['map_bbox'] = None
 
         # This is wrong.  Don't want MmIpRange() here.  Only works b/c its none()
-        table = self.create_table(agg_type, survey_id)
+        table = self.create_table(agg_type, survey)
         context_data['table'] = table
         return context_data
 
