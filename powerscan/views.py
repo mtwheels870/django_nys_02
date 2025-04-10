@@ -170,7 +170,6 @@ class MapNavigationView(generic.edit.FormView):
     def create_table(self, agg_type, survey_id):
         data_rows = []
         if agg_type and survey_id:
-            survey = IpRangeSurvey.get
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
             match agg_type:
                 case "states":
