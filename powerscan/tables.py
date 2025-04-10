@@ -41,10 +41,10 @@ class AggregationHistoryTable(tables.Table):
         thousands = value / 1000.0
         return f"{thousands:.2f}"
 
-    def render_ranges_returned(self, value, record):
+    def render_hosts_responded(self, value, record):
         return self._render_thousands(value)
 
-    def render_ranges_total(self, value, record):
+    def render_hosts_pinged(self, value, record):
         return self._render_thousands(value)
 
     def render_percentage(self, value, record):

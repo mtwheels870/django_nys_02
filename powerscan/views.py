@@ -46,11 +46,6 @@ KEY_AGG_TYPE = "agg_type"
 KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
-AGG_TYPE_STATES = "states"
-AGG_TYPE_COUNTIES = "counties"
-AGG_TYPE_TRACTS = "tracts"
-
-
 class UsStateViewSet(
     viewsets.ReadOnlyModelViewSet):
     # print("MTW, views.MarkerViewSet()")
@@ -190,15 +185,21 @@ class MapNavigationView(generic.edit.FormView):
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         context_data['map_title'] = "Map Title Here"
-        # form = context_data['form']
+        form = context_data['form']
         # map_bbox = form.fields[KEY_MAP_BBOX]
         query_params = self.request.GET
         if "survey_id" in query_params :
             survey_id = query_params["survey_id"]
+            field_survey_id = form.fields['survey_id']
+            field_survey_id.initial = survey_id
+            field_time_pinged = form.fields['time_pinged']
+            field_time_pinged.initial = "time pinged here"
         else:
             survey_id = None
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
+            field_agg_type = form.fields['agg_type']
+            field_agg_type.initial = agg_type
         else:
             agg_type = None
         if "in_bbox" in query_params:

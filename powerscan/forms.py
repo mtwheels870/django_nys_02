@@ -14,8 +14,8 @@ class SelectedAggregationForm(forms.Form):
     #id = forms.IntegerField(initial=23)
     #map_bbox = forms.CharField(initial="a=b")
     agg_type = forms.CharField()
-    id = forms.IntegerField(label="Db ID")
-    name = forms.CharField(label="Aggregation Name")
+    survey_id = forms.IntegerField(label="Survey ID")
+    time_pinged = forms.CharField(label="Time Pinged (UTC)")
     # map_bbox = forms.CharField(widget=forms.HiddenInput())
 
     # Range count doesn't work for IP ranges (looks like a single range, really many)
