@@ -236,8 +236,8 @@ class MapNavigationView(SingleTableView):
         # print(f"MNV.g_c_d(), 2")
 
         # This is wrong.  Don't want MmIpRange() here.  Only works b/c its none()
-        table = self.create_table(agg_type, survey)
-        context_data['table'] = table
+        #table = self._create_table(agg_type, survey)
+        #context_data['table'] = table
         # print(f"g_c_d(), returning here, context_data = {context_data}")
         return context_data
 
