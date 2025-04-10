@@ -199,7 +199,7 @@ class PingSurveyManager:
         total_ranges = 0
         num_counties = 0
         for survey_state in selected_survey_states :
-            county_set = survey_state.county_set.all():
+            county_set = survey_state.county_set.all()
             num_counties = num_counties + county_set.count()
             for county in county_set:
                 survey_county = IpSurveyCounty(survey=survey, county=county)
