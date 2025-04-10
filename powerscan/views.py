@@ -196,6 +196,7 @@ class MapNavigationView(generic.edit.FormView):
             context_data[KEY_TIME_PINGED] = survey.time_ping_started
         else:
             survey = None
+        print(f"MNV.g_c_d(), 1, c_d = {context_data}")
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
             context_data[KEY_AGG_TYPE] = agg_type
@@ -209,6 +210,7 @@ class MapNavigationView(generic.edit.FormView):
             context_data['map_bbox'] = in_bbox  
         else:
             context_data['map_bbox'] = None
+        print(f"MNV.g_c_d(), 2")
 
         # This is wrong.  Don't want MmIpRange() here.  Only works b/c its none()
         table = self.create_table(agg_type, survey)
