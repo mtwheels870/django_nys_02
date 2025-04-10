@@ -207,6 +207,9 @@ class PingSurveyManager:
                 if county.id == debug_county_id:
                     self._debug_directory(county)
                     self._debug_county = county
+                    add_to_debug = True
+                else:
+                    add_to_debug = False
                 ranges_added = self._county_ranges_whitelist(county, add_to_debug)
                 total_ranges = total_ranges + ranges_added
 
