@@ -144,7 +144,7 @@ class MapNavigationView(SingleTableView):
         survey = survey_state.survey
         us_state = survey_state.us_state 
         data_rows = []
-        for counter in IpSurveyCounty.objects.filter(survey=survey, county__us_state==us_state).order_by("id"):
+        for counter in IpSurveyCounty.objects.filter(survey=survey, county__us_state=us_state).order_by("id"):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
