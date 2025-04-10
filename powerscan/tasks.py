@@ -157,7 +157,7 @@ def build_whitelist(self, *args, **kwargs):
     survey.save()
 
     # Django channels back to the caller
-    return num_states, num_counties, num_tracts, num_ranges
+    return num_states, num_counties, num_ranges
 
 def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
     try:
