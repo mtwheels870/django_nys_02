@@ -18,8 +18,7 @@ TIME_FORMAT = "%H:%M:%S"
 MAX_STRING_LENGTH = 15
 class AggregationHistoryTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="id")
-    # survey_id = tables.Column(verbose_name="Survey_Id")
-    # ping_time = tables.Column(verbose_name="Ping Time (UTC)")
+    id = tables.Column(verbose_name="Id")
     name = tables.Column(verbose_name="Name")
     hosts_responded = tables.Column(verbose_name="Returns(K)")
     hosts_pinged = tables.Column(verbose_name="Total(K)")
