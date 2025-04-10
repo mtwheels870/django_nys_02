@@ -184,6 +184,7 @@ class PingSurveyManager:
         #print(f"PSM._traverse_geography(), survey = {survey}")
         
         selected_survey_states = IpSurveyState.objects.filter(survey_id=self._survey_id)
+        num_states = selected_survey_states.count()
 
         state_abbrevs = [s.us_state.state_abbrev for s in selected_survey_states]
         # debugger.print_array("PSM._traverse_geography(), selected_survey_states:", selected_survey_states)
@@ -191,35 +192,45 @@ class PingSurveyManager:
         if self._debug:
             print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
 
-        state_ids = []
+
+        #state_ids = []
+        #for survey_state in selected_survey_states :
+        #    state_ids.append(survey_state.us_state.id)
+        total_ranges = 0
+        num_counties = 0
         for survey_state in selected_survey_states :
-            state_ids.append(survey_state.us_state.id)
+            county_set = survey_state.county_set.all():
+            num_counties = num_counties + county_set.count()
+            for county in county_set:
+                survey_county = IpSurveyCounty(survey=survey, county=county)
+                survey_county.save()
+                if county.id == debug_county_id:
+                    self._debug_directory(county)
+                    self._debug_county = county
+                ranges_added = self._county_ranges_whitelist(county, add_to_debug)
+                total_ranges = total_ranges + ranges_added
+
+#            state_ids.append(survey_state.us_state.id)
 
         # debugger.print_array("PSM._traverse_geography(), state_ids:", state_ids)
 
-        county_ids = []
+#        county_ids = []
 
         # Could also do:
         # counties = state.county_set.all()
         # counties_in_state = County.objects.filter(us_state__id__in=state_ids)
-        total_ranges = 0
-        for county in us_state.county_set.all():
+#        total_ranges = 0
+#        counties_in_states = County.objects.filter(us_state__id__in=state_ids)
+#        for county in counties_in_states:
             # county_ids.append(county.id)
-            survey_county = IpSurveyCounty(survey=survey, county=county)
-            survey_county.save()
-            if county.id == debug_county_id:
-                self._debug_directory(county)
-                self._debug_county = county
-            ranges_added = self._county_ranges_whitelist(county, add_to_debug)
-            total_ranges = total_ranges + ranges_added
         #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
         # debugger.print_array("PSM._traverse_geography(), county_ids:", county_ids)
 
 
         # file_name = debugger.get_file()
         # debugger.close()
-        num_states = len(state_ids)
-        num_counties = len(county_ids)
+        #num_states = len(state_ids)
+        #num_counties = len(county_ids)
         # num_tracts = len(tract_ids)
         if self._debug:
             first = "PSM._traverse_geography(), created (s/c/r) = "
