@@ -114,7 +114,8 @@ class RangeChunker:
             raise StopIteration
 
         logger.info(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
-        ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
+        #ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
+        ranges = MmIpRange.objects.filter(county__isnull=True).order_by("id")[self._range_start:self._range_end]
         num_returned = ranges.count()
         logger.info(f"RangeChunker.__next__(), returned {num_returned} rows")
         if num_returned < SMALL_CHUNK_SIZE:
