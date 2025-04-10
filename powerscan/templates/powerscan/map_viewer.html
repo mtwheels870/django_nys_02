@@ -40,15 +40,17 @@
         <div class="right-side">
             <h2>Survey History, Selected Geography</h2>
             <div id="table-stuff"></div>
-            <form id="selected_tract_form" method="post" enctype="multipart/form-data" >
-                {% csrf_token %}
-                {{ form.errors }}
-                {{ form.media }}
-                {{ form.as_div }}
+            <form method="post" enctype="multipart/form-data">
+                <form id="selected_tract_form" method="post" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                    {{ form.errors }}
+                    {{ form.media }}
+                    {{ form.as_div }}
+                </form>
+                {% render_table table %}
+                <button type="submit" name="zoom_map">Zoom Map</button>
+                <button type="submit" name="expand">Expand</button>
             </form>
-            {% render_table table %}
-            <button type="submit" name="zoom_map">Zoom Map</button>
-            <button type="submit" name="expand">Expand</button>
         </div>
   </body>
 </html>
