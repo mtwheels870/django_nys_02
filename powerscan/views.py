@@ -227,13 +227,13 @@ class MapNavigationView(SingleTableView):
 
     def post(self, request, *args, **kwargs):
         print(f"MNV.post(), request.POST = {request.POST}")
-        form = SelectedAggregationForm(request.POST)
-        if not form.is_valid():
-            print(f"MNV.post(), form is INVALID")
-            return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
+        # form = SelectedAggregationForm(request.POST)
+#         if not form.is_valid():
+ #            print(f"MNV.post(), form is INVALID")
+  #           return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
 
-        survey_id = form.cleaned_data[KEY_SURVEY_ID]
-        agg_type = form.cleaned_data[KEY_AGG_TYPE]
+   #      survey_id = form.cleaned_data[KEY_SURVEY_ID]
+    #     agg_type = form.cleaned_data[KEY_AGG_TYPE]
 
         selected_pks = request.POST.getlist('selection')
         num_selected = len(selected_pks)
