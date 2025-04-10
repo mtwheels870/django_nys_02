@@ -117,8 +117,9 @@ def approve_ping(request, id):
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_my_scheduler:schedule_survey_detail", args=(id,)))
 
-class MapNavigationView(generic.edit.FormView):
-    form_class = SelectedAggregationForm
+# class MapNavigationView(generic.edit.FormView):
+class MapNavigationView(SingleTableView):
+    # form_class = SelectedAggregationForm
     table_class = AggregationHistoryTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
