@@ -42,6 +42,7 @@ from .tables import AggregationHistoryTable
 # Import our neighbors
 
 KEY_ID = "id"
+KEY_SURVEY_ID = "survey_id"
 KEY_AGG_TYPE = "agg_type"
 KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
@@ -114,7 +115,6 @@ def approve_ping(request, id):
     return HttpResponseRedirect(reverse("app_my_scheduler:schedule_survey_detail", args=(id,)))
 
 class MapNavigationView(generic.edit.FormView):
-    # model = TextFile
     form_class = SelectedAggregationForm
     table_class = AggregationHistoryTable
     template_name = "powerscan/map_viewer.html"
@@ -228,25 +228,35 @@ class MapNavigationView(generic.edit.FormView):
             return redirect(url)
 
     def post(self, request, *args, **kwargs):
-        form = SelectedCensusTractForm(request.POST)
-        # print(f"MNV.post(), checking form here: {form}")
-        if form.is_valid():
-            id = form.cleaned_data[KEY_ID]
-            agg_type = form.cleaned_data[KEY_AGG_TYPE]
-            map_bbox = form.cleaned_data[KEY_MAP_BBOX]
+        form = SelectedAggregationForm(request.POST)
+        if not form.is_valid():
+            print(f"MNV.post(), form is INVALID")
+            return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
 
-        # print(f"MNV.g_c_d(), map_bbox = {map_bbox}")
-            queryset = self.build_table(agg_type, id)
-            table = self.create_table(queryset)
-            print(f"MNV.post(), id = {id}, agg_type = {agg_type}, map_bbox = {map_bbox}")
-            print(f"          table = {table}")
+        survey_id = form.cleaned_data[KEY_SURVEY_ID]
+        agg_type = form.cleaned_data[KEY_AGG_TYPE]
 
+        selected_pks = request.POST.getlist('selection')
+        num_selected = len(selected_pks)
+        if 'zoom_map' in request.POST:
+            if num_selected > 0:
+                print(f"MNV.post(zoom_map), selected ids = {ids}")
+            else:
+                print(f"MNV.post(zoom_map), nothing selected")
+        if 'expand' in request.POST:
+            if num_selected == 1:
+                single_selected = selected_pks[0]
+                print(f"MNV.post(zoom_map), single_selected = {single_selected}")
+            else:
+                print(f"MNV.post(zoom_map), num_selected = {num_selected}")
             # Pass the form back in
             return render(request, "powerscan/map_viewer.html",
                 {'form': form, 'table': table, 'map_bbox' : map_bbox});
-        else:
-            print(f"MNV.post(), form is INVALID")
-            return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
+        time_pinged = form.cleaned_data[KEY_TIME_PINGED]
+        new_form = SelectedAggregationForm(initial={FIELD_SURVEY_ID : survey_id,
+            KEY_AGG_TYPE : agg_type, KEY_TIME_PINGED : time_pinged})
+        context = {"form" : new_form}
+        return render(request, self.template_name, context)
 
     # These labels are in static/cb_layer.js
     def build_table(self, agg_type, id):

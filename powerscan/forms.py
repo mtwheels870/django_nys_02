@@ -12,7 +12,7 @@ from .models import CountTract, IpRangePing, UsState
 class SelectedAggregationForm(forms.Form):
     agg_type = forms.CharField()
     survey_id = forms.IntegerField(label="Survey ID")
-    time_pinged = forms.DateTimeField(label="Time Pinged (UTC)")
+    time_pinged = forms.DateTimeField(label="Time Pinged (EDT)")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -26,19 +26,12 @@ class AggregationHistoryTable(tables.Table):
 
     class Meta:
         template_name = "django_tables2/bootstrap4.html"
-        # model = MmIpRange
         empty_text = "(No geography selected yet)"
-        # template_name = "django_tables2/bootstrap.html"
-        # This only works with models
-        # fields = "__all__"
         fields = ["selection", "id", "name", "hosts_responded", "hosts_pinged", "percentage"]
-
-#    def render_ping_time(self, value, record):
-#        return value.strftime(TIME_FORMAT)
 
     def _render_thousands(self, value):
         thousands = value / 1000.0
-        return f"{thousands:.2f}"
+        return f"{thousands:.1f}"
 
     def render_hosts_responded(self, value, record):
         return self._render_thousands(value)
@@ -47,7 +40,7 @@ class AggregationHistoryTable(tables.Table):
         return self._render_thousands(value)
 
     def render_percentage(self, value, record):
-        return f"{value:.2f}"
+        return f"{value:.3f}"
 
 class IpSurveyTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
