@@ -10,22 +10,15 @@ from .models import CountTract, IpRangePing, UsState
 
 # widget=forms.HiddenInput())
 class SelectedAggregationForm(forms.Form):
-    #agg_type = forms.CharField(initial="SomeType")
-    #id = forms.IntegerField(initial=23)
-    #map_bbox = forms.CharField(initial="a=b")
     agg_type = forms.CharField()
     survey_id = forms.IntegerField(label="Survey ID")
     time_pinged = forms.CharField(label="Time Pinged (UTC)")
-    # map_bbox = forms.CharField(widget=forms.HiddenInput())
-
-    # Range count doesn't work for IP ranges (looks like a single range, really many)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['agg_type'].widget.attrs['readonly'] = True
-        self.fields['id'].widget.attrs['readonly'] = True
-        self.fields['name'].widget.attrs['readonly'] = True
-        # self.fields['map_bbox'].widget.attrs['readonly'] = True
+        self.fields['survey_id'].widget.attrs['readonly'] = True
+        self.fields['time_pinged'].widget.attrs['readonly'] = True
 
 class PingStrategyForm(forms.Form):
     choices = []
