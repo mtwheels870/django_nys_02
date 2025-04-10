@@ -178,7 +178,7 @@ class MapNavigationView(SingleTableView):
                 case _:
                     print(f"create_table(), unrecognized agg_type = {agg_type}")
         else:
-            print(f"create_table(), agg_type = {agg_type}, survey = {survey}")
+            print(f"create_table(), agg_type = {agg_type}, id1 = {id1}")
         #table = self.table_class(data=data_rows)
         #RequestConfig(self.request, paginate=self.table_pagination).configure( table)
         return data_rows
