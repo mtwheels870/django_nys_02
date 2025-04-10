@@ -10,18 +10,18 @@ from .models import CountTract, IpRangePing, UsState
 
 # widget=forms.HiddenInput())
 class SelectedAggregationForm(forms.Form):
-    agg_type = forms.CharField()
-    survey_id = forms.IntegerField(label="Survey ID")
-    time_pinged = forms.DateTimeField(label="Time Pinged (EDT)")
+    agg_type = forms.CharField(widget=forms.HiddenInput())
+    survey_id = forms.IntegerField(label="Survey ID", widget=forms.HiddenInput())
+    time_pinged = forms.DateTimeField(label="Time Pinged (EDT)", widget=forms.HiddenInput()))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['agg_type'].widget.attrs['readonly'] = True
-        self.fields['survey_id'].widget.attrs['readonly'] = True
-        self.fields['time_pinged'].widget.attrs['readonly'] = True
+#        self.fields['agg_type'].widget.attrs['readonly'] = True
+#        self.fields['survey_id'].widget.attrs['readonly'] = True
+#        self.fields['time_pinged'].widget.attrs['readonly'] = True
 
-    def render_time_pinged(self, value, record):
-        return f"Render: {value} here"
+#    def render_time_pinged(self, value, record):
+#        return f"Render: {value} here"
 
 class PingStrategyForm(forms.Form):
     choices = []

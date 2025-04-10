@@ -118,7 +118,7 @@ def approve_ping(request, id):
     return HttpResponseRedirect(reverse("app_my_scheduler:schedule_survey_detail", args=(id,)))
 
 class MapNavigationView(generic.edit.FormView):
-    # form_class = SelectedAggregationForm
+    form_class = SelectedAggregationForm
     table_class = AggregationHistoryTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
