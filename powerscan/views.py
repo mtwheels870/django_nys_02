@@ -181,7 +181,8 @@ class MapNavigationView(SingleTableView):
         return table
 
     def get_queryset(self):
-        print(f"MNV.get_queryset(), self = {self}")
+        query_params = self.request.GET
+        print(f"MNV.get_queryset(), self = {self}, query_params = {query_params}")
         queryset = IpRangeSurvey.objects.order_by("-id")
         return queryset 
 
@@ -227,13 +228,6 @@ class MapNavigationView(SingleTableView):
 
     def post(self, request, *args, **kwargs):
         print(f"MNV.post(), request.POST = {request.POST}")
-        # form = SelectedAggregationForm(request.POST)
-#         if not form.is_valid():
- #            print(f"MNV.post(), form is INVALID")
-  #           return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
-
-   #      survey_id = form.cleaned_data[KEY_SURVEY_ID]
-    #     agg_type = form.cleaned_data[KEY_AGG_TYPE]
 
         selected_pks = request.POST.getlist('selection')
         num_selected = len(selected_pks)
@@ -307,3 +301,10 @@ def chat_room(request, room_name):
 #            querystring = urlencode(new_params)
 #            url = f"/powerscan/map/?{querystring}"
 #            return redirect(url)
+        # form = SelectedAggregationForm(request.POST)
+#         if not form.is_valid():
+ #            print(f"MNV.post(), form is INVALID")
+  #           return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
+
+   #      survey_id = form.cleaned_data[KEY_SURVEY_ID]
+    #     agg_type = form.cleaned_data[KEY_AGG_TYPE]
