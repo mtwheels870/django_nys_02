@@ -41,8 +41,8 @@
             <h2>Survey History, Selected Geography</h2>
             <div id="table-stuff"></div>
             <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
                 <form id="selected_tract_form" method="post" enctype="multipart/form-data" >
-                    {% csrf_token %}
                     {{ form.errors }}
                     {{ form.media }}
                     {{ form.as_div }}
