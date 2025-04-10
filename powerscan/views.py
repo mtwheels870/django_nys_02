@@ -181,8 +181,8 @@ class MapNavigationView(generic.edit.FormView):
     def get_context_data(self, **kwargs):
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
-        context_data['map_title'] = "Map Title Here"
-        form = context_data['form']
+        # context_data['map_title'] = "Map Title Here"
+        # form = context_data['form']
         # map_bbox = form.fields[KEY_MAP_BBOX]
         query_params = self.request.GET
         if "survey_id" in query_params :
@@ -213,6 +213,7 @@ class MapNavigationView(generic.edit.FormView):
         # This is wrong.  Don't want MmIpRange() here.  Only works b/c its none()
         table = self.create_table(agg_type, survey)
         context_data['table'] = table
+        print(f"g_c_d(), returning here, context_data = {context_data}")
         return context_data
 
     def get_queryset(self):
