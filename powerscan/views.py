@@ -162,28 +162,39 @@ class MapNavigationView(SingleTableView):
             data_rows.append(dict)
         return data_rows
 
-    def create_table(self, agg_type, survey):
+    def _create_table(self, agg_type, survey):
         data_rows = []
         if agg_type and survey:
+            print(f"_create_table(), agg_type = {agg_type}, survey = {survey}")
             match agg_type:
                 case "states":
                     data_rows = self._agg_type_states(survey)
                 case "counties":
                     data_rows = self._agg_type_counties(survey)
-                case "tracts":
-                    data_rows = self._agg_type_tracts(survey)
                 case _:
                     print(f"create_table(), unrecognized agg_type = {agg_type}")
         else:
             print(f"create_table(), agg_type = {agg_type}, survey = {survey}")
-        table = self.table_class(data=data_rows)
-        RequestConfig(self.request, paginate=self.table_pagination).configure( table)
-        return table
+        #table = self.table_class(data=data_rows)
+        #RequestConfig(self.request, paginate=self.table_pagination).configure( table)
+        return data_rows
 
     def get_queryset(self):
         query_params = self.request.GET
         print(f"MNV.get_queryset(), self = {self}, query_params = {query_params}")
-        queryset = IpRangeSurvey.objects.order_by("-id")
+        if "survey_id" in query_params :
+            survey_id = query_params["survey_id"]
+            #field_survey_id = form.fields['survey_id']
+            #field_survey_id.initial = survey_id
+            survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+        else:
+            survey = None
+        if "agg_type" in query_params:
+            agg_type = query_params["agg_type"]
+        else:
+            agg_type = None
+        queryset = self._create_table( agg_type, survey)
+        # queryset = IpRangeSurvey.objects.order_by("-id")
         return queryset 
 
     def get_context_data(self, **kwargs):
