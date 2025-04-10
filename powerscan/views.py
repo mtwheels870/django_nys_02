@@ -124,7 +124,8 @@ class MapNavigationView(generic.edit.FormView):
 
     def _agg_type_states(self, survey):
         data_rows = []
-        for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
+        #for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
+        for counter in IpSurveyState.objects.filter(survey=survey).order_by("id"):
             us_state = counter.us_state
             responded = counter.num_ranges_responded 
             pinged = counter.num_ranges_pinged 
