@@ -186,7 +186,7 @@ class MapNavigationView(SingleTableView):
         return queryset 
 
     def get_context_data(self, **kwargs):
-        #print(f"MNV.g_c_d(), kwargs = {kwargs}")
+        print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         # context_data['map_title'] = "Map Title Here"
         # form = context_data['form']
@@ -230,18 +230,18 @@ class MapNavigationView(SingleTableView):
 #        survey_id = 450
 #        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
 
-    def get(self, request, *args, **kwargs):
-        query_params = self.request.GET
-        if "survey_id" in query_params:
-            survey_id = query_params["survey_id"]
-            print(f"MNV.get(), read survey_id = {survey_id},render_to_response()")
-            return self.render_to_response(self.get_context_data())
-        else:
-            print(f"MNV.get(), no survey_id, redirecting")
-            new_params = {"agg_type" : "states", "survey_id": "459"}
-            querystring = urlencode(new_params)
-            url = f"/powerscan/map/?{querystring}"
-            return redirect(url)
+#    def get(self, request, *args, **kwargs):
+#        query_params = self.request.GET
+#        if "survey_id" in query_params:
+#            survey_id = query_params["survey_id"]
+#            print(f"MNV.get(), read survey_id = {survey_id},render_to_response()")
+#            return self.render_to_response(self.get_context_data())
+#        else:
+#            print(f"MNV.get(), no survey_id, redirecting")
+#            new_params = {"agg_type" : "states", "survey_id": "459"}
+#            querystring = urlencode(new_params)
+#            url = f"/powerscan/map/?{querystring}"
+#            return redirect(url)
 
     def post(self, request, *args, **kwargs):
         print(f"MNV.post(), request.POST = {request.POST}")
