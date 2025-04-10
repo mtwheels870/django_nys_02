@@ -41,9 +41,12 @@ from .tables import AggregationHistoryTable
 
 # Import our neighbors
 
+
+# These values should match the templates
 KEY_ID = "id"
 KEY_SURVEY_ID = "survey_id"
 KEY_AGG_TYPE = "agg_type"
+KEY_TIME_PINGED = "time_pinged"
 KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
@@ -115,7 +118,7 @@ def approve_ping(request, id):
     return HttpResponseRedirect(reverse("app_my_scheduler:schedule_survey_detail", args=(id,)))
 
 class MapNavigationView(generic.edit.FormView):
-    form_class = SelectedAggregationForm
+    # form_class = SelectedAggregationForm
     table_class = AggregationHistoryTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
@@ -184,17 +187,20 @@ class MapNavigationView(generic.edit.FormView):
         query_params = self.request.GET
         if "survey_id" in query_params :
             survey_id = query_params["survey_id"]
-            field_survey_id = form.fields['survey_id']
-            field_survey_id.initial = survey_id
+            #field_survey_id = form.fields['survey_id']
+            #field_survey_id.initial = survey_id
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
-            field_time_pinged = form.fields['time_pinged']
-            field_time_pinged.initial = survey.time_ping_started
+            #field_time_pinged = form.fields['time_pinged']
+            #field_time_pinged.initial = survey.time_ping_started
+            context_data[KEY_SURVEY_ID] = survey_id
+            context_data[KEY_TIME_PINGED] = survey.time_ping_started
         else:
             survey = None
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
-            field_agg_type = form.fields['agg_type']
-            field_agg_type.initial = agg_type
+            context_data[KEY_AGG_TYPE] = agg_type
+            #field_agg_type = form.fields['agg_type']
+            #field_agg_type.initial = agg_type
         else:
             agg_type = None
         if "in_bbox" in query_params:
