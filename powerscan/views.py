@@ -154,7 +154,7 @@ class MapNavigationView(SingleTableView):
             data_rows.append(dict)
         return data_rows
 
-    def _agg_type_tracts(self, survey):
+    def _unused_agg_type_tracts(self, survey):
         data_rows = []
         for counter in IpSurveyTract.objects.filter(survey__id=survey_id).order_by("id"):
             responded = counter .num_ranges_responded 
