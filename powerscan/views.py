@@ -136,8 +136,8 @@ class MapNavigationView(SingleTableView):
             responded = counter.num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"id" : counter.id, "name" : us_state.state_name, "hosts_responded" : responded,
-                    "hosts_pinged" : pinged, "percentage" : percentage}
+            dict = {"id" : counter.id, "agg_type" : "states", "name" : us_state.state_name,
+                    "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
 
@@ -149,8 +149,8 @@ class MapNavigationView(SingleTableView):
             responded = counter .num_ranges_responded 
             pinged = counter.num_ranges_pinged 
             percentage = float(responded)/pinged
-            dict = {"id" : counter.id, "name" : counter.county.county_name, "hosts_responded" : responded,
-                "hosts_pinged" : pinged, "percentage" : percentage}
+            dict = {"id" : counter.id, "agg_type" : "counties", "name" : counter.county.county_name, 
+                "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
             data_rows.append(dict)
         return data_rows
 
@@ -249,7 +249,7 @@ class MapNavigationView(SingleTableView):
         num_selected = len(selected_pks)
         if 'zoom_map' in request.POST:
             if num_selected > 0:
-                print(f"MNV.post(zoom_map), selected ids = {ids}")
+                print(f"MNV.post(zoom_map), selected ids = {selected_p:s}")
             else:
                 print(f"MNV.post(zoom_map), nothing selected")
         if 'expand' in request.POST:

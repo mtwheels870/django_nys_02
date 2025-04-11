@@ -17,9 +17,10 @@ TIME_FORMAT = "%H:%M:%S"
 
 MAX_STRING_LENGTH = 15
 class AggregationHistoryTable(tables.Table):
-    selection = tables.CheckBoxColumn(accessor="id")
+    selection = tables.CheckBoxColumn(accessor="id", attrs=None, checked=None, {"flavor" : "vanilla"})
     id = tables.Column(verbose_name="Id")
     name = tables.Column(verbose_name="Name")
+    agg_type = tables.Column(verbose_name="Agg Type")
     hosts_responded = tables.Column(verbose_name="Returns(K)")
     hosts_pinged = tables.Column(verbose_name="Total(K)")
     percentage = tables.Column(verbose_name="% Returned")
@@ -28,6 +29,7 @@ class AggregationHistoryTable(tables.Table):
         template_name = "django_tables2/bootstrap4.html"
         empty_text = "(No geography selected yet)"
         fields = ["selection", "id", "name", "hosts_responded", "hosts_pinged", "percentage"]
+        exclude = ["agg_type"]
 
     def _render_thousands(self, value):
         thousands = value / 1000.0
