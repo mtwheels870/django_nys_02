@@ -258,7 +258,8 @@ class MapNavigationView(SingleTableView):
                 print(f"MNV.post(zoom_map), single_selected = {single_selected}")
             else:
                 print(f"MNV.post(zoom_map), num_selected = {num_selected}")
-            # Pass the form back in
+            # This logic isn't quite right.  We can't assume we're in states, what does it mean to 
+            # expand from counties (should be the actual ranges, I would imagine)
             new_params = {"agg_type" : "counties", "id": single_selected}
             querystring = urlencode(new_params)
             return redirect(f"/powerscan/map/?{querystring}")
@@ -268,7 +269,7 @@ class MapNavigationView(SingleTableView):
             querystring = urlencode(new_params)
             url = f"/powerscan/map/?{querystring}"
             return redirect(url)
-        # This logic is wrong
+        # This logic is wrong, drop through on the zoom map
         time_pinged = form.cleaned_data[KEY_TIME_PINGED]
         new_form = SelectedAggregationForm(initial={"id" : survey_id,
             KEY_AGG_TYPE : agg_type, KEY_TIME_PINGED : time_pinged})
