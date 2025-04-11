@@ -249,7 +249,7 @@ class MapNavigationView(SingleTableView):
         num_selected = len(selected_pks)
         if 'zoom_map' in request.POST:
             if num_selected > 0:
-                print(f"MNV.post(zoom_map), selected ids = {selected_p:s}")
+                print(f"MNV.post(zoom_map), selected ids = {selected_pks}")
             else:
                 print(f"MNV.post(zoom_map), nothing selected")
         if 'expand' in request.POST:
