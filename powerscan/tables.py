@@ -17,7 +17,7 @@ TIME_FORMAT = "%H:%M:%S"
 
 MAX_STRING_LENGTH = 15
 class AggregationHistoryTable(tables.Table):
-    selection = tables.CheckBoxColumn(accessor="id", attrs=None, checked=None, {"flavor" : "vanilla"})
+    selection = tables.CheckBoxColumn({"flavor" : "vanilla"}, accessor="id", attrs=None, checked=None)
     id = tables.Column(verbose_name="Id")
     name = tables.Column(verbose_name="Name")
     agg_type = tables.Column(verbose_name="Agg Type")
