@@ -42,7 +42,8 @@ class AggregationHistoryTable(tables.Table):
         return self._render_thousands(value)
 
     def render_percentage(self, value, record):
-        return f"{value:.3f}"
+        percentage = value * 100.0
+        return f"{percentage:.2f}"
 
 class IpSurveyTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
