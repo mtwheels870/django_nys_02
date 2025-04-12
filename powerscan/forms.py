@@ -10,7 +10,7 @@ from .models import CountTract, IpRangePing, UsState
 
 # widget=forms.HiddenInput())
 class SelectedAggregationForm(forms.Form):
-    agg_type = forms.CharField(label="Agg Type")
+    agg_type = forms.CharField(label="Agg Type", editable=False)
     #survey_id = forms.IntegerField(label="Survey ID", widget=forms.HiddenInput())
     #time_pinged = forms.DateTimeField(label="Time Pinged (EDT)", widget=forms.HiddenInput())
 
