@@ -180,7 +180,7 @@ class AggTypeManager:
             agg_type = query_params["agg_type"]
         else:
             agg_type = None
-        queryset = self._create_table( agg_type, id1)
+        queryset = AggTypeManager._create_table( agg_type, id1)
         return queryset
         # queryset = IpRangeSurvey.objects.order_by("-id")
 
