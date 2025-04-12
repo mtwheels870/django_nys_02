@@ -121,7 +121,7 @@ def unused_approve_ping(request, id):
 
 # class MapNavigationView(generic.edit.FormView):
 class MapNavigationView(SingleTableView):
-    form_class = SelectedAggregationForm
+    # form_class = SelectedAggregationForm
     table_class = AggregationHistoryTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
@@ -192,7 +192,7 @@ class MapNavigationView(SingleTableView):
     def get_context_data(self, **kwargs):
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
-        form = context_data['form']
+        # form = context_data['form']
         print(f"MNV.g_c_d(), form = {form}")
         query_params = self.request.GET
         if "survey_id" in query_params :
@@ -206,12 +206,13 @@ class MapNavigationView(SingleTableView):
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
             context_data[KEY_AGG_TYPE] = agg_type
-            field_agg_type = form.fields['agg_type']
-            field_agg_type = agg_type
+            new_form = SelectedAggregationForm(initial={"agg_type" : agg_type})
             #field_agg_type = form.fields['agg_type']
             #field_agg_type.initial = agg_type
         else:
             agg_type = None
+            new_form = SelectedAggregationForm()
+        context_data['form'] = new_form
         if "in_bbox" in query_params:
             in_bbox = query_params["in_bbox"]
             #print(f"g_c_d(), query_params = {query_params},in_bbox = {in_bbox}")
