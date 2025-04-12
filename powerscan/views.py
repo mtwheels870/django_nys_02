@@ -119,16 +119,9 @@ def unused_approve_ping(request, id):
     # ping_strat_results is the name from urls.py
     return HttpResponseRedirect(reverse("app_my_scheduler:schedule_survey_detail", args=(id,)))
 
-# class MapNavigationView(generic.edit.FormView):
-class MapNavigationView(SingleTableView):
-    # form_class = SelectedAggregationForm
-    table_class = AggregationHistoryTable
-    template_name = "powerscan/map_viewer.html"
-    table_pagination = {
-        "per_page": 10
-    }
-
-    def _agg_type_states(self, survey):
+class AggTypeManager:
+    @staticmethod
+    def _agg_type_states(survey):
         data_rows = []
         #for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
         for counter in IpSurveyState.objects.filter(survey=survey).order_by("id"):
@@ -141,7 +134,8 @@ class MapNavigationView(SingleTableView):
             data_rows.append(dict)
         return data_rows
 
-    def _agg_type_counties(self, survey_state):
+    @staticmethod
+    def _agg_type_counties(survey_state):
         survey = survey_state.survey
         us_state = survey_state.us_state 
         data_rows = []
@@ -154,7 +148,8 @@ class MapNavigationView(SingleTableView):
             data_rows.append(dict)
         return data_rows
 
-    def _create_table(self, agg_type, id1):
+    @staticmethod
+    def _create_table(agg_type, id1):
         data_rows = []
         if agg_type and id1:
             print(f"_create_table(), agg_type = {agg_type}, id1 = {id1}")
@@ -171,8 +166,8 @@ class MapNavigationView(SingleTableView):
             print(f"create_table(), agg_type = {agg_type}, id1 = {id1}")
         return data_rows
 
-    def get_queryset(self):
-        query_params = self.request.GET
+    @staticmethod
+    def get_queryset(query_params):
         print(f"MNV.get_queryset(), self = {self}, query_params = {query_params}")
         if "id" in query_params :
             id1 = query_params["id"]
@@ -186,8 +181,21 @@ class MapNavigationView(SingleTableView):
         else:
             agg_type = None
         queryset = self._create_table( agg_type, id1)
+        return queryset
         # queryset = IpRangeSurvey.objects.order_by("-id")
-        return queryset 
+
+
+class MapNavigationView(SingleTableView):
+    # form_class = SelectedAggregationForm
+    table_class = AggregationHistoryTable
+    template_name = "powerscan/map_viewer.html"
+    table_pagination = {
+        "per_page": 10
+    }
+
+
+    def get_queryset(self):
+        return AggTypeManager.get_queryset(self.request.GET)
 
     def get_context_data(self, **kwargs):
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
