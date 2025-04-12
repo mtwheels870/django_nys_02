@@ -233,13 +233,14 @@ class MapNavigationView(SingleTableView):
             if num_selected == 1:
                 single_selected = selected_pks[0]
                 print(f"MNV.post(zoom_map), single_selected = {single_selected}")
+                # This logic isn't quite right.  We can't assume we're in states, what does it mean to 
+                # expand from counties (should be the actual ranges, I would imagine)
+                new_params = {"agg_type" : "counties", "id": single_selected}
+                querystring = urlencode(new_params)
+                return redirect(f"/powerscan/map/?{querystring}")
             else:
                 print(f"MNV.post(zoom_map), num_selected = {num_selected}")
-            # This logic isn't quite right.  We can't assume we're in states, what does it mean to 
-            # expand from counties (should be the actual ranges, I would imagine)
-            new_params = {"agg_type" : "counties", "id": single_selected}
-            querystring = urlencode(new_params)
-            return redirect(f"/powerscan/map/?{querystring}")
+                return render(request, self.template_name)
         if 'show_459' in request.POST:
             # id in this instance is survey id
             new_params = {"agg_type" : "states", "id": "459"}
