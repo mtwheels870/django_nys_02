@@ -279,8 +279,8 @@ def tally_results(metadata_file, survey_id, retry_count):
         if not survey_manager:
             print(f"Task.tally_results(), no survey manager for survey_id: {int_survey_id}")
             return 0
-        hosts_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
-        if hosts_to_db == 0:
+        ranges_responded, hosts_responded, hosts_pinged = _process_zmap_results(survey, survey_manager, metadata_file, now)
+        if ranges_responded == 0:
             delta = timedelta(seconds=TALLY_DELAY_SECS)
             tally_start = now + delta
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
@@ -302,6 +302,8 @@ def tally_results(metadata_file, survey_id, retry_count):
 
         survey.time_tally_stopped = timezone.now()
         survey.num_ranges_responded = hosts_to_db
+        survey.hosts_responded = hosts_responded 
+        survey.hosts_pinged = hosts_pinged 
         # print(f"SURVEY SAVE, 10")
         survey.save()
         print(f"Task.tally_results({survey_id}), saved {hosts_to_db:,} hosts to db")

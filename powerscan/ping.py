@@ -357,8 +357,8 @@ class PingSurveyManager:
         # Iterate the entire tree
         index = 0
 
-        saved_to_db = 0
         # Walk through our dataframe again
+        ranges_updated = hosts_pinged = hosts_responded = 0
         for index, row in self.df_ranges.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
@@ -376,10 +376,12 @@ class PingSurveyManager:
                     hosts_responded=count,
                     time_pinged=timezone.now())
                 range_ping.save()
-                saved_to_db = saved_to_db + 1
+                ranges_updated = ranges_updated + 1
+                hosts_pinged = hosts_pinged + possible_hosts
+                hosts_responded = hosts_responded + count
         # print(f"_save_to_db(), saved {saved_to_db} objects to database")
         #self._writer_cidr_trie.close()
-        return saved_to_db
+        return ranges_updated, hosts_responded, hosts_pinged
 
     # Returns the number of pings (hosts) saved to the database (count > 0)
     def process_results(self, survey):
@@ -389,8 +391,7 @@ class PingSurveyManager:
         self._build_radix_tree()
         self._match_zmap_replies()
         self.file_debugger.close()
-        rows_saved = self._save_to_db(survey)
-        return rows_saved 
+        return self._save_to_db(survey)
         
     def close(self):
         if self.writer_range_ip:
