@@ -30,7 +30,7 @@ class SurveyUtil:
             new_survey_tract = IpSurveyTract(survey=survey,tract=parent_tract.tract)
             new_survey_tract.save()
 
-        survey.num_total_ranges = parent_survey.num_total_ranges
+        survey.ranges_pinged = parent_survey.ranges_pinged
 
     @staticmethod
     def _delete_surveys(survey_ids):

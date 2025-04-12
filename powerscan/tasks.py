@@ -153,7 +153,7 @@ def build_whitelist(self, *args, **kwargs):
     if debug.whitelist:
         message = f"build_whitelist(), self = {self}, {num_ranges} ranges, cleaning up survey manager"
     survey_manager.close()
-    survey.num_total_ranges = num_ranges
+    survey.ranges_pinged = num_ranges
     survey.save()
 
     # Django channels back to the caller
@@ -301,7 +301,7 @@ def tally_results(metadata_file, survey_id, retry_count):
             return 0
 
         survey.time_tally_stopped = timezone.now()
-        survey.num_ranges_responded = ranges_responded
+        survey.ranges_responded = ranges_responded
         survey.hosts_responded = hosts_responded 
         survey.hosts_pinged = hosts_pinged 
         # print(f"SURVEY SAVE, 10")

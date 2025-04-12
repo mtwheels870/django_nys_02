@@ -157,8 +157,8 @@ class IpRangeSurvey(models.Model):
     time_tally_started = models.DateTimeField(null=True)
     time_tally_stopped = models.DateTimeField(null=True, verbose_name="Results Processed")
 
-    num_total_ranges = models.IntegerField(default=0, verbose_name="Ranges(K) Pinged")
-    num_ranges_responded = models.IntegerField(default=0, verbose_name="Hosts\nResponded(K)")
+    ranges_pinged = models.IntegerField(default=0, verbose_name="Ranges(K) Pinged")
+    ranges_responded = models.IntegerField(default=0, verbose_name="Ranges Responded(K)")
     hosts_responded = models.IntegerField(default=0, verbose_name="Hosts(K) Responded")
     hosts_pinged = models.IntegerField(default=0, verbose_name="Hosts(K) Pinged")
     # Should this be a ForeignKey (back to this model?)

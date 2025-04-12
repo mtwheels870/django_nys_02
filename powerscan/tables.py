@@ -53,7 +53,7 @@ class IpSurveyTable(tables.Table):
         # template_name = "django_tables2/bootstrap.html"
         # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
         fields = ["selection", "id", "parent_survey_id", "name", "time_created", "time_scheduled", "time_ping_started",
-            "time_tally_stopped", "num_ranges_responded", "num_total_ranges"]
+            "time_tally_stopped", "ranges_responded", "ranges_pinged"]
 
     def _render_time(self, value, include_date=False):
         if not value:
@@ -88,10 +88,10 @@ class IpSurveyTable(tables.Table):
         #return f"{thousands:,}"
         return f"{thousands:.2f}"
 
-    def render_num_ranges_responded(self, value, record):
+    def render_ranges_responded(self, value, record):
         return self._render_thousands(value)
 
-    def render_num_total_ranges(self, value, record):
+    def render_ranges_pinged(self, value, record):
         return self._render_thousands(value)
 
 class CeleryTaskTable(tables.Table):
