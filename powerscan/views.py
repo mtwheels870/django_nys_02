@@ -156,10 +156,10 @@ class AggTypeManager:
             match agg_type:
                 case "states":
                     survey = get_object_or_404(IpRangeSurvey, pk=id1)
-                    data_rows = self._agg_type_states(survey)
+                    data_rows = AggTypeManager._agg_type_states(survey)
                 case "counties":
                     survey_state = get_object_or_404(IpSurveyState, pk=id1)
-                    data_rows = self._agg_type_counties(survey_state)
+                    data_rows = AggTypeManager._agg_type_counties(survey_state)
                 case _:
                     print(f"create_table(), unrecognized agg_type = {agg_type}")
         else:
@@ -168,7 +168,7 @@ class AggTypeManager:
 
     @staticmethod
     def get_queryset(query_params):
-        print(f"MNV.get_queryset(), self = {self}, query_params = {query_params}")
+        print(f"ATM.get_queryset(), query_params = {query_params}")
         if "id" in query_params :
             id1 = query_params["id"]
             #field_survey_id = form.fields['survey_id']
