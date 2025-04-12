@@ -123,8 +123,8 @@ def _unused_ping_single_range(survey, tract, ip_range, dir_path, debug):
 
     num_responses = _count_output_lines(file_path)
     range_ping = IpRangePing(ip_survey=survey,ip_range=ip_range,
-        num_ranges_pinged=ip_network.size,
-        num_ranges_responded=num_responses,
+        hosts_pinged=ip_network.size,
+        hosts_responded=num_responses,
         time_pinged=timezone.now())
     range_ping.save()
 
@@ -279,8 +279,8 @@ def tally_results(metadata_file, survey_id, retry_count):
         if not survey_manager:
             print(f"Task.tally_results(), no survey manager for survey_id: {int_survey_id}")
             return 0
-        pings_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
-        if pings_to_db == 0:
+        hosts_to_db = _process_zmap_results(survey, survey_manager, metadata_file, now)
+        if hosts_to_db == 0:
             delta = timedelta(seconds=TALLY_DELAY_SECS)
             tally_start = now + delta
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
@@ -301,10 +301,10 @@ def tally_results(metadata_file, survey_id, retry_count):
             return 0
 
         survey.time_tally_stopped = timezone.now()
-        survey.num_ranges_responded = pings_to_db
+        survey.num_ranges_responded = hosts_to_db
         # print(f"SURVEY SAVE, 10")
         survey.save()
-        print(f"Task.tally_results({survey_id}), saved {pings_to_db:,} hosts to db")
+        print(f"Task.tally_results({survey_id}), saved {hosts_to_db:,} hosts to db")
     except Exception as e:
         print(f"Task.tally_results({survey_id}), exception: {e}")
         pings_to_db = -1

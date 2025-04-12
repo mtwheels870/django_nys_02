@@ -443,7 +443,7 @@ class Loader():
     def _update_tract_counts(self):
         # 1. build mapping
         for tract_counter in IpSurveyTract.objects.filter(survey__id=self._survey_id):
-            hosts_pinged = tract_counter.num_ranges_pinged
+            hosts_pinged = tract_counter.hosts_pinged
             if hosts_pinged != 0:
                 print(f"_update_tract_counts(), hosts_pinged = {hosts_pinged}! (aborting, already values)")
                 return 0
@@ -456,13 +456,13 @@ class Loader():
         for chunk in GeometryRangeChunker(survey_id=self._survey_id):
             print(f"_update_tract_counts(), processing chunk[{index_chunk}]")
             for range_ping in chunk:
-                hosts_pinged = range_ping.num_ranges_pinged
-                hosts_responded = range_ping.num_ranges_responded
+                hosts_pinged = range_ping.hosts_pinged
+                hosts_responded = range_ping.hosts_responded
                 tract = range_ping.ip_range.census_tract
                 if tract in self._tract_mapper:
                     counter = self._tract_mapper[tract]
-                    counter.num_ranges_pinged = counter.num_ranges_pinged + hosts_pinged
-                    counter.num_ranges_responded = counter.num_ranges_responded + hosts_responded
+                    counter.hosts_pinged = counter.hosts_pinged + hosts_pinged
+                    counter.hosts_responded = counter.hosts_responded + hosts_responded
                     total_ranges_responded = total_ranges_responded + 1
                 else:
                     print(f"_u_t_c(), could not find tract: {tract}")
@@ -475,8 +475,8 @@ class Loader():
         zero_tracts = 0
         for i, tract in enumerate(self._tract_mapper):
             counter = self._tract_mapper[tract]
-            hosts_pinged = counter.num_ranges_pinged
-            hosts_responded = counter.num_ranges_responded
+            hosts_pinged = counter.hosts_pinged
+            hosts_responded = counter.hosts_responded
             if hosts_responded == 0:
                 zero_tracts = zero_tracts + 1
             total_hosts_responded = total_hosts_responded + hosts_responded
@@ -502,12 +502,12 @@ class Loader():
         # 2: Bubble counts up, Walk through all of the tracts and update the corresponding counties
         for i, tract in enumerate(self._tract_mapper):
             tract_counter = self._tract_mapper[tract]
-            hosts_pinged = tract_counter.num_ranges_pinged
-            hosts_responded = tract_counter.num_ranges_responded
+            hosts_pinged = tract_counter.hosts_pinged
+            hosts_responded = tract_counter.hosts_responded
             county_counter = self._county_mapper[tract.county]
-            county_counter.num_ranges_pinged = county_counter.num_ranges_pinged + \
+            county_counter.hosts_pinged = county_counter.hosts_pinged + \
                     hosts_pinged 
-            county_counter.num_ranges_responded = county_counter.num_ranges_responded + \
+            county_counter.hosts_responded = county_counter.hosts_responded + \
                     hosts_responded 
 
         # 3: Go back to counties, save to DB
@@ -515,7 +515,7 @@ class Loader():
         for i, county in enumerate(self._county_mapper):
             county_counter = self._county_mapper[county]
             # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
-            hosts_responded = county_counter.num_ranges_responded
+            hosts_responded = county_counter.hosts_responded
             if hosts_responded == 0:
                 zero_counties = zero_counties + 1
             # Save to the db
@@ -546,11 +546,11 @@ class Loader():
             county_counter = self._county_mapper[county]
             # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
             state_counter = self._state_mapper[us_state]
-            hosts_pinged = county_counter.num_ranges_pinged 
-            hosts_responded = county_counter.num_ranges_responded
-            state_counter.num_ranges_pinged = state_counter.num_ranges_pinged + \
+            hosts_pinged = county_counter.hosts_pinged 
+            hosts_responded = county_counter.hosts_responded
+            state_counter.hosts_pinged = state_counter.hosts_pinged + \
                 hosts_pinged
-            state_counter.num_ranges_responded = state_counter.num_ranges_responded + \
+            state_counter.hosts_responded = state_counter.hosts_responded + \
                 hosts_responded
 
         # 3. Save to DB

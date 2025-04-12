@@ -126,8 +126,8 @@ class AggTypeManager:
         #for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
         for counter in IpSurveyState.objects.filter(survey=survey).order_by("id"):
             us_state = counter.us_state
-            responded = counter.num_ranges_responded 
-            pinged = counter.num_ranges_pinged 
+            responded = counter.hosts_responded 
+            pinged = counter.hosts_pinged 
             percentage = float(responded)/pinged
             dict = {"id" : counter.id, "agg_type" : "states", "name" : us_state.state_name,
                     "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}
@@ -140,8 +140,8 @@ class AggTypeManager:
         us_state = survey_state.us_state 
         data_rows = []
         for counter in IpSurveyCounty.objects.filter(survey=survey, county__us_state=us_state).order_by("id"):
-            responded = counter .num_ranges_responded 
-            pinged = counter.num_ranges_pinged 
+            responded = counter .hosts_responded 
+            pinged = counter.hosts_pinged 
             percentage = float(responded)/pinged
             dict = {"id" : counter.id, "agg_type" : "counties", "name" : counter.county.county_name, 
                 "hosts_responded" : responded, "hosts_pinged" : pinged, "percentage" : percentage}

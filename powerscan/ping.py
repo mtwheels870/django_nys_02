@@ -372,8 +372,8 @@ class PingSurveyManager:
                 possible_hosts = range_counter.possible_hosts
                 range_ping = IpRangePing(ip_survey=survey,
                     ip_range=ip_range,
-                    num_ranges_pinged=possible_hosts,
-                    num_ranges_responded=count,
+                    hosts_pinged=possible_hosts,
+                    hosts_responded=count,
                     time_pinged=timezone.now())
                 range_ping.save()
                 saved_to_db = saved_to_db + 1
@@ -381,7 +381,7 @@ class PingSurveyManager:
         #self._writer_cidr_trie.close()
         return saved_to_db
 
-    # Returns the number of pings saved to the database (count > 0)
+    # Returns the number of pings (hosts) saved to the database (count > 0)
     def process_results(self, survey):
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()
