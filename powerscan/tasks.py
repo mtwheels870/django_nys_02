@@ -306,10 +306,10 @@ def tally_results(metadata_file, survey_id, retry_count):
         survey.hosts_pinged = hosts_pinged 
         # print(f"SURVEY SAVE, 10")
         survey.save()
-        print(f"Task.tally_results({survey_id}), saved {hosts_to_db:,} hosts to db")
+        print(f"Task.tally_results({survey_id}), saved {hosts_responded:,} hosts to db")
     except Exception as e:
         print(f"Task.tally_results({survey_id}), exception: {e}")
-        hosts_to_db = -1
+        ranges_responded = -1
     return ranges_responded
 
     #network = ipaddress.ip_network(str(cidrs), strict=False)
