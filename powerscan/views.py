@@ -193,7 +193,6 @@ class MapNavigationView(SingleTableView):
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         # form = context_data['form']
-        print(f"MNV.g_c_d(), form = {form}")
         query_params = self.request.GET
         if "survey_id" in query_params :
             survey_id = query_params["survey_id"]
