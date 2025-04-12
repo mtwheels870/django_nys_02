@@ -112,7 +112,7 @@ class CountTractViewSet(
     serializer_class = CountTractSerializer
     
 # Reverse mapping from clicking on a index, detail
-def approve_ping(request, id):
+def unused_approve_ping(request, id):
     # print(f"Views.approve_ping(), {id}")
     survey = get_object_or_404(IpRangeSurvey, pk=id)
     survey.approve()
@@ -154,17 +154,6 @@ class MapNavigationView(SingleTableView):
             data_rows.append(dict)
         return data_rows
 
-    def _unused_agg_type_tracts(self, survey):
-        data_rows = []
-        for counter in IpSurveyTract.objects.filter(survey__id=survey_id).order_by("id"):
-            responded = counter .num_ranges_responded 
-            pinged = counter.num_ranges_pinged 
-            percentage = float(responded)/pinged
-            dict = {"id" : counter.id, "name" : "tract_name_here", "hosts_responded" : responded,
-                "hosts_pinged" : pinged, "percentage" : percentage}
-            data_rows.append(dict)
-        return data_rows
-
     def _create_table(self, agg_type, id1):
         data_rows = []
         if agg_type and id1:
@@ -180,8 +169,6 @@ class MapNavigationView(SingleTableView):
                     print(f"create_table(), unrecognized agg_type = {agg_type}")
         else:
             print(f"create_table(), agg_type = {agg_type}, id1 = {id1}")
-        #table = self.table_class(data=data_rows)
-        #RequestConfig(self.request, paginate=self.table_pagination).configure( table)
         return data_rows
 
     def get_queryset(self):
@@ -205,19 +192,12 @@ class MapNavigationView(SingleTableView):
     def get_context_data(self, **kwargs):
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
-        # context_data['map_title'] = "Map Title Here"
-        # form = context_data['form']
-        # map_bbox = form.fields[KEY_MAP_BBOX]
         query_params = self.request.GET
         if "survey_id" in query_params :
             survey_id = query_params["survey_id"]
-            #field_survey_id = form.fields['survey_id']
-            #field_survey_id.initial = survey_id
             survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
-            #field_time_pinged = form.fields['time_pinged']
-            #field_time_pinged.initial = survey.time_ping_started
-            context_data[KEY_SURVEY_ID] = survey_id
-            context_data[KEY_TIME_PINGED] = survey.time_ping_started
+            #context_data[KEY_SURVEY_ID] = survey_id
+            #context_data[KEY_TIME_PINGED] = survey.time_ping_started
         else:
             survey = None
         #print(f"MNV.g_c_d(), 1, c_d = {context_data}")
@@ -243,15 +223,12 @@ class MapNavigationView(SingleTableView):
         return context_data
 
     def post(self, request, *args, **kwargs):
-        print(f"MNV.post(), request.POST = {request.POST}")
+        print(f"MNV.post(), request = {request}")
+        print(f"         self = {self}, args = {args}, kwargs = {kwargs}")
+        print(f"                    POST = {request.POST}")
 
         selected_pks = request.POST.getlist('selection')
         num_selected = len(selected_pks)
-        if 'zoom_map' in request.POST:
-            if num_selected > 0:
-                print(f"MNV.post(zoom_map), selected ids = {selected_pks}")
-            else:
-                print(f"MNV.post(zoom_map), nothing selected")
         if 'expand' in request.POST:
             if num_selected == 1:
                 single_selected = selected_pks[0]
@@ -269,12 +246,17 @@ class MapNavigationView(SingleTableView):
             querystring = urlencode(new_params)
             url = f"/powerscan/map/?{querystring}"
             return redirect(url)
+        if 'zoom_map' in request.POST:
+            if num_selected > 0:
+                print(f"MNV.post(zoom_map), selected ids = {selected_pks}")
+            else:
+                print(f"MNV.post(zoom_map), nothing selected")
         # This logic is wrong, drop through on the zoom map
         time_pinged = form.cleaned_data[KEY_TIME_PINGED]
         new_form = SelectedAggregationForm(initial={"id" : survey_id,
             KEY_AGG_TYPE : agg_type, KEY_TIME_PINGED : time_pinged})
         context = {"form" : new_form}
-        return render(request, self.template_name, context)
+        return render(request, self.template_name)
 
     # These labels are in static/cb_layer.js
     def build_table(self, agg_type, id):
