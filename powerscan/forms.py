@@ -10,7 +10,7 @@ from .models import CountTract, IpRangePing, UsState
 
 # widget=forms.HiddenInput())
 class SelectedAggregationForm(forms.Form):
-    agg_type = forms.CharField(label="Agg Type", editable=False)
+    agg_type = forms.CharField(label="Agg Type")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
