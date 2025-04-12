@@ -171,8 +171,8 @@ class IpRangePing(models.Model):
     # THis is a 1-1 relationship: one range = one ping
     ip_range = models.ForeignKey(MmIpRange, on_delete=models.CASCADE)
     time_pinged = models.DateTimeField(null=True)
-    num_ranges_pinged = models.IntegerField(default=0)
-    num_ranges_responded = models.IntegerField(default=0)
+    hosts_pinged = models.IntegerField(default=0)
+    hosts_responded = models.IntegerField(default=0)
 
     def __str__(self):
         first = f"Range[{self.id}]: [{self.ip_range.ip_range_start},{self.ip_range.ip_range_end}], "
@@ -190,16 +190,16 @@ class IpSurveyState(models.Model):
 class IpSurveyCounty(models.Model):
     survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
     county = models.ForeignKey(County, on_delete=models.CASCADE)
-    num_ranges_pinged = models.IntegerField(default=0)
-    num_ranges_responded = models.IntegerField(default=0)
+    hosts_pinged = models.IntegerField(default=0)
+    hosts_responded = models.IntegerField(default=0)
     def __str__(self):
         return f"Survey results for county: {self.county.county_fp}"
 
 class IpSurveyTract(models.Model):
     survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
     tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
-    num_ranges_pinged = models.IntegerField(default=0)
-    num_ranges_responded = models.IntegerField(default=0)
+    hosts_pinged = models.IntegerField(default=0)
+    hosts_responded = models.IntegerField(default=0)
     def __str__(self):
         return f"Survey results for tract: {self.tract.tract_id}"
 
