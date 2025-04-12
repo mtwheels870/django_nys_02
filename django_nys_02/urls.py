@@ -18,13 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 # I don't understand why: path("map/api/", can't me moved to the markers/ level, but include("api") won't work
+#    path("kg_admin/", include("kg_admin.urls")),
+#    path("kg_train/", include("kg_train.urls")),
+#    path("kg_viz/", include("kg_viz.urls")),
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("powerscan/", include("powerscan.urls")),
     path("powerscan/api/", include("powerscan.api")),
-    path("kg_admin/", include("kg_admin.urls")),
-    path("kg_train/", include("kg_train.urls")),
-    path("kg_viz/", include("kg_viz.urls")),
     path('admin/statuscheck/', include('celerybeat_status.urls'))
 ]
 #print(f"project.urlpatterns = {urlpatterns}")
