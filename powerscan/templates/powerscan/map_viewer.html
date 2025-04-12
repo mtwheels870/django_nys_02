@@ -43,6 +43,9 @@
             <p>Survey Id: {{ survey_id }} </p>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+                {{ form.errors }}
+                {{ form.media }}
+                {{ form.as_div }}
                 {% render_table table %}
                 <button type="submit" name="zoom_map">Zoom Map</button>
                 <button type="submit" name="expand">Expand</button>

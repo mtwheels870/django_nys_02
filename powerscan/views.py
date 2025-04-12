@@ -121,7 +121,7 @@ def unused_approve_ping(request, id):
 
 # class MapNavigationView(generic.edit.FormView):
 class MapNavigationView(SingleTableView):
-    # form_class = SelectedAggregationForm
+    form_class = SelectedAggregationForm
     table_class = AggregationHistoryTable
     template_name = "powerscan/map_viewer.html"
     table_pagination = {
@@ -192,6 +192,8 @@ class MapNavigationView(SingleTableView):
     def get_context_data(self, **kwargs):
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
+        form = context_data['form']
+        print(f"MNV.g_c_d(), form = {form}")
         query_params = self.request.GET
         if "survey_id" in query_params :
             survey_id = query_params["survey_id"]
@@ -204,6 +206,8 @@ class MapNavigationView(SingleTableView):
         if "agg_type" in query_params:
             agg_type = query_params["agg_type"]
             context_data[KEY_AGG_TYPE] = agg_type
+            field_agg_type = form.fields['agg_type']
+            field_agg_type = agg_type
             #field_agg_type = form.fields['agg_type']
             #field_agg_type.initial = agg_type
         else:
@@ -232,26 +236,27 @@ class MapNavigationView(SingleTableView):
         if 'expand' in request.POST:
             if num_selected == 1:
                 single_selected = selected_pks[0]
-                print(f"MNV.post(zoom_map), single_selected = {single_selected}")
+                print(f"MNV.post(zoom_map), 1, single_selected = {single_selected}")
                 # This logic isn't quite right.  We can't assume we're in states, what does it mean to 
                 # expand from counties (should be the actual ranges, I would imagine)
                 new_params = {"agg_type" : "counties", "id": single_selected}
                 querystring = urlencode(new_params)
                 return redirect(f"/powerscan/map/?{querystring}")
             else:
-                print(f"MNV.post(zoom_map), num_selected = {num_selected}")
+                print(f"MNV.post(zoom_map), 2, num_selected = {num_selected}")
                 return render(request, self.template_name)
         if 'show_459' in request.POST:
             # id in this instance is survey id
             new_params = {"agg_type" : "states", "id": "459"}
             querystring = urlencode(new_params)
             url = f"/powerscan/map/?{querystring}"
+            print(f"MNV.post(zoom_map), 3 redirecting")
             return redirect(url)
         if 'zoom_map' in request.POST:
             if num_selected > 0:
-                print(f"MNV.post(zoom_map), selected ids = {selected_pks}")
+                print(f"MNV.post(zoom_map), 4, selected ids = {selected_pks}")
             else:
-                print(f"MNV.post(zoom_map), nothing selected")
+                print(f"MNV.post(zoom_map), 5, nothing selected")
         # This logic is wrong, drop through on the zoom map
         time_pinged = form.cleaned_data[KEY_TIME_PINGED]
         new_form = SelectedAggregationForm(initial={"id" : survey_id,
