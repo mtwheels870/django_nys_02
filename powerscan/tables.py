@@ -47,13 +47,17 @@ class AggregationHistoryTable(tables.Table):
 
 class IpSurveyTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
+
+    # Derived columns
+    hosts = tables.Column(verbose_name="Hosts(k) [r/p/%]")
+    ranges = tables.Column(verbose_name="Ranges(k) [r/p/%]")
     class Meta:
         model = IpRangeSurvey
         template_name = "django_tables2/bootstrap-responsive.html"
         # template_name = "django_tables2/bootstrap.html"
         # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
         fields = ["selection", "id", "parent_survey_id", "name", "time_created", "time_scheduled", "time_ping_started",
-            "time_tally_stopped", "ranges_responded", "ranges_pinged"]
+            "time_tally_stopped"]
 
     def _render_time(self, value, include_date=False):
         if not value:
@@ -88,11 +92,16 @@ class IpSurveyTable(tables.Table):
         #return f"{thousands:,}"
         return f"{thousands:.2f}"
 
-    def render_ranges_responded(self, value, record):
-        return self._render_thousands(value)
+    def render_hosts(self, value, record):
+        return "Hosts"
 
-    def render_ranges_pinged(self, value, record):
-        return self._render_thousands(value)
+    def render_ranges(self, value, record):
+        return "Ranges"
+#    def render_ranges_responded(self, value, record):
+#        return self._render_thousands(value)
+
+#    def render_ranges_pinged(self, value, record):
+#        return self._render_thousands(value)
 
 class CeleryTaskTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="uuid")
