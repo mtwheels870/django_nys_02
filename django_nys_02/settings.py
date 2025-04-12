@@ -31,8 +31,12 @@ ALLOWED_HOSTS = [
     "www.pinp01nt.com"
 ]
 
+#    'channels',
+#    'kg_admin.apps.KgAdminConfig',
+#    'kg_train.apps.KgTrainConfig',
+#    'colorfield',
+#    'django_prose_editor',
 INSTALLED_APPS = [
-    'channels',
     'daphne',
     'powerscan.apps.PowerScanConfig',
     'django.contrib.admin',
@@ -47,10 +51,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'djangobower',
     'django_extensions',
-    'kg_admin.apps.KgAdminConfig',
-    'kg_train.apps.KgTrainConfig',
-    'colorfield',
-    'django_prose_editor',
     'django_tables2', 
     'django_celery_results',     
     'django_celery_beat',     
@@ -93,18 +93,18 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
 # Ternery style    DIR_ZMAP_NAME = 'production' if PRODUCTION_MODE else 'development'
+#    PRODIGY_PORT = 8081 
+#    PRODIGY_PORT = 8080 
 PRODUCTION_MODE = False
 if PRODUCTION_MODE:
     DIR_ZMAP_NAME = 'production' 
     CELERY_APP_NAME = "celery_django_prod"
     CELERY_QUEUE = "cb_production"
-    PRODIGY_PORT = 8081 
     POWERSCAN_VERSION = "Production"
 else:
     DIR_ZMAP_NAME = 'development'
     CELERY_APP_NAME = "celery_django_dev"
     CELERY_QUEUE = 'cb_development'
-    PRODIGY_PORT = 8080 
     POWERSCAN_VERSION = "Development"
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
@@ -128,7 +128,8 @@ DATABASES = {
 }
 
 # This is a little weird that we're in the kg_train part of the world (and not the top-level like django_nys_02
-DATABASE_ROUTERS = ['kg_train.routers.SecondaryRouter']
+# This is for the prodigy database, prose_editor stuff
+# DATABASE_ROUTERS = ['kg_train.routers.SecondaryRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

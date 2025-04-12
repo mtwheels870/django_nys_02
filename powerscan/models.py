@@ -36,7 +36,7 @@ class County(models.Model):
     # COUNTY_FP is not unique (across states)
     county_fp = models.CharField(max_length=3)
     # COUNTY
-    county_name = models.CharField(max_length=100)
+    county_name = models.CharField(max_length=30)
     # STATE_1
     us_state = models.ForeignKey(UsState, on_delete=models.CASCADE)
 
