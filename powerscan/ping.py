@@ -246,7 +246,7 @@ class PingSurveyManager:
     def _tract_ranges_whitelist(self, tract, add_to_debug):
         # Use the set() notation
         ip_ranges = tract.mmiprange_set.all()
-        print(f"_t_r_w(), tract(county) = {tract}, num_ranges = {ip_ranges.count()}")
+        # print(f"_t_r_w(), tract(county) = {tract}, num_ranges = {ip_ranges.count()}")
         for range1 in ip_ranges:
             string1 = f"{range1.id},{range1.ip_network}\n"
             self.writer_range_ip.write(string1)
