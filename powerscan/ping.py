@@ -392,7 +392,6 @@ class PingSurveyManager:
         self._match_zmap_replies()
         self.file_debugger.close()
         ranges_updated, hosts_responded, hosts_pinged = self._save_to_db(survey)
-        print(f"process_results(), ranges_updated, hosts_responded, hosts_pinged = {ranges_updated},{hosts_responded},{hosts_pinged}")
         return ranges_updated, hosts_responded, hosts_pinged
         
     def close(self):

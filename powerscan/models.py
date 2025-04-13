@@ -159,6 +159,7 @@ class IpRangeSurvey(models.Model):
 
     ranges_pinged = models.IntegerField(default=0, verbose_name="Ranges(K) Pinged")
     ranges_responded = models.IntegerField(default=0, verbose_name="Ranges Responded(K)")
+
     hosts_responded = models.IntegerField(default=0, verbose_name="Hosts(K) Responded")
     hosts_pinged = models.IntegerField(default=0, verbose_name="Hosts(K) Pinged")
     # Should this be a ForeignKey (back to this model?)

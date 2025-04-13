@@ -258,13 +258,14 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 @celery_app.task
 def tally_results(metadata_file, survey_id, retry_count):
     # Ensure another worker hasn't grabbed the survey, yet
+    func_name = sys._getframe().f_code.co_name
     now = timezone.now()
     formatted_now = now.strftime(TIME_FORMAT_STRING)
     try:
         int_survey_id = int(survey_id)
         survey = IpRangeSurvey.objects.get(pk=int_survey_id)
         if survey.time_tally_started:
-            first = f"tally_results(), survey = {int_survey_id}, tally_started { survey.time_tally_started}, "
+            first = f"{func_name}(), survey = {int_survey_id}, tally_started { survey.time_tally_started}, "
             second = f"another worker grabbed it"
             print(first + second)
             return 0
@@ -277,7 +278,7 @@ def tally_results(metadata_file, survey_id, retry_count):
 
         survey_manager = PingSurveyManager.find(int_survey_id, debug_tally)
         if not survey_manager:
-            print(f"Task.tally_results(), no survey manager for survey_id: {int_survey_id}")
+            print(f"Task.{func_name}(), no survey manager for survey_id: {int_survey_id}")
             return 0
         ranges_responded, hosts_responded, hosts_pinged = _process_zmap_results(survey, survey_manager, metadata_file, now)
         if ranges_responded == 0:
@@ -286,9 +287,9 @@ def tally_results(metadata_file, survey_id, retry_count):
             formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
             retry_count = retry_count + 1
             if retry_count > MAX_TALLY_RETRY_COUNT:
-                print(f"Task.tally_results({int_survey_id}), max retries ({MAX_TALLY_RETRY_COUNT}) exceeded, aborting")
+                print(f"Task.{func_name}({int_survey_id}), max retries ({MAX_TALLY_RETRY_COUNT}) exceeded, aborting")
                 return
-            first = f"Task.tally_results({int_survey_id}), empty_zmap_file, delay:"
+            first = f"Task.{func_name}({int_survey_id}), empty_zmap_file, delay:"
             second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, retry_count: {retry_count}"
             print(first + second)
             async_result2 = tally_results.apply_async(
