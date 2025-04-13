@@ -1,5 +1,7 @@
 import logging
+import traceback
 from urllib.parse import urlencode
+
 from django.shortcuts import render
 from django.utils import timezone
 from django.views import generic
@@ -241,6 +243,8 @@ class MapNavigationView(SingleTableView):
             c = a / b
         except Exception as e:
             raise Exception(f"_test_exception(), Exception {e}")
+            print("Stack Trace:")
+            traceback.print_exc(file=sys.stdout)
         
     def post(self, request, *args, **kwargs):
         print(f"MNV.post(), request = {request}")
