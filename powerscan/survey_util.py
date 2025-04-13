@@ -188,7 +188,7 @@ class GeoCountUpdater:
         county_count = 0
         county_set = IpSurveyCounty.objects.filter(survey__id=self._survey_id)
         for county_counter in county_set:
-            hosts_pings = county_counter.hosts_pinged
+            hosts_pinged = county_counter.hosts_pinged
             if hosts_pinged != 0:
                 print(f"{func_name}(), hosts_pinged = {hosts_pinged}! (aborting, already values)")
             county = county_counter.county
