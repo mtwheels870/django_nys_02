@@ -391,7 +391,9 @@ class PingSurveyManager:
         self._build_radix_tree()
         self._match_zmap_replies()
         self.file_debugger.close()
-        return self._save_to_db(survey)
+        ranges_updated, hosts_responded, hosts_pinged = self._save_to_db(survey)
+        print(f"process_results(), ranges_updated, hosts_responded, hosts_pinged = {ranges_updated},{hosts_responded},{hosts_pinged}")
+        return ranges_updated, hosts_responded, hosts_pinged
         
     def close(self):
         if self.writer_range_ip:
