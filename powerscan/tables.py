@@ -90,10 +90,6 @@ class IpSurveyTable(tables.Table):
         #return f"{thousands:,}"
         return f"{thousands:.2f}"
 
-    def render_hosts(self, value, record):
-        print(f"Table.render_hosts(), record = {record}")
-        return "Hosts"
-
 #    def render_ranges(self, value, record):
 #        return "Ranges"
 #    def render_ranges_responded(self, value, record):
