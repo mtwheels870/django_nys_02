@@ -117,6 +117,8 @@ class GeometryRangeChunker:
         return self
 
     def __next__(self):
+        from .models import (IpRangePing)
+
         if self._last_chunk:
             raise StopIteration
 
