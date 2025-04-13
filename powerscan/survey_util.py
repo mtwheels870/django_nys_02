@@ -8,6 +8,8 @@ from django.contrib.gis.geos import MultiPolygon
 logger = logging.getLogger(__name__)
 #print(f"SurveyUtil: name = {__name__}, logger = {logger}")
 
+SMALL_CHUNK_SIZE = 10000
+
 class SurveyUtil:
     @staticmethod
     def copy_geography(survey_id, parent_survey_id):
