@@ -56,7 +56,7 @@ class IpSurveyTable(tables.Table):
         # template_name = "django_tables2/bootstrap.html"
         # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
         fields = ["selection", "id", "parent_survey_id", "name", "time_created", "time_scheduled", "time_ping_started",
-            "time_tally_stopped"]
+            "time_tally_stopped", "ranges"]
 
     def _render_time(self, value, include_date=False):
         if not value:
@@ -95,8 +95,8 @@ class IpSurveyTable(tables.Table):
         print(f"Table.render_hosts(), record = {record}")
         return "Hosts"
 
-    def render_ranges(self, value, record):
-        return "Ranges"
+#    def render_ranges(self, value, record):
+#        return "Ranges"
 #    def render_ranges_responded(self, value, record):
 #        return self._render_thousands(value)
 
