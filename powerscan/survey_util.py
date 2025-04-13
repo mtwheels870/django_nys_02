@@ -195,6 +195,7 @@ class GeoCountUpdater:
             hosts_pinged = county_counter.hosts_pinged
             if hosts_pinged != 0:
                 print(f"{func_name}(), hosts_pinged = {hosts_pinged}! (aborting, already values)")
+                return 0 
             county = county_counter.county
             # hash = county.__hash__()
             # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
@@ -236,7 +237,7 @@ class GeoCountUpdater:
             print(f"{func_name}(), processed {county_set.count()} counties, {zero_counties} zeros")
         else:
             print(f"{func_name}(), processed {county_set.count() } counties, no zeroes")
-
+        return total_ranges_responded
 
     def _update_state_counts(self):
         from .models import (IpSurveyState)
@@ -282,8 +283,8 @@ class GeoCountUpdater:
         #    continue
 
         self._county_mapper = {}
-        self._update_county_counts()
-
-        self._state_mapper = {}
-        self._update_state_counts()
+        ranges_processed = self._update_county_counts()
+        if ranges_processed > 0:
+            self._state_mapper = {}
+            self._update_state_counts()
         
