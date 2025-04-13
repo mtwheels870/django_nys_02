@@ -239,6 +239,8 @@ class GeoCountUpdater:
 
 
     def _update_state_counts(self):
+        from .models import (IpSurveyState)
+
         # Map the states to the count objects
         state_count = 0
         # 1: Set up the mapping, Map the states to the count objects
