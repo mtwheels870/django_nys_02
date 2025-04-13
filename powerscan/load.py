@@ -156,32 +156,6 @@ class MtwChunker:
             self._range_end = self._range_start + MTW_CHUNK_SIZE
         return states
 
-class GeometryRangeChunker:
-    def __init__(self,survey_id=0):
-        self._range_start = 0
-        self._range_end = self._range_start + SMALL_CHUNK_SIZE
-        self._last_chunk = False
-        self._survey_id = survey_id
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._last_chunk:
-            raise StopIteration
-
-        logger.info(f"GeometryRangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
-        ranges = IpRangePing.objects.filter(ip_survey__id=self._survey_id).order_by("id")[self._range_start:self._range_end]
-        num_returned = ranges.count()
-        logger.info(f"GeometryRangeChunker.__next__(), returned {num_returned} rows")
-        if num_returned < SMALL_CHUNK_SIZE:
-            logger.info(f"GeometryRangeChunker.__next__(), setting last chunk = True")
-            self._last_chunk = True
-        else:
-            self._range_start = self._range_end
-            self._range_end = self._range_start + SMALL_CHUNK_SIZE
-        return ranges
-
 class PowerScanValueException(Exception):
     pass
 
