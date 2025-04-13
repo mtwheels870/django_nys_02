@@ -169,7 +169,14 @@ class IpRangeSurvey(models.Model):
         pinged_k = self.ranges_pinged / 1000.0
         responded_k = self.ranges_responded / 1000.0
         pct = float(self.ranges_responded) / self.ranges_pinged
-        return f"{responded_k:.1f}/{pinged_k:.1f}/{pct:.2f}%"
+        return f"{responded_k:.1f}/{pinged_k:.1f} {pct:.2f}"
+
+    @property
+    def hosts(self):
+        pinged_k = self.hosts_pinged / 1000.0
+        responded_k = self.hosts_responded / 1000.0
+        pct = float(self.hosts_responded) / self.hosts_pinged
+        return f"{responded_k:.1f}/{pinged_k:.1f} {pct:.3f}"
         
     def __str__(self):
         return f"Survey[{self.id}]"

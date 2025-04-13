@@ -50,13 +50,12 @@ class IpSurveyTable(tables.Table):
 
     # Derived columns
     ranges = tables.Column(verbose_name="Ranges(k) [r/p/%]")
+    hosts = tables.Column(verbose_name="Hosts(k) [r/p/%]")
     class Meta:
         model = IpRangeSurvey
         template_name = "django_tables2/bootstrap-responsive.html"
-        # template_name = "django_tables2/bootstrap.html"
-        # fields = ["selection", "time_created", "time_ping_started", "time_tally_stopped", "num_total_ranges"]
         fields = ["selection", "id", "parent_survey_id", "name", "time_created", "time_scheduled", "time_ping_started",
-            "time_tally_stopped", "ranges"]
+            "time_tally_stopped", "ranges", "hosts"]
 
     def _render_time(self, value, include_date=False):
         if not value:
