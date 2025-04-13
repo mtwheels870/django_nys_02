@@ -422,7 +422,7 @@ class Loader():
         #survey_ids = [459]
         #survey_ids = [456, 451, 450, 449, 448, 447]
         #survey_ids = [445, 444, 443, 442, 441, 440, 439, 438, 437, 436, 435]
-        survey_ids = [470]
+        survey_ids = [471]
         for survey_id in survey_ids:
             print(f"{func_name}(), survey_id = {survey_id}")
             geo_counter =  GeoCountUpdater(survey_id)
