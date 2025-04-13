@@ -41,6 +41,8 @@ from .models import (
 
 from .ping import PingSurveyManager
 
+from .survey_util import GeoCountUpdater
+
 #SMALL_CHUNK_SIZE = 10000
 #TOTAL_OBJECTS = 22000
 
