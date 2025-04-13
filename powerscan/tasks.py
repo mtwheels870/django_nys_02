@@ -307,9 +307,14 @@ def tally_results(metadata_file, survey_id, retry_count):
         survey.hosts_pinged = hosts_pinged 
         # print(f"SURVEY SAVE, 10")
         survey.save()
-        print(f"Task.tally_results({survey_id}), saved {hosts_responded:,} hosts to db")
+        print(f"Task.{func_name}({survey_id}), saved {hosts_responded:,} hosts to db")
+        print(f"Task.{func_name}({survey_id}), updating geo counts")
+        geo_counter =  GeoCountUpdater(survey_id)
+        geo_counter.propagate_counts()
+        print(f"Task.{func_name}({survey_id}), done")
+
     except Exception as e:
-        print(f"Task.{sys._getframe().f_code.co_name}({survey_id}), exception: {e}")
+        print(f"Task.{func_name}({survey_id}), exception: {e}")
         traceback.print_exc(file=sys.stdout)
         ranges_responded = -1
     return ranges_responded
