@@ -356,6 +356,7 @@ class ScheduleSurveyView(generic.edit.FormView):
         survey_id = self.kwargs.get('pk')
         # print(f"SSV.g_c_d(), survey_id = {survey_id}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
+        print(f"SSV.g_c_d(), survey.ranges: {survey.ranges}")
         field_survey_id = form.fields[FIELD_SURVEY_ID]
         field_survey_id.initial = survey_id
         field_survey_name = form.fields[FIELD_SURVEY_NAME]
