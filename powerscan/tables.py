@@ -49,8 +49,8 @@ class IpSurveyTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="pk")
 
     # Derived columns
-    ranges = tables.Column(verbose_name="Ranges(k) [r/p/%]")
-    hosts = tables.Column(verbose_name="Hosts(k) [r/p/%]")
+    ranges = tables.Column(verbose_name="Ranges(k) [r p /%]")
+    hosts = tables.Column(verbose_name="Hosts(k) [r p %]")
     class Meta:
         model = IpRangeSurvey
         template_name = "django_tables2/bootstrap-responsive.html"
