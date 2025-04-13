@@ -236,7 +236,7 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     size = os.path.getsize(metadata_file_job)
     if size == 0:
         #print(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
-        return 0
+        return 0, 0, 0
 
     # Calculate zmap time
     survey.time_ping_stopped = now
