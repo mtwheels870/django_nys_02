@@ -234,6 +234,14 @@ class MapNavigationView(SingleTableView):
         # print(f"g_c_d(), returning here, context_data = {context_data}")
         return context_data
 
+    def test_exception(self):
+        try:
+            a = 23
+            b = 0
+            c = a / b
+        except Exception as e:
+            raise Exception(f"_test_exception(), Exception {e}")
+        
     def post(self, request, *args, **kwargs):
         print(f"MNV.post(), request = {request}")
         print(f"         self = {self}, args = {args}, kwargs = {kwargs}")
@@ -254,6 +262,7 @@ class MapNavigationView(SingleTableView):
                 print(f"MNV.post(zoom_map), 2, num_selected = {num_selected}")
                 return render(request, self.template_name)
         if 'show_459' in request.POST:
+            self.test_exception()
             # id in this instance is survey id
             new_params = {"agg_type" : "states", "id": "459"}
             querystring = urlencode(new_params)

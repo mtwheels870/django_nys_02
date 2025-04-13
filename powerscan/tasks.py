@@ -308,7 +308,7 @@ def tally_results(metadata_file, survey_id, retry_count):
         survey.save()
         print(f"Task.tally_results({survey_id}), saved {hosts_responded:,} hosts to db")
     except Exception as e:
-        print(f"Task.tally_results({survey_id}), exception: {e}")
+        print(f"Task.tally_results({survey_id}), exception: {e}, {dir(e)}")
         ranges_responded = -1
     return ranges_responded
 
