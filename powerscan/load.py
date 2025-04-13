@@ -443,13 +443,15 @@ class Loader():
         debug_power.save()
 
     def update_geo_counts(self, verbose=True):
+        func_name = sys._getframe().f_code.co_name
         #survey_ids = [459]
         #survey_ids = [456, 451, 450, 449, 448, 447]
-        survey_ids = [445, 444, 443, 442, 441, 440, 439, 438, 437, 436, 435]
+        #survey_ids = [445, 444, 443, 442, 441, 440, 439, 438, 437, 436, 435]
+        survey_ids = [470]
         for survey_id in survey_ids:
+            print(f"{func_name}(), survey_id = {survey_id}")
             geo_counter =  GeoCountUpdater(survey_id)
             geo_counter.propagate_counts()
-            self._survey_id = survey_id  
 
     # After we took out the tracts, we point the MmIpRanges to counties.  This sets that pointer
     def ranges_counties(self, verbose=True):
