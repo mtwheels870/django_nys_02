@@ -107,7 +107,7 @@ class GeoCountUpdater:
     def __init__(self, survey_id):
         self._survey_id = survey_id
         
-    def _update_tract_counts(self):
+    def _unused_update_tract_counts(self):
         # 1. build mapping
         for tract_counter in IpSurveyTract.objects.filter(survey__id=self._survey_id):
             hosts_pinged = tract_counter.hosts_pinged
@@ -154,10 +154,14 @@ class GeoCountUpdater:
         return total_ranges_responded 
 
     def _update_county_counts(self):
+        func_name = sys._getframe().f_code.co_name
         # 1: Set up the mapping, Map the counties to the count objects
         county_count = 0
         county_set = IpSurveyCounty.objects.filter(survey__id=self._survey_id)
         for county_counter in county_set:
+            hosts_pings = county_counter.hosts_pinged
+            if hosts_pinged != 0:
+                print(f"{func_name}(), hosts_pinged = {hosts_pinged}! (aborting, already values)")
             county = county_counter.county
             # hash = county.__hash__()
             # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
@@ -166,16 +170,22 @@ class GeoCountUpdater:
         # print(f"_update_county_counts(), county_count = {county_count}")
         county_counter = None
 
-        # 2: Bubble counts up, Walk through all of the tracts and update the corresponding counties
-        for i, tract in enumerate(self._tract_mapper):
-            tract_counter = self._tract_mapper[tract]
-            hosts_pinged = tract_counter.hosts_pinged
-            hosts_responded = tract_counter.hosts_responded
-            county_counter = self._county_mapper[tract.county]
-            county_counter.hosts_pinged = county_counter.hosts_pinged + \
-                    hosts_pinged 
-            county_counter.hosts_responded = county_counter.hosts_responded + \
-                    hosts_responded 
+        index_chunk = 0
+        total_ranges_responded = 0
+        for chunk in GeometryRangeChunker(survey_id=self._survey_id):
+            print(f"{func_name}(), processing chunk[{index_chunk}]")
+            for range_ping in chunk:
+                hosts_pinged = range_ping.hosts_pinged
+                hosts_responded = range_ping.hosts_responded
+                county = range_ping.ip_range.county
+                if county in self._county_mapper:
+                    counter = self._county_mapper[county]
+                    counter.hosts_pinged = counter.hosts_pinged + hosts_pinged
+                    counter.hosts_responded = counter.hosts_responded + hosts_responded
+                    total_ranges_responded = total_ranges_responded + 1
+                else:
+                    print(f"{func_name}(), could not find county: {county}")
+            index_chunk = index_chunk + 1
 
         # 3: Go back to counties, save to DB
         zero_counties = 0
@@ -190,9 +200,9 @@ class GeoCountUpdater:
             county_counter.save()
             #county_counter.save()
         if zero_counties > 0:
-            print(f"_update_county_counts(), processed {county_set.count()} counties, {zero_counties} zeros")
+            print(f"{func_name}(), processed {county_set.count()} counties, {zero_counties} zeros")
         else:
-            print(f"_update_county_counts(), processed {county_set.count() } counties, no zeroes")
+            print(f"{func_name}(), processed {county_set.count() } counties, no zeroes")
 
 
     def _update_state_counts(self):
@@ -231,14 +241,14 @@ class GeoCountUpdater:
         print(f"propagate_counts(), scanning survey_id: {self._survey_id}")
             # self._exec_db = False
 
-            self._tract_mapper = {}
-            ranges_responded = self._update_tract_counts()
-            if ranges_responded == 0:
-                continue
+        #self._tract_mapper = {}
+        #ranges_responded = self._update_tract_counts()
+        #if ranges_responded == 0:
+        #    continue
 
-            self._county_mapper = {}
-            self._update_county_counts()
+        self._county_mapper = {}
+        self._update_county_counts()
 
-            self._state_mapper = {}
-            self._update_state_counts()
+        self._state_mapper = {}
+        self._update_state_counts()
         
