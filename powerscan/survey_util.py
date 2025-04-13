@@ -105,6 +105,8 @@ class SurveyUtil:
         logger.info(f"(LOGGER) last_n_surveys_state(), first_state = {first_state}")
 
 class GeoCountUpdater:
+    from .models import (IpRangeSurvey, IpSurveyState, IpSurveyCounty)
+
     def __init__(self, survey_id):
         self._survey_id = survey_id
         
