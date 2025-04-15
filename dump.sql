@@ -1,7 +1,1 @@
--t powerscan_debugpowerscan
--t powerscan_iprangeping
--t powerscan_iprangesurvey
--t powerscan_ipsurveystate
--t powerscan_ipsurveycounty
--t powerscan_ipsurveytract
--t powerscan_militarybase
+include table powerscan_debugpowerscan
