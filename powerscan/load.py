@@ -16,7 +16,7 @@ from django_nys_02.asgi import application
 
 from .consumers import CHANNEL_NAME_TASK_RESULT
 
-from .survey_util import GeoCountUpdater
+from .survey_util import GeoCountUpdater, SMALL_CHUNK_SIZE
 
 from .models import (
     UsState, County, CensusTract,
@@ -98,8 +98,8 @@ maxm_config = {
     "IP_RANGE_PATH" : "/home/bitnami/Data/LA/IP/CityBlocks_LA_01.shp",
 }
 
-CHUNK_SIZE = 200000
-SMALL_CHUNK_SIZE = 10000
+# CHUNK_SIZE = 200000
+# SMALL_CHUNK_SIZE = 10000
 
 logger = logging.getLogger(__name__)
 
