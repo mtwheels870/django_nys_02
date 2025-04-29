@@ -1,1 +1,0 @@
-include table powerscan_debugpowerscan
