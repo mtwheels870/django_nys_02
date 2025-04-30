@@ -16,7 +16,8 @@ Authors: Michael T. Wheeler (mike@pinp01nt.com)
 import os
 import datetime
 
-import pandas as pd
+# import pandas as pd
+import pyspark.pandas as ps
 import ipaddress
 import netaddr
 
@@ -396,7 +397,7 @@ class PingSurveyManager:
         self.pyt = pytricia.PyTricia()
 
         # print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
-        df = self.df_ranges = pd.read_csv(self.path_range_ip)
+        df = self.df_ranges = ps.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
         #print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
         for index, row in df.iterrows():
@@ -426,7 +427,7 @@ class PingSurveyManager:
         Docstring here
         """
         index_chunk = 0
-        for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
+        for chunk in ps.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
             column_names = chunk.columns.tolist()
             #if self._debug:
             #    print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {chunk.shape[0]}, column = {column_names}")
