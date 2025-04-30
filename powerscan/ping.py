@@ -397,7 +397,8 @@ class PingSurveyManager:
         self.pyt = pytricia.PyTricia()
 
         # print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
-        df = self.df_ranges = ps.read_csv(self.path_range_ip)
+        # df = self.df_ranges = ps.read_csv(self.path_range_ip)
+        df = self.df_ranges = self.spark.read.csv(self.path_range_ip)
         column_names = df.columns.tolist()
         #print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
         for index, row in df.iterrows():
@@ -485,6 +486,10 @@ class PingSurveyManager:
         """
         Docstring here
         """
+        self.spark = SparkSession.builder().master("local[1]")
+            .appName("ProcessResults")
+            .getOrCreate()
+        
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
