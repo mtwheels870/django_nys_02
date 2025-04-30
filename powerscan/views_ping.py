@@ -12,16 +12,16 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 from django_tables2 import SingleTableView
 
-from django_celery_results.models import TaskResult
+#from django_celery_results.models import TaskResult
 
-from celery import shared_task
-from celery.app import control 
+#from celery import shared_task
+# from celery.app import control 
 
-from rest_framework import viewsets
-from rest_framework_gis import filters
+#from rest_framework import viewsets
+# from rest_framework_gis import filters
 
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+#from channels.layers import get_channel_layer
+# from asgiref.sync import async_to_sync
 
 from django_nys_02.settings import CELERY_QUEUE, POWERSCAN_VERSION 
 from django_nys_02.celery import app as celery_app
