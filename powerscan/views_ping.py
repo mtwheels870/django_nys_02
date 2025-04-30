@@ -40,7 +40,7 @@ from django_tables2 import SingleTableView
 
 from django_nys_02.settings import CELERY_QUEUE, POWERSCAN_VERSION 
 from django_nys_02.celery import app as celery_app
-from django_nys_02.asgi import application
+# from django_nys_02.asgi import application
 
 from .tasks import (
     build_whitelist, zmap_from_file, tally_results,
