@@ -1,4 +1,11 @@
 /*
+ * Copyright (c) 2025, PINP01NT, LLC
+ * 
+ * https://pinp01nt.com/
+ * 
+ * All rights reserved.
+ */
+/*
  * Base Class
  */ 
 // Don't do this! import { map_wrapper } from "./map.js";

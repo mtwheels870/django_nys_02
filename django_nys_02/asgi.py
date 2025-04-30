@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2025, PINP01NT, LLC
+#
+# https://pinp01nt.com/
+#
+# All rights reserved.
 """
 ASGI config for DJANGO project.
 
@@ -5,6 +13,8 @@ It exposes the ASGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
+
+Authors: Michael T. Wheeler (mike@pinp01nt.com)
 """
 
 import os
@@ -24,7 +34,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 #print(f"django_asgi_app = {django_asgi_app}, dir() = {dir(django_asgi_app)}")
 
 # Our URLs are in here
-from powerscan.routing import websocket_urlpatterns
+# from powerscan.routing import websocket_urlpatterns
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

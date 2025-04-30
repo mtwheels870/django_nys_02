@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025, PINP01NT, LLC
+ * 
+ * https://pinp01nt.com/
+ * 
+ * All rights reserved.
+ */
 import { cb_render_all, CIRCLE_PANE } from './cb_layer.js';
 
 // Create the map

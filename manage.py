@@ -1,5 +1,18 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2025, PINP01NT, LLC
+#
+# https://pinp01nt.com/
+#
+# All rights reserved.
+#
+"""
+Django's command-line utility for administrative tasks.
+
+Authors: Michael T. Wheeler (mike@pinp01nt.com)
+
+"""
 import os
 import sys
 
