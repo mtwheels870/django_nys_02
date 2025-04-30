@@ -26,14 +26,15 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 # Our URLs are in here
 from powerscan.routing import websocket_urlpatterns
 
-application = ProtocolTypeRouter({
+application = get_asgi_application()
+application02 = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
-    "channel": ChannelNameRouter({
-        CHANNEL_NAME_TASK_RESULT: TaskConsumer.as_asgi(),
-        }),
     })
+#    "websocket": AllowedHostsOriginValidator(
+#        AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
+#    "channel": ChannelNameRouter({
+#        CHANNEL_NAME_TASK_RESULT: TaskConsumer.as_asgi(),
+#        }),
 #    "http": django_asgi_app,
 #    "websocket": AllowedHostsOriginValidator(
 #        AuthMiddlewareStack(URLRouter(websocket_urlpatterns))),
