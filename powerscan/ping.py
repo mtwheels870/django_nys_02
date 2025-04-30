@@ -486,9 +486,7 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        self.spark = SparkSession.builder().master("local[1]")
-            .appName("ProcessResults")
-            .getOrCreate()
+        self.spark = SparkSession.builder().master("local[1]").appName("ProcessResults").getOrCreate()
         
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()
