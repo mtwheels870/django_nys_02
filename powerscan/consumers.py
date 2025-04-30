@@ -41,17 +41,29 @@ class CeleryResultsHandler:
             return str(self.name)
 
     def __init__(self):
+        """
+        Docstring here
+        """
         self.reset()
 
     def get_status(self):
+        """
+        Docstring here
+        """
         return self._survey_status
 
     def set_status(self, new_status, task_result=None):
+        """
+        Docstring here
+        """
         self._survey_status = new_status
         if task_result:
             self._pending_task_result[task_result.task_id] = None
 
     def reset(self):
+        """
+        Docstring here
+        """
         self._hash_task_ids = {}
         self._pending_task_result = {}
         self.set_status(self.SurveyStatus.NULL)
@@ -61,6 +73,9 @@ class CeleryResultsHandler:
 #        self._pending_task_result[task_result.id] = None
 
     def store_task_result(self, task_result):
+        """
+        Docstring here
+        """
         task_id = task_result.task_id
         print(f"store_task_result(), task_result = {task_id}")
         if not task_id in self._pending_task_result:

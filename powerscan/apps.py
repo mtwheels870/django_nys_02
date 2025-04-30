@@ -27,6 +27,9 @@ class PowerScanConfig(AppConfig):
     name = 'powerscan'
 
     def ready(self):
+        """
+        Docstring here
+        """
         # Can't put this at the top-level (apps aren't ready yet)
         from django_celery_beat.models import PeriodicTask, IntervalSchedule
 

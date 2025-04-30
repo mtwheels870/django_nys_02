@@ -125,6 +125,9 @@ def _unused_prep_file_range(ip_range, dir_path):
     return file_path_text, ip_network 
 
 def _count_output_lines(file_path):
+    """
+    Docstring here
+    """
     return sum(1 for _ in open(file_path))
 
 def _unused_ping_single_range(survey, tract, ip_range, dir_path, debug):
@@ -147,6 +150,9 @@ def _unused_ping_single_range(survey, tract, ip_range, dir_path, debug):
 
 @shared_task(bind=True)
 def build_whitelist(self, *args, **kwargs):
+    """
+    Docstring here
+    """
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
     # print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
@@ -177,6 +183,9 @@ def build_whitelist(self, *args, **kwargs):
     return num_states, num_counties, num_ranges
 
 def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
+    """
+    Docstring here
+    """
     try:
         # This seems wrong for a ICMP
         # port = 80
@@ -213,6 +222,9 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
 #    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
 @shared_task(bind=True)
 def zmap_from_file(self, survey_id_string):
+    """
+    Docstring here
+    """
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
     #ip_source_id = kwargs["ip_source_id"]
@@ -244,6 +256,9 @@ def zmap_from_file(self, survey_id_string):
     return metadata_file
 
 def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
+    """
+    Docstring here
+    """
     whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
     if metadata_file_job != metadata_file_survey:
         logger.info(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
@@ -274,6 +289,9 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
 
 @celery_app.task
 def tally_results(metadata_file, survey_id, retry_count):
+    """
+    Docstring here
+    """
     # Ensure another worker hasn't grabbed the survey, yet
     func_name = sys._getframe().f_code.co_name
     now = timezone.now()

@@ -47,16 +47,28 @@ class AggregationHistoryTable(tables.Table):
         exclude = ["agg_type"]
 
     def _render_thousands(self, value):
+        """
+        Docstring here
+        """
         thousands = value / 1000.0
         return f"{thousands:.1f}"
 
     def render_hosts_responded(self, value, record):
+        """
+        Docstring here
+        """
         return self._render_thousands(value)
 
     def render_hosts_pinged(self, value, record):
+        """
+        Docstring here
+        """
         return self._render_thousands(value)
 
     def render_percentage(self, value, record):
+        """
+        Docstring here
+        """
         percentage = value * 100.0
         return f"{percentage:.2f}"
 
@@ -73,6 +85,9 @@ class IpSurveyTable(tables.Table):
             "time_tally_stopped", "ranges", "hosts"]
 
     def _render_time(self, value, include_date=False):
+        """
+        Docstring here
+        """
         if not value:
             return_string = ""
         elif include_date:
@@ -82,15 +97,27 @@ class IpSurveyTable(tables.Table):
         return return_string
 
     def render_time_created(self, value, record):
+        """
+        Docstring here
+        """
         return self._render_time(value, include_date=True)
 
     def render_time_scheduled(self, value, record):
+        """
+        Docstring here
+        """
         return self._render_time(value)
 
     def render_time_ping_started(self, value, record):
+        """
+        Docstring here
+        """
         return self._render_time(value)
 
     def render_time_tally_stopped(self, value, record):
+        """
+        Docstring here
+        """
         time_string = self._render_time(value)
         if value and record.time_ping_started:
             timedelta_secs = value - record.time_ping_started
@@ -101,6 +128,9 @@ class IpSurveyTable(tables.Table):
             return time_string
 
     def _render_thousands(self, value):
+        """
+        Docstring here
+        """
         thousands = float(value) / 1000.0
         #return f"{thousands:,}"
         return f"{thousands:.2f}"
@@ -125,8 +155,14 @@ class CeleryTaskTable(tables.Table):
         template_name = "django_tables2/bootstrap4.html"
 
     def __init__(self, *args, **kwargs):
+        """
+        Docstring here
+        """
         super().__init__(*args, **kwargs)
 
     def render_eta(self, value, record):
+        """
+        Docstring here
+        """
         dt = iso8601.parse_iso8601(value)
         return dt.strftime(DATE_TIME_FORMAT)

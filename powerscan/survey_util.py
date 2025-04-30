@@ -28,6 +28,9 @@ SMALL_CHUNK_SIZE = 10000
 class SurveyUtil:
     @staticmethod
     def copy_geography(survey_id, parent_survey_id):
+        """
+        Docstring here
+        """
         from .models import (IpRangeSurvey, IpSurveyState, IpSurveyCounty, IpSurveyTract)
 
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
@@ -52,6 +55,9 @@ class SurveyUtil:
 
     @staticmethod
     def _delete_surveys(survey_ids):
+        """
+        Docstring here
+        """
         from .models import (IpRangeSurvey, IpSurveyCounty, IpSurveyTract)
 
         logger.warn(f"PSM._delete_surveys(), surveys: {survey_ids}")
@@ -84,12 +90,18 @@ class SurveyUtil:
 
     @staticmethod
     def link_file_string(survey_id, parent_survey_id):
+        """
+        Docstring here
+        """
         from .ping import PingSurveyManager
 
         return PingSurveyManager.link_survey(survey_id, int(parent_survey_id))
 
     @staticmethod
     def calculate_bbox(survey_id):
+        """
+        Docstring here
+        """
         from .models import (IpRangeSurvey)
 
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
@@ -113,6 +125,9 @@ class SurveyUtil:
 
     @staticmethod
     def last_n_surveys_state(survey_id, limit):
+        """
+        Docstring here
+        """
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         state_set = survey.ipsurveystate_set.all()
         num_states = state_set.count()
@@ -129,9 +144,15 @@ class GeometryRangeChunker:
         self._survey_id = survey_id
 
     def __iter__(self):
+        """
+        Docstring here
+        """
         return self
 
     def __next__(self):
+        """
+        Docstring here
+        """
         from .models import (IpRangePing)
 
         func_name = sys._getframe().f_code.co_name
@@ -152,9 +173,15 @@ class GeometryRangeChunker:
 
 class GeoCountUpdater:
     def __init__(self, survey_id):
+        """
+        Docstring here
+        """
         self._survey_id = survey_id
         
     def _unused_update_tract_counts(self):
+        """
+        Docstring here
+        """
         # 1. build mapping
         for tract_counter in IpSurveyTract.objects.filter(survey__id=self._survey_id):
             hosts_pinged = tract_counter.hosts_pinged
@@ -201,6 +228,9 @@ class GeoCountUpdater:
         return total_ranges_responded 
 
     def _update_county_counts(self):
+        """
+        Docstring here
+        """
         from .models import (IpSurveyCounty)
 
         func_name = sys._getframe().f_code.co_name
@@ -256,6 +286,9 @@ class GeoCountUpdater:
         return total_ranges_responded
 
     def _update_state_counts(self):
+        """
+        Docstring here
+        """
         from .models import (IpSurveyState)
 
         # Map the states to the count objects
@@ -290,6 +323,9 @@ class GeoCountUpdater:
         print(f"_update_states_counts(), processed {state_set.count()} states")
 
     def propagate_counts(self):
+        """
+        Docstring here
+        """
         print(f"propagate_counts(), scanning survey_id: {self._survey_id}")
             # self._exec_db = False
 

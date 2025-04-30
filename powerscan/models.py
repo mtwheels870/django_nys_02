@@ -40,9 +40,15 @@ class UsState(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
+        """
+        Docstring here
+        """
         return self.state_name
 
     def __hash__(self):
+        """
+        Docstring here
+        """
         return int(self.state_fp)
 
 #state_fp = models.CharField(max_length=2, db_index=True)
@@ -69,9 +75,15 @@ class County(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
+        """
+        Docstring here
+        """
         return self.county_name
 
     def __hash__(self):
+        """
+        Docstring here
+        """
         return int(self.geoid)
 
 class CensusTract(models.Model):
@@ -87,9 +99,15 @@ class CensusTract(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):
+        """
+        Docstring here
+        """
         return self.name
     
     def __hash__(self):
+        """
+        Docstring here
+        """
         return int(self.tract_id)
 
 #
@@ -103,9 +121,15 @@ class CountState(models.Model):
     centroid = models.PointField(null=True)
 
     class Meta:
+        """
+        Docstring here
+        """
         ordering = ["-range_count"]
 
     def __str__(self):
+        """
+        Docstring here
+        """
         return f"State: {self.us_state.state_name}"
 #
 # Power Scan, IP ranges (and aggregations)
@@ -122,6 +146,9 @@ class CountCounty(models.Model):
         ordering = ["-range_count"]
 
     def __str__(self):
+        """
+        Docstring here
+        """
         return f"County: {self.county.county_fp}"
 
 # pp = pulse_plus (in the original Digital Element Net Acuity DB 30
@@ -137,6 +164,9 @@ class CountTract(models.Model):
         ordering = ["-range_count"]
 
     def __str__(self):
+        """
+        Docstring here
+        """
         return f"{self.census_tract}: {self.range_count:,}"
 
 
@@ -152,6 +182,9 @@ class MmIpRange(models.Model):
     mpoint = models.MultiPointField(null=True)
 
     def __str__(self):
+        """
+        Docstring here
+        """
         return f"{self.ip_network}"
 
 #
@@ -182,6 +215,9 @@ class IpRangeSurvey(models.Model):
 
     @property
     def ranges(self):
+        """
+        Docstring here
+        """
         pinged_k = self.ranges_pinged / 1000.0
         responded_k = self.ranges_responded / 1000.0
         pct = float(self.ranges_responded) / self.ranges_pinged
@@ -189,6 +225,9 @@ class IpRangeSurvey(models.Model):
 
     @property
     def hosts(self):
+        """
+        Docstring here
+        """
         pinged_k = self.hosts_pinged / 1000.0
         responded_k = self.hosts_responded / 1000.0
         pct = float(self.hosts_responded) / self.hosts_pinged
@@ -207,6 +246,9 @@ class IpRangePing(models.Model):
     hosts_responded = models.IntegerField(default=0)
 
     def __str__(self):
+        """
+        Docstring here
+        """
         first = f"Range[{self.id}]: [{self.ip_range.ip_range_start},{self.ip_range.ip_range_end}], "
         second = f"time_pinged = {self.time_pinged}"
         return first + second
@@ -217,6 +259,9 @@ class IpSurveyState(models.Model):
     hosts_pinged = models.IntegerField(default=0)
     hosts_responded = models.IntegerField(default=0)
     def __str__(self):
+        """
+        Docstring here
+        """
         return f"Survey results for state: {self.us_state.state_abbrev}"
 
 class IpSurveyCounty(models.Model):
@@ -225,6 +270,9 @@ class IpSurveyCounty(models.Model):
     hosts_pinged = models.IntegerField(default=0)
     hosts_responded = models.IntegerField(default=0)
     def __str__(self):
+        """
+        Docstring here
+        """
         return f"Survey results for county: {self.county.county_fp}"
 
 class IpSurveyTract(models.Model):
@@ -233,6 +281,9 @@ class IpSurveyTract(models.Model):
     hosts_pinged = models.IntegerField(default=0)
     hosts_responded = models.IntegerField(default=0)
     def __str__(self):
+        """
+        Docstring here
+        """
         return f"Survey results for tract: {self.tract.tract_id}"
 
 class MilitaryBase(models.Model):
@@ -242,6 +293,9 @@ class MilitaryBase(models.Model):
     point = models.PointField(null=True)
 
     def __str__(self):
+        """
+        Docstring here
+        """
         return {self.name.county_fp}
 
 class DebugPowerScan(models.Model):
@@ -254,6 +308,9 @@ class DebugPowerScan(models.Model):
     calculate_baseline = models.BooleanField(default=False)
 
     def __str__(self):
+        """
+        Docstring here
+        """
         first = f"profile[{self.profile_name}, whitelist = {self.whitelist}, zmap = {self.zmap}, "
         second = f"     tally_results = {self.tally_results}, scheduler = {self.scheduler}\n"
         third = f"calculate_baseline = {self.calculate_baseline}"

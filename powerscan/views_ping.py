@@ -83,6 +83,9 @@ FIELD_NUM_OCCURRENCES = "field_num_occurrences"
 logger = logging.getLogger(__name__)
 
 def _get_current_time():
+    """
+    Docstring here
+    """
     now_fmt = timezone.now().strftime(TIME_FORMAT_STRING)
     return now_fmt
 
@@ -94,6 +97,9 @@ class CreateNewSurveyView(generic.edit.FormView):
     _survey_id = 0
 
     def get_context_data(self, **kwargs):
+        """
+        Docstring here
+        """
         context_data = super().get_context_data(**kwargs)
 
         form = context_data['form']
@@ -115,6 +121,9 @@ class CreateNewSurveyView(generic.edit.FormView):
     # of states to the celery worker.  So, we create the survey, pass the survey id to the worker, and she reads
     # the pre-saved states from the database
     def _configure_survey(self, selected_states):
+        """
+        Docstring here
+        """
         survey = IpRangeSurvey()
         # print(f"SURVEY SAVE, 11")
         survey.save()
@@ -133,6 +142,9 @@ class CreateNewSurveyView(generic.edit.FormView):
         return abbrevs, survey.id
 
     def _build_whitelist(self, survey_id):
+        """
+        Docstring here
+        """
         if not survey_id:
             print(f"CPV.build_whitelist(), survey not configured! (should be extracted from the form)")
             return None
@@ -151,6 +163,9 @@ class CreateNewSurveyView(generic.edit.FormView):
 
     # CreateNewSurveyView
     def post(self, request, *args, **kwargs):
+        """
+        Docstring here
+        """
         form = PingStrategyForm(request.POST)
         if not form.is_valid():
             print(f"CPV.post(), form is INVALID, creating empty")
@@ -212,16 +227,25 @@ class RecentSurveyView(SingleTableView):
     }
 
     def get_context_data(self, **kwargs):
+        """
+        Docstring here
+        """
         context = super().get_context_data(**kwargs)
         context[TEMPLATE_VAR_CURRENT_TIME] = _get_current_time
         context[TEMPLATE_VAR_POWERSCAN_VERSION ] = POWERSCAN_VERSION
         return context
 
     def get_queryset(self):
+        """
+        Docstring here
+        """
         queryset = IpRangeSurvey.objects.order_by("-id")
         return queryset 
 
     def _calculate_map_extent(self, survey_id):
+        """
+        Docstring here
+        """
         bbox = SurveyUtil.calculate_bbox(survey_id)
         # print(f"(PRINT) _calculate_map_extent(), logger = {logger}")
         logger.info(f"(LOGGER) _calculate_map_extent(), survey_id = {survey_id}, bbox = {bbox}")
@@ -233,6 +257,9 @@ class RecentSurveyView(SingleTableView):
         return HttpResponseRedirect(url)
 
     def post(self, request, *args, **kwargs):
+        """
+        Docstring here
+        """
         selected_pks = request.POST.getlist('selection')
         num_selected = len(selected_pks)
         if 'edit' in request.POST:
@@ -273,10 +300,6 @@ class RecentSurveyView(SingleTableView):
         })
 
 class CeleryTasksView(SingleTableView):
-    #data = [
-    #    {"name": "John", "surname": "Doe", "address": "123 Main St"},
-    #    {"name": "Jane", "surname": "Smith", "address": "456 Oak Ave"},
-    #]
     table_class = CeleryTaskTable 
     #table_class = NonModelTable
     template_name = "powerscan/tasks_table.html"
@@ -285,12 +308,18 @@ class CeleryTasksView(SingleTableView):
     }
 
     def get_context_data(self, **kwargs):
+        """
+        Docstring here
+        """
         context = super().get_context_data(**kwargs)
         context[TEMPLATE_VAR_CURRENT_TIME] = _get_current_time
         context[TEMPLATE_VAR_POWERSCAN_VERSION ] = POWERSCAN_VERSION
         return context
 
     def _make_task_tuple(self, status, task):
+        """
+        Docstring here
+        """
         print(f"_make_task_tuple(), task = {task}")
         survey_id, task_name = _get_task_survey_id(task)
         #request = task["request"]
@@ -312,6 +341,9 @@ class CeleryTasksView(SingleTableView):
         return dict
 
     def get_queryset(self):
+        """
+        Docstring here
+        """
         inspect = celery_app.control.inspect()
         tasks_active = inspect.active()
         data = []
@@ -332,6 +364,9 @@ class CeleryTasksView(SingleTableView):
         return data
 
     def post(self, request, *args, **kwargs):
+        """
+        Docstring here
+        """
         selected_uuids = request.POST.getlist('selection')
         num_selected = len(selected_uuids)
         print(f"CTV.post(), selected_uuids({num_selected}) = {selected_uuids}")
@@ -364,6 +399,9 @@ class ScheduleSurveyView(generic.edit.FormView):
     template_name = "powerscan/schedule_survey.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Docstring here
+        """
         context_data = super().get_context_data(**kwargs)
         context_data[TEMPLATE_VAR_CURRENT_TIME] = _get_current_time()
         context_data[TEMPLATE_VAR_POWERSCAN_VERSION ] = POWERSCAN_VERSION
@@ -381,11 +419,17 @@ class ScheduleSurveyView(generic.edit.FormView):
         return context_data
 
     def _clone_survey(self, survey, start_time):
+        """
+        Docstring here
+        """
         new_survey = IpRangeSurvey(name=survey.name, time_whitelist_created=survey.time_whitelist_created,
             parent_survey_id=survey.id, time_scheduled=start_time)
         return new_survey
 
     def _schedule_surveys(self, survey_id, start_time, recurring, num_occurrences):
+        """
+        Docstring here
+        """
         #print(f"SSV._schedule_surveys(), survey_id = {survey_id}, start_time = {start_time}")
         #print(f"      recurring = {recurring}, num_occurrences = {num_occurrences}")
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
@@ -407,6 +451,9 @@ class ScheduleSurveyView(generic.edit.FormView):
         # print(f"SURVEY SAVE, 1") 
 
     def post(self, request, *args, **kwargs):
+        """
+        Docstring here
+        """
         survey_id = kwargs["pk"]
         # print(f"SSV.post(), survey_id = {survey_id}")
         if 'discard' in request.POST:

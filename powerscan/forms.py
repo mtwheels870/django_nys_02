@@ -45,6 +45,9 @@ class PingStrategyForm(forms.Form):
 
 class CustomDateTimeField(forms.DateTimeField):
     def to_python(self, value):
+        """
+        Docstring here
+        """
         if isinstance(value, list):
             if all(v is None for v in value):
                 return None
@@ -63,6 +66,9 @@ class ScheduleSurveyForm(forms.Form):
     field_num_occurrences = forms.IntegerField(label="Num Occurrences:", initial=0)
 
     def __init__(self, *args, **kwargs):
+        """
+        Docstring here
+        """
         super().__init__(*args, **kwargs)
         self.fields['field_survey_id'].widget.attrs['readonly'] = True
         self.fields['field_survey_name'].widget.attrs['readonly'] = True

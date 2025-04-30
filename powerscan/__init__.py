@@ -13,4 +13,3 @@ Docstring here
 Authors: Michael T. Wheeler (mike@pinp01nt.com)
 
 """
-

@@ -120,14 +120,23 @@ logger = logging.getLogger(__name__)
 
 class RangeChunker:
     def __init__(self):
+        """
+        Docstring here
+        """
         self._range_start = 0
         self._range_end = self._range_start + SMALL_CHUNK_SIZE
         self._last_chunk = False
 
     def __iter__(self):
+        """
+        Docstring here
+        """
         return self
 
     def __next__(self):
+        """
+        Docstring here
+        """
         if self._last_chunk:
             raise StopIteration
 
@@ -147,14 +156,23 @@ class RangeChunker:
 MTW_CHUNK_SIZE = 3
 class MtwChunker:
     def __init__(self):
+        """
+        Docstring here
+        """
         self._range_start = 0
         self._range_end = self._range_start + MTW_CHUNK_SIZE
         self._last_chunk = False
 
     def __iter__(self):
+        """
+        Docstring here
+        """
         return self
 
     def __next__(self):
+        """
+        Docstring here
+        """
         if self._last_chunk:
             logger.info(f"MtwChunker.__next__(), found last chunk, returning StopIteration")
             raise StopIteration
@@ -176,10 +194,16 @@ class PowerScanValueException(Exception):
 
 class Loader():
     def __init__(self):
+        """
+        Docstring here
+        """
         self.counter = 0
         self.tracts = None
 
     def chunk_states(self, verbose=True):
+        """
+        Docstring here
+        """
         index = 0
         chunk_count = 0
         for chunk in MtwChunker():
@@ -191,17 +215,26 @@ class Loader():
                 chunk_count = chunk_count + 1
 
     def run_state(self, verbose=True):
+        """
+        Docstring here
+        """
         state_shp = Path(loc_config["PATH_STATE"])
         logger.info(f"run_state(), state_shp = {state_shp}, mapping = {mapping_state}")
         self.lm_state = LayerMapping(UsState, state_shp, mapping_state, transform=False)
         self.lm_state.save(strict=True, verbose=verbose)
 
     def run_county(self, verbose=True):
+        """
+        Docstring here
+        """
         county_shp = Path(loc_config["PATH_COUNTY"])
         self.lm_county = LayerMapping(County, county_shp, mapping_county, transform=False)
         self.lm_county.save(strict=True, verbose=verbose)
 
     def run_tracts(self, verbose=False, progress=500):
+        """
+        Docstring here
+        """
         tract_shp = Path(loc_config["PATH_TRACTS"])
         self.lm_tracts = LayerMapping(CensusTract, tract_shp, mapping_tract, transform=False)
         self.lm_tracts.save(strict=True, verbose=verbose, progress=progress)
@@ -209,6 +242,9 @@ class Loader():
     # I don't know why we do this as a two-step thing.  Seems like we should be able to do the county
     # lookup on the LayerMapping()
     def run_ip_ranges_maxm(self, verbose=False, progress=1000):
+        """
+        Docstring here
+        """
         ip_range_shp = Path(loc_config["PATH_IP_RANGES"])
         self.lm_ranges = LayerMapping(MmIpRange, ip_range_shp, mapping_maxm_range, transform=False)
         # Throws exception, should wrap in a try{}
@@ -217,6 +253,9 @@ class Loader():
 
     # Build a big hash of census tract(id) to an empty count
     def _create_hash_tract_counts(self):
+        """
+        Docstring here
+        """
         logger.info(f"_create_hash_tract_counts(), creating hash of empty counts")
         self.hash_tracts = {}
         #point = Point(float(range.mm_longitude), float(range.mm_latitude))
@@ -238,6 +277,9 @@ class Loader():
             index = index + 1
 
     def _save_hash_tract_counts(self):
+        """
+        Docstring here
+        """
         print(f"_save_hash_tract_counts(), iterating through dictionary...")
         for tract_id, new_counter in self.hash_tracts.items():
             if new_counter.range_count > 0:
@@ -245,6 +287,9 @@ class Loader():
                 new_counter.save()
 
     def aggregate_tracts_maxm(self, verbose=False):
+        """
+        Docstring here
+        """
         # Create empty counts
         self._create_hash_tract_counts()
         index = 0
@@ -268,6 +313,9 @@ class Loader():
         self._save_hash_tract_counts()
 
     def _create_county_counter(self, county):
+        """
+        Docstring here
+        """
         county_counter = CountCounty()
         county_counter.county = county
         long = county.interp_long
@@ -283,6 +331,9 @@ class Loader():
         return county_counter
 
     def aggregate_counties(self, verbose=False):
+        """
+        Docstring here
+        """
         logger.info(f"aggregate_counties()")
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_counties = {}
@@ -312,6 +363,9 @@ class Loader():
             index_county = index_county + 1
 
     def _create_state_counter(self, us_state):
+        """
+        Docstring here
+        """
         state_counter = CountState()
         state_counter.us_state = us_state
         long = us_state.interp_long
@@ -326,6 +380,9 @@ class Loader():
         return state_counter
 
     def aggregate_states(self, verbose=False):
+        """
+        Docstring here
+        """
         logger.info(f"aggregate_states()")
         #ip_range_source = IpRangeSource.objects.get(pk=source_id)
         self.hash_states = {}
@@ -354,6 +411,9 @@ class Loader():
             state_counter.save()
 
     def load_state_counts(self, verbose=False):
+        """
+        Docstring here
+        """
         # ('78',      34),
         counts = [
             ('01', 52689),
@@ -381,6 +441,9 @@ class Loader():
     # Try and get the Django channels stuff working (works w/ a Django worker, but not with celery.
     # Was hoping that Django would serve the WSGI channel name stuff (since we're running w/ daphne now).
     def ping_c(self):
+        """
+        Docstring here
+        """
         try:
             channel_layer = get_channel_layer()
             logger.info(f"ping_c(), channel_layer = {channel_layer}")
@@ -400,6 +463,9 @@ class Loader():
 
 
     def mil_state(self, verbose=False):
+        """
+        Docstring here
+        """
         path01 = "/home/bitnami/Data/PowerScan/Military/Military_State.shp"
         state_shp = Path(path01)
         military_state = {
@@ -415,6 +481,9 @@ class Loader():
         lm.save(strict=True, verbose=verbose)
 
     def fix_names(self, verbose=True):
+        """
+        Docstring here
+        """
         index = 0
         for survey in IpRangeSurvey.objects.all():
             # print(f"fix_name(), survey[{index}] = {survey.id}")
@@ -429,10 +498,16 @@ class Loader():
             index = index + 1
 
     def create_debug(self):
+        """
+        Docstring here
+        """
         debug_power = DebugPowerScan(profile_name="Primary")
         debug_power.save()
 
     def update_geo_counts(self, verbose=True):
+        """
+        Docstring here
+        """
         func_name = sys._getframe().f_code.co_name
         #survey_ids = [459]
         #survey_ids = [456, 451, 450, 449, 448, 447]
@@ -445,6 +520,9 @@ class Loader():
 
     # After we took out the tracts, we point the MmIpRanges to counties.  This sets that pointer
     def ranges_counties(self, verbose=True):
+        """
+        Docstring here
+        """
         index_chunk = 0
         for chunk in RangeChunker():
             print(f"ranges_counties(), processing chunk[{index_chunk}]")

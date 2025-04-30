@@ -51,6 +51,9 @@ PD_CHUNK_SIZE = 10000
 # Should rename this.  It doesn't like a Model (but it's Local to here)
 class RangeIpCount:
     def __init__(self, db_range_id, ip_network, possible_hosts):
+        """
+        Docstring here
+        """
         self.id = db_range_id
         self.ip_network = ip_network
         self.possible_hosts = possible_hosts
@@ -61,9 +64,15 @@ class RangeIpCount:
     
 class TrieWrapper:
     def __init__(self):
+        """
+        Docstring here
+        """
         self.dictionary = {}
 
     def _get_hashed_trie(self, ip_network, create_new=False):
+        """
+        Docstring here
+        """
         octets = ip_network.split('.')
         first_octet = octets[0]
         if not first_octet in self.dictionary:
@@ -76,19 +85,31 @@ class TrieWrapper:
         return return_trie
 
     def insert(self, ip_network, data):
+        """
+        Docstring here
+        """
         trie = self._get_hashed_trie(ip_network, create_new=True)
         trie.insert(ip_network, data)
 
     def find_all(self, ip_network):
+        """
+        Docstring here
+        """
         trie = self._get_hashed_trie(ip_network)
         return trie.find_all(ip_network)
             
     def traverse(self, ip_network):
+        """
+        Docstring here
+        """
         trie = self._get_hashed_trie(ip_network)
         return trie.traverse(ip_network)
 
 class PingSurveyManager:
     def __init__(self, survey_id, debug, create_new=True, linked_survey_id=None):
+        """
+        Docstring here
+        """
         self._survey_id = survey_id
         self._debug = debug
         if create_new:
@@ -104,16 +125,25 @@ class PingSurveyManager:
 
     @staticmethod
     def find(survey_id_string, debug):
+        """
+        Docstring here
+        """
         survey_id = survey_id_string
         return PingSurveyManager._find_survey(survey_id, debug)
         
     @staticmethod
     def _build_survey_name(survey_id) -> str:
+        """
+        Docstring here
+        """
         folder_snapshot = f"Survey_{survey_id:05d}"
         return folder_snapshot
 
     @staticmethod
     def _find_survey(survey_id, debug):
+        """
+        Docstring here
+        """
         survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
         full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
         #print(f"PSM._find_survey(), full_path = {str(full_path)}")
@@ -125,6 +155,9 @@ class PingSurveyManager:
 
     @staticmethod
     def link_survey(survey_id, parent_survey_id):
+        """
+        Docstring here
+        """
         links_created = 0
         parent_psm = PingSurveyManager._find_survey(parent_survey_id, False)
         # print(f"PSM.link_survey(), parent_psm = {parent_psm}")
@@ -160,6 +193,9 @@ class PingSurveyManager:
         self.directory = most_recent_dir.path
 
     def _create_directory(self, linked_survey_id):
+        """
+        Docstring here
+        """
         # now = datetime.datetime.now()
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
         # folder_snapshot = f"Survey_{self._survey_id:05d}"
@@ -173,6 +209,9 @@ class PingSurveyManager:
         self.directory = full_path
 
     def _debug_directory(self, county):
+        """
+        Docstring here
+        """
         print(f"Found debug county = {county.id},{county.county_name}")
         cleaned_name = county.county_name.replace(" ","_")
         directory_name = f"{county.id:04}_{cleaned_name}"
@@ -185,13 +224,22 @@ class PingSurveyManager:
         self._debug_writer = open(whitelist_file, "w+")
 
     def _debug_add_range(self, range1, string1):
+        """
+        Docstring here
+        """
         self._debug_writer.write(string1)
 
     def _debug_close_files(self):
+        """
+        Docstring here
+        """
         print(f"_debug_close_files()")
         self._debug_writer.close()
 
     def _traverse_geography(self):
+        """
+        Docstring here
+        """
         debug_county_id = 1175
         self._debug_county = None
 
@@ -259,6 +307,9 @@ class PingSurveyManager:
         return num_states, num_counties, total_ranges
 
     def _tract_ranges_whitelist(self, tract, add_to_debug):
+        """
+        Docstring here
+        """
         # Use the set() notation
         ip_ranges = tract.mmiprange_set.all()
         # print(f"_t_r_w(), tract(county) = {tract}, num_ranges = {ip_ranges.count()}")
@@ -274,11 +325,17 @@ class PingSurveyManager:
 
     # Exactly the same (as above), but we change the names to start to generalize
     def _county_ranges_whitelist(self, county, add_to_debug):
+        """
+        Docstring here
+        """
         return self._tract_ranges_whitelist(county, add_to_debug)
 
     # Return the number of ranges
     def _configure_whitelist_files(self):
         self.path_range_ip = os.path.join(self.directory, FILE_RANGE_IP)
+        """
+        Docstring here
+        """
         self.path_whitelist = os.path.join(self.directory, FILE_WHITELIST)
         self.path_output = os.path.join(self.directory, FILE_OUTPUT)
         self.path_metadata = os.path.join(self.directory, FILE_METADATA)
@@ -291,6 +348,9 @@ class PingSurveyManager:
 
     # Return the number of ranges
     def _create_writers(self):
+        """
+        Docstring here
+        """
         # range_ip is how we get back to the databaes (ip_range_id (in the database), to network).
         self.writer_range_ip = open(self.path_range_ip, "w+")
         self.writer_range_ip.write(HEADER)
@@ -298,6 +358,9 @@ class PingSurveyManager:
         self.writer_log = open(self.path_log, "w+")
 
     def build_whitelist(self):
+        """
+        Docstring here
+        """
         self._create_writers()
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
         num_states, num_counties, num_ranges = self._traverse_geography()
@@ -311,14 +374,23 @@ class PingSurveyManager:
         self.writer_whitelist.write(f"{ip_network}\n")
 
     def get_zmap_files(self):
+        """
+        Docstring here
+        """
         return self.path_whitelist, self.path_output, self.path_metadata, self.path_log 
 
     def _calculate_possible(self, cidr):
+        """
+        Docstring here
+        """
         ip_network = ipaddress.ip_network(cidr)
         return 1 << (ip_network.max_prefixlen - ip_network.prefixlen)
 
     # Build a radix tree of the ip address
     def _build_radix_tree(self):
+        """
+        Docstring here
+        """
         #full_path = os.path.join(self.directory, FILE_PATRICIA_TRIE)
         #self._writer_cidr_trie = open(full_path, "w+")
         self.pyt = pytricia.PyTricia()
@@ -339,6 +411,9 @@ class PingSurveyManager:
             self.pyt.insert(ip_network, range_ip)
 
     def debug_matches(self, ip_network):
+        """
+        Docstring here
+        """
         print(f"_debug_matches(), calling traverse on {ip_network}")
         index = 0
         # for node in self.trie_wrapper.traverse(ip_network):
@@ -347,6 +422,9 @@ class PingSurveyManager:
             index = index + 1
 
     def _match_zmap_replies(self):
+        """
+        Docstring here
+        """
         index_chunk = 0
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
             column_names = chunk.columns.tolist()
@@ -368,6 +446,9 @@ class PingSurveyManager:
         #print(f"_match_zmap_replies(), debug_file {FILE_PATRICIA_TRIE}")
 
     def _save_to_db(self, survey):
+        """
+        Docstring here
+        """
         # print(f"_save_to_db(), size (of tree): {self.trie.size}")
         # Iterate the entire tree
         index = 0
@@ -400,6 +481,9 @@ class PingSurveyManager:
 
     # Returns the number of pings (hosts) saved to the database (count > 0)
     def process_results(self, survey):
+        """
+        Docstring here
+        """
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
@@ -410,6 +494,9 @@ class PingSurveyManager:
         return ranges_updated, hosts_responded, hosts_pinged
         
     def close(self):
+        """
+        Docstring here
+        """
         if self.writer_range_ip:
             self.writer_range_ip.close()
 
@@ -422,11 +509,17 @@ class PingSurveyManager:
     # Embedded class: PingSurveyManager.FileDebugger
     class FileDebugger:
         def __init__(self, directory, name):
+            """
+            Docstring here
+            """
             self._error_count = 0
             self._full_path = os.path.join(directory, FILE_DEBUG_ZMAP)
             self._writer = open(self._full_path, "w+")
 
         def close(self):
+            """
+            Docstring here
+            """
             if self._error_count > 0:
                 self._writer.write(f"FileDebugger.close(), {self._error_count} errors\n")
             else:
@@ -434,14 +527,23 @@ class PingSurveyManager:
             self._writer.close()
 
         def get_file(self):
+            """
+            Docstring here
+            """
             return self._full_path
 
         def print_array_line(self, sub_array):
+            """
+            Docstring here
+            """
             sub_array_strings = map(str, sub_array)
             array_string = ", ".join(sub_array_strings)
             self._writer.write(array_string + "\n")
 
         def print_array(self, description, array_output):
+            """
+            Docstring here
+            """
             array_len = len(array_output)
             print(f"FileDebugger.print(), description = {description}, array_len = {array_len}")
             self._writer.write(description + "\n")
@@ -461,6 +563,9 @@ class PingSurveyManager:
                 array_len = array_len - sub_array_len
 
         def print_error(self, string1, error=False):
+            """
+            Docstring here
+            """
             self._writer.write(string1+ "\n")
             if error:
                 self._error_count = self._error_count + 1

@@ -139,6 +139,9 @@ def unused_approve_ping(request, id):
 class AggTypeManager:
     @staticmethod
     def _agg_type_states(survey):
+        """
+        Docstring here
+        """
         data_rows = []
         #for counter in IpSurveyState.objects.filter(survey__id=survey_id).order_by("id"):
         for counter in IpSurveyState.objects.filter(survey=survey).order_by("id"):
@@ -153,6 +156,9 @@ class AggTypeManager:
 
     @staticmethod
     def _agg_type_counties(survey_state):
+        """
+        Docstring here
+        """
         survey = survey_state.survey
         us_state = survey_state.us_state 
         data_rows = []
@@ -167,6 +173,9 @@ class AggTypeManager:
 
     @staticmethod
     def _create_table(agg_type, id1):
+        """
+        Docstring here
+        """
         data_rows = []
         if agg_type and id1:
             print(f"_create_table(), agg_type = {agg_type}, id1 = {id1}")
@@ -185,6 +194,9 @@ class AggTypeManager:
 
     @staticmethod
     def get_queryset(query_params):
+        """
+        Docstring here
+        """
         print(f"ATM.get_queryset(), query_params = {query_params}")
         if "id" in query_params :
             id1 = query_params["id"]
@@ -212,9 +224,15 @@ class MapNavigationView(SingleTableView):
 
 
     def get_queryset(self):
+        """
+        Docstring here
+        """
         return AggTypeManager.get_queryset(self.request.GET)
 
     def get_context_data(self, **kwargs):
+        """
+        Docstring here
+        """
         print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         # form = context_data['form']
@@ -252,6 +270,9 @@ class MapNavigationView(SingleTableView):
         return context_data
 
     def test_exception(self):
+        """
+        Docstring here
+        """
         try:
             a = 23
             b = 0
@@ -262,6 +283,9 @@ class MapNavigationView(SingleTableView):
             traceback.print_exc(file=sys.stdout)
         
     def post(self, request, *args, **kwargs):
+        """
+        Docstring here
+        """
         print(f"MNV.post(), request = {request}")
         print(f"         self = {self}, args = {args}, kwargs = {kwargs}")
         print(f"                    POST = {request.POST}")
@@ -302,6 +326,9 @@ class MapNavigationView(SingleTableView):
 
     # These labels are in static/cb_layer.js
     def build_table(self, agg_type, id):
+        """
+        Docstring here
+        """
         table = None
         match agg_type:
             case "CountRangeTract":
@@ -322,33 +349,3 @@ class MapNavigationView(SingleTableView):
                 print(f"build_table(), unrecognized agg_type = {agg_type}")
         return table
 
-def chat_index(request):
-    return render(request, "powerscan/chat_index.html")
-
-def chat_room(request, room_name):
-    return render(request, "powerscan/chat_room.html", {"room_name": room_name})
-
-#    def get_queryset(self):
-        # For now, just hard-code with 'PR'
-#        survey_id = 450
-#        return SurveyUtil.last_n_surveys_state(survey_id=450, limit=30)
-
-#    def get(self, request, *args, **kwargs):
-#        query_params = self.request.GET
-#        if "survey_id" in query_params:
-#            survey_id = query_params["survey_id"]
-#            print(f"MNV.get(), read survey_id = {survey_id},render_to_response()")
-#            return self.render_to_response(self.get_context_data())
-#        else:
-#            print(f"MNV.get(), no survey_id, redirecting")
-#            new_params = {"agg_type" : "states", "survey_id": "459"}
-#            querystring = urlencode(new_params)
-#            url = f"/powerscan/map/?{querystring}"
-#            return redirect(url)
-        # form = SelectedAggregationForm(request.POST)
-#         if not form.is_valid():
- #            print(f"MNV.post(), form is INVALID")
-  #           return HttpResponseRedirect(reverse("app_powerscan:map_viewer",), {'form': form});
-
-   #      survey_id = form.cleaned_data[KEY_SURVEY_ID]
-    #     agg_type = form.cleaned_data[KEY_AGG_TYPE]

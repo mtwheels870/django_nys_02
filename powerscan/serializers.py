@@ -62,6 +62,9 @@ class CountStateSerializer(
         model = CountState
 
     def get_model_b_field(self, obj):
+        """
+        Docstring here
+        """
         return obj.us_state.state_name
 
 class CountCountySerializer(

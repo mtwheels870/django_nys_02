@@ -47,6 +47,9 @@ ESTIMATED_RANGES_PER_MIN = 4500
 
 @celery_app.task
 def _build_clone_details(survey_id, parent_survey_id):
+    """
+    Docstring here
+    """
     # Clone all of the database stuff
     SurveyUtil.copy_geography(survey_id, parent_survey_id)
 
@@ -60,6 +63,9 @@ def _build_clone_details(survey_id, parent_survey_id):
 #
 @shared_task(bind=True)
 def start_ping(self, *args, **kwargs):
+    """
+    Docstring here
+    """
     from .tasks import zmap_from_file
     from .models import IpRangeSurvey
 
@@ -96,6 +102,9 @@ def start_ping(self, *args, **kwargs):
     return async_result
 
 def _estimate_zmap_time(survey_id):
+    """
+    Docstring here
+    """
     from .models import IpSurveyState
 
     total_ranges = 0
@@ -114,6 +123,9 @@ def _estimate_zmap_time(survey_id):
 
 @celery_app.task
 def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
+    """
+    Docstring here
+    """
     from .tasks import tally_results
 
     #print(f"TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
@@ -133,6 +145,9 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     return async_result2
 
 def _task_check_args(task, task_name, args, index):
+    """
+    Docstring here
+    """
     required_length = index + 1
     if len(args) < required_length:
         print(f"_task_check_args(), task = {task_name}, index = {index}, args = {args}")
@@ -142,12 +157,18 @@ def _task_check_args(task, task_name, args, index):
     return survey_id 
 
 def _task_check_kwargs(task_name, kwargs):
+    """
+    Docstring here
+    """
     if "survey_id" in kwargs:
         survey_id = kwargs["survey_id"]
         return survey_id
     return None
 
 def _get_task_survey_id(task):
+    """
+    Docstring here
+    """
     if not "kwargs" in task:
         if "request" in task:
             request = task["request"]
@@ -191,6 +212,9 @@ def _get_task_survey_id(task):
         return None, None
 
 def _scheduled_active_surveys(debug_tasks_queues):
+    """
+    Docstring here
+    """
     running_surveys = {}
     inspect = celery_app.control.inspect()
 
@@ -221,6 +245,9 @@ def _scheduled_active_surveys(debug_tasks_queues):
     return running_surveys
 
 def _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues):
+    """
+    Docstring here
+    """
     index = 0
     running_survey_ids = _scheduled_active_surveys(debug_tasks_queues)
     now = timezone.now()
@@ -259,6 +286,9 @@ def _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues):
     #    print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
 
 def _add_surveys_to_queues(debug_scheduler, debug_tasks_queues):
+    """
+    Docstring here
+    """
     from .models import IpRangeSurvey
 
     now = timezone.now()
@@ -285,6 +315,9 @@ def _add_surveys_to_queues(debug_scheduler, debug_tasks_queues):
 
 @celery_app.task(name='check_new_surveys', bind=True)
 def check_new_surveys(self):
+    """
+    Docstring here
+    """
     from .models import DebugPowerScan
     from .tasks import DEBUG_ID
 
