@@ -3,7 +3,7 @@ import logging
 
 from enum import Enum
 
-from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, SyncConsumer, AsyncConsumer
+# from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, SyncConsumer, AsyncConsumer
 from asgiref.sync import async_to_sync
 
 CHANNEL_GROUP_WORKERS = "workers"
