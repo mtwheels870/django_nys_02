@@ -40,6 +40,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("powerscan/", include("powerscan.urls")),
     path("powerscan/api/", include("powerscan.api")),
-    path('admin/statuscheck/', include('celerybeat_status.urls'))
 ]
 #print(f"project.urlpatterns = {urlpatterns}")
