@@ -24,7 +24,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_nys_02.settings')
 #print(f"django_asgi_app = {django_asgi_app}, dir() = {dir(django_asgi_app)}")
 
 # Our URLs are in here
-from powerscan.routing import websocket_urlpatterns
+#from powerscan.routing import websocket_urlpatterns
 
 application = get_asgi_application()
 application02 = ProtocolTypeRouter({
