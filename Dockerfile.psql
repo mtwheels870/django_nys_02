@@ -1,0 +1,18 @@
+# syntax=docker/dockerfile:1.0-experimental
+# Use a Python base image
+FROM postgres:15.8
+ARG POSTGRES_USER=cb_admin
+ARG POSTGRES_DB=compassblue01
+
+RUN --mount=type=secret,id=psql_password,dst=/run/secrets/psql_password cat /run/secrets/psql_password
+ENV POSTGRES_PASSWORD /run/secrets/psql_password
+#RUN --mount=type=secret,id=psql_password,env=POSTGRES_PASSWORD
+
+# Create and set the working directory
+WORKDIR /app
+
+RUN echo ARG_NAME = $ARG_NAME
+COPY Data/cb06.dump .
+
+CMD ["postgres"]
+

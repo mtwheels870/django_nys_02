@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15.8
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_ROOT_USER=postgres
+      - POSTGRES_USER=cb_admin
+      - POSTGRES_DB=compassblue01
+      - POSTGRES_DB_PRODUCTION=cb_production
