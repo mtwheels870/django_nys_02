@@ -1,18 +1,29 @@
 # syntax=docker/dockerfile:1.0-experimental
 # Use a Python base image
-FROM postgres:15.8
+FROM postgres:15.13
 ARG POSTGRES_USER=cb_admin
 ARG POSTGRES_DB=compassblue01
 
-RUN --mount=type=secret,id=psql_password,dst=/run/secrets/psql_password cat /run/secrets/psql_password
-ENV POSTGRES_PASSWORD /run/secrets/psql_password
-#RUN --mount=type=secret,id=psql_password,env=POSTGRES_PASSWORD
+ARG INIT_SQL="/docker-entrypoint-initdb.d/init.sql"
+RUN --mount=type=secret,id=psql_root_password,target=/run/secrets/postgres_root_password \
+    cat /run/secrets/postgres_root_password > /tmp/postgres_root_password && \
+    # Use the password file to set the password
+    # This example uses a temporary file for illustration; 
+    # adapt based on how the official Postgres image handles password setup
+    echo "ALTER USER postgres PASSWORD '$(cat /tmp/postgres_root_password )';" > $INIT_SQL
 
 # Create and set the working directory
-WORKDIR /app
+# COPY $DB_DUMP ./docker-entrypoint-initdb.d/
+ARG DB_DUMP="Data/cb06.dump"
+COPY $DB_DUMP .
 
-RUN echo ARG_NAME = $ARG_NAME
-COPY Data/cb06.dump .
+ARG RESTORE_SCRIPT="/docker-entrypoint-initdb.d/restore_db.sh"
+RUN --mount=type=secret,id=psql_user_password,target=/run/secrets/postgres_user_password \
+    cat /run/secrets/postgres_user_password > /tmp/postgres_user_password && \
+    # Use the password file to set the password
+    # This example uses a temporary file for illustration; 
+    # adapt based on how the official Postgres image handles password setup
+    echo "pg_restore -U cb_admin -d compassblue01 '$(cat /tmp/postgres_user_password )'" > $RESTORE_SCRIPT
 
 CMD ["postgres"]
 
