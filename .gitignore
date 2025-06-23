@@ -1,3 +1,7 @@
 .idea
 Data
 my_secret.txt
+.env
+bad.yml
+build_django.sh
+pg_data.old

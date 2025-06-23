@@ -2,14 +2,22 @@ version: '3.9'
 
 services:
   postgres:
-    image: postgres:15.8
+    image: mtw_psql:01
+    user: postgres:postgres
     ports:
       - 5432:5432
-    volumes:
-      - ~/apps/postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=S3cret
-      - POSTGRES_ROOT_USER=postgres
       - POSTGRES_USER=cb_admin
+      - POSTGRES_PASSWORD=Wt;Sherm9n
       - POSTGRES_DB=compassblue01
       - POSTGRES_DB_PRODUCTION=cb_production
+    volumes:
+        - my_vol_01:/var/lib/postgresql/data
+
+  django:
+    image: mtw:01
+    ports:
+      - 8000:8000
+
+volumes:
+    my_vol_01:

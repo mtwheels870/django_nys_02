@@ -1,29 +1,39 @@
 # syntax=docker/dockerfile:1.0-experimental
 # Use a Python base image
-FROM postgres:15.13
+FROM postgres:16.9
 ARG POSTGRES_USER=cb_admin
 ARG POSTGRES_DB=compassblue01
+ARG POSTGRES_PASSWORD=stuff
+ARG POSTGRES_USER_PASSWORD=more-stuff
+ARG DB_VERSION=07
+ARG DB_DUMP=cb${DB_VERSION}.dump
+
+WORKDIR /app
+
+USER root
+
+RUN apt-get update && apt-get install -y postgresql-16-postgis-3 && apt-get clean
 
 ARG INIT_SQL="/docker-entrypoint-initdb.d/init.sql"
-RUN --mount=type=secret,id=psql_root_password,target=/run/secrets/postgres_root_password \
-    cat /run/secrets/postgres_root_password > /tmp/postgres_root_password && \
-    # Use the password file to set the password
-    # This example uses a temporary file for illustration; 
-    # adapt based on how the official Postgres image handles password setup
-    echo "ALTER USER postgres PASSWORD '$(cat /tmp/postgres_root_password )';" > $INIT_SQL
+RUN echo "MTW, PASSWORD: $POSTGRES_PASSWORD, ARG: $POSTGRES_DB"
+RUN echo "ALTER USER postgres PASSWORD '$POSTGRES_PASSWORD';" > $INIT_SQL
+RUN echo "CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;" >> $INIT_SQL
+RUN echo "CREATE DATABASE compassblue01;" >> $INIT_SQL
+RUN echo "CREATE USER cb_admin WITH encrypted PASSWORD '$POSTGRES_USER_PASSWORD';" >> $INIT_SQL
+RUN echo "GRANT ALL PRIVILEGES ON DATABASE compassblue01 TO cb_admin;" >> $INIT_SQL
+#RUN cat $INIT_SQL
+RUN chown postgres:postgres $INIT_SQL
+RUN chmod 444 $INIT_SQL
 
 # Create and set the working directory
 # COPY $DB_DUMP ./docker-entrypoint-initdb.d/
-ARG DB_DUMP="Data/cb06.dump"
-COPY $DB_DUMP .
+COPY /Data/${DB_DUMP} .
 
 ARG RESTORE_SCRIPT="/docker-entrypoint-initdb.d/restore_db.sh"
-RUN --mount=type=secret,id=psql_user_password,target=/run/secrets/postgres_user_password \
-    cat /run/secrets/postgres_user_password > /tmp/postgres_user_password && \
-    # Use the password file to set the password
-    # This example uses a temporary file for illustration; 
-    # adapt based on how the official Postgres image handles password setup
-    echo "pg_restore -U cb_admin -d compassblue01 '$(cat /tmp/postgres_user_password )'" > $RESTORE_SCRIPT
+RUN echo "echo '$POSTGRES_PASSWORD' | pg_restore -U postgres -d compassblue01 $DB_DUMP" > $RESTORE_SCRIPT
+RUN chown postgres:postgres $RESTORE_SCRIPT
+RUN chmod 755 $RESTORE_SCRIPT
 
+USER postgres
 CMD ["postgres"]
 
