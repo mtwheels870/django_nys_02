@@ -25,10 +25,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 #RUN mkdir $DJANGO_DIR 
 COPY $DJANGO_DIR /app/
 
+# RUN cd /app/$DJANGO_DIR
+
 USER 1000
 
 # Expose the port Django runs on
 EXPOSE 8000
 
 # Command to run the Django application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["tail", "-f", "/dev/null"]
