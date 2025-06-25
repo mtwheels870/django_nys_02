@@ -18,12 +18,14 @@ RUN chown 1000:1000 /app
 # RUN chown 1000:1000 /.local
 
 # Copy requirements file and install dependencies
-COPY requirements.txt /app/
+COPY ../requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project files
 #RUN mkdir $DJANGO_DIR 
-COPY $DJANGO_DIR /app/
+COPY ../django_nys_02 /app/
+COPY ../powerscan /app/
+COPY ../manage.py /app/
 
 # RUN cd /app/$DJANGO_DIR
 
