@@ -131,7 +131,7 @@ DATABASES = {
         'NAME': 'cb_production' if PRODUCTION_MODE else 'compassblue01',
         'USER': 'cb_admin',
         'PASSWORD': 'Ch0c0late!',
-        'HOST': 'postgres',
+        'HOST': 'svc_postgres',
         'PORT': '5432',
     },
     'secondary': {
