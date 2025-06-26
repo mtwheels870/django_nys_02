@@ -13,11 +13,19 @@ services:
       - POSTGRES_DB_PRODUCTION=cb_production
     volumes:
         - my_vol_01:/var/lib/postgresql/data
+    networks:
+        - db_network
 
   django:
     image: mtw:01
     ports:
       - 8000:8000
+    networks:
+        - db_network
 
 volumes:
     my_vol_01:
+
+networks:
+    my_app_network:
+    db_network:
