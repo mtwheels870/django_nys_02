@@ -23,8 +23,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project files
 #RUN mkdir $DJANGO_DIR 
-COPY ../django_nys_02 /app/
-COPY ../powerscan /app/
+COPY ../django_nys_02 /app/django_nys_02/
+COPY ../powerscan/ /app/powerscan/
 COPY ../manage.py /app/
 
 # RUN cd /app/$DJANGO_DIR
@@ -35,5 +35,5 @@ USER 1000
 EXPOSE 8000
 
 # Command to run the Django application
-#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-CMD ["tail", "-f", "/dev/null"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["tail", "-f", "/dev/null"]
