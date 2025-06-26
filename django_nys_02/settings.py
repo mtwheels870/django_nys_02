@@ -43,7 +43,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "18.208.200.162", 
     "127.0.0.1",
-    "www.pinp01nt.com"
+    "www.pinp01nt.com",
+    "34.201.218.170"
 ]
 
 #    'channels',
@@ -123,13 +124,14 @@ else:
     POWERSCAN_VERSION = "Development"
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
+#        'HOST': 'localhost',
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'cb_production' if PRODUCTION_MODE else 'compassblue01',
         'USER': 'cb_admin',
         'PASSWORD': 'Ch0c0late!',
-        'HOST': 'localhost',
+        'HOST': 'postgres',
         'PORT': '5432',
     },
     'secondary': {

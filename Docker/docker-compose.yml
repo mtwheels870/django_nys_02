@@ -12,7 +12,7 @@ services:
       - POSTGRES_DB=compassblue01
       - POSTGRES_DB_PRODUCTION=cb_production
     volumes:
-        - my_vol_01:/var/lib/postgresql/data
+        - my_vol_05:/var/lib/postgresql/data
     networks:
         - db_network
 
@@ -24,8 +24,7 @@ services:
         - db_network
 
 volumes:
-    my_vol_01:
+    my_vol_05:
 
 networks:
-    my_app_network:
     db_network:
