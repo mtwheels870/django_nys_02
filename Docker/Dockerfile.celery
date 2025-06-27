@@ -1,21 +1,5 @@
 # Use a base Python image
-FROM python:3.11-slim
-
-# Set the working directory inside the container
-WORKDIR /app
-
-RUN apt-get update && apt-get install -y build-essential 
-
-RUN chown 1000:1000 /app
-
-# Copy the requirements file and install dependencies
-COPY ../requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy your Celery application code
-COPY ../django_nys_02 /app/django_nys_02/
-COPY ../powerscan/ /app/powerscan/
-COPY ../manage.py /app/
+FROM mtw:01
 
 USER 1000
 

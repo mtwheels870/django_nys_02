@@ -22,9 +22,29 @@ services:
       - 8000:8000
     networks:
         - db_network
+        - redis_network
+
+  svc_celery:
+    image: mtw_celery:01
+    depends_on:
+        - svc_redis
+    networks:
+        - db_network
+        - redis_network
+    environment:
+      - CELERY_BROKER_URL="redis://svc_redis:6379:0"
+      - CELERY_RESULT_BACKEND="django-db"
+
+  svc_redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+        - redis_network
 
 volumes:
     my_vol_05:
 
 networks:
     db_network:
+    redis_network:
