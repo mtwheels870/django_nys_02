@@ -5,3 +5,4 @@ USER 1000
 
 # Command to run the Celery worker
 CMD ["celery", "-A", "django_nys_02", "worker", "--concurrency=2", "-Q", "cb_development,celery", "--loglevel", "warning"]
+# CMD ["tail", "-f", "/dev/null"]
