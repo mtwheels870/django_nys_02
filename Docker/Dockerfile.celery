@@ -4,12 +4,13 @@ FROM mtw:01
 USER root
 
 # RUN apt-get update && apt-get install -y vim zmap
-RUN apt-get update && apt-get install -y zmap
+RUN apt-get update && apt-get install -y zmap procps less net-tools
 
 RUN mkdir /app/run
 RUN chmod 777 /app/run
 
-USER 1000
+RUN useradd -ms /bin/bash ubuntu
+USER ubuntu
 
 # Command to run the Celery worker
 CMD ["celery", "-A", "django_nys_02", "worker", "--concurrency=2", "-Q", "cb_development,celery", "--loglevel", "warning"]
