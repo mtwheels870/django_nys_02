@@ -1,6 +1,14 @@
 # Use a base Python image
 FROM mtw:01
 
+USER root
+
+# RUN apt-get update && apt-get install -y vim zmap
+RUN apt-get update && apt-get install -y zmap
+
+RUN mkdir /app/run
+RUN chmod 777 /app/run
+
 USER 1000
 
 # Command to run the Celery worker

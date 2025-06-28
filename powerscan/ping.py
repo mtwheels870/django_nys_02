@@ -36,7 +36,8 @@ from .models import (
     IpSurveyTract,
     County, CensusTract)
 
-TEMP_DIRECTORY = "/home/bitnami/run/exec_zmap/"
+#TEMP_DIRECTORY = "/home/bitnami/run/exec_zmap/"
+TEMP_DIRECTORY = "/app/run/exec_zmap/"
 FILE_RANGE_IP = "RangeIp.csv"
 FILE_WHITELIST = "Whitelist.csv"
 FILE_OUTPUT = "ZmapOutput.csv"
