@@ -31,8 +31,6 @@ services:
     networks:
         - db_network
         - redis_network
-    environment:
-      - CELERY_BROKER_URL="redis://svc_redis:6379:0"
 
   svc_redis:
     image: redis:latest
