@@ -126,6 +126,7 @@ else:
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 #        'HOST': 'localhost',
+#        'HOST': 'svc_postgres',
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -281,7 +282,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
+            "hosts": [("svc_redis", 6379)],
         },
         "ROUTING": ".asgi.application",
     },

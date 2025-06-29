@@ -5,7 +5,7 @@ services:
     image: mtw_psql:01
     user: postgres:postgres
     ports:
-      - 5432:5432
+        - 5432:5432
     environment:
       - POSTGRES_USER=cb_admin
       - POSTGRES_PASSWORD=${POSTGRES_ROOT_PASSWORD}
@@ -18,24 +18,23 @@ services:
 
   svc_django:
     image: mtw:01
-    ports:
-      - 8000:8000
     networks:
         - db_network
         - redis_network
+    ports:
+       - 8000:8000 
 
   svc_celery:
     image: mtw_celery:01
     depends_on:
         - svc_redis
     networks:
-        - db_network
-        - redis_network
+        db_network:
+        redis_network:
+        pub_net:
 
   svc_redis:
     image: redis:latest
-    ports:
-      - 6379:6379
     networks:
         - redis_network
 
@@ -43,10 +42,17 @@ volumes:
     my_vol_05:
 
 networks:
-    db_network:
-    redis_network:
-      ipam:
-        config:
-          - subnet: 172.28.0.0/16
-            ip_range: 172.28.5.0/24
-            gateway: 172.28.5.254
+  db_network:
+  redis_network:
+  pub_net:
+    driver: macvlan
+    driver_opts:
+      parent: ens5
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/24
+          ip_range: 192.168.1.248/29
+          gateway: 192.168.1.1
+        
+

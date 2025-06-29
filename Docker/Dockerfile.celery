@@ -4,12 +4,16 @@ FROM mtw:01
 USER root
 
 # RUN apt-get update && apt-get install -y vim zmap
-RUN apt-get update && apt-get install -y zmap procps less net-tools
+RUN apt-get update && apt-get install -y zmap procps less net-tools libcap2-bin curl
+
+# RUN setcap cap_net_raw,cap_net_admin=eip /usr/sbin/zmap
 
 RUN mkdir /app/run
 RUN chmod 777 /app/run
 
 RUN useradd -ms /bin/bash ubuntu
+# RUN usermod -aG sudo ubuntu
+# RUN chmod u+s /usr/sbin/zmap
 USER ubuntu
 
 # Command to run the Celery worker
