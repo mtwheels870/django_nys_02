@@ -16,8 +16,8 @@ Authors: Michael T. Wheeler (mike@pinp01nt.com)
 import os
 import datetime
 
-# import pandas as pd
-from pyspark.sql import SparkSession
+import pandas as pd
+# from pyspark.sql import SparkSession
 import ipaddress
 import netaddr
 
@@ -399,10 +399,12 @@ class PingSurveyManager:
 
         # print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
         # df = self.df_ranges = ps.read_csv(self.path_range_ip)
-        df = self.df_ranges = self.spark.read.csv(self.path_range_ip)
+        # df = self.df_ranges = self.spark.read.csv(self.path_range_ip)
+        df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
-        #print(f"_build_radix_tree(), num_rows = {df.shape[0]}, columns = {column_names}")
+        # print(f"__build_radix_tree(), columns = {column_name}")
         for index, row in df.iterrows():
+            # print(f"__build_radix_tree(), row = {row}\n")
             range_id = row['range_id']
             ip_network = row['ip_network']
             #print(f"RangeIp({range_id},{ip_network})")
@@ -429,7 +431,7 @@ class PingSurveyManager:
         Docstring here
         """
         index_chunk = 0
-        for chunk in ps.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
+        for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
             column_names = chunk.columns.tolist()
             #if self._debug:
             #    print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {chunk.shape[0]}, column = {column_names}")
@@ -463,6 +465,7 @@ class PingSurveyManager:
             ip_network = row['ip_network']
             range_counter = self.pyt.get(ip_network)
             count = range_counter.count
+            # self.writer_log.write("__save_to_db(), writing (range_id,ip_network) = ({range_id},{ip_network})\n")
             # print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
             #self._writer_cidr_trie.write(f"_save_to_db(), network[{index}]: {ip_network} = {count}\n")
             if count > 0:
@@ -487,7 +490,9 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        self.spark = SparkSession.builder().master("local[1]").appName("ProcessResults").getOrCreate()
+        # self.spark = SparkSession.builder().master("local[1]").appName("ProcessResults").getOrCreate()
+        # self.spark = SparkSession.builder().master("local").appName("ProcessResults").getOrCreate()
+        # self.spark = SparkSession.builder.master("local") .appName("ProcessResults").getOrCreate()
         
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()

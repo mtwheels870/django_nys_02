@@ -282,7 +282,8 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
         timedelta_secs = 0
     else:
         timedelta_secs = survey.time_ping_stopped - survey.time_ping_started
-    timedelta_mins = timedelta_secs.total_seconds() / 60
+    # timedelta_mins = timedelta_secs.total_seconds() / 60
+    timedelta_mins = timedelta_secs / 60
     formatted_now = now.strftime(TIME_FORMAT_STRING)
     # print(f"_process_zmap_results(), now {formatted_now}, zmap time = {timedelta_mins:.1f} mins")
     return survey_manager.process_results(survey)

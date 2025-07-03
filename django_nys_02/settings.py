@@ -127,13 +127,15 @@ else:
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 #        'HOST': 'localhost',
 #        'HOST': 'svc_postgres',
+postgres_host = os.getenv("POSTGRES_HOST")
+print(f"postgres_host = {postgres_host}")
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'cb_production' if PRODUCTION_MODE else 'compassblue01',
         'USER': 'cb_admin',
         'PASSWORD': 'Ch0c0late!',
-        'HOST': 'svc_postgres',
+        'HOST': postgres_host,
         'PORT': '5432',
     },
     'secondary': {
@@ -261,7 +263,8 @@ MEDIA_URL = '/media/'
 CELERY_TIMEZONE = "America/New_York"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = 'redis://svc_redis:6379/0'  # Use Redis as the message broker
+redis_host = os.getenv("REDIS_HOST")
+CELERY_BROKER_URL = 'redis://' + redis_host + ':6379/0'  # Use Redis as the message broker
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'

@@ -18,6 +18,9 @@ services:
 
   svc_django:
     image: mtw:01
+    environment:
+      - POSTGRES_HOST=svc_postgres
+      - REDIS_HOST=svc_redis
     networks:
         - db_network
         - redis_network
@@ -26,15 +29,17 @@ services:
 
   svc_celery:
     image: mtw_celery:01
+    environment:
+      - POSTGRES_HOST=localhost
+      - REDIS_HOST=localhost
     depends_on:
         - svc_redis
-    networks:
-        db_network:
-        redis_network:
-        pub_net:
+    network_mode: host
 
   svc_redis:
     image: redis:latest
+    ports:
+        - 6379:6379
     networks:
         - redis_network
 
