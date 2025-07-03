@@ -49,15 +49,3 @@ volumes:
 networks:
   db_network:
   redis_network:
-  pub_net:
-    driver: macvlan
-    driver_opts:
-      parent: ens5
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.1.0/24
-          ip_range: 192.168.1.248/29
-          gateway: 192.168.1.1
-        
-
