@@ -36,6 +36,17 @@ services:
         - svc_redis
     network_mode: host
 
+  svc_cbeat:
+    image: mtw_cbeat:01
+    environment:
+      - REDIS_HOST=svc_redis
+      - POSTGRES_HOST=svc_postgres
+    networks:
+        - db_network
+        - redis_network
+    depends_on:
+        - svc_redis
+
   svc_redis:
     image: redis:latest
     ports:

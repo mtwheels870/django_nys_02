@@ -1,0 +1,10 @@
+# Use a base Python image
+FROM mtw_celery:01
+
+USER ubuntu
+
+ENV BEAT_DIR=/app/beat
+RUN mkdir ${BEAT_DIR}
+
+# Command to run the Celery worker
+CMD ["celery", "-A", "django_nys_02", "beat", "--detach", "--pidfile=${BEAT_DIR}/beat.pid", "--logfile=${BEAT_DIR}/beat.log", "--loglevel=INFO", "--schedule=${BEAT_DIR}/cbeat-schedule"]
