@@ -12,24 +12,19 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y build-essential && \
     apt-get install -y libgdal-dev python3-gdal
 
-
-RUN chown 1000:1000 /app
-# 34.37 ERROR: Could not install packages due to an OSError: [Errno 13] Permission denied: '/.local'
-# RUN chown 1000:1000 /.local
+RUN useradd -ms /bin/bash ubuntu
+RUN chown ubuntu:ubuntu /app
 
 # Copy requirements file and install dependencies
 COPY ../requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project files
-#RUN mkdir $DJANGO_DIR 
 COPY ../django_nys_02 /app/django_nys_02/
 COPY ../powerscan/ /app/powerscan/
 COPY ../manage.py /app/
 
-# RUN cd /app/$DJANGO_DIR
-
-USER 1000
+USER ubuntu
 
 # Expose the port Django runs on
 EXPOSE 8000
