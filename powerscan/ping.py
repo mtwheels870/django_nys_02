@@ -36,8 +36,9 @@ from .models import (
     IpSurveyTract,
     County, CensusTract)
 
-#TEMP_DIRECTORY = "/home/bitnami/run/exec_zmap/"
-TEMP_DIRECTORY = "/app/run/exec_zmap/"
+zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
+print(f"zmap_run_dir = {zmap_run_dir}")
+TEMP_DIRECTORY = zmap_run_dir 
 FILE_RANGE_IP = "RangeIp.csv"
 FILE_WHITELIST = "Whitelist.csv"
 FILE_OUTPUT = "ZmapOutput.csv"
@@ -393,26 +394,15 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        #full_path = os.path.join(self.directory, FILE_PATRICIA_TRIE)
-        #self._writer_cidr_trie = open(full_path, "w+")
         self.pyt = pytricia.PyTricia()
-
-        # print(f"build_radix_tree(), self = {self}, trie = {self.pyt}")
-        # df = self.df_ranges = ps.read_csv(self.path_range_ip)
-        # df = self.df_ranges = self.spark.read.csv(self.path_range_ip)
         df = self.df_ranges = pd.read_csv(self.path_range_ip)
         column_names = df.columns.tolist()
-        # print(f"__build_radix_tree(), columns = {column_name}")
         for index, row in df.iterrows():
-            # print(f"__build_radix_tree(), row = {row}\n")
             range_id = row['range_id']
             ip_network = row['ip_network']
-            #print(f"RangeIp({range_id},{ip_network})")
             possible_hosts = self._calculate_possible(ip_network)
             # Hang a counter on the tree
             range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
-            #self._writer_cidr_trie.write(f"Trie_insert: {ip_network}\n")
-            # self.trie_wrapper.insert(ip_network, range_ip)
             self.pyt.insert(ip_network, range_ip)
 
     def debug_matches(self, ip_network):
@@ -433,9 +423,6 @@ class PingSurveyManager:
         index_chunk = 0
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
             column_names = chunk.columns.tolist()
-            #if self._debug:
-            #    print(f"_match_zmap_replies(), chunk[{index_chunk}], rows = {chunk.shape[0]}, column = {column_names}")
-            #print(f"_match_zmap_replies(), self = {self}, trie = {self.pyt}")
             for index, row in chunk.iterrows():
                 saddr = row['saddr']
                 timestamp = row['timestamp-ts']
@@ -465,9 +452,6 @@ class PingSurveyManager:
             ip_network = row['ip_network']
             range_counter = self.pyt.get(ip_network)
             count = range_counter.count
-            # self.writer_log.write("__save_to_db(), writing (range_id,ip_network) = ({range_id},{ip_network})\n")
-            # print(f"_save_to_db(), network[{index}]: {ip_network} = {count}")
-            #self._writer_cidr_trie.write(f"_save_to_db(), network[{index}]: {ip_network} = {count}\n")
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
                 ip_range = MmIpRange.objects.get(pk=range_counter.id)
@@ -490,10 +474,6 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        # self.spark = SparkSession.builder().master("local[1]").appName("ProcessResults").getOrCreate()
-        # self.spark = SparkSession.builder().master("local").appName("ProcessResults").getOrCreate()
-        # self.spark = SparkSession.builder.master("local") .appName("ProcessResults").getOrCreate()
-        
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []

@@ -7,13 +7,7 @@ USER root
 RUN apt-get update && apt-get install -y zmap procps less net-tools libcap2-bin curl &&\
         rm -rf /var/lib/apt/lists/*
 
-# RUN usermod -aG sudo ubuntu
-# RUN chmod u+s /usr/sbin/zmap
-
-# USER ubuntu
-
-# Command to run the Celery worker
-# CMD ["tail", "-f", "/dev/null"]
+# NB: We need to run as root so that our zmap can hit the host network interface
 
 # ENTRYPOINT ["dumb-init", "/usr/sbin/zmap"]
 CMD ["celery", "-A", "django_nys_02", "worker", "--concurrency=2", "-Q", "cb_development,celery", "--loglevel", "warning"]

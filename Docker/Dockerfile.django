@@ -8,6 +8,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Create and set the working directory
 WORKDIR /app
+RUN mkdir /app/run
 
 RUN apt-get update && apt-get install -y build-essential && \
     apt-get install -y libgdal-dev python3-gdal

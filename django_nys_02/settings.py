@@ -45,7 +45,8 @@ ALLOWED_HOSTS = [
     "18.208.200.162", 
     "127.0.0.1",
     "www.pinp01nt.com",
-    "34.201.218.170"
+    "34.201.218.170",
+    "54.91.156.12"
 ]
 
 #    'channels',
@@ -128,7 +129,7 @@ else:
 #        'HOST': 'localhost',
 #        'HOST': 'svc_postgres',
 postgres_host = os.getenv("POSTGRES_HOST")
-print(f"postgres_host = {postgres_host}")
+# print(f"postgres_host = {postgres_host}")
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',

@@ -182,7 +182,7 @@ def build_whitelist(self, *args, **kwargs):
     # Django channels back to the caller
     return num_states, num_counties, num_ranges
 
-def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
+def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file, debug_zmap):
     """
     Docstring here
     """
@@ -203,7 +203,10 @@ def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file):
         full_command = " ".join(list_command)
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
         first_100 = full_command[:100]
-        logger.info(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
+        if debug_zmap:
+            logger.info(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
+        else:
+            print(f"debug_zmap = {debug_zmap}")
         # stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process = subprocess.Popen(full_command, shell=True, stdout=None, stderr=None) 
 
@@ -252,7 +255,7 @@ def zmap_from_file(self, survey_id_string):
     whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
     # Run Zmap command here. We'll process the output file when the zmap is done running
-    ret_val = _execute_subprocess(whitelist_file, output_file, metadata_file, log_file)
+    ret_val = _execute_subprocess(whitelist_file, output_file, metadata_file, log_file, debug_zmap)
     return metadata_file
 
 def _process_zmap_results(survey, survey_manager, metadata_file_job, now):

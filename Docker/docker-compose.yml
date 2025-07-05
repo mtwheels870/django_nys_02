@@ -12,7 +12,7 @@ services:
       - POSTGRES_DB=compassblue01
       - POSTGRES_DB_PRODUCTION=cb_production
     volumes:
-        - my_vol_05:/var/lib/postgresql/data
+        - /home/ubuntu/Pinp01nt/Data/psql:/var/lib/postgresql/data:Z
     networks:
         - db_network
 
@@ -21,6 +21,8 @@ services:
     environment:
       - POSTGRES_HOST=svc_postgres
       - REDIS_HOST=svc_redis
+    volumes:
+        - /home/ubuntu/Pinp01nt/Data/app_run:/app/run:Z
     networks:
         - db_network
         - redis_network
@@ -32,6 +34,9 @@ services:
     environment:
       - POSTGRES_HOST=localhost
       - REDIS_HOST=localhost
+      - ZMAP_RUN_DIRECTORY=/app/run/exec_zmap/
+    volumes:
+        - /home/ubuntu/Pinp01nt/Data/app_run:/app/run:Z
     depends_on:
         - svc_redis
     network_mode: host
@@ -41,6 +46,8 @@ services:
     environment:
       - REDIS_HOST=svc_redis
       - POSTGRES_HOST=svc_postgres
+    volumes:
+        - /home/ubuntu/Pinp01nt/Data/app_run:/app/run:Z
     networks:
         - db_network
         - redis_network
@@ -60,3 +67,4 @@ volumes:
 networks:
   db_network:
   redis_network:
+#        - my_vol_05:/var/lib/postgresql/data

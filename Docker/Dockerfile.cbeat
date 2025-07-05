@@ -6,5 +6,10 @@ USER ubuntu
 ENV BEAT_DIR=/app/beat
 RUN mkdir ${BEAT_DIR}
 
+WORKDIR /app
 # Command to run the Celery worker
-CMD ["celery", "-A", "django_nys_02", "beat", "--detach", "--pidfile=${BEAT_DIR}/beat.pid", "--logfile=${BEAT_DIR}/beat.log", "--loglevel=INFO", "--schedule=${BEAT_DIR}/cbeat-schedule"]
+# RUN echo "celery -A django_nys_02 beat --detach --pidfile=${BEAT_DIR}/beat.pid --logfile=${BEAT_DIR}/beat.log --loglevel=INFO --schedule=${BEAT_DIR}/cbeat-schedule" > ${BEAT_DIR}/run.sh
+
+# CMD ["tail", "-f", "/dev/null"]
+# CMD ["celery", "-A", "django_nys_02", "beat", "--pidfile=/app/beat/beat.pid", "--logfile=/app/beat/beat.log", "--loglevel=DEBUG", "--schedule=/app/beat/cbeat-schedule"]
+CMD ["celery", "-A", "django_nys_02", "beat", "--loglevel=INFO"]
