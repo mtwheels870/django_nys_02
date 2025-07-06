@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y zmap procps less net-tools libcap2-bin 
         rm -rf /var/lib/apt/lists/*
 
 # NB: We need to run as root so that our zmap can hit the host network interface
+# USER ubuntu
 
 # ENTRYPOINT ["dumb-init", "/usr/sbin/zmap"]
 CMD ["celery", "-A", "django_nys_02", "worker", "--concurrency=2", "-Q", "cb_development,celery", "--loglevel", "warning"]

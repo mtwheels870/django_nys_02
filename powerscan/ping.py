@@ -37,6 +37,9 @@ from .models import (
     County, CensusTract)
 
 zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
+# zmap_num_threads = os.getenv("ZMAP_NUM_THREADS")
+# zmap_ping_rate = os.getenv("ZMAP_PING_RATE")
+# print(f"zmap_run_dir = {zmap_run_dir}, num_threads = {zmap_num_threads}, ping_rate = {zmap_ping_rate}")
 print(f"zmap_run_dir = {zmap_run_dir}")
 TEMP_DIRECTORY = zmap_run_dir 
 FILE_RANGE_IP = "RangeIp.csv"
@@ -45,6 +48,7 @@ FILE_OUTPUT = "ZmapOutput.csv"
 FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
 FILE_DEBUG_ZMAP = "ProcessZmapResults.txt"
+FILE_ZMAP_SHELL = "run_zmap.sh"
 #FILE_PATRICIA_TRIE = "PatriciaTrie.txt"
 
 HEADER = "range_id,ip_network\n"
@@ -121,7 +125,7 @@ class PingSurveyManager:
             # This is duplicative (with the find() call below)
             survey_dir_name = PingSurveyManager._build_survey_name(survey_id)
             full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, survey_dir_name)
-            #print(f"PSM.__init__(), full_path = {str(full_path)}")
+            print(f"PSM.__init__(), TEMP_DIR = {str(TEMP_DIRECTORY)}, full_path = {str(full_path)}")
             self.directory = full_path
         # In either init() [create or read existing], we want to configure the files
         self._configure_whitelist_files()
