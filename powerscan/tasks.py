@@ -183,7 +183,7 @@ def build_whitelist(self, *args, **kwargs):
     # Django channels back to the caller
     return num_states, num_counties, num_ranges
 
-def _execute_subprocess(whitelist_file, output_file, metadata_file, log_file, debug_zmap):
+def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, log_file, debug_zmap):
     """
     Docstring here
     """
@@ -255,17 +255,17 @@ def zmap_from_file(self, survey_id_string):
         logger.warning(f"zmap_from_file({survey_id}), no directory, quitting")
         return None
 
-    whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
+    directory, whitelist_file, output_file, metadata_file, log_file = survey_manager.get_zmap_files()
 
     # Run Zmap command here. We'll process the output file when the zmap is done running
-    ret_val = _execute_subprocess(whitelist_file, output_file, metadata_file, log_file, debug_zmap)
+    ret_val = _execute_subprocess(directory, whitelist_file, output_file, metadata_file, log_file, debug_zmap)
     return metadata_file
 
 def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     """
     Docstring here
     """
-    whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
+    directory, whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
     if metadata_file_job != metadata_file_survey:
         logger.info(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
         return 0

@@ -384,7 +384,7 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        return self.path_whitelist, self.path_output, self.path_metadata, self.path_log 
+        return self.directory, self.path_whitelist, self.path_output, self.path_metadata, self.path_log 
 
     def _calculate_possible(self, cidr):
         """
