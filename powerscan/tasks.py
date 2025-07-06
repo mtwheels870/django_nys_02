@@ -81,7 +81,7 @@ TIME_FORMAT_STRING = "%H:%M:%S"
 
 DEBUG_ID = 1
 
-RATE_PACKETS_SECOND = 10000
+# RATE_PACKETS_SECOND = 10000
 # RATE_PACKETS_SECOND = 2000
 
 logger = logging.getLogger(__name__)
@@ -159,7 +159,6 @@ def build_whitelist(self, *args, **kwargs):
     """
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
-    # print(f"build_whitelist(), self = {self}, kwargs = {kwargs}")
     survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
     survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
@@ -235,8 +234,6 @@ def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, l
         raise Exception(f"_execute_subprocess(), Exception {e}, Popen command: {full_command}")
     return ret_val
 
-# def zmap_from_file(self, *args, **kwargs):
-#    survey_id_string = kwargs[CELERY_FIELD_SURVEY_ID]
 @shared_task(bind=True)
 def zmap_from_file(self, survey_id_string):
     """
@@ -244,8 +241,6 @@ def zmap_from_file(self, survey_id_string):
     """
     debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
     # Ensure another worker hasn't grabbed the survey, yet
-    #ip_source_id = kwargs["ip_source_id"]
-    #survey_id = int(survey_id_string)
     survey_id = int(survey_id_string)
     survey = IpRangeSurvey.objects.get(pk=survey_id)
 
@@ -284,12 +279,10 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     # See whether the metadata file has values
     size = os.path.getsize(metadata_file_job)
     if size == 0:
-        #print(f"_process_zmap_results(), empty metadata file: {metadata_file_job}")
         return 0, 0, 0
 
     # Calculate zmap time
     survey.time_ping_stopped = now
-    # print(f"SURVEY SAVE, 7")
     survey.save()
     if not survey.time_ping_stopped:
         print(f"_process_zmap_results(), time_ping_stopped = {survey.time_ping_stopped}")
@@ -299,10 +292,8 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
         timedelta_secs = 0
     else:
         timedelta_secs = survey.time_ping_stopped - survey.time_ping_started
-    # timedelta_mins = timedelta_secs.total_seconds() / 60
     timedelta_mins = timedelta_secs / 60
     formatted_now = now.strftime(TIME_FORMAT_STRING)
-    # print(f"_process_zmap_results(), now {formatted_now}, zmap time = {timedelta_mins:.1f} mins")
     return survey_manager.process_results(survey)
 
 @celery_app.task
@@ -333,7 +324,8 @@ def tally_results(metadata_file, survey_id, retry_count):
         if not survey_manager:
             print(f"Task.{func_name}(), no survey manager for survey_id: {int_survey_id}")
             return 0
-        ranges_responded, hosts_responded, hosts_pinged = _process_zmap_results(survey, survey_manager, metadata_file, now)
+        ranges_responded, hosts_responded, hosts_pinged = _process_zmap_results(survey,
+                survey_manager, metadata_file, now)
         if ranges_responded == 0:
             delta = timedelta(seconds=TALLY_DELAY_SECS)
             tally_start = now + delta
@@ -371,15 +363,3 @@ def tally_results(metadata_file, survey_id, retry_count):
         traceback.print_exc(file=sys.stdout)
         ranges_responded = -1
     return ranges_responded
-
-    #network = ipaddress.ip_network(str(cidrs), strict=False)
-    #num_potential = cidrs.size
-        #exc_type, exc_value, exc_traceback = sys.exc_info()
-        #print(f"    exc_traceback = {dir(exc_traceback)}")
-        #exc_traceback.print_exc()
-        #exc_traceback.print_exception(*sys.exc_info())
-                #"ip_source_id": IP_RANGE_SOURCE,
-            # print(f"SURVEY SAVE, 9")
-        # print(f"SURVEY SAVE, 8")
-    # print(f"tally_results(), metadata = {metadata_file}, survey_id = {survey_id}")
-    # print(f"tally_results(), now: {formatted_now}")

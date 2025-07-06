@@ -35,7 +35,7 @@ services:
       - POSTGRES_HOST=localhost
       - REDIS_HOST=localhost
       - ZMAP_RUN_DIRECTORY=/app/run/exec_zmap/
-      - ZMAP_NUM_THREADS=1
+      - ZMAP_NUM_THREADS=4
       - ZMAP_PING_RATE=10000
     volumes:
         - /home/ubuntu/Pinp01nt/Data/app_run:/app/run:Z
