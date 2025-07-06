@@ -55,7 +55,7 @@ from .models import (
 )
 
 # from .ping import PingSurveyManager, zmap_num_threads, zmap_ping_rate, FILE_ZMAP_SHELL
-from .ping import PingSurveyManager
+from .ping import PingSurveyManager, FILE_ZMAP_SHELL
 
 from .survey_util import GeoCountUpdater
 
@@ -204,7 +204,13 @@ def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, l
         full_command = " ".join(list_command)
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
         first_100 = full_command[:100]
-        # print(f"_execute_subprocess(), directory = {directory}, shell_file = {FILE_ZMAP_SHELL}")
+
+        if directory:
+            shell_path = os.path.join(directory, FILE_ZMAP_SHELL)
+            shell_writer = open(shell_path, "w+")
+            shell_writer.write(f"#!/bin/bash\n{full_command}\n")
+            shell_writer.close()
+            print(f"_execute_subprocess(), wrote shell file: {str(shell_path)}")
         print(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
         if debug_zmap:
             logger.info(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
