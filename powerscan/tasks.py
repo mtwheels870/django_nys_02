@@ -62,6 +62,9 @@ from .survey_util import GeoCountUpdater
 #SMALL_CHUNK_SIZE = 10000
 #TOTAL_OBJECTS = 22000
 
+num_threads = os.getenv("ZMAP_NUM_THREADS")
+ping_rate = os.getenv("ZMAP_PING_RATE")
+print(f"tasks.py: num_threads = {num_threads}, ping_rate = {ping_rate}")
 CELERY_FIELD_SURVEY_ID = "survey_id"
 
 RESULTS_STATES = "states"
@@ -191,16 +194,18 @@ def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, l
         # This seems wrong for a ICMP
         # port = 80
         # f"--log-file=${log_file}", NoVa
+
         list_command = ["zmap",
-            "--quiet", f"-r {RATE_PACKETS_SECOND}",
-            f"--whitelist-file={whitelist_file}",
-            f"--output-file={output_file}",
+            "--quiet",
             "--output-module=csv",
             "--output-fields=saddr,timestamp-ts",
+            "--probe-module=icmp_echoscan",
+            f"-r {ping_rate}",
+            f"--whitelist-file={whitelist_file}",
+            f"--output-file={output_file}",
             f"--metadata-file={metadata_file}",
             f"--log-file={log_file}", 
-            "--sender-threads=1",
-            "--probe-module=icmp_echoscan"]
+            f"--sender-threads={num_threads}"]
         full_command = " ".join(list_command)
         #if"zmap -p {port} -r {rate_packets_second} {ip_net_string} -o {file_path_string}"
         first_100 = full_command[:100]
