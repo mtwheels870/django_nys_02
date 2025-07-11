@@ -117,12 +117,12 @@ PRODUCTION_MODE = False
 if PRODUCTION_MODE:
     DIR_ZMAP_NAME = 'production' 
     CELERY_APP_NAME = "celery_django_prod"
-    CELERY_QUEUE = "cb_production"
+    CELERY_QUEUE = "pp_production"
     POWERSCAN_VERSION = "Production"
 else:
     DIR_ZMAP_NAME = 'development'
     CELERY_APP_NAME = "celery_django_dev"
-    CELERY_QUEUE = 'cb_development'
+    CELERY_QUEUE = 'pp_development'
     POWERSCAN_VERSION = "Development"
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
@@ -133,17 +133,13 @@ postgres_host = os.getenv("POSTGRES_HOST")
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'cb_production' if PRODUCTION_MODE else 'compassblue01',
+        'NAME': 'pp_prod02' if PRODUCTION_MODE else 'pp_dev02',
         'USER': 'cb_admin',
         'PASSWORD': 'Ch0c0late!',
         'HOST': postgres_host,
         'PORT': '5432',
     },
 }
-
-# This is a little weird that we're in the kg_train part of the world (and not the top-level like django_nys_02
-# This is for the prodigy database, prose_editor stuff
-# DATABASE_ROUTERS = ['kg_train.routers.SecondaryRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -239,11 +235,11 @@ LOGGING = {
     },
 }
 
+#    'fullcalendar#3.8.2'
 BOWER_INSTALLED_APPS = (
     'jquery',
     'jquery-ui',
     'bootstrap',
-    'fullcalendar#3.8.2'
 )
 
 # Directory where uploaded files will be stored
@@ -283,5 +279,3 @@ CHANNEL_LAYERS = {
         "ROUTING": ".asgi.application",
     },
 }
-
-
