@@ -178,7 +178,7 @@ class AggTypeManager:
         """
         data_rows = []
         if agg_type and id1:
-            print(f"_create_table(), agg_type = {agg_type}, id1 = {id1}")
+            # print(f"_create_table(), agg_type = {agg_type}, id1 = {id1}")
             match agg_type:
                 case "states":
                     survey = get_object_or_404(IpRangeSurvey, pk=id1)
@@ -197,7 +197,7 @@ class AggTypeManager:
         """
         Docstring here
         """
-        print(f"ATM.get_queryset(), query_params = {query_params}")
+        # print(f"ATM.get_queryset(), query_params = {query_params}")
         if "id" in query_params :
             id1 = query_params["id"]
             #field_survey_id = form.fields['survey_id']
@@ -233,7 +233,7 @@ class MapNavigationView(SingleTableView):
         """
         Docstring here
         """
-        print(f"MNV.g_c_d(), kwargs = {kwargs}")
+        # print(f"MNV.g_c_d(), kwargs = {kwargs}")
         context_data = super().get_context_data(**kwargs)
         # form = context_data['form']
         query_params = self.request.GET
