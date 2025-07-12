@@ -159,12 +159,12 @@ class GeometryRangeChunker:
         if self._last_chunk:
             raise StopIteration
 
-        logger.info(f"GeometryRangeChunker.{func_name}(), querying [{self._range_start}, {self._range_end}]")
+        logger.debug(f"GeometryRangeChunker.{func_name}(), querying [{self._range_start}, {self._range_end}]")
         ranges = IpRangePing.objects.filter(ip_survey__id=self._survey_id).order_by("id")[self._range_start:self._range_end]
         num_returned = ranges.count()
-        logger.info(f"GeometryRangeChunker.{func_name}(), returned {num_returned} rows")
+        logger.debug(f"GeometryRangeChunker.{func_name}(), returned {num_returned} rows")
         if num_returned < SMALL_CHUNK_SIZE:
-            logger.info(f"GeometryRangeChunker.{func_name}(), setting last chunk = True")
+            logger.debug(f"GeometryRangeChunker.{func_name}(), setting last chunk = True")
             self._last_chunk = True
         else:
             self._range_start = self._range_end

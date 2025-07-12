@@ -214,7 +214,7 @@ def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, l
             shell_writer = open(shell_path, "w+")
             shell_writer.write(f"#!/bin/bash\n{full_command}\n")
             shell_writer.close()
-            print(f"_execute_subprocess(), wrote shell file: {str(shell_path)}")
+            # print(f"_execute_subprocess(), wrote shell file: {str(shell_path)}")
         print(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
         if debug_zmap:
             logger.info(f"_execute_subprocess(), calling subprocess.Popen(), full_command(100) = {first_100}")
@@ -353,10 +353,10 @@ def tally_results(metadata_file, survey_id, retry_count):
         # print(f"SURVEY SAVE, 10")
         survey.save()
         print(f"Task.{func_name}({survey_id}), saved {hosts_responded:,} hosts to db")
-        print(f"Task.{func_name}({survey_id}), updating geo counts")
+        # print(f"Task.{func_name}({survey_id}), updating geo counts")
         geo_counter =  GeoCountUpdater(survey_id)
         geo_counter.propagate_counts()
-        print(f"Task.{func_name}({survey_id}), done")
+        # print(f"Task.{func_name}({survey_id}), done")
 
     except Exception as e:
         print(f"Task.{func_name}({survey_id}), exception: {e}")

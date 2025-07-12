@@ -36,6 +36,7 @@ from .survey_util import SurveyUtil
 
 #from .models import IpRangeSurvey
 
+# Celery beat will wake up on this value, check for new jobs
 PERIODIC_MINS = 2
 PERIODIC_SECS = PERIODIC_MINS * 60
 
@@ -43,7 +44,7 @@ TIME_FORMAT2 = "%H:%M:%S"
 
 ESTIMATED_BASE_MIN = 2.0
 # ESTIMATED_RANGES_PER_MIN = 4500
-ESTIMATED_RANGES_PER_MIN = 5000
+ESTIMATED_RANGES_PER_MIN = 4000
 
 
 @celery_app.task
@@ -115,6 +116,8 @@ def _estimate_zmap_time(survey_id):
         estimated_ranges = state.estimated_ranges
         #print(f"       state: {state.state_abbrev}, count = {estimated_ranges:,}")
         total_ranges = total_ranges + estimated_ranges
+
+    # Calculate when we *think* the zmap job should be done, start the tally
     estimated_mins = ESTIMATED_BASE_MIN + (total_ranges / ESTIMATED_RANGES_PER_MIN)
     estimated_secs = estimated_mins * 60
     #first = "_estimate_zmap_time(), total_ranges = "

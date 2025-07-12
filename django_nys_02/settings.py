@@ -124,7 +124,6 @@ else:
     CELERY_APP_NAME = "celery_django_dev"
     CELERY_QUEUE = 'pp_development'
     POWERSCAN_VERSION = "Development"
-print(f"settings.py: CELERY_QUEUE = {CELERY_QUEUE}")
 
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 #        'HOST': 'localhost',
