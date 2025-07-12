@@ -49,6 +49,7 @@ mapping_state = {
     "interp_lat": "INTPTLAT",
     "interp_long": "INTPTLON",
     "mpoly": "MULTIPOLYGON",
+    "state_abbrev": "STUSPS",           # Haven't tested this
 }
 
 mapping_county = {
