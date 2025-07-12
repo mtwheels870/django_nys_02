@@ -99,7 +99,7 @@ mapping_maxm_range = {
 loc_config = {
     "PATH_STATE" : "/home/bitnami/Data/PowerScan/Geo/2024_US_State_04_East_Texas.shp",
     "PATH_COUNTY" : "/home/bitnami/Data/PowerScan/Geo/Counties_04_East_Texas.shp",
-    "PATH_IP_RANGES" : "/home/bitnami/Data/PowerScan/IP/MM_Southeast_07_wCountyFP.shp"
+    "PATH_IP_RANGES" : "/home/bitnami/Data/PowerScan/IP/MM_Southeast_08.shp"
 }
 
 ny_config = {
