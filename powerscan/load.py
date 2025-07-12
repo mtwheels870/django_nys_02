@@ -141,11 +141,13 @@ class RangeChunker:
         if self._last_chunk:
             raise StopIteration
 
-        logger.info(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
+        # logger.info(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
+        print(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
         ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
         # ranges = MmIpRange.objects.filter(county__isnull=True).order_by("id")[self._range_start:self._range_end]
         num_returned = ranges.count()
-        logger.info(f"RangeChunker.__next__(), returned {num_returned} rows")
+        # logger.info(f"RangeChunker.__next__(), returned {num_returned} rows")
+        print(f"RangeChunker.__next__(), returned {num_returned} rows")
         if num_returned < SMALL_CHUNK_SIZE:
             logger.info(f"RangeChunker.__next__(), setting last chunk = True")
             self._last_chunk = True
@@ -373,8 +375,8 @@ class Loader():
         self.hash_counties = {}
         
         for chunk in RangeChunker():
-            for range in chunk:
-                county = range.county
+            for range1 in chunk:
+                county = range1.county
                 if county.id in self.hash_counties:
                     county_counter = self.hash_counties[county.id]
                 else:
@@ -383,7 +385,8 @@ class Loader():
         # Should save here
         index_county = 0
         for county_id, county_counter in self.hash_counties.items():
-            logger.info(f"county[{index_county}], save[{county_id}]: count = {county_counter.range_count}")
+            # logger.info(f"county[{index_county}], save[{county_id}]: count = {county_counter.range_count}")
+            print(f"county[{index_county}], save[{county_id}]: count = {county_counter.range_count}")
             county_counter.save()
             index_county = index_county + 1
 
