@@ -53,6 +53,7 @@ mapping_state = {
 
 mapping_county = {
     "county_fp" : "COUNTYFP",
+    "state_fp" : "STATEFP",
     "county_name": "NAME",
     "us_state" :  {"state_fp": "STATEFP"},
     "geoid": "GEOID",
