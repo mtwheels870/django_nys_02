@@ -89,7 +89,7 @@ mapping_maxm_range = {
     "mm_longitude" : "longitude",
     # "FIELD_THIS_MODEL" : { FIELD_IN_TRACT (model) : OUR_FIELD_FROM_SHAPE }
     # "census_tract": {"geoid": "GEOID"},     # Foreign key field
-    "county": {"county_fp": "COUNTYFP_2"},     # Foreign key field
+    "county": {"county_fp": "COUNTYFP", "us_state.state_fp" : "STATEFP"},     # Foreign key field
     "accuracy" : "accuracy_r",
     "mpoint" : "MULTIPOINT",
 }
