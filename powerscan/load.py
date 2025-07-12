@@ -142,8 +142,8 @@ class RangeChunker:
             raise StopIteration
 
         logger.info(f"RangeChunker.__next__(), querying [{self._range_start}, {self._range_end}]")
-        #ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
-        ranges = MmIpRange.objects.filter(county__isnull=True).order_by("id")[self._range_start:self._range_end]
+        ranges = MmIpRange.objects.all().order_by("id")[self._range_start:self._range_end]
+        # ranges = MmIpRange.objects.filter(county__isnull=True).order_by("id")[self._range_start:self._range_end]
         num_returned = ranges.count()
         logger.info(f"RangeChunker.__next__(), returned {num_returned} rows")
         if num_returned < SMALL_CHUNK_SIZE:
@@ -329,10 +329,10 @@ class Loader():
         # mpoint = MultiPoint(Point(float(long), float(lat)))
         point = Point(float(long), float(lat))
         county_counter.centroid = point
-        self.hash_counties[county.geoid] = county_counter
+        self.hash_counties[county.id] = county_counter
         return county_counter
 
-    def aggregate_counties(self, verbose=False):
+    def aggregate_counties_old(self, verbose=False):
         """
         Docstring here
         """
@@ -361,6 +361,29 @@ class Loader():
         index_county = 0
         for geoid, county_counter in self.hash_counties.items():
             logger.info(f"county[{index_county}], save[{geoid}]: count = {county_counter.range_count}")
+            county_counter.save()
+            index_county = index_county + 1
+
+    def aggregate_counties(self, verbose=False):
+        """
+        Docstring here
+        """
+        logger.info(f"aggregate_counties()")
+        #ip_range_source = IpRangeSource.objects.get(pk=source_id)
+        self.hash_counties = {}
+        
+        for chunk in RangeChunker():
+            for range in chunk:
+                county = range.county
+                if county.id in self.hash_counties:
+                    county_counter = self.hash_counties[county.id]
+                else:
+                    county_counter = self._create_county_counter(county)
+                county_counter.range_count = county_counter.range_count + 1
+        # Should save here
+        index_county = 0
+        for county_id, county_counter in self.hash_counties.items():
+            logger.info(f"county[{index_county}], save[{county_id}]: count = {county_counter.range_count}")
             county_counter.save()
             index_county = index_county + 1
 
