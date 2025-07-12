@@ -177,7 +177,7 @@ class MmIpRange(models.Model):
     mm_latitude = models.CharField(max_length=20)
     mm_longitude = models.CharField(max_length=20)
     accuracy = models.IntegerField()
-    census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
+    # census_tract = models.ForeignKey(CensusTract, null=True, on_delete=models.CASCADE)
     county = models.ForeignKey(County, null=True, on_delete=models.CASCADE)
     mpoint = models.MultiPointField(null=True)
 

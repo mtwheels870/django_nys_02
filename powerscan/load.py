@@ -88,7 +88,8 @@ mapping_maxm_range = {
     "mm_latitude" : "latitude",
     "mm_longitude" : "longitude",
     # "FIELD_THIS_MODEL" : { FIELD_IN_TRACT (model) : OUR_FIELD_FROM_SHAPE }
-    "census_tract": {"geoid": "GEOID"},     # Foreign key field
+    # "census_tract": {"geoid": "GEOID"},     # Foreign key field
+    "county": {"county_fp": "COUNTYFP"},     # Foreign key field
     "accuracy" : "accuracy_r",
     "mpoint" : "MULTIPOINT",
 }
@@ -227,6 +228,7 @@ class Loader():
         Docstring here
         """
         county_shp = Path(loc_config["PATH_COUNTY"])
+        logger.info(f"run_county(), county_shp = {county_shp}, mapping = {mapping_county}")
         self.lm_county = LayerMapping(County, county_shp, mapping_county, transform=False)
         self.lm_county.save(strict=True, verbose=verbose)
 
