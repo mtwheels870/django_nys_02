@@ -12,4 +12,5 @@ WORKDIR /app
 
 # CMD ["tail", "-f", "/dev/null"]
 # CMD ["celery", "-A", "django_nys_02", "beat", "--pidfile=/app/beat/beat.pid", "--logfile=/app/beat/beat.log", "--loglevel=DEBUG", "--schedule=/app/beat/cbeat-schedule"]
-CMD ["celery", "-A", "django_nys_02", "beat", "--loglevel=INFO"]
+# CMD ["celery", "-A", "django_nys_02", "beat", "--loglevel=INFO"]
+CMD ["celery", "-A", "celery_django_prod", "beat", "--loglevel=INFO"]
