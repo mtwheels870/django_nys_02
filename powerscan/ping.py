@@ -38,7 +38,7 @@ from .models import (
 
 tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
 if not tmp_zmap_run_dir:
-    zmap_run_dir = "/home/bitnami/app_run/exec_zmap"
+    zmap_run_dir = "/home/bitnami/run/exec_zmap"
 else:
     zmap_run_dir = tmp_zmap_run_dir
 # zmap_num_threads = os.getenv("ZMAP_NUM_THREADS")
