@@ -62,8 +62,17 @@ from .survey_util import GeoCountUpdater
 #SMALL_CHUNK_SIZE = 10000
 #TOTAL_OBJECTS = 22000
 
-num_threads = os.getenv("ZMAP_NUM_THREADS")
-ping_rate = os.getenv("ZMAP_PING_RATE")
+tmp_num_threads = os.getenv("ZMAP_NUM_THREADS")
+if not tmp_num_threads:
+    num_threads = 8
+else:
+    num_threads = tmp_num_threads
+
+tmp_ping_rate = os.getenv("ZMAP_PING_RATE")
+if not tmp_ping_rate:
+    ping_rate = 10000
+else:
+    ping_rate = tmp_ping_rate
 print(f"tasks.py: num_threads = {num_threads}, ping_rate = {ping_rate}")
 CELERY_FIELD_SURVEY_ID = "survey_id"
 
