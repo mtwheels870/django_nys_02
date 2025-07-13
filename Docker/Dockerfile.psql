@@ -41,4 +41,5 @@ USER postgres
 
 # Run postgres as that user
 CMD ["postgres"]
+#CMD [ "tail", "-f", "/dev/null"]
 

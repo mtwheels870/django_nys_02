@@ -113,7 +113,7 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 # Ternery style    DIR_ZMAP_NAME = 'production' if PRODUCTION_MODE else 'development'
 #    PRODIGY_PORT = 8081 
 #    PRODIGY_PORT = 8080 
-PRODUCTION_MODE = False
+PRODUCTION_MODE = True
 if PRODUCTION_MODE:
     DIR_ZMAP_NAME = 'production' 
     CELERY_APP_NAME = "celery_django_prod"
