@@ -153,12 +153,11 @@ class CreateNewSurveyView(generic.edit.FormView):
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_whitelist_created = timezone.now()
         # MaxM ranges
-        # print(f"CPV.build_whitelist(), apply_async(), queue: {CELERY_QUEUE}")
         async_result = build_whitelist.apply_async(
             kwargs={"survey_id" : survey_id},
             queue=CELERY_QUEUE,
             routing_key='ping.tasks.build_whitelist')
-        #celery_results_handler.save_pending(async_result)
+        print(f"CPV.build_whitelist(), q: {CELERY_QUEUE}, surv_id = {survey_id}, async_res = {async_result}")
         return async_result
 
     # CreateNewSurveyView

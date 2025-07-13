@@ -128,7 +128,11 @@ else:
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 #        'HOST': 'localhost',
 #        'HOST': 'svc_postgres',
-postgres_host = os.getenv("POSTGRES_HOST")
+tmp_postgres_host = os.getenv("POSTGRES_HOST")
+if not tmp_postgres_host:
+    postgres_host = "localhost"
+else:
+    postgres_host = tmp_postgres_host
 # print(f"postgres_host = {postgres_host}")
 DATABASES = {
     'default': {
@@ -252,7 +256,11 @@ MEDIA_URL = '/media/'
 CELERY_TIMEZONE = "America/New_York"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-redis_host = os.getenv("REDIS_HOST")
+tmp_redis_host = os.getenv("REDIS_HOST")
+if not tmp_redis_host:
+    redis_host = "localhost"
+else:
+    redis_host = tmp_redis_host
 CELERY_BROKER_URL = 'redis://' + redis_host + ':6379/0'  # Use Redis as the message broker
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_ACCEPT_CONTENT = ['json']
