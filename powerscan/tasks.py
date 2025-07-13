@@ -194,7 +194,7 @@ def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, l
         # port = 80
         # f"--log-file=${log_file}", NoVa
 
-        list_command = ["zmap",
+        list_command = ["/usr/sbin/zmap",
             "--quiet",
             "--output-module=csv",
             "--output-fields=saddr,timestamp-ts",

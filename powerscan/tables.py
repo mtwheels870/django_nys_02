@@ -106,7 +106,7 @@ class IpSurveyTable(tables.Table):
         """
         Docstring here
         """
-        return self._render_time(value)
+        return self._render_time(value, include_date=True)
 
     def render_time_ping_started(self, value, record):
         """
