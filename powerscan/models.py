@@ -221,6 +221,9 @@ class IpRangeSurvey(models.Model):
         """
         pinged_k = self.ranges_pinged / 1000.0
         responded_k = self.ranges_responded / 1000.0
+        if self.ranges_pinged == 0:
+            print(f"ranges(), ranges_pinged = {self.ranges_pinged}")
+            return None
         pct = float(self.ranges_responded) / self.ranges_pinged
         return f"{responded_k:.1f}  {pinged_k:.1f}  {pct:.2f}"
 
@@ -231,6 +234,9 @@ class IpRangeSurvey(models.Model):
         """
         pinged_k = self.hosts_pinged / 1000.0
         responded_k = self.hosts_responded / 1000.0
+        if self.hosts_pinged == 0:
+            print(f"hosts(), hosts_pinged = {self.hosts_pinged}")
+            return None
         pct = float(self.hosts_responded) / self.hosts_pinged
         return f"{responded_k:.1f}  {pinged_k:.1f}  {pct:.3f}"
         
