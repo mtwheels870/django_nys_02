@@ -11,4 +11,4 @@ RUN apt-get update && apt-get install -y zmap procps less net-tools libcap2-bin 
 # USER ubuntu
 
 # ENTRYPOINT ["dumb-init", "/usr/sbin/zmap"]
-CMD ["celery", "-A", "celery_django_prod", "worker", "--concurrency=2", "-Q", "pp_production,celery", "--loglevel", "warning"]
+CMD ["celery", "-A", "django_nys_02", "worker", "--concurrency=2", "-Q", "pp_production,celery", "--loglevel", "warning"]

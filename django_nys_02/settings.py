@@ -116,7 +116,7 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 PRODUCTION_MODE = True
 if PRODUCTION_MODE:
     DIR_ZMAP_NAME = 'production' 
-    CELERY_APP_NAME = "celery_django_prod"
+    CELERY_APP_NAME = "django_nys_02"
     CELERY_QUEUE = "pp_production"
     POWERSCAN_VERSION = "Production"
 else:
