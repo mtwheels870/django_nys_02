@@ -36,7 +36,11 @@ from .models import (
     IpSurveyTract,
     County, CensusTract)
 
-zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
+tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
+if not tmp_zmap_run_dir:
+    zmap_run_dir = "/home/bitnami/app_run/exec_zmap"
+else:
+    zmap_run_dir = tmp_zmap_run_dir
 # zmap_num_threads = os.getenv("ZMAP_NUM_THREADS")
 # zmap_ping_rate = os.getenv("ZMAP_PING_RATE")
 # print(f"zmap_run_dir = {zmap_run_dir}, num_threads = {zmap_num_threads}, ping_rate = {zmap_ping_rate}")
@@ -207,6 +211,12 @@ class PingSurveyManager:
         # folder_snapshot = now.strftime("%Y%m%d_%H%M%S")
         # folder_snapshot = f"Survey_{self._survey_id:05d}"
         folder_snapshot = PingSurveyManager._build_survey_name(self._survey_id)
+        if not TEMP_DIRECTORY:
+            print(f"_create_directory(), TEMP_DIRECTORY is not set!")
+            return
+        if not DIR_ZMAP_NAME:
+            print(f"_create_directory(), DIR_ZMAP_NAME is not set!")
+            return
         full_path = os.path.join(TEMP_DIRECTORY, DIR_ZMAP_NAME, folder_snapshot)
         # print(f"PSM.create_directory(), directory = {str(full_path)}")
         if not os.path.exists(full_path):
