@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1.0-experimental
 # Use a Python base image
 FROM postgres:16.9
-ARG POSTGRES_USER=cb_admin
-ARG POSTGRES_DB=pp_prod02
+ENV POSTGRES_USER=cb_admin
+ENV POSTGRES_DB=pp_prod02
 ARG POSTGRES_PASSWORD=overridden01
 ARG POSTGRES_USER_PASSWORD=overridden02
-ARG DB_VERSION=pp_prod02
-ARG DB_DUMP=${DB_VERSION}.dump
+ENV DB_VERSION=pp_prod02
+ENV DB_DUMP=${DB_VERSION}.dump
 
 WORKDIR /app
 
@@ -30,7 +30,7 @@ RUN chmod 444 $INIT_SQL
 
 # Create and set the working directory
 # COPY $DB_DUMP ./docker-entrypoint-initdb.d/
-COPY /Data/${DB_DUMP} .
+COPY ${DB_DUMP} .
 
 ARG RESTORE_SCRIPT="/docker-entrypoint-initdb.d/restore_db.sh"
 RUN echo "echo '$POSTGRES_PASSWORD' | pg_restore -U postgres -d ${POSTGRES_DB} $DB_DUMP" > $RESTORE_SCRIPT
