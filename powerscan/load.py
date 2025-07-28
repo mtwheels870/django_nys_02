@@ -32,6 +32,7 @@ from django_nys_02.asgi import application
 from .consumers import CHANNEL_NAME_TASK_RESULT
 
 from .survey_util import GeoCountUpdater, SMALL_CHUNK_SIZE
+from .tasks import tally_results
 
 from .models import (
     UsState, County, CensusTract,
@@ -561,3 +562,100 @@ class Loader():
                 range_ping.county = county
                 range_ping.save()
             index_chunk = index_chunk + 1
+
+    def update_range_counts2(self, verbose=True):
+        survey_ids = [110]
+        for survey_id in survey_ids:
+            metadata_file = f"stuff_here/survey_{survey_id}"
+            print(f"metadata_file = {metadata_file}")
+            tally_results(metadata_file, survey_id, 0)
+
+    def process_zmap_results2(self, survey, survey_manager, metadata_file_job, now):
+        """
+        Docstring here
+        """
+        print(f"process_zmap_results2()")
+        directory, whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
+        if metadata_file_job != metadata_file_survey:
+            logger.info(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
+            print(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
+            return 0, 0, 0
+
+        # See whether the metadata file has values
+        size = os.path.getsize(metadata_file_job)
+        if size == 0:
+            return 0, 0, 0
+
+        # Calculate zmap time
+        survey.time_ping_stopped = now
+        survey.save()
+        if not survey.time_ping_stopped:
+            print(f"_process_zmap_results(), time_ping_stopped = {survey.time_ping_stopped}")
+            timedelta_secs = 0
+        elif not survey.time_ping_started:
+            print(f"_process_zmap_results(), time_ping_started = {survey.time_ping_started}")
+            timedelta_secs = 0
+        else:
+            timedelta_secs = survey.time_ping_stopped - survey.time_ping_started
+        timedelta_mins = timedelta_secs / 60
+        formatted_now = now.strftime(TIME_FORMAT_STRING)
+        return survey_manager.process_results(survey)
+
+    def new_tally_results(self, metadata_file, survey_id, retry_count):
+        """
+        Docstring here
+        """
+        print(f"new_tally_results()")
+        # Ensure another worker hasn't grabbed the survey, yet
+        func_name = sys._getframe().f_code.co_name
+        now = timezone.now()
+        formatted_now = now.strftime(TIME_FORMAT_STRING)
+        try:
+            int_survey_id = int(survey_id)
+            survey = IpRangeSurvey.objects.get(pk=int_survey_id)
+            if survey.time_tally_started:
+                first = f"{func_name}(), survey = {int_survey_id}, tally_started { survey.time_tally_started}, "
+                second = f"another worker grabbed it"
+                print(first + second)
+                return 0
+            # We save this, but we'll set it back to null if we're not ready to tally (no metadata file)
+            survey.time_tally_started = now
+            survey.save()
+
+            debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
+            debug_tally = debug.tally_results 
+
+            survey_manager = PingSurveyManager.find(int_survey_id, debug_tally)
+            if not survey_manager:
+                print(f"Task.{func_name}(), no survey manager for survey_id: {int_survey_id}")
+                return 0
+
+            ranges_responded, hosts_responded, hosts_pinged = self.process_zmap_results2(survey,
+                    survey_manager, metadata_file, now)
+
+            survey.time_tally_stopped = timezone.now()
+            survey.ranges_responded = ranges_responded
+            survey.hosts_responded = hosts_responded 
+            survey.hosts_pinged = hosts_pinged 
+            # print(f"SURVEY SAVE, 10")
+            survey.save()
+            print(f"Task.{func_name}({survey_id}), saved {hosts_responded:,} hosts to db")
+            # print(f"Task.{func_name}({survey_id}), updating geo counts")
+            geo_counter =  GeoCountUpdater(survey_id)
+            geo_counter.propagate_counts()
+            # print(f"Task.{func_name}({survey_id}), done")
+
+        except Exception as e:
+            print(f"Task.{func_name}({survey_id}), exception: {e}")
+            traceback.print_exc(file=sys.stdout)
+            ranges_responded = -1
+        return ranges_responded
+
+    def update_range_counts(self, verbose=True):
+        print(f"update_range_counts()")
+        survey_ids = [110]
+        for survey_id in survey_ids:
+            metadata_file = f"stuff_here/survey_{survey_id}"
+            print(f"metadata_file = {metadata_file}")
+            self.new_tally_results(metadata_file, survey_id, 0)
+

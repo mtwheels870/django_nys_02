@@ -283,7 +283,8 @@ def _process_zmap_results(survey, survey_manager, metadata_file_job, now):
     directory, whitelist_file, output_file, metadata_file_survey, log_file = survey_manager.get_zmap_files()
     if metadata_file_job != metadata_file_survey:
         logger.info(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
-        return 0
+        print(f"_process_zmap_results(), md_file_job = {metadata_file_job}, md_survey = {metadata_file_survey}")
+        return 0, 0, 0
 
     # See whether the metadata file has values
     size = os.path.getsize(metadata_file_job)
