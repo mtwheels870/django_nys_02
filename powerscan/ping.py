@@ -435,6 +435,7 @@ class PingSurveyManager:
         Docstring here
         """
         index_chunk = 0
+        print(f"_match_zmap_replies(), reading chunk[{index_chunk}]")
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
             column_names = chunk.columns.tolist()
             for index, row in chunk.iterrows():
