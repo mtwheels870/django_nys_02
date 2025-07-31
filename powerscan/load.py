@@ -33,6 +33,7 @@ from .consumers import CHANNEL_NAME_TASK_RESULT
 
 from .survey_util import GeoCountUpdater, SMALL_CHUNK_SIZE
 from .tasks import tally_results, TIME_FORMAT_STRING
+from .ping import PingSurveyManager
 
 from .models import (
     UsState, County, CensusTract,
