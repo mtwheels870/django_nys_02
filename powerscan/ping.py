@@ -435,8 +435,9 @@ class PingSurveyManager:
         Docstring here
         """
         index_chunk = 0
-        print(f"_match_zmap_replies(), reading chunk[{index_chunk}]")
+        print(f"_match_zmap_replies(), before chunking")
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
+            print(f"_match_zmap_replies(), processing chunk[{index_chunk}]")
             column_names = chunk.columns.tolist()
             for index, row in chunk.iterrows():
                 saddr = row['saddr']
