@@ -622,6 +622,7 @@ class Loader():
             survey.time_tally_started = now
             survey.save()
 
+            DEBUG_ID=1
             debug = DebugPowerScan.objects.get(pk=DEBUG_ID)
             debug_tally = debug.tally_results 
 
