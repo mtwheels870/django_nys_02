@@ -430,14 +430,16 @@ class PingSurveyManager:
             print(f"_debug_matches(), node[{index} = {node}")
             index = index + 1
 
-    def _match_zmap_replies(self):
+    def _match_zmap_replies(self, debug=False):
         """
         Docstring here
         """
         index_chunk = 0
-        print(f"_match_zmap_replies(), before chunking")
+        if debug):
+            print(f"_match_zmap_replies(), before chunking")
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
-            print(f"_match_zmap_replies(), processing chunk[{index_chunk}]")
+            if debug:
+                print(f"_match_zmap_replies(), processing chunk[{index_chunk}]")
             column_names = chunk.columns.tolist()
             for index, row in chunk.iterrows():
                 saddr = row['saddr']
@@ -486,7 +488,7 @@ class PingSurveyManager:
         return ranges_updated, hosts_responded, hosts_pinged
 
     # Returns the number of pings (hosts) saved to the database (count > 0)
-    def process_results(self, survey):
+    def process_results(self, survey, debug=False):
         """
         Docstring here
         """
@@ -494,7 +496,7 @@ class PingSurveyManager:
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
         self._build_radix_tree()
-        self._match_zmap_replies()
+        self._match_zmap_replies(debug)
         self.file_debugger.close()
         ranges_updated, hosts_responded, hosts_pinged = self._save_to_db(survey)
         return ranges_updated, hosts_responded, hosts_pinged

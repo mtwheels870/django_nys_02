@@ -601,7 +601,7 @@ class Loader():
             timedelta_secs = survey.time_ping_stopped - survey.time_ping_started
         timedelta_mins = timedelta_secs / 60
         formatted_now = now.strftime(TIME_FORMAT_STRING)
-        return survey_manager.process_results(survey)
+        return survey_manager.process_results(survey,debug=False)
 
     def new_tally_results(self, metadata_file, survey_id, retry_count):
         """
