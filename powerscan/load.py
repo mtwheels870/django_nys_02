@@ -25,7 +25,7 @@ from django.contrib.gis.geos import Point, MultiPoint
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models.functions import Centroid
 
-from channels.layers import get_channel_layer
+# from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from django_nys_02.asgi import application
@@ -656,9 +656,9 @@ class Loader():
 
     def update_range_counts(self, verbose=True):
         print(f"update_range_counts()")
-        survey_ids = [14]
+        survey_ids = [111 112 113 114 115 116 117 118 119]
         for survey_id in survey_ids:
-            metadata_file = f"/home/bitnami/run/exec_zmap/production/Survey_000{survey_id}/Metadata.csv"
+            metadata_file = f"/app/run/exec_zmap/production/Survey_00{survey_id}/Metadata.csv"
             print(f"metadata_file = {metadata_file}")
             self.new_tally_results(metadata_file, survey_id, 0)
 

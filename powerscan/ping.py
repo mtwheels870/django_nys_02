@@ -15,6 +15,7 @@ Authors: Michael T. Wheeler (mike@pinp01nt.com)
 """
 import os
 import datetime
+import gc
 
 import pandas as pd
 # from pyspark.sql import SparkSession
@@ -498,6 +499,9 @@ class PingSurveyManager:
         self._build_radix_tree()
         self._match_zmap_replies(debug)
         self.file_debugger.close()
+        collected_objects = gc.collect()
+        if debug:
+            print(f"p_r(), {collected_objects} objects collected")
         ranges_updated, hosts_responded, hosts_pinged = self._save_to_db(survey)
         return ranges_updated, hosts_responded, hosts_pinged
         
