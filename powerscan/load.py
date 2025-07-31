@@ -15,6 +15,7 @@ Authors: Michael T. Wheeler (mike@pinp01nt.com)
 """
 import logging
 import sys
+import os
 
 from pathlib import Path
 
