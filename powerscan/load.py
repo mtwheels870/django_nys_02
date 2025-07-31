@@ -657,7 +657,7 @@ class Loader():
         print(f"update_range_counts()")
         survey_ids = [14]
         for survey_id in survey_ids:
-            metadata_file = f"/home/bitnami/run/exec_zmap/production/Survey_000{survey_id}"
+            metadata_file = f"/home/bitnami/run/exec_zmap/production/Survey_000{survey_id}/Metadata.csv"
             print(f"metadata_file = {metadata_file}")
             self.new_tally_results(metadata_file, survey_id, 0)
 
