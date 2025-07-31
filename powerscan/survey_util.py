@@ -253,7 +253,7 @@ class GeoCountUpdater:
         index_chunk = 0
         total_ranges_responded = 0
         for chunk in GeometryRangeChunker(survey_id=self._survey_id):
-            print(f"{func_name}(), processing chunk[{index_chunk}]")
+            print(f"{func_name}(), processing {SMALL_CHUNK_SIZE} chunk (saved ranges)[{index_chunk}]")
             for range_ping in chunk:
                 hosts_pinged = range_ping.hosts_pinged
                 hosts_responded = range_ping.hosts_responded

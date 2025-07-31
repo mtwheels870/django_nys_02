@@ -657,7 +657,8 @@ class Loader():
 
     def update_range_counts(self, verbose=True):
         print(f"update_range_counts()")
-        survey_ids = [111, 112, 113, 114, 115, 116, 117, 118, 119]
+        # survey_ids = [111, 112, 113, 114, 115, 116, 117, 118, 119]
+        survey_ids = range(120, 129)
         for survey_id in survey_ids:
             metadata_file = f"/app/run/exec_zmap/production/Survey_00{survey_id}/Metadata.csv"
             print(f"metadata_file = {metadata_file}")
