@@ -460,17 +460,20 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        # print(f"_save_to_db(), size (of tree): {self.trie.size}")
+        print(f"_save_to_db(), size (of tree): {self.trie.size}")
         # Iterate the entire tree
         index = 0
 
         # Walk through our dataframe again
         ranges_updated = hosts_pinged = hosts_responded = 0
+        print("_save_to_db(), iterrating through all of the ranges")
         for index, row in self.df_ranges.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
             range_counter = self.pyt.get(ip_network)
             count = range_counter.count
+            if index % 1000 == 0:
+                print("_save_to_db(), index[{index}], range_id = {range_id}, ip_network = {ip_network}, count = {count}")
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
                 ip_range = MmIpRange.objects.get(pk=range_counter.id)
@@ -484,8 +487,6 @@ class PingSurveyManager:
                 ranges_updated = ranges_updated + 1
                 hosts_pinged = hosts_pinged + possible_hosts
                 hosts_responded = hosts_responded + count
-        # print(f"_save_to_db(), saved {saved_to_db} objects to database")
-        #self._writer_cidr_trie.close()
         return ranges_updated, hosts_responded, hosts_pinged
 
     # Returns the number of pings (hosts) saved to the database (count > 0)
@@ -501,7 +502,7 @@ class PingSurveyManager:
         self.file_debugger.close()
         collected_objects = gc.collect()
         if debug:
-            print(f"p_r(), {collected_objects} objects collected")
+            print(f"ping.py:process_results(), {collected_objects} objects collected, saving to db")
         ranges_updated, hosts_responded, hosts_pinged = self._save_to_db(survey)
         return ranges_updated, hosts_responded, hosts_pinged
         
