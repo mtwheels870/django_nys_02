@@ -237,6 +237,7 @@ class GeoCountUpdater:
         # 1: Set up the mapping, Map the counties to the count objects
         county_count = 0
         county_set = IpSurveyCounty.objects.filter(survey__id=self._survey_id)
+        print(f"update_county_counts(), {count_set.count()} counties")
         for county_counter in county_set:
             hosts_pinged = county_counter.hosts_pinged
             if hosts_pinged != 0:
@@ -252,6 +253,7 @@ class GeoCountUpdater:
 
         index_chunk = 0
         total_ranges_responded = 0
+        print(f"update_county_counts(), doing GeometryRangeChunker...")
         for chunk in GeometryRangeChunker(survey_id=self._survey_id):
             print(f"{func_name}(), processing {SMALL_CHUNK_SIZE} chunk (saved ranges)[{index_chunk}]")
             for range_ping in chunk:

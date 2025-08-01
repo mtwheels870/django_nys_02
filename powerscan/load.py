@@ -602,7 +602,7 @@ class Loader():
             timedelta_secs = survey.time_ping_stopped - survey.time_ping_started
         timedelta_mins = timedelta_secs / 60
         formatted_now = now.strftime(TIME_FORMAT_STRING)
-        return survey_manager.process_results(survey,debug=False)
+        return survey_manager.process_results(survey,debug=True)
 
     def new_tally_results(self, metadata_file, survey_id, retry_count):
         """
@@ -658,7 +658,7 @@ class Loader():
     def update_range_counts(self, verbose=True):
         print(f"update_range_counts()")
         # survey_ids = [111, 112, 113, 114, 115, 116, 117, 118, 119]
-        survey_ids = range(120, 129)
+        survey_ids = range(121, 129)
         for survey_id in survey_ids:
             metadata_file = f"/app/run/exec_zmap/production/Survey_00{survey_id}/Metadata.csv"
             print(f"metadata_file = {metadata_file}")
