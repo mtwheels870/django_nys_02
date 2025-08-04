@@ -213,6 +213,7 @@ class IpRangeSurvey(models.Model):
     hosts_pinged = models.IntegerField(default=0, verbose_name="Hosts(K) Pinged")
     # Should this be a ForeignKey (back to this model?)
     parent_survey_id = models.BigIntegerField(null=True, verbose_name="Copies")
+    whitelist_tablename = models.CharField(max_length=20, null=True)
 
     @property
     def ranges(self):
@@ -282,16 +283,16 @@ class IpSurveyCounty(models.Model):
         """
         return f"Survey results for county: {self.county.county_fp}"
 
-class IpSurveyTract(models.Model):
-    survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
-    tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
-    hosts_pinged = models.IntegerField(default=0)
-    hosts_responded = models.IntegerField(default=0)
-    def __str__(self):
-        """
-        Docstring here
-        """
-        return f"Survey results for tract: {self.tract.tract_id}"
+#class IpSurveyTract(models.Model):
+#    survey = models.ForeignKey(IpRangeSurvey, on_delete=models.CASCADE)
+#    tract = models.ForeignKey(CensusTract, on_delete=models.CASCADE)
+#    hosts_pinged = models.IntegerField(default=0)
+#    hosts_responded = models.IntegerField(default=0)
+#    def __str__(self):
+#        """
+#        Docstring here
+#        """
+#        return f"Survey results for tract: {self.tract.tract_id}"
 
 class MilitaryBase(models.Model):
     # Should be county_ref or something (it's not an actual code)
