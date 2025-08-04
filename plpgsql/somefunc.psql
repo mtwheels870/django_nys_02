@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION somefunc() RETURNS integer AS $$
+CREATE OR REPLACE PROCEDURE somefunc() RETURNS integer AS $$
 << outerblock >>
 DECLARE
     quantity integer := 30;
