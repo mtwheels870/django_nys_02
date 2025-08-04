@@ -326,7 +326,8 @@ class PingSurveyManager:
 
     def _tract_ranges_whitelist(self, tract, add_to_debug):
         """
-        Docstring here
+        NB: This actually works on counties now, not tracts (the county_ranges_whitelist() call is
+        a pass-through
         """
         # Use the set() notation
         ip_ranges = tract.mmiprange_set.all()
@@ -460,7 +461,7 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        print(f"_save_to_db(), size (of tree): {self.trie.size}")
+        # print(f"_save_to_db(), size (of tree): {self.trie.size}")
         # Iterate the entire tree
         index = 0
 
@@ -473,7 +474,7 @@ class PingSurveyManager:
             range_counter = self.pyt.get(ip_network)
             count = range_counter.count
             if index % 1000 == 0:
-                print("_save_to_db(), index[{index}], range_id = {range_id}, ip_network = {ip_network}, count = {count}")
+                print(f"_save_to_db(), index[{index}], range_id = {range_id}, ip_network = {ip_network}, count = {count}")
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
                 ip_range = MmIpRange.objects.get(pk=range_counter.id)
