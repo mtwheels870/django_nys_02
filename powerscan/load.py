@@ -42,7 +42,6 @@ from .models import (
     CountTract, CountCounty, CountState,
     IpRangeSurvey, IpRangePing,
     MmIpRange, DebugPowerScan,
-    IpSurveyTract,
     IpSurveyCounty,
     IpSurveyState
 )

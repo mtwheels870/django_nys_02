@@ -31,7 +31,7 @@ class SurveyUtil:
         """
         Docstring here
         """
-        from .models import (IpRangeSurvey, IpSurveyState, IpSurveyCounty, IpSurveyTract)
+        from .models import (IpRangeSurvey, IpSurveyState, IpSurveyCounty)
 
         survey = get_object_or_404(IpRangeSurvey, pk=survey_id)
         parent_survey = get_object_or_404(IpRangeSurvey, pk=parent_survey_id)
@@ -46,11 +46,6 @@ class SurveyUtil:
             new_survey_county = IpSurveyCounty(survey=survey, county=parent_county.county)
             new_survey_county.save()
 
-        tract_set = parent_survey.ipsurveytract_set.all()
-        for parent_tract in tract_set:
-            new_survey_tract = IpSurveyTract(survey=survey,tract=parent_tract.tract)
-            new_survey_tract.save()
-
         survey.ranges_pinged = parent_survey.ranges_pinged
 
     @staticmethod
@@ -58,7 +53,7 @@ class SurveyUtil:
         """
         Docstring here
         """
-        from .models import (IpRangeSurvey, IpSurveyCounty, IpSurveyTract)
+        from .models import (IpRangeSurvey, IpSurveyCounty)
 
         logger.warn(f"PSM._delete_surveys(), surveys: {survey_ids}")
         for survey_id in survey_ids:
@@ -183,13 +178,7 @@ class GeoCountUpdater:
         Docstring here
         """
         # 1. build mapping
-        for tract_counter in IpSurveyTract.objects.filter(survey__id=self._survey_id):
-            hosts_pinged = tract_counter.hosts_pinged
-            if hosts_pinged != 0:
-                print(f"_update_tract_counts(), hosts_pinged = {hosts_pinged}! (aborting, already values)")
-                return 0
-            # Build the hash table
-            self._tract_mapper[tract_counter.tract] = tract_counter
+        # Deleted
             
         # 2. Update counts
         index_chunk = 0

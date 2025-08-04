@@ -34,7 +34,6 @@ from django.shortcuts import get_object_or_404
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
     MmIpRange, IpSurveyState, IpSurveyCounty,
-    IpSurveyTract,
     County, CensusTract)
 
 tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
@@ -583,18 +582,3 @@ class PingSurveyManager:
             self._writer.write(string1+ "\n")
             if error:
                 self._error_count = self._error_count + 1
-
-#        tract_ids = []
-#        tracts_in_counties = CensusTract.objects.filter(county__id__in=county_ids)
-#        for tract in tracts_in_counties:
-#            tract_ids.append(tract.id)
-#            if tract.county == self._debug_county:
-#                # self._debug_tracts.append(tract.id)
-#                add_to_debug = True
-#            else:
-#                add_to_debug = False
-#            survey_tract = IpSurveyTract(survey=survey, tract=tract)
-#            survey_tract.save()
-#            ranges_added = self._tract_ranges_whitelist(tract, add_to_debug)
-#            total_ranges = total_ranges + ranges_added
-#        # debugger.print_array("PSM._traverse_geography(), tract_ids:", tract_ids)
