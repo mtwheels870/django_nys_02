@@ -1,4 +1,9 @@
-CREATE OR REPLACE PROCEDURE somefunc() RETURNS integer AS $$
+CREATE OR REPLACE PROCEDURE somefunc(
+    IN survey_id INT,
+    OUT whitelist_tablename VARCHAR(50)
+) 
+LANGUAGE plpsqgl
+AS $$
 << outerblock >>
 DECLARE
     quantity integer := 30;
@@ -16,7 +21,6 @@ BEGIN
     END;
 
     RAISE NOTICE 'Quantity here is %', quantity;  -- Prints 50
-
-    RETURN quantity;
+    whitelist_tablename := "tablename_here";
 END;
-$$ LANGUAGE plpgsql;
+$$;
