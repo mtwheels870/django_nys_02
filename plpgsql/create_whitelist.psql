@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE somefunc(
+CREATE OR REPLACE PROCEDURE create_whitelist(
     IN survey_id INT,
     OUT whitelist_tablename VARCHAR(50)
 ) 
