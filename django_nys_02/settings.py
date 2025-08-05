@@ -118,12 +118,12 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 env = environ.Env(
     PRODUCTION_MODE=(bool, True)
 )
-BASE_DIR = os.path.dirname(
-    os.path.dirname(os.path.abspath(__file__))
-)
+#BASE_DIR = os.path.dirname(
+#    os.path.dirname(os.path.abspath(__file__))
+#)
 
 # Read the .env file
-environ.Env.read_env(os.path.join(BASE_DIR, ".env")
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 PRODUCTION_MODE=env("PRODUCTION_MODE")
 print(f"PRODUCTION_MODE = {PRODUCTION_MODE}")
