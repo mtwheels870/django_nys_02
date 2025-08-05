@@ -21,6 +21,6 @@ BEGIN
     END;
 
     RAISE NOTICE 'Quantity here is %', quantity;  -- Prints 50
-    whitelist_tablename := "tablename_here";
+    whitelist_tablename := 'tablename_here';
 END;
 $$;
