@@ -10,10 +10,6 @@ DECLARE
 BEGIN
     whitelist_tablename := 'whitelist_' || survey_id;
 
-    select_statement := 'select ip_network, c.id as range_id, b.id as county_id, a.us_state_id as us_state_id ' ||
-        'INTO ' || whitelist_tablename || ' from powerscan_ipsurveystate a, powerscan_county b, ' ||
-        'powerscan_mmiprange c where survey_id = ' || survey_id || 
-        ' and b.us_state_id = a.us_state_id and c.county_id = b.id order by us_state_id, county_id, range_id';
-    RAISE NOTICE 'SQL STATEMENT: %', select_statement;
+    RAISE NOTICE 'whitelist_tablename: %', whitelist_tablename;
 END;
 $$;
