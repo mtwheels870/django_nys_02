@@ -113,7 +113,13 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 # Ternery style    DIR_ZMAP_NAME = 'production' if PRODUCTION_MODE else 'development'
 #    PRODIGY_PORT = 8081 
 #    PRODIGY_PORT = 8080 
-PRODUCTION_MODE = True
+env = environ.Env(
+    PRODUCTION_MODE=(bool, True)
+)
+environ.Env.read_env()
+
+PRODUCTION_MODE=env("PRODUCTION_MODE")
+print(f"PRODUCTION_MODE = {PRODUCTION_MODE}")
 if PRODUCTION_MODE:
     DIR_ZMAP_NAME = 'production' 
     CELERY_APP_NAME = "django_nys_02"
