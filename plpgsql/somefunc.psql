@@ -2,7 +2,7 @@ CREATE OR REPLACE PROCEDURE somefunc(
     IN survey_id INT,
     OUT whitelist_tablename VARCHAR(50)
 ) 
-LANGUAGE plpsqgl
+LANGUAGE plpgsql
 AS $$
 << outerblock >>
 DECLARE
