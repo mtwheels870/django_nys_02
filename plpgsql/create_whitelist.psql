@@ -6,7 +6,7 @@ LANGUAGE plpgsql
 AS $$
 << outerblock >>
 DECLARE
-    select_statement VARCHAR(250);
+    select_statement VARCHAR(400);
 BEGIN
     whitelist_tablename := 'whitelist_' || survey_id;
 
