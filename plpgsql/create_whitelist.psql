@@ -6,21 +6,14 @@ LANGUAGE plpgsql
 AS $$
 << outerblock >>
 DECLARE
-    quantity integer := 30;
+    select_statement VARCHAR(250);
 BEGIN
-    RAISE NOTICE 'Quantity here is %', quantity;  -- Prints 30
-    quantity := 50;
-    --
-    -- Create a subblock
-    --
-    DECLARE
-        quantity integer := 80;
-    BEGIN
-        RAISE NOTICE 'Quantity here is %', quantity;  -- Prints 80
-        RAISE NOTICE 'Outer quantity here is %', outerblock.quantity;  -- Prints 50
-    END;
+    whitelist_tablename := 'whitelist_' || survey_id;
 
-    RAISE NOTICE 'Quantity here is %', quantity;  -- Prints 50
-    whitelist_tablename := 'tablename_here';
+    select_statement := 'select ip_network, c.id as range_id, b.id as county_id, a.us_state_id as us_state_id ' ||
+        'INTO ' || whitelist_tablename || ' from powerscan_ipsurveystate a, powerscan_county b, ' ||
+        'powerscan_mmiprange c where survey_id = ' || survey_id || 
+        ' and b.us_state_id = a.us_state_id and c.county_id = b.id order by us_state_id, county_id, range_id';
+    RAISE NOTICE 'SQL STATEMENT: %', select_statement;
 END;
 $$;
