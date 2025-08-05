@@ -132,16 +132,7 @@ class IpSurveyTable(tables.Table):
         Docstring here
         """
         thousands = float(value) / 1000.0
-        #return f"{thousands:,}"
         return f"{thousands:.2f}"
-
-#    def render_ranges(self, value, record):
-#        return "Ranges"
-#    def render_ranges_responded(self, value, record):
-#        return self._render_thousands(value)
-
-#    def render_ranges_pinged(self, value, record):
-#        return self._render_thousands(value)
 
 class CeleryTaskTable(tables.Table):
     selection = tables.CheckBoxColumn(accessor="uuid")
