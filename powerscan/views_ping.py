@@ -157,7 +157,7 @@ class CreateNewSurveyView(generic.edit.FormView):
             kwargs={"survey_id" : survey_id},
             queue=CELERY_QUEUE,
             routing_key='ping.tasks.build_whitelist')
-        print(f"CPV.build_whitelist(), q: {CELERY_QUEUE}, surv_id = {survey_id}, async_res = {async_result}")
+        # print(f"CPV.build_whitelist(), q: {CELERY_QUEUE}, surv_id = {survey_id}, async_res = {async_result}")
         return async_result
 
     # CreateNewSurveyView
