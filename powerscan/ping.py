@@ -384,7 +384,8 @@ class PingSurveyManager:
         print(f"PSM.build_whitelist(), USE_STORED_PROCS = {USE_STORED_PROCS}, survey_id = {self._survey_id}")
         if USE_STORED_PROCS:
             with connection.cursor() as cursor:
-                return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
+                # return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
+                return_value = cursor.execute(f"EXECUTE create_whitelist({self._survey_id}, null)")
                 print(f"return_value = {return_value}")
                 rows = cursor.fetchall()
                 for index, row in enumerate(rows):
