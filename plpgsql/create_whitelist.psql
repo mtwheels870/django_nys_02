@@ -15,5 +15,6 @@ BEGIN
         'WHERE id = %s;', whitelist_tablename, survey_id);
     RAISE LOG '3. update_statement : %', update_statement ;
     EXECUTE update_statement;
+    COMMIT;
 END;
 $$;
