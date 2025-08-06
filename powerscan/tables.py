@@ -81,8 +81,8 @@ class IpSurveyTable(tables.Table):
     class Meta:
         model = IpRangeSurvey
         template_name = "django_tables2/bootstrap-responsive.html"
-        fields = ["selection", "id", "parent_survey_id", "name", "time_created", "time_scheduled", "time_ping_started",
-            "time_tally_stopped", "ranges", "hosts"]
+        fields = ["selection", "id", "parent_survey_id", "name", "time_created", "whitelist_tablename",
+            "time_scheduled", "time_ping_started", "time_tally_stopped", "ranges", "hosts"]
 
     def _render_time(self, value, include_date=False):
         """

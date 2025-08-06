@@ -213,7 +213,7 @@ class IpRangeSurvey(models.Model):
     hosts_pinged = models.IntegerField(default=0, verbose_name="Hosts(K) Pinged")
     # Should this be a ForeignKey (back to this model?)
     parent_survey_id = models.BigIntegerField(null=True, verbose_name="Copies")
-    whitelist_tablename = models.CharField(max_length=20, null=True)
+    whitelist_tablename = models.CharField(max_length=20, null=True, verbose_name="Whitelist")
 
     @property
     def ranges(self):
