@@ -36,6 +36,8 @@ from .models import (
     MmIpRange, IpSurveyState, IpSurveyCounty,
     County, CensusTract)
 
+from .celery import USE_STORED_PROCS
+
 tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
 if not tmp_zmap_run_dir:
     zmap_run_dir = "/home/bitnami/run/exec_zmap"
@@ -380,8 +382,14 @@ class PingSurveyManager:
         Docstring here
         """
         self._create_writers()
+        print(f"PSM.build_whitelist(), USE_STORED_PROCS = {USE_STORED_PROCS}")
+        if USE_STORED_PROCS:
+            with connection.cursor() as cursor:
+                return_value = cursor.execute(f"CALL create_whitelist({survey_id}, null)")
+                print(f"return_value = {return_value}")
+        else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
-        num_states, num_counties, num_ranges = self._traverse_geography()
+            num_states, num_counties, num_ranges = self._traverse_geography()
         return num_states, num_counties, num_ranges
 
     def build_whitelist_sp(self):
@@ -389,9 +397,6 @@ class PingSurveyManager:
         Docstring here
         """
         self._create_writers()
-        with connection.cursor() as cursor:
-            return_value = cursor.execute(f"CALL create_whitelist({survey_id}, null)")
-            print(f"return_value = {return_value}")
         return 0, 0, 0
 
     def unused_add(self, index, range_id, ip_network):

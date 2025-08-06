@@ -117,6 +117,7 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 #    PRODIGY_PORT = 8080 
 env = environ.Env(
     PRODUCTION_MODE=(bool, True)
+    USE_STORED_PROCS=(bool, False)
 )
 #BASE_DIR = os.path.dirname(
 #    os.path.dirname(os.path.abspath(__file__))
@@ -126,7 +127,8 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 PRODUCTION_MODE=env("PRODUCTION_MODE")
-print(f"PRODUCTION_MODE = {PRODUCTION_MODE}")
+USE_STORED_PROCS=env("USE_STORED_PROCS")
+print(f"USE_STORED_PROCS = {USE_STORED_PROCS}")
 if PRODUCTION_MODE:
     DIR_ZMAP_NAME = 'production' 
     CELERY_APP_NAME = "django_nys_02"
