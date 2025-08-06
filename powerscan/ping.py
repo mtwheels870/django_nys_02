@@ -30,6 +30,7 @@ from django_nys_02.settings import DIR_ZMAP_NAME, USE_STORED_PROCS
 
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.db import connection
 
 from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
