@@ -116,7 +116,7 @@ WSGI_APPLICATION = 'django_nys_02.wsgi.application'
 #    PRODIGY_PORT = 8081 
 #    PRODIGY_PORT = 8080 
 env = environ.Env(
-    PRODUCTION_MODE=(bool, True)
+    PRODUCTION_MODE=(bool, True),
     USE_STORED_PROCS=(bool, False)
 )
 #BASE_DIR = os.path.dirname(
