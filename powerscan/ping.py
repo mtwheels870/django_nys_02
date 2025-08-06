@@ -36,7 +36,7 @@ from .models import (
     MmIpRange, IpSurveyState, IpSurveyCounty,
     County, CensusTract)
 
-from .celery import USE_STORED_PROCS
+from celery import USE_STORED_PROCS
 
 tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
 if not tmp_zmap_run_dir:
