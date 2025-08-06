@@ -16,12 +16,13 @@ BEGIN
         a.us_state_id as us_state_id from powerscan_ipsurveystate a, powerscan_county b, \
         powerscan_mmiprange c where survey_id = %s and b.us_state_id = a.us_state_id and \
         c.county_id = b.id order by us_state_id, county_id, range_id;', whitelist_tablename, survey_id);
-    RAISE NOTICE 'select_statement: %', select_statement;
+    RAISE NOTICE '1. select_statement: %', select_statement;
 
-    RAISE NOTICE '2, whitelist_tablename: %', whitelist_tablename;
+    RAISE NOTICE '2. whitelist_tablename: %', whitelist_tablename;
 
-    update_statement := 'UPDATE powerscan_iprangesurvey SET whitelist_tablename = ' || 
-            whitelist_tablename || ' WHERE survey_id = ' || survey_id || ';' ;
+    update_statement := FORMAT('UPDATE powerscan_iprangesurvey SET whitelist_tablename = ''%s'' \
+        WHERE survey_id = %s;', whitelist_tablename, survey_id);
+    RAISE NOTICE '3. update_statement : %', update_statement ;
     EXECUTE update_statement;
 END;
 $$;
