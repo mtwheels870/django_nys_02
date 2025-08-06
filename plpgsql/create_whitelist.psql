@@ -21,7 +21,7 @@ BEGIN
     EXECUTE select_statement INTO whitelist_tablename;
 
     update_statement := 'UPDATE powerscan_iprangesurvey SET whitelist_tablename = ' || 
-            whitelist_tablename || ' WHERE survey_id = ' || survey_id || ';'
+            whitelist_tablename || ' WHERE survey_id = ' || survey_id || ';' ;
     EXECUTE update_statement;
 END;
 $$;
