@@ -26,7 +26,7 @@ import netaddr
 #import cidr_trie.cidr_util
 import pytricia
 
-from django_nys_02.settings import DIR_ZMAP_NAME
+from django_nys_02.settings import DIR_ZMAP_NAME, USE_STORED_PROCS
 
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -35,9 +35,6 @@ from .models import (
     IpRangeSurvey, CountTract, IpRangePing, 
     MmIpRange, IpSurveyState, IpSurveyCounty,
     County, CensusTract)
-
-# NB: celery is a bad name, as it conflicts with a .../site-packages/celery.  Need to rename it
-from django_nys_02.celery import USE_STORED_PROCS
 
 tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
 if not tmp_zmap_run_dir:
