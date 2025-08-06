@@ -9,7 +9,7 @@ DECLARE
     select_statement VARCHAR(400);
     update_statement VARCHAR(150);
 BEGIN
-    p_whitelist_tablename := 'whitelist_' || survey_id;
+    p_whitelist_tablename := 'whitelist_' || p_survey_id;
 
     UPDATE powerscan_iprangesurvey
     SET whitelist_tablename = p_whitelist_tablename
