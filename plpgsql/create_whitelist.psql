@@ -7,6 +7,7 @@ AS $$
 << outerblock >>
 DECLARE
     select_statement VARCHAR(400);
+    update_statement VARCHAR(100);
 BEGIN
     whitelist_tablename := 'whitelist_' || survey_id;
 
@@ -19,7 +20,8 @@ BEGIN
 
     EXECUTE select_statement INTO whitelist_tablename;
 
-    UPDATE 'powerscan_iprangesurvey SET whitelist_tablename = ' || whitelist_tablename || ' WHERE survey_id = ' || 
-        survey_id;
+    update_statement := 'UPDATE powerscan_iprangesurvey SET whitelist_tablename = ' || 
+            whitelist_tablename || ' WHERE survey_id = ' || survey_id || ';'
+    EXECUTE update_statement;
 END;
 $$;
