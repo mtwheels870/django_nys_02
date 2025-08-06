@@ -18,5 +18,8 @@ BEGIN
     RAISE NOTICE 'select_statement: %', select_statement;
 
     EXECUTE select_statement INTO whitelist_tablename;
+
+    UPDATE 'powerscan_iprangesurvey SET whitelist_tablename = ' || whitelist_tablename || ' WHERE survey_id = ' || 
+        survey_id;
 END;
 $$;
