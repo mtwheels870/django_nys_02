@@ -1,6 +1,6 @@
 CREATE OR REPLACE PROCEDURE create_whitelist(
     IN p_survey_id INT,
-    OUT p_whitelist_tablename VARCHAR(40);
+    OUT p_whitelist_tablename VARCHAR(40)
 ) 
 LANGUAGE plpgsql
 AS $$
