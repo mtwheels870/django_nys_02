@@ -386,6 +386,8 @@ class PingSurveyManager:
             with connection.cursor() as cursor:
                 return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
                 print(f"return_value = {return_value}")
+            for index, notice in enumerate(connection.notices):
+                print(f"PostgreSQL Notice[{index}] = {notice}")
             num_states = num_counties = num_ranges = 0
         else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
