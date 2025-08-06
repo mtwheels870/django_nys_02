@@ -64,10 +64,6 @@ class SurveyUtil:
             for range1 in iprange_set:
                 range1.delete()
 
-            tract_set = survey.ipsurveytract_set.all()
-            for tract in tract_set:
-                tract.delete()
-
             county_set = survey.ipsurveycounty_set.all()
             for county in county_set:
                 county.delete()
@@ -76,10 +72,9 @@ class SurveyUtil:
             for state in state_set:
                 state.delete()
 
-            num_tracts = tract_set.count()
             num_counties = county_set.count()
             num_states = state_set.count()
-            logger.warn(f"      deleted s/c/t: {num_states}/{num_counties}/{num_tracts}")
+            logger.warn(f"      deleted s/c/t: {num_states}/{num_counties}")
             survey.delete()
         return True
 
