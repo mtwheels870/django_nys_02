@@ -37,15 +37,7 @@ from .models import (
     MmIpRange, IpSurveyState, IpSurveyCounty,
     County, CensusTract)
 
-tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
-if not tmp_zmap_run_dir:
-    zmap_run_dir = "/home/bitnami/run/exec_zmap"
-else:
-    zmap_run_dir = tmp_zmap_run_dir
-# zmap_num_threads = os.getenv("ZMAP_NUM_THREADS")
-# zmap_ping_rate = os.getenv("ZMAP_PING_RATE")
-# print(f"zmap_run_dir = {zmap_run_dir}, num_threads = {zmap_num_threads}, ping_rate = {zmap_ping_rate}")
-print(f"zmap_run_dir = {zmap_run_dir}")
+zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY", "/home/bitnami/run/exec_zmap")
 TEMP_DIRECTORY = zmap_run_dir 
 FILE_RANGE_IP = "RangeIp.csv"
 FILE_WHITELIST = "Whitelist.csv"
@@ -54,7 +46,6 @@ FILE_METADATA = "Metadata.csv"
 FILE_LOG = "Log.txt"
 FILE_DEBUG_ZMAP = "ProcessZmapResults.txt"
 FILE_ZMAP_SHELL = "run_zmap.sh"
-#FILE_PATRICIA_TRIE = "PatriciaTrie.txt"
 
 HEADER = "range_id,ip_network\n"
 

@@ -128,7 +128,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 PRODUCTION_MODE=env("PRODUCTION_MODE")
 USE_STORED_PROCS=env("USE_STORED_PROCS")
-print(f"USE_STORED_PROCS = {USE_STORED_PROCS}")
+# print(f"USE_STORED_PROCS = {USE_STORED_PROCS}")
 if PRODUCTION_MODE:
     DIR_ZMAP_NAME = 'production' 
     CELERY_APP_NAME = "django_nys_02"
