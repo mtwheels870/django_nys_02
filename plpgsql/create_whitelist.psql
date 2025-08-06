@@ -4,6 +4,7 @@ CREATE OR REPLACE PROCEDURE create_whitelist(
 ) 
 LANGUAGE plpgsql
 AS $$
+BEGIN
     p_whitelist_tablename := 'whitelist_' || p_survey_id;
 
     UPDATE powerscan_iprangesurvey
@@ -12,4 +13,5 @@ AS $$
 
     COMMIT;
     RAISE LOG '1. after update';
+END
 $$;
