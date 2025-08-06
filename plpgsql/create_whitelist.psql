@@ -3,11 +3,13 @@ CREATE OR REPLACE PROCEDURE create_whitelist(
 ) 
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    whitelist_tablename VARCHAR(20);
 BEGIN
-    p_whitelist_tablename := 'whitelist_' || p_survey_id;
+    whitelist_tablename := 'whitelist_' || p_survey_id;
 
     UPDATE powerscan_iprangesurvey
-    SET whitelist_tablename = p_whitelist_tablename
+    SET whitelist_tablename = whitelist_tablename
     WHERE id = p_survey_id;
 
     COMMIT;
