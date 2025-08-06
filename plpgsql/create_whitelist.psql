@@ -13,6 +13,6 @@ BEGIN
 
     UPDATE powerscan_iprangesurvey
     SET whitelist_tablename = p_whitelist_tablename
-    WHERE id = p_survey_id
+    WHERE id = p_survey_id;
 END;
 $$;
