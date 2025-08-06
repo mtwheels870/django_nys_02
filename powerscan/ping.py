@@ -385,8 +385,8 @@ class PingSurveyManager:
         if USE_STORED_PROCS:
             with connection.cursor() as cursor:
                 # return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
-                string_value = ""
-                return_value = cursor.execute("CALL create_whitelist(%s)", [self._survey_id, string_value])
+                string_value = "null"
+                return_value = cursor.execute("CALL create_whitelist(%s, %s)", [self._survey_id, string_value])
                 print(f"return_value = {return_value}")
                 rows = cursor.fetchall()
                 for index, row in enumerate(rows):
