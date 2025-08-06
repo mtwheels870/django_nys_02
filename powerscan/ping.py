@@ -378,11 +378,12 @@ class PingSurveyManager:
                 # return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
                 string_value = "null"
                 # return_value = cursor.execute("CALL create_whitelist(%s, null)", [self._survey_id])
-                return_value = cursor.callproc("create_whitelist", [int(self._survey_id)])
+                return_value = cursor.execute("create_whitelist", [int(self._survey_id)])
                 print(f"return_value = {return_value}")
                 rows = cursor.fetchall()
                 for index, row in enumerate(rows):
                     print(f"Row[{index}] = {row}")
+                connection.commit()
 #            for index, notice in enumerate(connection.notices):
 #                print(f"PostgreSQL Notice[{index}] = {notice}")
 #            connection.notices.clear()
