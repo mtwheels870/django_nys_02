@@ -384,6 +384,16 @@ class PingSurveyManager:
         num_states, num_counties, num_ranges = self._traverse_geography()
         return num_states, num_counties, num_ranges
 
+    def build_whitelist_sp(self):
+        """
+        Docstring here
+        """
+        self._create_writers()
+        with connection.cursor() as cursor:
+            return_value = cursor.execute(f"CALL create_whitelist({survey_id}, null)")
+            print(f"return_value = {return_value}")
+        return 0, 0, 0
+
     def unused_add(self, index, range_id, ip_network):
         if index == 0:
             self.writer_range_ip.write(HEADER)
