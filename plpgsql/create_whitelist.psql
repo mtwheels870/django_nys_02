@@ -20,7 +20,7 @@ BEGIN
 
     RAISE NOTICE '2. whitelist_tablename: %', whitelist_tablename;
 
-    update_statement := FORMAT('UPDATE powerscan_iprangesurvey SET whitelist_tablename = ''%s'' \
+    update_statement = FORMAT('UPDATE powerscan_iprangesurvey SET whitelist_tablename = ''%s'' \
         WHERE survey_id = %s;', whitelist_tablename, survey_id);
     RAISE NOTICE '3. update_statement : %', update_statement ;
     EXECUTE update_statement;
