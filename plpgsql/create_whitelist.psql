@@ -10,6 +10,8 @@ BEGIN
     UPDATE powerscan_iprangesurvey
     SET whitelist_tablename = p_whitelist_tablename
     WHERE id = p_survey_id;
+
     COMMIT;
+    RAISE LOG '1. after update';
 END;
 $$;
