@@ -37,8 +37,7 @@ from .models import (
     County, CensusTract)
 
 # NB: celery is a bad name, as it conflicts with a .../site-packages/celery.  Need to rename it
-import celery 
-from celery import USE_STORED_PROCS
+from django_nys_02.celery import USE_STORED_PROCS
 
 tmp_zmap_run_dir = os.getenv("ZMAP_RUN_DIRECTORY")
 if not tmp_zmap_run_dir:
