@@ -389,8 +389,12 @@ class PingSurveyManager:
 #            for index, notice in enumerate(connection.notices):
 #                print(f"PostgreSQL Notice[{index}] = {notice}")
 #            connection.notices.clear()
+            rows = cursor.fetchall()
+            for index, row in enumerate(rows):
+                print(f"Row[{index}] = {row}")
             for index, field in enumerate(dir(connection)):
-                print(f"connection, field[{index}], {field}")
+                if not field.startswith("__"):
+                    print(f"connection, field[{index}], {field}")
             num_states = num_counties = num_ranges = 0
         else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
