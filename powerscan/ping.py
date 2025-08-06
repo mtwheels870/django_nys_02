@@ -381,7 +381,7 @@ class PingSurveyManager:
         Docstring here
         """
         self._create_writers()
-        print(f"PSM.build_whitelist(), USE_STORED_PROCS = {USE_STORED_PROCS}")
+        print(f"PSM.build_whitelist(), USE_STORED_PROCS = {USE_STORED_PROCS}, survey_id = {self._survey_id}")
         if USE_STORED_PROCS:
             with connection.cursor() as cursor:
                 return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
