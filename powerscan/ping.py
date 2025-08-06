@@ -386,12 +386,12 @@ class PingSurveyManager:
             with connection.cursor() as cursor:
                 return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
                 print(f"return_value = {return_value}")
+                rows = cursor.fetchall()
+                for index, row in enumerate(rows):
+                    print(f"Row[{index}] = {row}")
 #            for index, notice in enumerate(connection.notices):
 #                print(f"PostgreSQL Notice[{index}] = {notice}")
 #            connection.notices.clear()
-            rows = cursor.fetchall()
-            for index, row in enumerate(rows):
-                print(f"Row[{index}] = {row}")
             for index, field in enumerate(dir(connection)):
                 if not field.startswith("__"):
                     print(f"connection, field[{index}], {field}")
