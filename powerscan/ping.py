@@ -375,18 +375,19 @@ class PingSurveyManager:
         print(f"PSM.build_whitelist(), USE_STORED_PROCS = {USE_STORED_PROCS}, survey_id = {self._survey_id}")
         if USE_STORED_PROCS:
             with connection.cursor() as cursor:
-                # return_value = cursor.execute(f"CALL create_whitelist({self._survey_id}, null)")
-                string_value = "null"
-                # return_value = cursor.execute("CALL create_whitelist(%s, null)", [self._survey_id])
                 return_value = cursor.execute("CALL create_whitelist(%s,null);", [int(self._survey_id)])
                 print(f"return_value = {return_value}")
                 rows = cursor.fetchall()
                 for index, row in enumerate(rows):
                     print(f"Row[{index}] = {row}")
                 connection.commit()
-#            for index, notice in enumerate(connection.notices):
-#                print(f"PostgreSQL Notice[{index}] = {notice}")
-#            connection.notices.clear()
+                print(f"Cursor:"
+                for index, field in enumerate(dir(cursor)):
+                    if not field.startswith("__"):
+                        print(f"cursor, field[{index}], {field}")
+                        if field in cursor:
+                            value = cursor[field]
+                            print(f"value = {value}")
             for index, field in enumerate(dir(connection)):
                 if not field.startswith("__"):
                     print(f"connection, field[{index}], {field}")
