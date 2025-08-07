@@ -367,7 +367,7 @@ class PingSurveyManager:
         self.writer_whitelist = open(self.path_whitelist, "w+")
         self.writer_log = open(self.path_log, "w+")
 
-    def build_whitelist(self):
+    def build_whitelist(self, survey):
         """
         Docstring here
         """
@@ -389,7 +389,6 @@ class PingSurveyManager:
                 new_table_name = first_row[0]
             if new_table_name:
                 print(f"Read new_table_name = {new_table_name}")
-                survey = IpRangeSurvey.objects.get(pk=self._survey_id)
                 survey.whitelist_tablename = new_table_name
                 survey.save()
                 print(f"after save, whitelist_tablename = {survey.whitelist_tablename}")
@@ -398,20 +397,6 @@ class PingSurveyManager:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
             num_states, num_counties, num_ranges = self._traverse_geography()
         return num_states, num_counties, num_ranges
-
-    def build_whitelist_sp(self):
-        """
-        Docstring here
-        """
-        self._create_writers()
-        return 0, 0, 0
-
-    def unused_add(self, index, range_id, ip_network):
-        if index == 0:
-            self.writer_range_ip.write(HEADER)
-        string1 = f"{range_id},{ip_network}\n"
-        self.writer_range_ip.write(string1)
-        self.writer_whitelist.write(f"{ip_network}\n")
 
     def get_zmap_files(self):
         """

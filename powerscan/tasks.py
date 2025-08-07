@@ -174,7 +174,7 @@ def build_whitelist(self, *args, **kwargs):
 
     survey_manager = PingSurveyManager(survey_id, debug.whitelist)
     # num_states, num_counties, num_tracts, num_ranges = survey_manager.build_whitelist()
-    num_states, num_counties, num_ranges = survey_manager.build_whitelist()
+    num_states, num_counties, num_ranges = survey_manager.build_whitelist(survey)
 
     print(f"tasks:build_whitelist(), whitelist_tablename = {survey.whitelist_tablename}")
     if debug.whitelist:
