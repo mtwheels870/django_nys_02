@@ -4,6 +4,8 @@ CREATE OR REPLACE PROCEDURE create_whitelist(
 ) 
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    select_statement VARCHAR(400);
 BEGIN
     p_whitelist_tablename := 'whitelist_' || p_survey_id;
 
