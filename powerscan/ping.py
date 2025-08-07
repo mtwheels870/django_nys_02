@@ -393,6 +393,7 @@ class PingSurveyManager:
                 new_table_name = first_row[0]
             if new_table_name:
                 survey.whitelist_tablename = new_table_name
+                print(f"build_whitelist(), created table {new_table_name}")
 
             # Build counties and whitelist file from database table
             num_counties, num_ranges = self.build_counties_ranges_from_db(survey, new_table_name)
