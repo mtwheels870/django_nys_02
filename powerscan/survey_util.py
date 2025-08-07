@@ -221,7 +221,7 @@ class GeoCountUpdater:
         # 1: Set up the mapping, Map the counties to the count objects
         county_count = 0
         county_set = IpSurveyCounty.objects.filter(survey__id=self._survey_id)
-        print(f"update_county_counts(), {count_set.count()} counties")
+        print(f"update_county_counts(), {county_set.count()} counties")
         for county_counter in county_set:
             hosts_pinged = county_counter.hosts_pinged
             if hosts_pinged != 0:
