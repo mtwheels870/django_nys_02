@@ -346,12 +346,10 @@ class PingSurveyManager:
         with connection.cursor() as cursor:
             select_statement = f"SELECT distinct county_id FROM {new_table_name} ORDER BY county_id"
             cursor.execute(select_statement)
-            print(f"build_counties_ranges_from_db(), return_value 1, = {return_value}")
             county_rows = cursor.fetchall()
             num_counties = len(county_rows)
             for index, row in enumerate(county_rows):
                 county_id = row[0]
-                # Create IpSurveyCounty AQUI
                 county = County.objects.get(pk=county_id)
                 survey_county = IpSurveyCounty(survey=survey, county=county)
                 survey_county.save()
