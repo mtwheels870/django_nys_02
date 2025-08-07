@@ -341,6 +341,35 @@ class PingSurveyManager:
         self.writer_whitelist = open(self.path_whitelist, "w+")
         self.writer_log = open(self.path_log, "w+")
 
+    def build_counties_ranges_from_db(self, survey, new_table_name):
+            num_counties, num_ranges = self.build_counties_ranges_from_db(survey, new_table_name)
+        with connection.cursor() as cursor:
+            select_statement = f"SELECT distinct county_id from {new_table_name} ORDER BY county_id"
+            return_value = cursor.execute(select_statement)
+            print(f"build_counties_ranges_from_db(), return_value 1, = {return_value}")
+            county_rows = cursor.fetchall():
+            num_counties = len(county_rows)
+            for row in county_rows:
+                county_id = row[0]
+                # Create IpSurveyCounty AQUI
+                county = County.objects.get(pk=county_id)
+                survey_county = IpSurveyCounty(survey=survey, county=county)
+                survey_county.save()
+                print(f"b_c_r_..db(), counter for county[{county_id}] = {county.county_name}") 
+
+        with connection.cursor() as cursor:
+            select_statement = "SELECT range_id, ip_network {new_table_name} ORDER BY range_id")
+            return_value = cursor.execute(select_statement)
+            print(f"build_counties_ranges_from_db(), return_value 2, = {return_value}")
+            range_rows = cursor.fetchall():
+            num_ranges = len(range_rows)
+            for index, row in enumerate(range_rows):
+                range_id = row[0]
+                ip_network = row[1]
+                if index % 20 == 0:
+                    print(f"b_c_r_..db(), range[{index}], ({range_id},{ip_network})")
+        return num_counties, num_ranges
+
     def build_whitelist(self, survey):
         """
         Docstring here
@@ -349,6 +378,7 @@ class PingSurveyManager:
         print(f"PSM.build_whitelist(), USE_STORED_PROCS = {USE_STORED_PROCS}, survey_id = {self._survey_id}")
         if USE_STORED_PROCS:
             new_table_name = None
+            # Create the whitelist in the database
             with connection.cursor() as cursor:
                 return_value = cursor.execute("CALL create_whitelist(%s,null);", [int(self._survey_id)])
                 rows = cursor.fetchall()
@@ -362,7 +392,11 @@ class PingSurveyManager:
                 new_table_name = first_row[0]
             if new_table_name:
                 survey.whitelist_tablename = new_table_name
-            num_states = num_counties = num_ranges = 0
+
+            # Build counties and whitelist file from database table
+            num_counties, num_ranges = self.build_counties_ranges_from_db(survey, new_table_name)
+
+            num_states = 0
         else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
             num_states, num_counties, num_ranges = self._traverse_geography()
