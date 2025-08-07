@@ -421,20 +421,44 @@ class PingSurveyManager:
         return 1 << (ip_network.max_prefixlen - ip_network.prefixlen)
 
     # Build a radix tree of the ip address
-    def _build_radix_tree(self):
+    def _build_radix_tree(self, survey):
         """
         Docstring here
         """
         self.pyt = pytricia.PyTricia()
-        df = self.df_ranges = pd.read_csv(self.path_range_ip)
-        column_names = df.columns.tolist()
-        for index, row in df.iterrows():
-            range_id = row['range_id']
-            ip_network = row['ip_network']
-            possible_hosts = self._calculate_possible(ip_network)
-            # Hang a counter on the tree
-            range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
-            self.pyt.insert(ip_network, range_ip)
+        if USE_STORED_PROCS:
+            whitelist_tablename = survey.whitelist_tablename
+            if not whitelist_tablename:
+                message = "PSM.build_radix_tree(), STORED_PROC, but no whitelist_tablename!"
+                print(message)
+                raise ValueError(message)
+
+            with connection.cursor() as cursor:
+                select_statement = f"SELECT range_id, ip_network FROM {whitelist_tablename} ORDER BY range_id"
+                return_value = cursor.execute(select_statement)
+                print(f"(), return_value 2, = {return_value}")
+                range_rows = cursor.fetchall()
+                num_ranges = len(range_rows)
+                print("Ranges: ({num_ranges})")
+                for index, row in enumerate(range_rows):
+                    range_id = row[0]
+                    ip_network = row[1]
+                    if index % 5000 == 0:
+                        print(f"b_c_r_..db(), range[{index}], ({range_id},{ip_network})")
+                    possible_hosts = self._calculate_possible(ip_network)
+                    # Hang a counter on the tree
+                    range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
+                    self.pyt.insert(ip_network, range_ip)
+        else:
+            df = self.df_ranges = pd.read_csv(self.path_range_ip)
+            column_names = df.columns.tolist()
+            for index, row in df.iterrows():
+                range_id = row['range_id']
+                ip_network = row['ip_network']
+                possible_hosts = self._calculate_possible(ip_network)
+                # Hang a counter on the tree
+                range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
+                self.pyt.insert(ip_network, range_ip)
 
     def debug_matches(self, ip_network):
         """
@@ -510,15 +534,10 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        if USE_STORED_PROCS:
-            message = "PSM.process_results(), don't process from stored procedure correctly (yet)!"
-            print(message)
-            raise ValueError(message)
-
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
-        self._build_radix_tree()
+        self._build_radix_tree(survey)
         self._match_zmap_replies(debug)
         self.file_debugger.close()
         collected_objects = gc.collect()
