@@ -90,17 +90,12 @@ def start_ping(self, *args, **kwargs):
         chain01 = chain(zmap_from_file.s(survey_id).set(countdown=zmap_delay_secs),
                 _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
         async_result = chain01.run()
-        #print(f"Task.start_ping(), chain01 = {chain01}, async_result = {async_result}")
     else:
-        #print(f"Task.start_ping(), derivative survey, need to clone here")
         # Zmap gets passed the two args from the build_clone_details
         chain02 = chain(_build_clone_details.s(survey_id, parent_survey_id),
                 zmap_from_file.s().set(countdown=zmap_delay_secs),
                 _start_tally.s(survey_id, tally_delay_mins, tally_delay_secs))
         async_result = chain02.run()
-
-                # queue=QUEUE_NAME,routing_key='ping.tasks.zmap_from_file')))
-    #print(f"start_ping(), async_result = {async_result}")
     return async_result
 
 def _estimate_zmap_time(survey_id):
@@ -110,7 +105,6 @@ def _estimate_zmap_time(survey_id):
     from .models import IpSurveyState
 
     total_ranges = 0
-    #print(f"_estimate_zmap_time(), survey_id = {survey_id}")
     for survey_state in IpSurveyState.objects.filter(survey__id=survey_id):
         state = survey_state.us_state
         estimated_ranges = state.estimated_ranges
@@ -120,9 +114,6 @@ def _estimate_zmap_time(survey_id):
     # Calculate when we *think* the zmap job should be done, start the tally
     estimated_mins = ESTIMATED_BASE_MIN + (total_ranges / ESTIMATED_RANGES_PER_MIN)
     estimated_secs = estimated_mins * 60
-    #first = "_estimate_zmap_time(), total_ranges = "
-    #second = f"{total_ranges}, estimated m/s = {estimated_mins:.1f}/{estimated_secs:.0f}"
-    #print(first + second)
     return estimated_mins, estimated_secs
 
 @celery_app.task
@@ -132,7 +123,6 @@ def _start_tally(metadata_file, survey_id, delay_mins, delay_secs):
     """
     from .tasks import tally_results
 
-    #print(f"TasksPeriodic._start_tally(), metadata_file = {metadata_file}, survey_id = {survey_id}")
     if not metadata_file:
         print(f"TasksPeriodic._start_tally(), no metadata_file, bailing...")
         return None
@@ -255,7 +245,6 @@ def _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues):
     index = 0
     running_survey_ids = _scheduled_active_surveys(debug_tasks_queues)
     now = timezone.now()
-    #print(f"_schedule_surveys_tasks(), running_survey_ids = {running_survey_ids}")
     for survey in upcoming_surveys:
         survey_id = survey.id
         if debug_tasks_queues:
@@ -267,12 +256,10 @@ def _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues):
             t_s = survey.time_scheduled.strftime(TIME_FORMAT2 )
             now_f = now.strftime(TIME_FORMAT2)
             if survey.time_scheduled < now:
-                # print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
                 delay_secs = 0
             else:
                 time_difference = survey.time_scheduled - now       # time diff in microseconds
                 delay_secs = time_difference.seconds 
-            # print(f"CALC: {t_s} - {now_f} = {time_diff_secs:.1f}")
             # delay_secs = 0 if time_difference.seconds < 0 else time_difference.seconds
             print(f"Scheduling: survey[{index}]: {survey.id}, scheduled: {t_s}, now: {now_f}")
             print(f"    queue = {CELERY_QUEUE}, delay_secs = {delay_secs:.1f}")
@@ -283,11 +270,6 @@ def _schedule_surveys_tasks(upcoming_surveys, debug_tasks_queues):
                 routing_key='ping.tasks.start_ping')
             #print(f"    async_result = {async_result}")
         index = index + 1
-
-    # UNUSED: f = lambda survey: survey.id
-    # survey_ids = [f(x) for x in upcoming_surveys]
-    #if len(survey_ids) > 0:
-    #    print(f"TasksPeriodic._sched_surv(), survey_id = {survey_ids}")
 
 def _add_surveys_to_queues(debug_scheduler, debug_tasks_queues):
     """
@@ -306,7 +288,6 @@ def _add_surveys_to_queues(debug_scheduler, debug_tasks_queues):
     window_end = now + forward_two_periods 
     end_string = window_end.strftime(TIME_FORMAT2 )
 
-    # now_p1_string = now_plus_one.strftime(TIME_FORMAT2)
     # Take surveys whose ping has not been started and whose time_scheduled is in our window
     upcoming_surveys = IpRangeSurvey.objects.filter(
             time_ping_started__isnull=True).filter(

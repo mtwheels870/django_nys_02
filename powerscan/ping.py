@@ -249,7 +249,7 @@ class PingSurveyManager:
         """
         Docstring here
         """
-        debug_county_id = 1175
+        debug_county_id = 1175          # Calcasieu, LA. Random debug county
         self._debug_county = None
 
         survey = IpRangeSurvey.objects.get(pk=self._survey_id)
@@ -264,10 +264,6 @@ class PingSurveyManager:
         if self._debug:
             print(f"PSM._traverse_geography(), survey_id: {self._survey_id}, states = {state_abbrevs}")
 
-
-        #state_ids = []
-        #for survey_state in selected_survey_states :
-        #    state_ids.append(survey_state.us_state.id)
         total_ranges = 0
         num_counties = 0
         for survey_state in selected_survey_states :
@@ -285,28 +281,6 @@ class PingSurveyManager:
                 ranges_added = self._county_ranges_whitelist(county, add_to_debug)
                 total_ranges = total_ranges + ranges_added
 
-#            state_ids.append(survey_state.us_state.id)
-
-        # debugger.print_array("PSM._traverse_geography(), state_ids:", state_ids)
-
-#        county_ids = []
-
-        # Could also do:
-        # counties = state.county_set.all()
-        # counties_in_state = County.objects.filter(us_state__id__in=state_ids)
-#        total_ranges = 0
-#        counties_in_states = County.objects.filter(us_state__id__in=state_ids)
-#        for county in counties_in_states:
-            # county_ids.append(county.id)
-        #print(f"PSM._traverse_geography(), county_ids = {county_ids}")
-        # debugger.print_array("PSM._traverse_geography(), county_ids:", county_ids)
-
-
-        # file_name = debugger.get_file()
-        # debugger.close()
-        #num_states = len(state_ids)
-        #num_counties = len(county_ids)
-        # num_tracts = len(tract_ids)
         if self._debug:
             first = "PSM._traverse_geography(), created (s/c/r) = "
             second = f"{num_states}/{num_counties}/{total_ranges:,}"
@@ -315,7 +289,7 @@ class PingSurveyManager:
             self._debug_close_files()
         return num_states, num_counties, total_ranges
 
-    def _tract_ranges_whitelist(self, tract, add_to_debug):
+    def _county_ranges_whitelist(self, tract, add_to_debug):
         """
         NB: This actually works on counties now, not tracts (the county_ranges_whitelist() call is
         a pass-through
@@ -334,11 +308,11 @@ class PingSurveyManager:
         return ranges_added
 
     # Exactly the same (as above), but we change the names to start to generalize
-    def _county_ranges_whitelist(self, county, add_to_debug):
+    def _county_ranges_whitelist_old(self, county, add_to_debug):
         """
         Docstring here
         """
-        return self._tract_ranges_whitelist(county, add_to_debug)
+        # return self._tract_ranges_whitelist(county, add_to_debug)
 
     # Return the number of ranges
     def _configure_whitelist_files(self):
@@ -377,7 +351,6 @@ class PingSurveyManager:
             new_table_name = None
             with connection.cursor() as cursor:
                 return_value = cursor.execute("CALL create_whitelist(%s,null);", [int(self._survey_id)])
-                print(f"return_value = {return_value}")
                 rows = cursor.fetchall()
                 num_rows = len(rows)
                 if num_rows != 1:
@@ -388,10 +361,7 @@ class PingSurveyManager:
                     print(f"build_whitelist(), first_row = {first_row}, num_items = {num_items}")
                 new_table_name = first_row[0]
             if new_table_name:
-                print(f"Read new_table_name = {new_table_name}")
                 survey.whitelist_tablename = new_table_name
-                survey.save()
-                print(f"after save, whitelist_tablename = {survey.whitelist_tablename}")
             num_states = num_counties = num_ranges = 0
         else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
@@ -471,7 +441,7 @@ class PingSurveyManager:
         # Iterate the entire tree
         index = 0
 
-        # Walk through our dataframe again
+        # Walk through our dataframe again of IP ranges, look each up in in the radix tree
         ranges_updated = hosts_pinged = hosts_responded = 0
         print("_save_to_db(), iterrating through all of the ranges")
         for index, row in self.df_ranges.iterrows():
