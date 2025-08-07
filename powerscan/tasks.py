@@ -326,39 +326,43 @@ def tally_results(metadata_file, survey_id, retry_count):
         if not survey_manager:
             print(f"Task.{func_name}(), no survey manager for survey_id: {int_survey_id}")
             return 0
-        ranges_responded, hosts_responded, hosts_pinged = _process_zmap_results(survey,
-                survey_manager, metadata_file, now)
-        if ranges_responded == 0:
-            delta = timedelta(seconds=TALLY_DELAY_SECS)
-            tally_start = now + delta
-            formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
-            retry_count = retry_count + 1
-            if retry_count > MAX_TALLY_RETRY_COUNT:
-                print(f"Task.{func_name}({int_survey_id}), max retries ({MAX_TALLY_RETRY_COUNT}) exceeded, aborting")
-                return
-            first = f"Task.{func_name}({int_survey_id}), empty_zmap_file, delay:"
-            second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, retry_count: {retry_count}"
-            print(first + second)
-            async_result2 = tally_results.apply_async(
-                countdown=TALLY_DELAY_SECS, 
-                kwargs={"survey_id": survey_id,
-                    "metadata_file": metadata_file,
-                    "retry_count": retry_count} )
-            survey.time_tally_started = None
-            survey.save()
-            return 0
+        try:
+            ranges_responded, hosts_responded, hosts_pinged = _process_zmap_results(survey,
+                    survey_manager, metadata_file, now)
+            # This logic is wrong.  We could have 0 ranges responded just because (config problem, etc.)
+            if ranges_responded == 0:
+                delta = timedelta(seconds=TALLY_DELAY_SECS)
+                tally_start = now + delta
+                formatted_start = tally_start.strftime(TIME_FORMAT_STRING)
+                retry_count = retry_count + 1
+                if retry_count > MAX_TALLY_RETRY_COUNT:
+                    print(f"Task.{func_name}({int_survey_id}), max retries ({MAX_TALLY_RETRY_COUNT}) exceeded, aborting")
+                    return
+                first = f"Task.{func_name}({int_survey_id}), empty_zmap_file, delay:"
+                second = f"{TALLY_DELAY_MINS}m, new start: {formatted_start}, retry_count: {retry_count}"
+                print(first + second)
+                async_result2 = tally_results.apply_async(
+                    countdown=TALLY_DELAY_SECS, 
+                    kwargs={"survey_id": survey_id,
+                        "metadata_file": metadata_file,
+                        "retry_count": retry_count} )
+                survey.time_tally_started = None
+                survey.save()
+                return 0
 
-        survey.time_tally_stopped = timezone.now()
-        survey.ranges_responded = ranges_responded
-        survey.hosts_responded = hosts_responded 
-        survey.hosts_pinged = hosts_pinged 
-        # print(f"SURVEY SAVE, 10")
-        survey.save()
-        print(f"Task.{func_name}({survey_id}), saved {hosts_responded:,} hosts to db")
-        # print(f"Task.{func_name}({survey_id}), updating geo counts")
-        geo_counter =  GeoCountUpdater(survey_id)
-        geo_counter.propagate_counts()
-        # print(f"Task.{func_name}({survey_id}), done")
+            survey.time_tally_stopped = timezone.now()
+            survey.ranges_responded = ranges_responded
+            survey.hosts_responded = hosts_responded 
+            survey.hosts_pinged = hosts_pinged 
+            # print(f"SURVEY SAVE, 10")
+            survey.save()
+            print(f"Task.{func_name}({survey_id}), saved {hosts_responded:,} hosts to db")
+            # print(f"Task.{func_name}({survey_id}), updating geo counts")
+            geo_counter =  GeoCountUpdater(survey_id)
+            geo_counter.propagate_counts()
+            # print(f"Task.{func_name}({survey_id}), done")
+        except ValueError as e:
+            print(f"Task.tally_results(), aborting (don't requeue)")
 
     except Exception as e:
         print(f"Task.{func_name}({survey_id}), exception: {e}")

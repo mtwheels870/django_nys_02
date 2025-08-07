@@ -510,6 +510,11 @@ class PingSurveyManager:
         """
         Docstring here
         """
+        if USE_STORED_PROCS:
+            message = "PSM.process_results(), don't process from stored procedure correctly (yet)!"
+            print(message)
+            raise ValueError(message)
+
         self.file_debugger = self.FileDebugger(self.directory, "UnusedName")
         #self.trie_wrapper = TrieWrapper()
         self._unmatched_list = []
