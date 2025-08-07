@@ -17,6 +17,7 @@ import os
 import datetime
 import gc
 
+import numpy as np
 import pandas as pd
 # from pyspark.sql import SparkSession
 import ipaddress
@@ -364,7 +365,7 @@ class PingSurveyManager:
             print(f"build_counties_ranges_from_db(), return_value 2, = {return_value}")
             range_rows = cursor.fetchall()
             num_ranges = len(range_rows)
-            print("Ranges: ({num_ranges})")
+            print(f"Ranges: ({num_ranges})")
             for index, row in enumerate(range_rows):
                 range_id = row[0]
                 ip_network = row[1]
@@ -439,16 +440,22 @@ class PingSurveyManager:
                 print(f"(), return_value 2, = {return_value}")
                 range_rows = cursor.fetchall()
                 num_ranges = len(range_rows)
-                print("Ranges: ({num_ranges})")
+                print(f"Ranges: ({num_ranges})")
+                np_array = np.empty((num_ranges, 2))
                 for index, row in enumerate(range_rows):
                     range_id = row[0]
                     ip_network = row[1]
                     if index % 5000 == 0:
                         print(f"b_c_r_..db(), range[{index}], ({range_id},{ip_network})")
                     possible_hosts = self._calculate_possible(ip_network)
+                    np_array[i][0] = range_id
+                    np_array[i][1] = ip_network
                     # Hang a counter on the tree
                     range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
                     self.pyt.insert(ip_network, range_ip)
+                self.df_ranges = pd.DataFrame(np_array, columns=["range_id", "ip_network"])
+                print(f"Creating pandas dataframe, df_ranges:")
+                print(self.df_ranges)
         else:
             df = self.df_ranges = pd.read_csv(self.path_range_ip)
             column_names = df.columns.tolist()
@@ -506,7 +513,7 @@ class PingSurveyManager:
 
         # Walk through our dataframe again of IP ranges, look each up in in the radix tree
         ranges_updated = hosts_pinged = hosts_responded = 0
-        print("_save_to_db(), iterrating through all of the ranges")
+        print("_save_to_db(), iterating through all of the ranges")
         for index, row in self.df_ranges.iterrows():
             range_id = row['range_id']
             ip_network = row['ip_network']
