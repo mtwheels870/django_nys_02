@@ -381,7 +381,7 @@ class PingSurveyManager:
                 for index, row in enumerate(rows):
                     print(f"Row[{index}] = {row}")
                 connection.commit()
-                print(f"Cursor:"
+                print(f"Cursor:")
                 for index, field in enumerate(dir(cursor)):
                     if not field.startswith("__"):
                         print(f"cursor, field[{index}], {field}")
