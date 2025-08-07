@@ -12,7 +12,7 @@ BEGIN
     select_statement = FORMAT('CREATE TABLE %s AS SELECT ip_network, c.id as range_id, b.id as county_id, '
         'a.us_state_id as us_state_id from powerscan_ipsurveystate a, powerscan_county b, '
         'powerscan_mmiprange c where survey_id = %s and b.us_state_id = a.us_state_id and '
-        'c.county_id = b.id order by us_state_id, county_id, range_id;', p_whitelist_tablename, survey_id);
+        'c.county_id = b.id order by us_state_id, county_id, range_id;', p_whitelist_tablename, p_survey_id);
     RAISE LOG '1. select_statement: %', select_statement;
     EXECUTE select_statement;
 END
