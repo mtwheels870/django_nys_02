@@ -432,13 +432,14 @@ class PingSurveyManager:
                 range_rows = cursor.fetchall()
                 num_ranges = len(range_rows)
                 print(f"Ranges: ({num_ranges})")
-                np_array = np.empty((num_ranges, 2))
+                np_array = np.empty((num_ranges, 2), dtype=object)
                 for index, row in enumerate(range_rows):
                     range_id = row[0]
                     ip_network = row[1]
                     if index % 5000 == 0:
                         print(f"b_c_r_..db(), range[{index}], ({range_id},{ip_network})")
                     possible_hosts = self._calculate_possible(ip_network)
+                    print(f"build_radix_tree(), adding[{index}]: {range_id}, {ip_network}")
                     np_array[index][0] = range_id
                     np_array[index][1] = ip_network
                     # Hang a counter on the tree
