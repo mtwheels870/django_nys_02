@@ -391,6 +391,7 @@ class PingSurveyManager:
                 print(f"Read new_table_name = {new_table_name}")
                 survey = IpRangeSurvey.objects.get(pk=self._survey_id)
                 survey.whitelist_tablename = new_table_name
+                survey.save()
                 
             num_states = num_counties = num_ranges = 0
         else:
