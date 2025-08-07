@@ -342,7 +342,7 @@ class PingSurveyManager:
         self.writer_log = open(self.path_log, "w+")
 
     def build_counties_ranges_from_db(self, survey, new_table_name):
-            num_counties, num_ranges = self.build_counties_ranges_from_db(survey, new_table_name)
+        print("Counties:")
         with connection.cursor() as cursor:
             select_statement = f"SELECT distinct county_id from {new_table_name} ORDER BY county_id"
             return_value = cursor.execute(select_statement)
@@ -357,6 +357,7 @@ class PingSurveyManager:
                 survey_county.save()
                 print(f"b_c_r_..db(), counter for county[{county_id}] = {county.county_name}") 
 
+        print("Ranges:")
         with connection.cursor() as cursor:
             select_statement = "SELECT range_id, ip_network {new_table_name} ORDER BY range_id")
             return_value = cursor.execute(select_statement)
