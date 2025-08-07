@@ -347,7 +347,7 @@ class PingSurveyManager:
             select_statement = f"SELECT distinct county_id from {new_table_name} ORDER BY county_id"
             return_value = cursor.execute(select_statement)
             print(f"build_counties_ranges_from_db(), return_value 1, = {return_value}")
-            county_rows = cursor.fetchall():
+            county_rows = cursor.fetchall()
             num_counties = len(county_rows)
             for row in county_rows:
                 county_id = row[0]
@@ -362,7 +362,7 @@ class PingSurveyManager:
             select_statement = "SELECT range_id, ip_network {new_table_name} ORDER BY range_id"
             return_value = cursor.execute(select_statement)
             print(f"build_counties_ranges_from_db(), return_value 2, = {return_value}")
-            range_rows = cursor.fetchall():
+            range_rows = cursor.fetchall()
             num_ranges = len(range_rows)
             for index, row in enumerate(range_rows):
                 range_id = row[0]
