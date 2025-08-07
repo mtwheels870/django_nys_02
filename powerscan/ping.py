@@ -374,23 +374,13 @@ class PingSurveyManager:
         self._create_writers()
         print(f"PSM.build_whitelist(), USE_STORED_PROCS = {USE_STORED_PROCS}, survey_id = {self._survey_id}")
         if USE_STORED_PROCS:
+            new_table_name = None
             with connection.cursor() as cursor:
                 return_value = cursor.execute("CALL create_whitelist(%s,null);", [int(self._survey_id)])
                 print(f"return_value = {return_value}")
                 rows = cursor.fetchall()
-                for index, row in enumerate(rows):
-                    print(f"Row[{index}] = {row}")
-                connection.commit()
-                print(f"Cursor:")
-                for index, field in enumerate(dir(cursor)):
-                    if not field.startswith("__"):
-                        print(f"cursor, field[{index}], {field}")
-                        if field in cursor:
-                            value = cursor[field]
-                            print(f"value = {value}")
-            for index, field in enumerate(dir(connection)):
-                if not field.startswith("__"):
-                    print(f"connection, field[{index}], {field}")
+                new_table_name = row[0][0]
+            print(f"Read new_table_name = {new_table_name}")
             num_states = num_counties = num_ranges = 0
         else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
