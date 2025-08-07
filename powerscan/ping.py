@@ -448,8 +448,8 @@ class PingSurveyManager:
                     if index % 5000 == 0:
                         print(f"b_c_r_..db(), range[{index}], ({range_id},{ip_network})")
                     possible_hosts = self._calculate_possible(ip_network)
-                    np_array[i][0] = range_id
-                    np_array[i][1] = ip_network
+                    np_array[index][0] = range_id
+                    np_array[index][1] = ip_network
                     # Hang a counter on the tree
                     range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
                     self.pyt.insert(ip_network, range_ip)
