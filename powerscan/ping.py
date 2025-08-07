@@ -342,13 +342,13 @@ class PingSurveyManager:
         self.writer_log = open(self.path_log, "w+")
 
     def build_counties_ranges_from_db(self, survey, new_table_name):
-        print("Counties:")
         with connection.cursor() as cursor:
             select_statement = f"SELECT distinct county_id FROM {new_table_name} ORDER BY county_id"
             return_value = cursor.execute(select_statement)
             print(f"build_counties_ranges_from_db(), return_value 1, = {return_value}")
             county_rows = cursor.fetchall()
             num_counties = len(county_rows)
+            print(f"Counties ({num_counties}): ")
             for index, row in enumerate(county_rows):
                 county_id = row[0]
                 # Create IpSurveyCounty AQUI
@@ -358,18 +358,20 @@ class PingSurveyManager:
                 if index % 10 == 0:
                     print(f"b_c_r_..db(), counter for county[{county_id}] = {county.county_name}") 
 
-        print("Ranges:")
         with connection.cursor() as cursor:
             select_statement = f"SELECT range_id, ip_network FROM {new_table_name} ORDER BY range_id"
             return_value = cursor.execute(select_statement)
             print(f"build_counties_ranges_from_db(), return_value 2, = {return_value}")
             range_rows = cursor.fetchall()
             num_ranges = len(range_rows)
+            print("Ranges: ({num_ranges})")
             for index, row in enumerate(range_rows):
                 range_id = row[0]
                 ip_network = row[1]
-                if index % 20 == 0:
+                if index % 5000 == 0:
                     print(f"b_c_r_..db(), range[{index}], ({range_id},{ip_network})")
+                whitelist_string = f"{ip_network}\n"
+                self.writer_whitelist.write(whitelist_string)
         return num_counties, num_ranges
 
     def build_whitelist(self, survey):
