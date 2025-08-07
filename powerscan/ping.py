@@ -360,7 +360,7 @@ class PingSurveyManager:
 
         print("Ranges:")
         with connection.cursor() as cursor:
-            select_statement = "SELECT range_id, ip_network FROM {new_table_name} ORDER BY range_id"
+            select_statement = f"SELECT range_id, ip_network FROM {new_table_name} ORDER BY range_id"
             return_value = cursor.execute(select_statement)
             print(f"build_counties_ranges_from_db(), return_value 2, = {return_value}")
             range_rows = cursor.fetchall()
