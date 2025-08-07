@@ -392,7 +392,7 @@ class PingSurveyManager:
                 survey = IpRangeSurvey.objects.get(pk=self._survey_id)
                 survey.whitelist_tablename = new_table_name
                 survey.save()
-                
+                print(f"after save, whitelist_tablename = {survey.whitelist_tablename}")
             num_states = num_counties = num_ranges = 0
         else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
