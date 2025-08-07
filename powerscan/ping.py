@@ -379,8 +379,19 @@ class PingSurveyManager:
                 return_value = cursor.execute("CALL create_whitelist(%s,null);", [int(self._survey_id)])
                 print(f"return_value = {return_value}")
                 rows = cursor.fetchall()
-                new_table_name = row[0][0]
-            print(f"Read new_table_name = {new_table_name}")
+                num_rows = len(rows)
+                if num_rows != 1:
+                    print(f"build_whitelist(), num_rows = {num_rows}")
+                first_row = rows[0]
+                num_items = len(first_row)
+                if num_items != 1:
+                    print(f"build_whitelist(), first_row = {first_row}, num_items = {num_items}")
+                new_table_name = first_row[0]
+            if new_table_name:
+                print(f"Read new_table_name = {new_table_name}")
+                survey = IpRangeSurvey.objects.get(pk=self._survey_id)
+                survey.whitelist_tablename = new_table_name
+                
             num_states = num_counties = num_ranges = 0
         else:
         # num_states, num_counties, num_tracts, num_ranges = self._traverse_geography()
