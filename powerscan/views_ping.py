@@ -27,20 +27,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 from django_tables2 import SingleTableView
 
-#from django_celery_results.models import TaskResult
-
-#from celery import shared_task
-# from celery.app import control 
-
-#from rest_framework import viewsets
-# from rest_framework_gis import filters
-
-#from channels.layers import get_channel_layer
-# from asgiref.sync import async_to_sync
-
 from django_nys_02.settings import CELERY_QUEUE, POWERSCAN_VERSION 
 from django_nys_02.celery import app as celery_app
-# from django_nys_02.asgi import application
 
 from .tasks import (
     build_whitelist, zmap_from_file, tally_results,
@@ -67,9 +55,7 @@ KEY_MAP_BBOX = "map_bbox"
 KEY_LEAFLET_MAP = "leaflet_map"
 
 # These fields are used in the templates
-#FIELD_CELERY_DETAILS = "celery_stuff"
 TEMPLATE_VAR_STATUS = "status_message" 
-#FIELD_SURVEY_ID = "survey_id" 
 TEMPLATE_VAR_SURVEY_STATUS = "survey_status" 
 TEMPLATE_VAR_CURRENT_TIME = "current_time"
 TEMPLATE_VAR_POWERSCAN_VERSION = "powerscan_version"
@@ -125,11 +111,9 @@ class CreateNewSurveyView(generic.edit.FormView):
         Docstring here
         """
         survey = IpRangeSurvey()
-        # print(f"SURVEY SAVE, 11")
         survey.save()
         abbrevs = []
         selected_states_string = ",".join(selected_states)
-        # print(f"CPV._configure_survey(), selected_states (fp) = {selected_states_string}")
         for state in UsState.objects.filter(state_fp__in=selected_states).order_by("state_abbrev"):
             abbrevs.append(state.state_abbrev)
             survey_state = IpSurveyState(survey=survey, us_state=state)
@@ -137,7 +121,6 @@ class CreateNewSurveyView(generic.edit.FormView):
         self._survey_id = survey.id
         abbrev_string = ",".join(abbrevs)
         survey.name = abbrev_string
-        # print(f"SURVEY SAVE, 2") 
         survey.save()
         return abbrevs, survey.id
 
@@ -149,7 +132,6 @@ class CreateNewSurveyView(generic.edit.FormView):
             print(f"CPV.build_whitelist(), survey not configured! (should be extracted from the form)")
             return None
 
-        # print(f"CPV.build_whitelist(), survey: {survey_id}")
         survey = IpRangeSurvey.objects.get(pk=survey_id)
         survey.time_whitelist_created = timezone.now()
         # MaxM ranges
