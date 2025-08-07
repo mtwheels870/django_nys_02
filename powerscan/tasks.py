@@ -362,7 +362,7 @@ def tally_results(metadata_file, survey_id, retry_count):
         # print(f"Task.{func_name}({survey_id}), done")
 
     except ValueError as e:
-        print(f"Task.tally_results(), aborting (don't requeue)")
+        print(f"Task.tally_results(), aborting (don't requeue), e: {e}")
         ranges_responded = -1
     except Exception as e:
         print(f"Task.{func_name}({survey_id}), exception: {e}")
