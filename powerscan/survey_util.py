@@ -20,6 +20,8 @@ from django.shortcuts import get_object_or_404
 
 from django.contrib.gis.geos import MultiPolygon
 
+from django_nys_02.settings import USE_STORED_PROCS
+
 logger = logging.getLogger(__name__)
 #print(f"SurveyUtil: name = {__name__}, logger = {logger}")
 
@@ -287,12 +289,10 @@ class GeoCountUpdater:
             # print(f"_u_c_c(), county[{county_count}]: {county.county_name}, hash = {hash}")
             self._state_mapper[state_counter.us_state] = state_counter
             #state_count = state_count + 1
-        # print(f"_update_county_counts(), county_count = {county_count}")
 
         # 2: Bubble counts up, Walk through all of the counties and update the corresponding states
         for i, county in enumerate(self._county_mapper):
             county_counter = self._county_mapper[county]
-            # print(f"_update_county_counts(), pulling county[{index_county}]: {county.county_name}")
             state_counter = self._state_mapper[us_state]
             hosts_pinged = county_counter.hosts_pinged 
             hosts_responded = county_counter.hosts_responded
@@ -313,16 +313,13 @@ class GeoCountUpdater:
         Docstring here
         """
         print(f"propagate_counts(), scanning survey_id: {self._survey_id}")
-            # self._exec_db = False
 
-        #self._tract_mapper = {}
-        #ranges_responded = self._update_tract_counts()
-        #if ranges_responded == 0:
-        #    continue
-
-        self._county_mapper = {}
-        ranges_processed = self._update_county_counts()
-        if ranges_processed > 0:
-            self._state_mapper = {}
-            self._update_state_counts()
+        if USE_STORED_PROCS:
+            print(f"propagate_counts(), call shared procedure here!")
+        else:
+            self._county_mapper = {}
+            ranges_processed = self._update_county_counts()
+            if ranges_processed > 0:
+                self._state_mapper = {}
+                self._update_state_counts()
         

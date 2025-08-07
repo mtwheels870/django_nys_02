@@ -427,28 +427,20 @@ class PingSurveyManager:
 
             with connection.cursor() as cursor:
                 select_statement = f"SELECT range_id, ip_network FROM {whitelist_tablename} ORDER BY range_id"
-                return_value = cursor.execute(select_statement)
-                print(f"build_radix_tree(), return_value 2, = {return_value}")
+                cursor.execute(select_statement)
                 range_rows = cursor.fetchall()
                 num_ranges = len(range_rows)
-                print(f"Ranges: ({num_ranges})")
                 np_array = np.empty((num_ranges, 2), dtype=object)
                 for index, row in enumerate(range_rows):
                     range_id = row[0]
                     ip_network = row[1]
-                    if index % 5000 == 0:
-                        print(f"b_c_r_..db(), range[{index}], ({range_id},{ip_network})")
                     possible_hosts = self._calculate_possible(ip_network)
-                    print(f"build_radix_tree(), adding[{index}]: {range_id}, {ip_network}")
                     np_array[index][0] = range_id
                     np_array[index][1] = ip_network
                     # Hang a counter on the tree
                     range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
                     self.pyt.insert(ip_network, range_ip)
-                print(f"Creating pandas dataframe, np_array: {np_array}")
                 self.df_ranges = pd.DataFrame(np_array, columns=["range_id", "ip_network"])
-                print(f"Creating pandas dataframe, df_ranges:")
-                print(self.df_ranges)
         else:
             df = self.df_ranges = pd.read_csv(self.path_range_ip)
             column_names = df.columns.tolist()
