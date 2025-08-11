@@ -13,7 +13,7 @@ BEGIN
         'FROM powerscan_ipsurvey_county '
         ' INNER JOIN ( '
             'select a.id as survey_county_id, a.county_id, a.survey_id, sum(b.hosts_pinged) as county_hosts_pinged, '
-            'sum(b.hosts_responded) as county_hosts_reponded '
+            'sum(b.hosts_responded) as county_hosts_responded '
             'from powerscan_ipsurveycounty a, powerscan_iprangeping b, powerscan_mmiprange c '
             'where a.survey_id = ' || p_survey_id || ' and b.ip_range_id = c.id and c.county_id = a.county_id '
             'group by survey_county_id	'
