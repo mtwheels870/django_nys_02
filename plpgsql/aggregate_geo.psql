@@ -16,6 +16,6 @@ BEGIN
     UPDATE powerscan_ipsurveycounty
     SET hosts_pinged = AD.county_hosts_pinged
     FROM powerscan_ipsurveycounty pic
-    JOIN AggregatedData AD ON pic.id = AD.id;
+    JOIN AggregatedData AD ON pic.id = AD.survey_county_id;
 END
 $$;
