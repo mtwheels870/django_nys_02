@@ -318,7 +318,7 @@ class GeoCountUpdater:
 
         if USE_STORED_PROCS:
             with connection.cursor() as cursor:
-                select_statement = f"CALL aggregate_geo({self._survey_id})")
+                select_statement = f"CALL aggregate_geo({self._survey_id})"
                 cursor.execute(select_statement)
                 rows = cursor.fetchall()
                 for index, row in enumerate(rows):
