@@ -6,8 +6,6 @@ AS $$
 DECLARE
     statement_update_county VARCHAR(400); 
 BEGIN
-    whitelist_tablename := 'whitelist_' || p_survey_id;
-
     statement_update_county := 
         'UPDATE powerscan_ipsurveycounty'
         'SET hosts_pinged = AggregatedData.county_hosts_pinged, '
