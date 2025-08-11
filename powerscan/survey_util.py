@@ -320,9 +320,12 @@ class GeoCountUpdater:
             with connection.cursor() as cursor:
                 select_statement = f"CALL aggregate_geo({self._survey_id})"
                 cursor.execute(select_statement)
-                rows = cursor.fetchall()
-                for index, row in enumerate(rows):
-                    print(f"agg_geo(), row[{index}]: {row}")
+                if cursor.description is None:
+                    print("agg_geo(), no results to fetch")
+                else:
+                    rows = cursor.fetchall()
+                    for index, row in enumerate(rows):
+                        print(f"agg_geo(), row[{index}]: {row}")
         else:
             self._county_mapper = {}
             ranges_processed = self._update_county_counts()
