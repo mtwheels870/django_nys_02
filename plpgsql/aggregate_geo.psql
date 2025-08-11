@@ -4,7 +4,7 @@ CREATE OR REPLACE PROCEDURE aggregate_geo(
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    statement_update_county VARCHAR(600); 
+    statement_update_county VARCHAR(1000); 
 BEGIN
     statement_update_county := 
         'UPDATE powerscan_ipsurveycounty '
