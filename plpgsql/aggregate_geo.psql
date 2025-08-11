@@ -1,0 +1,31 @@
+CREATE OR REPLACE PROCEDURE aggregate_geo(
+    IN p_survey_id INT
+) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    statement_update_county VARCHAR(400), 
+    statement_update_state VARCHAR(400), 
+    statement_drop_table VARCHAR(100), 
+    whitelist_tablename VARCHAR(30);
+BEGIN
+    whitelist_tablename := 'whitelist_' || p_survey_id;
+
+    statement_update_county := 
+        'UPDATE powerscan_ipsurveycounty'
+        'SET hosts_pinged = AggregatedData.county_hosts_pinged, '
+            'hosts_responded = AggregatedData.county_hosts_responded, '
+        'FROM powerscan_ipsurvey_county '
+        ' INNER JOIN ( '
+            'select a.id as survey_county_id, a.county_id, a.survey_id, sum(b.hosts_pinged) as county_hosts_pinged, '
+            'sum(b.hosts_responded) as county_hosts_reponded '
+            'from powerscan_ipsurveycounty a, powerscan_iprangeping b, powerscan_mmiprange c '
+            'where a.survey_id = ' || p_survey_id || ' and b.ip_range_id = c.id and c.county_id = a.county_id '
+            'group by survey_county_id	'
+        ') AS AggregatedData '
+        'ON TargetTable.id = AggregatedData.survey_county_id; '
+
+    RAISE LOG '1. select_statement: %', statement_update_county;
+    EXECUTE statement_update_county ;
+END
+$$;
