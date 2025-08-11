@@ -9,7 +9,7 @@ BEGIN
     statement_update_county := 
         'UPDATE powerscan_ipsurveycounty '
         'SET hosts_pinged = AggregatedData.county_hosts_pinged, '
-            'hosts_responded = AggregatedData.county_hosts_responded, '
+            'hosts_responded = AggregatedData.county_hosts_responded '
         'FROM powerscan_ipsurvey_county '
         ' INNER JOIN ( '
             'select a.id as survey_county_id, a.county_id, a.survey_id, sum(b.hosts_pinged) as county_hosts_pinged, '
