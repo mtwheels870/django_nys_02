@@ -7,7 +7,7 @@ DECLARE
     statement_update_county VARCHAR(600); 
 BEGIN
     statement_update_county := 
-        'UPDATE powerscan_ipsurveycounty'
+        'UPDATE powerscan_ipsurveycounty '
         'SET hosts_pinged = AggregatedData.county_hosts_pinged, '
             'hosts_responded = AggregatedData.county_hosts_responded, '
         'FROM powerscan_ipsurvey_county '
