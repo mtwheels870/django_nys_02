@@ -7,11 +7,12 @@ DECLARE
     statement_update_county VARCHAR(1000); 
 BEGIN
     WITH AggregatedData AS (
-        SELECT a.id as survey_county_id, a.county_id, a.survey_id, SUM(b.hosts_pinged) as county_hosts_pinged, 
-        SUM(b.hosts_responded) as county_hosts_responded 
-        FROM powerscan_ipsurveycounty a, powerscan_iprangeping b, powerscan_mmiprange c 
-        WHERE c.county_id = a.county_id AND a.survey_id = b.ip_survey_id AND b.ip_range_id = c.id
-        GROUP BY survey_county_id	
+        SELECT a.id as survey_county_id, a.county_id, a.survey_id, SUM(b.hosts_pinged) as county_hosts_pinged,
+        SUM(b.hosts_responded) as county_hosts_responded
+        FROM powerscan_ipsurveycounty a, powerscan_iprangeping b, powerscan_mmiprange c
+        WHERE a.survey_id = p_survey_id and b.ip_survey_id = p_survey_id AND b.ip_range_id = c.id
+            AND c.county_id = a.county_id
+        GROUP BY survey_county_id
     )
     UPDATE powerscan_ipsurveycounty
     SET hosts_pinged = AD.county_hosts_pinged
