@@ -22,6 +22,8 @@ from django.contrib.gis.geos import MultiPolygon
 
 from django_nys_02.settings import USE_STORED_PROCS
 
+from django.db import connection
+
 logger = logging.getLogger(__name__)
 #print(f"SurveyUtil: name = {__name__}, logger = {logger}")
 
@@ -315,7 +317,12 @@ class GeoCountUpdater:
         print(f"propagate_counts(), scanning survey_id: {self._survey_id}")
 
         if USE_STORED_PROCS:
-            print(f"propagate_counts(), call shared procedure here!")
+            with connection.cursor() as cursor:
+                select_statement = f"CALL aggregate_geo({self._survey_id})")
+                cursor.execute(select_statement)
+                rows = cursor.fetchall()
+                for index, row in enumerate(rows):
+                    print(f"agg_geo(), row[{index}]: {row}")
         else:
             self._county_mapper = {}
             ranges_processed = self._update_county_counts()
