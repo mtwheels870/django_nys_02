@@ -14,9 +14,9 @@ BEGIN
             AND c.county_id = a.county_id
         GROUP BY survey_county_id
     )
-    UPDATE powerscan_ipsurveycounty
-    SET hosts_pinged = AD.county_hosts_pinged
-    FROM powerscan_ipsurveycounty pic
-    JOIN AggregatedData AD ON pic.id = AD.survey_county_id;
+    UPDATE powerscan_ipsurveycounty pic
+    SET hosts_pinged = AD.county_hosts_pinged, hosts_responded = county_hosts_responded
+    FROM AggregatedData AD
+    WHERE pid.id = AD.survey_county_id;
 END
 $$;
