@@ -4,10 +4,7 @@ CREATE OR REPLACE PROCEDURE aggregate_geo(
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    statement_update_county VARCHAR(400), 
-    statement_update_state VARCHAR(400), 
-    statement_drop_table VARCHAR(100), 
-    whitelist_tablename VARCHAR(30);
+    statement_update_county VARCHAR(400); 
 BEGIN
     whitelist_tablename := 'whitelist_' || p_survey_id;
 
