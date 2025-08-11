@@ -23,7 +23,7 @@ BEGIN
             'where a.survey_id = ' || p_survey_id || ' and b.ip_range_id = c.id and c.county_id = a.county_id '
             'group by survey_county_id	'
         ') AS AggregatedData '
-        'ON TargetTable.id = AggregatedData.survey_county_id; '
+        'ON TargetTable.id = AggregatedData.survey_county_id; ';
 
     RAISE LOG '1. select_statement: %', statement_update_county;
     EXECUTE statement_update_county ;
