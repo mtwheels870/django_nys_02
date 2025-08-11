@@ -10,7 +10,7 @@ BEGIN
         'UPDATE powerscan_ipsurveycounty '
         'SET hosts_pinged = AggregatedData.county_hosts_pinged, '
             'hosts_responded = AggregatedData.county_hosts_responded '
-        'FROM powerscan_ipsurvey_county '
+        'FROM powerscan_ipsurveycounty '
         ' INNER JOIN ( '
             'select a.id as survey_county_id, a.county_id, a.survey_id, sum(b.hosts_pinged) as county_hosts_pinged, '
             'sum(b.hosts_responded) as county_hosts_responded '
