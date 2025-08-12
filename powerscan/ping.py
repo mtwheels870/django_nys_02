@@ -480,7 +480,9 @@ class PingSurveyManager:
                 saddr_raw = row['saddr-raw']
                 # timestamp = row['timestamp-ts']
                 # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
+                print(f"match_zmap(), before ip_address()")
                 ip_address = ipaddress.ip_address(saddr_raw)
+                print(f"match_zmap(), after ip_address()")
                 string_ip = ip_address.str()
                 # if index % 200 == 0:
                 print(f"match_zmap(), saddr_raw = {saddr_raw}, ip_address = {ip_address}, string_ip = {string_ip}")
