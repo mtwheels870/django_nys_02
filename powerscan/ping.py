@@ -473,8 +473,8 @@ class PingSurveyManager:
 #        if debug:
         print(f"_match_zmap_replies(), before chunking")
         dtype_spec = {
-            'saddr-raw': int,
-            'timestamp-ts': int64
+            'saddr-raw': np.int32,
+            'timestamp-ts': np.int64
         }
         for chunk in pd.read_csv(self.path_output, dtype=dtype_spec, chunksize=PD_CHUNK_SIZE):
 #            if debug:
