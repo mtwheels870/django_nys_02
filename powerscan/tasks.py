@@ -194,11 +194,12 @@ def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, l
         # This seems wrong for a ICMP
         # port = 80
         # f"--log-file=${log_file}", NoVa
+        # "--output-fields=saddr-raw,timestamp-ts",
 
         list_command = ["/usr/sbin/zmap",
             "--quiet",
             "--output-module=csv",
-            "--output-fields=saddr,timestamp-ts",
+            "--output-fields=saddr-raw",
             "--probe-module=icmp_echoscan",
             f"-r {ping_rate}",
             f"--whitelist-file={whitelist_file}",
