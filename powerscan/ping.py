@@ -481,10 +481,10 @@ class PingSurveyManager:
             print(f"_match_zmap_replies(), processing {PD_CHUNK_SIZE} chunk (output rows)[{index_chunk}]")
             column_names = chunk.columns.tolist()
             for index, row in chunk.iterrows():
-                saddr_raw = row['saddr-raw'] & 0xFFFFFFFF
+                saddr_raw = row['saddr-raw']
                 # timestamp = row['timestamp-ts']
                 # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-                print(f"match_zmap(), before ip_address()")
+                print(f"match_zmap(), before ip_address(), saddr_raw = {saddr_raw}, type() = {type(saddr_row)}")
                 ip_address = ipaddress.ip_address(saddr_raw)
                 print(f"match_zmap(), after ip_address()")
                 string_ip = ip_address.str()
