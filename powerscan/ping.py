@@ -470,11 +470,11 @@ class PingSurveyManager:
         Docstring here
         """
         index_chunk = 0
-        if debug:
-            print(f"_match_zmap_replies(), before chunking")
+#        if debug:
+        print(f"_match_zmap_replies(), before chunking")
         for chunk in pd.read_csv(self.path_output, chunksize=PD_CHUNK_SIZE):
-            if debug:
-                print(f"_match_zmap_replies(), processing {PD_CHUNK_SIZE} chunk (output rows)[{index_chunk}]")
+#            if debug:
+            print(f"_match_zmap_replies(), processing {PD_CHUNK_SIZE} chunk (output rows)[{index_chunk}]")
             column_names = chunk.columns.tolist()
             for index, row in chunk.iterrows():
                 saddr_raw = row['saddr-raw']
