@@ -440,7 +440,9 @@ class PingSurveyManager:
                     # Hang a counter on the tree
                     range_ip = RangeIpCount(range_id, ip_network, possible_hosts)
                     self.pyt.insert(ip_network, range_ip)
+                print("PSM.build_radix_tree(), building data frame from numpy array")
                 self.df_ranges = pd.DataFrame(np_array, columns=["range_id", "ip_network"])
+                print("PSM.build_radix_tree(), after data frame...")
         else:
             df = self.df_ranges = pd.read_csv(self.path_range_ip)
             column_names = df.columns.tolist()
