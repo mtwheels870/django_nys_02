@@ -475,13 +475,13 @@ class PingSurveyManager:
                 print(f"_match_zmap_replies(), processing {PD_CHUNK_SIZE} chunk (output rows)[{index_chunk}]")
             column_names = chunk.columns.tolist()
             for index, row in chunk.iterrows():
-                saddr = row['saddr']
+                saddr_raw = row['saddr-raw']
                 # timestamp = row['timestamp-ts']
                 # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-                range_counter = self.pyt.get(saddr)
+                range_counter = self.pyt.get(saddr_raw)
                 if not range_counter:
                     first = "Ping._match_zmap_replies(), could not find range counter for: "
-                    second = f"{saddr}"
+                    second = f"{saddr_raw}"
                     self.file_debugger.print_error(first + second, error=True)
                 else:
                     range_counter.count = range_counter.count + 1

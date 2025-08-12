@@ -199,7 +199,7 @@ def _execute_subprocess(directory, whitelist_file, output_file, metadata_file, l
         list_command = ["/usr/sbin/zmap",
             "--quiet",
             "--output-module=csv",
-            "--output-fields=saddr,timestamp-ts",
+            "--output-fields=saddr-raw,timestamp-ts",
             "--probe-module=icmp_echoscan",
             f"-r {ping_rate}",
             f"--whitelist-file={whitelist_file}",
