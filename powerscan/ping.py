@@ -478,7 +478,10 @@ class PingSurveyManager:
                 saddr_raw = row['saddr-raw']
                 # timestamp = row['timestamp-ts']
                 # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-                range_counter = self.pyt.get(saddr_raw)
+                ip_address = ipaddress.ip_address(saddr_raw)
+                if index % 200 == 0:
+                    print(f"match_zmap(), saddr_raw = {saddr_raw}, ip_address = {ip_address}")
+                range_counter = self.pyt.get(ip_address)
                 if not range_counter:
                     first = "Ping._match_zmap_replies(), could not find range counter for: "
                     second = f"{saddr_raw}"
