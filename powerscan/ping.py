@@ -480,8 +480,8 @@ class PingSurveyManager:
                 # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
                 ip_address = ipaddress.ip_address(saddr_raw)
                 string_ip = ip_address.str()
-                if index % 200 == 0:
-                    print(f"match_zmap(), saddr_raw = {saddr_raw}, ip_address = {ip_address}, string_ip = {string_ip}")
+                # if index % 200 == 0:
+                print(f"match_zmap(), saddr_raw = {saddr_raw}, ip_address = {ip_address}, string_ip = {string_ip}")
                 range_counter = self.pyt.get(string_ip)
                 if not range_counter:
                     first = "Ping._match_zmap_replies(), could not find range counter for: "
