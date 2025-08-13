@@ -481,15 +481,16 @@ class PingSurveyManager:
             print(f"_match_zmap_replies(), processing {PD_CHUNK_SIZE} chunk (output rows)[{index_chunk}]")
             column_names = chunk.columns.tolist()
             for index, row in chunk.iterrows():
+                # This doesn't fix the pytricia thing, still need to sitch to a string
                 saddr_raw = row['saddr-raw'].astype(np.int32)
                 # timestamp = row['timestamp-ts']
                 # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
                 print(f"match_zmap(), before ip_address(), saddr_raw = {saddr_raw}, type() = {type(saddr_raw)}")
                 # abc = saddr_raw.astype(np.int32)
                 # print(f"match_zmap(), abc = {abc}, type() = {type(abc)}")
-                ip_address = ipaddress.ip_address(saddr_raw)
-                print(f"match_zmap(), after ip_address()")
+                ip_address = ipaddress.IPv4Address(saddr_raw)
                 string_ip = ip_address.str()
+                print(f"match_zmap(), after ip_address(), ip_address = {ip_address}")
                 # if index % 200 == 0:
                 print(f"match_zmap(), saddr_raw = {saddr_raw}, ip_address = {ip_address}, string_ip = {string_ip}")
                 range_counter = self.pyt.get(string_ip)
