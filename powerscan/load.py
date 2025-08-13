@@ -20,6 +20,8 @@ import gc
 
 from pathlib import Path
 
+import ipaddress
+
 from django.utils import timezone
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.geos import Point, MultiPoint
