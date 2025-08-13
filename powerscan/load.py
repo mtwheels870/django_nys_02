@@ -665,3 +665,8 @@ class Loader():
             collected_objects = gc.collect()
             print(f"u_r_c(), {collected_objects} objects collected")
 
+    def convert_ip(self, verbose=True):
+        ip_string = "192.168.0.1"
+        ip_address = ipaddress.IPv4Address(ip_string)
+        print(f"convert_ip(), string = {ip_string}, ip_address = {ip_address}")
+
