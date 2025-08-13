@@ -489,8 +489,8 @@ class PingSurveyManager:
                 # abc = saddr_raw.astype(np.int32)
                 # print(f"match_zmap(), abc = {abc}, type() = {type(abc)}")
                 ip_address = ipaddress.IPv4Address(saddr_raw)
-                string_ip = ip_address.str()
-                print(f"match_zmap(), after ip_address(), ip_address = {ip_address}")
+                string_ip = str(ip_address)
+                # print(f"match_zmap(), after ip_address(), ip_address = {ip_address}")
                 # if index % 200 == 0:
                 print(f"match_zmap(), saddr_raw = {saddr_raw}, ip_address = {ip_address}, string_ip = {string_ip}")
                 range_counter = self.pyt.get(string_ip)
