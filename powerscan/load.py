@@ -671,4 +671,10 @@ class Loader():
         ip_string = "192.168.0.1"
         ip_address = ipaddress.IPv4Address(ip_string)
         print(f"convert_ip(), string = {ip_string}, ip_address = {ip_address}")
+        second = int(ip_address)
+        print(f"convert_ip(), second = {second},0x{second:x}")
+        second_ip = ipaddress.IPv4Address(second)
+        second_string = str(second_ip)
+        print(f"convert_ip(), second_ip = {second_ip}, second_string = {second_string}")
+
 
