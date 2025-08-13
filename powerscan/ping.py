@@ -485,12 +485,11 @@ class PingSurveyManager:
                 saddr_raw = row['saddr-raw'].astype(np.int32)
                 # timestamp = row['timestamp-ts']
                 # self._writer_cidr_trie.write(f"Trie_lookup: {saddr}\n")
-                print(f"match_zmap(), before ip_address(), saddr_raw = {saddr_raw}, type() = {type(saddr_raw)}")
+                print(f"match_zmap(), before ip_address(), saddr_raw = {saddr_raw},0x{saddr_raw:x} type() = {type(saddr_raw)}")
                 # abc = saddr_raw.astype(np.int32)
                 # print(f"match_zmap(), abc = {abc}, type() = {type(abc)}")
                 ip_address = ipaddress.IPv4Address(saddr_raw)
-                string_ip = str(ip_address)
-                # print(f"match_zmap(), after ip_address(), ip_address = {ip_address}")
+                print(f"match_zmap(), after ip_address(), ip_address = {ip_address}")
                 # if index % 200 == 0:
                 print(f"match_zmap(), saddr_raw = {saddr_raw}, ip_address = {ip_address}, string_ip = {string_ip}")
                 range_counter = self.pyt.get(string_ip)
