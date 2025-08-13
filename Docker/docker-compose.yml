@@ -21,6 +21,7 @@ services:
     environment:
       - POSTGRES_HOST=svc_postgres
       - REDIS_HOST=svc_redis
+      - ALLOWED_HOSTS=127.0.0.1,www.pinp01nt.com,54.167.198.200
     volumes:
         - /home/ubuntu/Pinp01nt/Data/app_run:/app/run:Z
     networks:

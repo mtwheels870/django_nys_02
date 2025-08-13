@@ -321,11 +321,7 @@ class GeoCountUpdater:
                 select_statement = f"CALL aggregate_geo({self._survey_id})"
                 cursor.execute(select_statement)
                 if cursor.description is None:
-                    print("agg_geo(), no results to fetch")
-                else:
-                    rows = cursor.fetchall()
-                    for index, row in enumerate(rows):
-                        print(f"agg_geo(), row[{index}]: {row}")
+                    print("agg_geo(), no results to fetch (after CALL aggregate_geo()")
         else:
             self._county_mapper = {}
             ranges_processed = self._update_county_counts()
@@ -333,3 +329,7 @@ class GeoCountUpdater:
                 self._state_mapper = {}
                 self._update_state_counts()
         
+#else:
+#    rows = cursor.fetchall()
+#    for index, row in enumerate(rows):
+#        print(f"agg_geo(), row[{index}]: {row}")

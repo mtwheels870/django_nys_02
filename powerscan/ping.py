@@ -506,7 +506,9 @@ class PingSurveyManager:
             range_counter = self.pyt.get(ip_network)
             count = range_counter.count
             if index % 1000 == 0:
-                print(f"_save_to_db(), index[{index}], range_id = {range_id}, ip_network = {ip_network}, count = {count}")
+                first = f"_save_to_db(), index[{index}], range_id = {range_id}, "
+                second = f"ip_network = {ip_network},{int(ip_network):x}, count = {count}"
+                print(first + second)
             if count > 0:
                 # Pull up the original range object, so we can get the database reference
                 ip_range = MmIpRange.objects.get(pk=range_counter.id)

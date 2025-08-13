@@ -43,13 +43,17 @@ SECRET_KEY = 'django-insecure-o$n17$$v!&omhuiy$24im(leupmj$p-7xi(!8#)z76i1(2tsf0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "18.208.200.162", 
-    "127.0.0.1",
-    "www.pinp01nt.com",
-    "34.201.218.170",
-    "54.91.156.12"
-]
+allowed_hosts_list = os.getenv("ALLOWED_HOSTS", "18.208.200.162")
+allowed_hosts = allowed_hosts_list.split(",")
+print(f"allowed_hosts = {allowed_hosts}, type = {type(allowed_hosts)}")
+ALLOWED_HOSTS = allowed_hosts
+#ALLOWED_HOSTS = [
+#    "18.208.200.162", 
+#    "127.0.0.1",
+#    "www.pinp01nt.com",
+#    "34.201.218.170",
+#    "54.91.156.12"
+#]
 
 #    'channels',
 #    'kg_admin.apps.KgAdminConfig',
@@ -143,12 +147,7 @@ else:
 # PRODUCTION.  NAME /compassblue01/cb_production/,
 #        'HOST': 'localhost',
 #        'HOST': 'svc_postgres',
-tmp_postgres_host = os.getenv("POSTGRES_HOST")
-if not tmp_postgres_host:
-    postgres_host = "localhost"
-else:
-    postgres_host = tmp_postgres_host
-# print(f"postgres_host = {postgres_host}")
+postgres_host = os.getenv("POSTGRES_HOST", "localhost")
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -271,11 +270,7 @@ MEDIA_URL = '/media/'
 CELERY_TIMEZONE = "America/New_York"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-tmp_redis_host = os.getenv("REDIS_HOST")
-if not tmp_redis_host:
-    redis_host = "localhost"
-else:
-    redis_host = tmp_redis_host
+redis_host = os.getenv("REDIS_HOST", "localhost")
 CELERY_BROKER_URL = 'redis://' + redis_host + ':6379/0'  # Use Redis as the message broker
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_ACCEPT_CONTENT = ['json']
